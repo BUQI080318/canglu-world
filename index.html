@@ -1475,10 +1475,24 @@ applyHash();
     EDGES.forEach(function(e){
       if(e.type === 'isolated') return;
       var a = NODES[e.a], b = NODES[e.b];
-      var line = mk('line', {x1:a.x, y1:a.y, x2:b.x, y2:b.y, 'class':'pm-line ' + e.type});
-      edges.appendChild(line);
-      // 关系标签（中点上方）
-      var mx = (a.x+b.x)/2, my = (a.y+b.y)/2 - 16;
+      var d = 'M' + a.x + ' ' + a.y;
+      // 每条线用不同的贝塞尔弯曲路径，避免相互遮挡：
+      // hostile=微弯向上 / tribute=明显上弯 / trade=大幅下弯绕行 / 对角=中弯
+      if(e.type === 'hostile'){
+        d += ' Q ' + ((a.x+b.x)/2) + ' ' + (Math.min(a.y,b.y) - 18) + ' ' + b.x + ' ' + b.y;
+      } else if(e.type === 'tribute'){
+        d += ' Q ' + ((a.x+b.x)/2) + ' ' + (Math.min(a.y,b.y) - 52) + ' ' + b.x + ' ' + b.y;
+      } else if(e.type === 'trade'){
+        // 贸易线走下方大弯，绕开横排节点
+        d += ' Q ' + ((a.x+b.x)/2) + ' ' + (Math.max(a.y,b.y) + 120) + ' ' + b.x + ' ' + b.y;
+      } else {
+        d += ' Q ' + ((a.x+b.x)/2) + ' ' + ((a.y+b.y)/2 + 20) + ' ' + b.x + ' ' + b.y;
+      }
+      var path = mk('path', {d:d, 'class':'pm-line ' + e.type, fill:'none'});
+      edges.appendChild(path);
+      // 关系标签：曲线中点（曲线上方）
+      var mx = (a.x+b.x)/2;
+      var my = e.type === 'trade' ? (Math.max(a.y,b.y) + 120) - 14 : (e.type === 'tribute' ? (Math.min(a.y,b.y) - 52) - 10 : (Math.min(a.y,b.y) - 18) - 10);
       var lab = mk('text', {x:mx, y:my, 'class':'pm-line-label'});
       lab.textContent = en ? e.en : e.zh;
       edges.appendChild(lab);
