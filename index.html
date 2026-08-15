@@ -1461,7 +1461,8 @@ applyHash();
     let count = 0;
     while(h2.nextElementSibling && h2.nextElementSibling.tagName !== 'H2'){
       const el = h2.nextElementSibling;
-      if(el.classList && el.classList.contains('item')) count++;
+      // 统计条目：.item 条目 或 普通段落 <p>（如"核心主线"章节）
+      if(el.tagName === 'P' || (el.classList && el.classList.contains('item'))) count++;
       inner.appendChild(el);
     }
     body.appendChild(inner);
