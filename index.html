@@ -431,7 +431,62 @@
   html[data-motion="light"] .glass-shine::after{display:none}
   /* 鼠标光效关闭 */
   html[data-fx="off"] #cursorRing,html[data-fx="off"] .pt,html[data-fx="off"] .ripple,html[data-fx="off"] .glass-shine::after{display:none !important}
-  @media (max-width:700px){ .theme-btn,.settings-btn{font-size:12px;padding:6px 10px} .settings-panel{width:calc(100vw - 24px);right:12px;top:auto;bottom:74px} }
+  /* 徽记释义弹窗 */
+  .logo-intro-mask{
+    position:fixed;inset:0;z-index:300;background:rgba(5,8,14,.72);
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+    display:none;align-items:center;justify-content:center;padding:20px;
+  }
+  .logo-intro-mask.on{display:flex}
+  .logo-intro-box{
+    width:min(720px,94vw);max-height:82vh;overflow-y:auto;
+    background:var(--glass-bg);
+    -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+    border:1px solid var(--glass-brd);border-radius:18px;
+    box-shadow:var(--glass-hl),0 24px 64px rgba(0,0,0,.55);
+    padding:26px 30px;position:relative;
+    animation:modalIn .35s cubic-bezier(.22,.61,.36,1);
+  }
+  @keyframes modalIn{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:none}}
+  .logo-intro-box::-webkit-scrollbar{width:6px}
+  .logo-intro-box::-webkit-scrollbar-thumb{background:var(--gold-dim);border-radius:3px}
+  .logo-intro-close{
+    position:absolute;top:14px;right:16px;background:none;border:none;color:var(--ink-dim);
+    font-size:18px;cursor:pointer;width:32px;height:32px;border-radius:50%;transition:all .2s;font-family:inherit;
+  }
+  .logo-intro-close:hover{color:var(--gold);background:var(--item-hover)}
+  .logo-intro-box h3{color:var(--gold);font-size:18px;letter-spacing:3px;margin:20px 0 10px;font-weight:bold}
+  .logo-intro-box h3:first-child{margin-top:0}
+  .logo-intro-box h4{color:var(--gold-dim);font-size:15px;letter-spacing:2px;margin:14px 0 6px;font-weight:normal}
+  .logo-intro-box p{line-height:1.9;font-size:14.5px;margin:6px 0;color:var(--ink);text-indent:0}
+  .logo-intro-box ul{margin:6px 0 6px 4px;padding-left:18px}
+  .logo-intro-box li{line-height:1.85;font-size:14px;margin:4px 0;color:var(--ink)}
+  .logo-intro-box li b{color:var(--gold);font-weight:normal}
+  .logo-intro-box .li-note{color:var(--ink-dim);font-size:13.5px}
+  .logo-intro-box .li-tag{color:var(--gold-dim)}
+  /* LOGO 展示区（城邦页） */
+  .logo-hero{
+    display:flex;align-items:center;gap:26px;margin:26px 0 8px;padding:22px 26px;
+    background:var(--glass-bg);
+    -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+    border:1px solid var(--glass-brd);border-radius:16px;
+    box-shadow:var(--glass-hl),var(--glass-shadow);
+  }
+  .logo-hero-img{width:110px;height:110px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 14px var(--glow))}
+  .logo-hero-text{flex:1;min-width:0}
+  .logo-hero-title{color:var(--gold);font-size:20px;letter-spacing:5px;font-weight:bold}
+  .logo-hero-slogan{color:var(--ink-dim);font-size:13.5px;letter-spacing:3px;margin:6px 0 12px}
+  .logo-intro-btn{
+    background:var(--glass-bg);border:1px solid var(--gold-dim);color:var(--gold);
+    font-family:inherit;font-size:13px;letter-spacing:3px;padding:8px 22px;border-radius:9px;
+    cursor:pointer;transition:all .25s;
+  }
+  .logo-intro-btn:hover{background:var(--item-hover);box-shadow:0 0 14px var(--glow)}
+  @media (max-width:700px){
+    .logo-hero{flex-direction:column;text-align:center;gap:12px;padding:18px}
+    .logo-hero-img{width:84px;height:84px}
+    .logo-intro-box{padding:20px 18px}
+  }
   /* 品牌 LOGO */
   .brand{display:flex;align-items:center;gap:9px}
   .logo-mark{
@@ -549,63 +604,63 @@
 <main>
 <section class="page on" id="geoPage">
   <div class="doc fade">
-    <h1><span class="h-diamond"></span><span class="h-title">地理志</span><span class="h-diamond"></span></h1>
-    <div class="lead">沧陆山河 · 海洋与陆地</div>
-    <h2>一、海洋与水域</h2>
-    <h3>1. 大型海域</h3>
+    <h1><span class="h-diamond"></span><span class="h-title" data-i18n="t_geo">地理志</span><span class="h-diamond"></span></h1>
+    <div class="lead" data-i18n="l_geo">沧陆山河 · 海洋与陆地</div>
+    <h2 data-i18n="h2_geo1">一、海洋与水域</h2>
+    <h3 data-i18n="h3_g1">1. 大型海域</h3>
     <div class="item"><b>元荒海</b>：地图最西侧的广阔外海，为西部大陆的西界海域。</div>
     <div class="item"><b>苍瀛海</b>：地图最东侧的广阔外海，为东部大陆的东界海域。</div>
     <div class="item"><b>白绫海</b>：地图最北部的陆缘内海，被北部大陆、奇迤岛环绕。</div>
     <div class="item"><b>肆星海</b>：地图中南部的核心主海域，位于中部大陆、盎季地与南部诸岛之间，是区域通航核心水域，多星礁。</div>
-    <h3>2. 海湾与海峡</h3>
+    <h3 data-i18n="h3_g2">2. 海湾与海峡</h3>
     <div class="item"><b>双生湾</b>：西部大陆南段的元荒海沿岸海湾，为延西河入海口所在区域。</div>
     <div class="item"><b>泊月湾</b>：中部大陆南段的肆星海北岸海湾，为连奕江入海口所在区域。</div>
     <div class="item"><b>屈海</b>：东部大陆南段被东枝崖环绕包裹的海湾。</div>
     <div class="item"><b>承晚海峡</b>：分隔东生半岛与雁南岛的狭窄水道，连通元荒海与肆星海。</div>
     <div class="item"><b>望暮海峡</b>：分隔奇迤岛与北部大陆的狭窄水道，连通白绫海和苍瀛海。</div>
-    <h3>3. 内陆湖泊</h3>
+    <h3 data-i18n="h3_g3">3. 内陆湖泊</h3>
     <div class="item"><b>吴阳湖</b>：中东部平原的大型淡水湖，坐落于连奕江下游东侧。</div>
     <div class="item"><b>荻瑟湖</b>：雁南岛内部的天然湖泊，为岛上核心水域。</div>
-    <h2>二、陆地单元</h2>
-    <h3>1. 主陆块</h3>
+    <h2 data-i18n="h2_geo2">二、陆地单元</h2>
+    <h3 data-i18n="h3_g4">1. 主陆块</h3>
     <div class="item"><b>西部大陆</b>：元荒海东岸的主陆块，以断脊山脉为地形骨架，是恓鸟城所在的核心陆地区。</div>
     <div class="item"><b>中部大陆</b>：眸霞山脉以东、肆星海以北的中央陆块，是茹章城与连奕江流域的核心区域。</div>
     <div class="item"><b>盎季地</b>：地图东侧的大型半岛型陆块，为东部文明的核心区域，南端延伸至东枝崖。</div>
-    <h3>2. 半岛</h3>
+    <h3 data-i18n="h3_g5">2. 半岛</h3>
     <div class="item"><b>东生半岛</b>：西部大陆向西南延伸的半岛，隔承晚海峡与雁南岛相望。</div>
-    <h3>3. 独立岛屿</h3>
+    <h3 data-i18n="h3_g6">3. 独立岛屿</h3>
     <div class="item"><b>奇迤岛</b>：白绫海东北部的大型岛屿，位于斯瑜群岛西侧。</div>
     <div class="item"><b>雁南岛</b>：承晚海峡南侧的大陆型岛屿，岛上分布有荻瑟湖，是西南海域的关键陆地节点。</div>
     <div class="item"><b>赎誓阁</b>：肆星海南偏的岛屿，是东南海域的关键陆地节点。</div>
     <div class="item"><b>伏熏岛</b>：位于元荒海东南侧与肆星海西南侧的火山岛，是伏熏城、狩脊山的所在地。</div>
-    <h3>4. 群岛与礁群</h3>
+    <h3 data-i18n="h3_g7">4. 群岛与礁群</h3>
     <div class="item"><b>归尘屿</b>：肆星海南部、盎季地正南方的连片星礁型海岛。</div>
     <div class="item"><b>斯瑜群岛</b>：白绫海东侧与苍瀛海西侧交界处的小型群岛。</div>
     <div class="item"><b>南引群岛</b>：地处肆星海东南端的大型火山型群岛。</div>
     <div class="item"><b>星沙礁</b>：肆星海南部的大片浅滩/暗星礁群，散布于中部海域。</div>
-    <h2>三、地形地貌</h2>
-    <h3>1. 主山脉</h3>
+    <h2 data-i18n="h2_geo3">三、地形地貌</h2>
+    <h3 data-i18n="h3_g8">1. 主山脉</h3>
     <div class="item"><b>断脊山脉</b>：西部大陆南北走向的主山脉，核心山脊海拔普遍在3000m以上，是西部地形的核心骨架。</div>
     <div class="item"><b>眸霞山脉</b>：中部南北走向的主山脉，分隔西部内陆与中部平原，是沧陆最重要的地理分界线之一。</div>
-    <h3>2. 山峰</h3>
+    <h3 data-i18n="h3_g9">2. 山峰</h3>
     <div class="item"><b>辞君山</b>：断脊山脉西北段山峰，海拔1437m。</div>
     <div class="item"><b>桓山</b>：白绫海南岸、眸霞山脉西北侧山峰，海拔4297m。</div>
     <div class="item"><b>自鸣山</b>：眸霞山脉主峰，沧陆最高峰，海拔5243m。</div>
     <div class="item"><b>狩脊山</b>：伏熏岛东部山峰，海拔2136m。</div>
     <div class="item"><b>扼根山</b>：奇迤岛西侧山峰，海拔1505m。</div>
-    <h3>3. 特殊地貌</h3>
+    <h3 data-i18n="h3_g10">3. 特殊地貌</h3>
     <div class="item"><b>渡蛟裂谷</b>：吴阳湖东侧、盎季地西侧的南北走向裂谷带，为东部的最重要地形分界线。</div>
     <div class="item"><b>东枝崖</b>：盎季地最南端的崖岸海角，是大陆向肆星海延伸的最南端区域。</div>
     <div class="item"><b>无昼碛</b>：横贯奇迤岛中东部的海岛沙漠，意为"永无白昼的沙漠"，沙粒自带吸光特性，哪怕岛外晴空万里，沙漠范围内永远笼罩着一层灰蒙暝色，分不清晨昏昼夜。</div>
-    <h2>四、河流水系</h2>
+    <h2 data-i18n="h2_geo4">四、河流水系</h2>
     <div class="item"><b>延西河</b>：发源于断脊山脉，向南流经西部内陆，注入双生湾附近海域。</div>
     <div class="item"><b>连奕江</b>：发源于眸霞山脉，向东横贯中部平原，流经吴阳湖周边，最终注入泊月湾附近海域。</div>
-    <h2>五、人文聚落</h2>
+    <h2 data-i18n="h2_geo5">五、人文聚落</h2>
     <div class="item"><b>恓鸟城</b>：西部大陆断脊山脉南段西侧内陆的核心城市，延西河流域重镇。</div>
     <div class="item"><b>茹章城</b>：中部平原、眸霞山脉东侧的核心都城级城市，中部文明的中心。</div>
     <div class="item"><b>眴姚城</b>：盎季地东侧沿海的港口城市。</div>
     <div class="item"><b>伏熏城</b>：伏熏岛中部腹地的核心城，伏熏岛屿文明的中心。</div>
-    <h2>六、大型工程地标</h2>
+    <h2 data-i18n="h2_geo6">六、大型工程地标</h2>
     <div class="item"><b>望暮大桥</b>：横跨白绫海南部海峡的巨型桥梁，连接中部大陆与奇迤岛，是跨区域核心交通枢纽。</div>
     <div class="item"><b>潜蛟海底隧道</b>：穿越承晚海峡附近海域的海底隧道，连通北部陆块与雁南岛。</div>
   </div>
@@ -613,8 +668,16 @@
 
 <section class="page" id="cityPage">
   <div class="doc fade">
-    <h1><span class="h-diamond"></span><span class="h-title">城邦志</span><span class="h-diamond"></span></h1>
-    <div class="lead">沧陆四大核心城邦</div>
+    <h1><span class="h-diamond"></span><span class="h-title" data-i18n="t_city">城邦志</span><span class="h-diamond"></span></h1>
+    <div class="lead" data-i18n="l_city">沧陆四大核心城邦</div>
+    <div class="logo-hero glass-shine">
+      <img class="logo-hero-img" src="assets/logo_hero_gold.png" alt="沧陆全域LOGO">
+      <div class="logo-hero-text">
+        <div class="logo-hero-title">沧陆全域徽记</div>
+        <div class="logo-hero-slogan">折翼一陆 · 剑衡四方</div>
+        <button class="logo-intro-btn" id="logoIntroBtn">徽记释义</button>
+      </div>
+    </div>
     <div class="city-grid" id="cityGrid"></div>
     <div id="cityDetail"></div>
   </div>
@@ -622,8 +685,8 @@
 
 <section class="page" id="landmarkPage">
   <div class="doc fade">
-    <h1><span class="h-diamond"></span><span class="h-title">秘境志</span><span class="h-diamond"></span></h1>
-    <div class="lead">山川人文意象与秘境</div>
+    <h1><span class="h-diamond"></span><span class="h-title" data-i18n="t_land">秘境志</span><span class="h-diamond"></span></h1>
+    <div class="lead" data-i18n="l_land">山川人文意象与秘境</div>
     <div class="city-grid" id="landmarkGrid"></div>
     <div id="landmarkDetail"></div>
   </div>
@@ -631,24 +694,24 @@
 
 <section class="page" id="calPage">
   <div class="doc fade">
-    <h1><span class="h-diamond"></span><span class="h-title">历法志</span><span class="h-diamond"></span></h1>
-    <div class="lead">沧陆各邦历法 · 通用月份</div>
-    <h2>沧陆各邦历法</h2>
-    <h3>（一）茹章城官方历法</h3>
+    <h1><span class="h-diamond"></span><span class="h-title" data-i18n="t_cal">历法志</span><span class="h-diamond"></span></h1>
+    <div class="lead" data-i18n="l_cal">沧陆各邦历法 · 通用月份</div>
+    <h2 data-i18n="h2_cal1">沧陆各邦历法</h2>
+    <h3 data-i18n="h3_c1">（一）茹章城官方历法</h3>
     <p>纪元名称：祀元纪（以"献祭"为纪元开端），简称祀元。</p>
     <p>元年事件："幽荧降世"（官方史书美化后的说法）或"血祭封神"（民间隐秘传言）。</p>
     <p class="note">（补：民间私下有用一轮指代一代人即45年的说法）</p>
-    <h3>（二）恓鸟城官方历法</h3>
+    <h3 data-i18n="h3_c2">（二）恓鸟城官方历法</h3>
     <p>纪元名称：戍城年。元年事件：恓鸟建国为元年，对应祀元200年。</p>
     <p>换算：戍城年份 = 祀元年份 − 200 = 衡历年份 − 40。</p>
-    <h3>（三）眴姚城官方历法</h3>
+    <h3 data-i18n="h3_c3">（三）眴姚城官方历法</h3>
     <p>纪元名称：祀元。商行、海关、货单全部写祀元，和茹章通商完全无阻碍。</p>
-    <h3>（四）伏熏城官方历法</h3>
+    <h3 data-i18n="h3_c4">（四）伏熏城官方历法</h3>
     <p>纪元名称：衡历。元年事件：伏熏城邦统一、立衡法、定商事、规整匠艺的建国之年，对应祀元160年。</p>
     <p>换算：衡历年份 = 祀元年份 − 160 = 戍城年 + 40。</p>
-    <h2>历法换算器</h2>
+    <h2 data-i18n="h2_cal2">历法换算器</h2>
     <div class="calc">
-      <h3>祀元 ⇄ 戍城 ⇄ 衡历</h3>
+      <h3 data-i18n="h3_c5">祀元 ⇄ 戍城 ⇄ 衡历</h3>
       <div class="calc-row">
         <label>祀元</label>
         <input id="calcSiyuan" type="number" placeholder="祀元年份" min="0">
@@ -663,7 +726,7 @@
       </div>
       <div class="calc-out" id="calcOut">在任意一栏输入年份，自动换算其余两历。</div>
     </div>
-    <h2>沧陆通用月份名称</h2>
+    <h2 data-i18n="h2_cal3">沧陆通用月份名称</h2>
     <table>
       <tr><th style="width:110px">月份</th><th>时令与典故</th></tr>
       <tr><td>1月 凛月</td><td>断脊山脉雪线最低，恓鸟城最苦寒的戍边月。</td></tr>
@@ -684,8 +747,8 @@
 
 <section class="page" id="timePage">
   <div class="doc fade">
-    <h1><span class="h-diamond"></span><span class="h-title">纪年志</span><span class="h-diamond"></span></h1>
-    <div class="lead">沧陆大事编年 · 从血祭封神到预言终局</div>
+    <h1><span class="h-diamond"></span><span class="h-title" data-i18n="t_time">纪年志</span><span class="h-diamond"></span></h1>
+    <div class="lead" data-i18n="l_time">沧陆大事编年 · 从血祭封神到预言终局</div>
     <div class="timeline">
       <div class="tl-item">
         <div class="era">祀元元年<small>幽荧降世 · 血祭封神</small></div>
@@ -717,17 +780,17 @@
 
 <section class="page" id="powerPage">
   <div class="doc fade">
-    <h1><span class="h-diamond"></span><span class="h-title">势力志</span><span class="h-diamond"></span></h1>
-    <div class="lead">四方势力格局 · 世界核心主线</div>
-    <h2>四方势力博弈关系</h2>
+    <h1><span class="h-diamond"></span><span class="h-title" data-i18n="t_power">势力志</span><span class="h-diamond"></span></h1>
+    <div class="lead" data-i18n="l_power">四方势力格局 · 世界核心主线</div>
+    <h2 data-i18n="h2_pow1">四方势力博弈关系</h2>
     <div class="item"><b>西部：恓鸟城</b>：是唯一能在军事硬实力上与茹章城抗衡的势力，二者长期处于对峙状态，边境摩擦不断。恓鸟城鄙夷茹章城的虚伪神权统治，茹章城则将恓鸟城视作扩张路上的最大障碍。</div>
     <div class="item"><b>中部：茹章城</b>：是名义上的大陆霸主，主导着大陆的秩序，依靠朝贡体系与军事威慑控制多数中小城邦；但内部被寿命诅咒束缚，强盛的根基极其脆弱。</div>
     <div class="item"><b>东部：眴姚城</b>：是各方势力之间的润滑剂与信息枢纽，依靠贸易在博弈中获利，既不敢彻底得罪茹章城，也暗中与恓鸟城、伏熏城保持贸易往来。</div>
     <div class="item"><b>南部：伏熏城</b>：奉行孤立主义，偏安海岛，不主动介入大陆纷争，对外保持戒备，专注于自身的发展与秩序，是沧陆格局中的"旁观者"。</div>
-    <h2>核心主线</h2>
+    <h2 data-i18n="h2_pow2">核心主线</h2>
     <p>茹章城以全城邦世代居民的寿命为代价换来的"永恒繁荣"，是沧陆最大的秘密：扼根山深处的灵祠里，沉睡着一具"不属于这个世界的神之遗骸"。神骸缓慢吞噬民众的生命余脉以维持城邦气运，全城无论贵贱都活不过45岁。</p>
     <p>官方以"删改围罪"清除所有真相知晓者，靠朝贡与扩张转移注意力。但预言中，终有一日神会彻底苏醒，以它的规则重写整个世界的秩序——届时，茹章城的"奇迹"将彻底崩塌，而沧陆的格局也将随之改写。</p>
-    <h2>重要隐喻</h2>
+    <h2 data-i18n="h2_pow3">重要隐喻</h2>
     <div class="item"><b>扼根山</b>：绿洲中的死寂之山，官方否认与茹章城的关联，民间却暗中信奉，相信城邦气运与山体深度绑定。</div>
     <div class="item"><b>无昼碛</b>：永无白昼的沙漠，神骸力量外泄扭曲了光线与时空规则的产物，扼根山绿洲是沙漠中唯一的力量锚点。</div>
     <div class="item"><b>狩脊山</b>：遍植白色草木的圣山，象征一尘不染的圣洁——而极致的纯白只存在于传说与理想中，现实里的圣洁永远伴随代价与虚伪。</div>
@@ -745,6 +808,53 @@
   <div class="music-now" id="musicNow"><b>沧陆</b><span class="music-hint">· 静候佳音</span></div>
 </div>
 <div id="cursorRing"></div>
+
+<div class="logo-intro-mask" id="logoIntroMask">
+  <div class="logo-intro-box">
+    <button class="logo-intro-close" id="logoIntroClose">✕</button>
+    <h3>徽记释义 · 沧陆全域总LOGO</h3>
+    <p class="li-note">「单侧羽翼 + 十字佩剑」——沧陆全域世界观总LOGO。从整片沧陆大陆、四海四城邦、世界底层宿命的宏观视角拆解符号内核。</p>
+    <h3>一、符号全局寓意</h3>
+    <h4>1. 十字剑（承载世界四方势力、世间平衡）</h4>
+    <p>十字四向对应沧陆四大核心城邦，是整片大陆的四方缩影：</p>
+    <ul>
+      <li><b>剑上竖刃</b>：中部茹章城（大陆中心、神权集权，整片世界权力枢纽）</li>
+      <li><b>剑下竖刃</b>：南部伏熏岛（海岛隔绝、理性民主，世界边缘孤岛）</li>
+      <li><b>剑左横格</b>：西部恓鸟城（山地、兵刃、戍守、尚武，大陆西疆防线）</li>
+      <li><b>剑右横格</b>：东部眴姚港（海洋、商贸、通航，连通四海的纽带）</li>
+    </ul>
+    <p>贯穿十字的长剑，代表武力、冲突、制衡：四邦常年对峙、摩擦、博弈，刀剑是沧陆永恒底色；剑身笔直代表这片大陆共通的生存底线——无论制度、信仰差异，所有人都在挣扎求生。</p>
+    <h4>2. 单侧残缺羽翼（沧陆世界的核心宿命底色）</h4>
+    <ul>
+      <li><b>世界先天残缺</b>：根源是扼根山神骸、茹章全城寿命诅咒、无昼碛时空扭曲——沧陆自诞生起就存在无法修复的先天裂痕，不存在完美、圆满的秩序，对应单翼而非双翼。</li>
+      <li><b>四方皆有伤痕</b>：恓鸟城战火濒灭的创伤；茹章城全民短命、虚假繁荣的诅咒；眴姚港夹缝求生、依附霸主的无奈；伏熏城封闭自保、割裂大陆的隔阂。整片大陆没有一方净土，所有人都背负各自残缺与苦痛。</li>
+      <li><b>「恓鸟」全域意象延伸</b>：「恓鸟」不单是西部城名，是沧陆所有生灵的统称——世间众生皆是折翼孤鸟，困在山海与宿命之中，独自背负苦难。</li>
+    </ul>
+    <h4>3. 组合完整世界主题</h4>
+    <p><b class="li-tag">折翼之世，以剑衡四方</b>——整片沧陆，是一片天生残缺、四方势力彼此制衡、永在纷争与挣扎中存续的大地；山河、海域、城邦、凡人，皆困于宿命，却始终持剑守住自身生存的信念。</p>
+    <p class="li-note">视觉区分优势：恓鸟城专属符号侧重山脉、孤守、兵刃，不用羽翼作核心；茹章城用对称圆满纹样、环形神纹，拒绝残缺意象；眴姚港用双翅、海浪、船帆；伏熏城用纯白草木、日月，无尖锐佩剑。全域LOGO独有的「单残缺羽翼+十字长剑」与四大城邦视觉体系完全割裂，一眼区分「世界总标识」与「单一势力纹章」。</p>
+    <h3>二、三版LOGO分场景适配</h3>
+    <h4>版本1：水墨暗黑渲染版（世界观宣传视觉·插画款）</h4>
+    <p>适配：小说封面、世界观设定集主海报、平台主页背景、世界开篇插图、沧陆全域地图底纹装饰。墨渍、暗沉灰调呼应无昼碛永暗与茹章城诅咒的压抑宿命感。</p>
+    <p class="li-note">短板：细碎污渍、渐变层次过多，无法标准化复用，缩小后糊作一团，仅作美术宣传图。</p>
+    <h4>版本2：铅笔素描明暗稿（设定集内页插画）</h4>
+    <p>适配：世界观文档插图、四大城邦分卷扉页、美术原画设定稿、PPT演示配图。羽毛、剑身明暗层次完整，手绘厚重感贴合大陆史诗感。</p>
+    <p class="li-note">短板：灰度排线不适合标准化印刷、刺绣、金属铸造，只能作为辅助美术素材。</p>
+    <h4>版本3：纯色轮廓线稿（沧陆官方全域标准LOGO·最优定稿）</h4>
+    <p>唯一能全场景通用：超高识别度，缩小为网站头像、水印，或放大做纪念碑、地图边框浮雕均清晰不变形；兼容烫金印刷、布料刺绣、金属徽章、石刻、印章、UI图标；配色自由度极高（正式物料铁黑线条+霜白底；宣传海报深灰底+银白线条）；线条简洁克制，不偏向任意一方城邦。</p>
+    <p class="li-note">小幅优化建议：羽翼内侧加极简三段起伏折线（暗喻断脊山脉、眸霞山脉），剑格十字四角点缀极短波浪细线（代表元荒海、苍瀛海、白绫海、肆星海），把山川四海意象融入全域LOGO。</p>
+    <h3>三、落地使用分层规划</h3>
+    <ul>
+      <li><b>官方统一全域标识</b>：固定用第三版线稿——世界观文档页眉、地图角落、小说系列水印、IP头像、周边通用徽章、线下设定展主标识。</li>
+      <li><b>宣传美术物料</b>：用第一版水墨渲染款——主海报、小说封面、短视频背景、世界观开篇长图。</li>
+      <li><b>内页插图配套</b>：用第二版素描稿——分城邦章节插图、历史解说配图、人物设定集装饰图。</li>
+      <li><b>势力区分补充</b>：四大城邦各自保留专属纹章，全域LOGO仅作整片沧陆的总象征——地图上四角印城邦徽记，中心印单翼十字全域LOGO，直观体现「四方共属一陆」。</li>
+    </ul>
+    <h3>四、核心世界观主题总结</h3>
+    <p><b class="li-tag">短句版</b>：折翼一陆，剑衡四方</p>
+    <p><b class="li-tag">史诗长句</b>：沧陆众生皆为恓鸟，山河残缺，兵刃衡世，在宿命裂痕中生生不息。</p>
+  </div>
+</div>
 
 <script>
 /* ============ 城邦卡片（完整设定） ============ */
@@ -1292,6 +1402,24 @@ function revealItem(el){
 
 
 
+/* ============ 徽记释义弹窗 ============ */
+(function(){
+  var mask = document.getElementById('logoIntroMask');
+  var btn = document.getElementById('logoIntroBtn');
+  var close = document.getElementById('logoIntroClose');
+  if(!mask) return;
+  function open(){ mask.classList.add('on'); }
+  function closeFn(){ mask.classList.remove('on'); }
+  if(btn) btn.onclick = function(e){ e.stopPropagation(); open(); };
+  if(close) close.onclick = closeFn;
+  mask.addEventListener('click', function(e){
+    if(e.target === mask) closeFn();
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') closeFn();
+  });
+})();
+
 /* ============ 移动端 header 高度自适应 ============ */
 (function(){
   function fitHeader(){
@@ -1456,6 +1584,62 @@ function animatePageIn(sec){
       searchPh: '检索地名 / 城邦 / 条目',
       settings: '设置',
       themeTitle: '主题设置',
+      t_geo:'地理志', t_city:'城邦志', t_land:'秘境志', t_cal:'历法志', t_time:'纪年志', t_power:'势力志',
+      l_geo:'沧陆山河 · 海洋与陆地', l_city:'沧陆四大核心城邦', l_land:'山川人文意象与秘境',
+      l_cal:'沧陆各邦历法 · 通用月份', l_time:'沧陆大事编年 · 从血祭封神到预言终局', l_power:'四方势力格局 · 世界核心主线',
+      h2_geo1:'一、海洋与水域', h2_geo2:'二、陆地单元', h2_geo3:'三、地形地貌',
+      h2_geo4:'四、河流水系', h2_geo5:'五、人文聚落', h2_geo6:'六、大型工程地标',
+      h2_cal1:'沧陆各邦历法', h2_cal2:'历法换算器', h2_cal3:'沧陆通用月份名称',
+      h2_pow1:'四方势力博弈关系', h2_pow2:'核心主线', h2_pow3:'重要隐喻',
+      h3_g1:'1. 大型海域', h3_g2:'2. 海湾与海峡', h3_g3:'3. 内陆湖泊',
+      h3_g4:'1. 主陆块', h3_g5:'2. 半岛', h3_g6:'3. 独立岛屿', h3_g7:'4. 群岛与礁群',
+      h3_g8:'1. 主山脉', h3_g9:'2. 山峰', h3_g10:'3. 特殊地貌',
+      h3_c1:'（一）茹章城官方历法', h3_c2:'（二）恓鸟城官方历法',
+      h3_c3:'（三）眴姚城官方历法', h3_c4:'（四）伏熏城官方历法',
+      h3_c5:'祀元 ⇄ 戍城 ⇄ 衡历',
+      spTheme:'外观主题', spFont:'界面字体', spLang:'界面语言', spMotion:'动效强度',
+      spAutoplay:'进站自动播放音乐', spFx:'鼠标光效（桌面端）',
+      spOptAuto:'跟随系统', spOptLight:'浅色', spOptDark:'深色',
+      spFontDef:'默认', spFontKai:'楷风', spFontSong:'宋韵', spFontHei:'黑体',
+      spLangZh:'中文', spLangEn:'English',
+      spMotionFull:'完整', spMotionLight:'轻量', spMotionOff:'关闭',
+      spOn:'开启', spOff:'关闭',
+      musicHint:'静候佳音', settingsTitle:'设置',
+    },
+    en: {
+      nav: ['Geography','Cities','Mysteries','Calendar','Chronicle','Powers'],
+      searchPh: 'Search places / cities / entries',
+      settings: 'Settings',
+      themeTitle: 'Theme',
+      t_geo:'Geography', t_city:'City-States', t_land:'Mystic Lands', t_cal:'Calendar', t_time:'Chronicle', t_power:'Powers',
+      l_geo:'Canglu Mountains & Seas', l_city:'The Four Great City-States', l_land:'Mountains, Icons & Mystic Lands',
+      l_cal:'Calendars of the States · Common Months', l_time:'Chronicle of Canglu · From the Blood Sacrifice to the Final Prophecy', l_power:'The Four Powers · Core Threads of the World',
+      h2_geo1:'I. Seas & Waters', h2_geo2:'II. Landmasses', h2_geo3:'III. Terrain & Landforms',
+      h2_geo4:'IV. Rivers & Waterways', h2_geo5:'V. Settlements', h2_geo6:'VI. Great Engineering Works',
+      h2_cal1:'Calendars of the States', h2_cal2:'Calendar Converter', h2_cal3:'Common Month Names',
+      h2_pow1:'The Four Powers in Balance', h2_pow2:'Core Threads', h2_pow3:'Key Metaphors',
+      h3_g1:'1. Great Seas', h3_g2:'2. Bays & Straits', h3_g3:'3. Inland Lakes',
+      h3_g4:'1. Main Landmasses', h3_g5:'2. Peninsulas', h3_g6:'3. Islands', h3_g7:'4. Archipelagos & Reefs',
+      h3_g8:'1. Principal Ranges', h3_g9:'2. Peaks', h3_g10:'3. Strange Landforms',
+      h3_c1:'(I) Official Calendar of Ruzhang', h3_c2:'(II) Official Calendar of Xuniao',
+      h3_c3:'(III) Official Calendar of Minyao', h3_c4:'(IV) Official Calendar of Fuxun',
+      h3_c5:'Siyuan ⇄ Shucheng ⇄ Hengli',
+      spTheme:'Appearance Theme', spFont:'Interface Font', spLang:'Interface Language', spMotion:'Motion Effects',
+      spAutoplay:'Auto-play Music on Entry', spFx:'Mouse Effects (Desktop)',
+      spOptAuto:'Follow System', spOptLight:'Light', spOptDark:'Dark',
+      spFontDef:'Default', spFontKai:'Kai', spFontSong:'Song', spFontHei:'Hei',
+      spLangZh:'中文', spLangEn:'English',
+      spMotionFull:'Full', spMotionLight:'Light', spMotionOff:'Off',
+      spOn:'On', spOff:'Off',
+      musicHint:'Waiting for music', settingsTitle:'Settings',
+    }
+  };
+
+    zh: {
+      nav: ['地理','城邦','秘境','历法','纪年','势力'],
+      searchPh: '检索地名 / 城邦 / 条目',
+      settings: '设置',
+      themeTitle: '主题设置',
     },
     en: {
       nav: ['Geography','Cities','Mysteries','Calendar','Chronicle','Powers'],
@@ -1466,6 +1650,7 @@ function animatePageIn(sec){
   };
   function applyLang(){
     var t = I18N[s.lang] || I18N.zh;
+    // 导航
     var navBtns = document.querySelectorAll('nav button[data-page]');
     var pages = ['geoPage','cityPage','landmarkPage','calPage','timePage','powerPage'];
     navBtns.forEach(function(b, i){
@@ -1473,12 +1658,66 @@ function animatePageIn(sec){
         b.textContent = t.nav[pages.indexOf(b.dataset.page)];
       }
     });
+    // 搜索框
     var sb = document.getElementById('searchBox');
     if(sb) sb.placeholder = t.searchPh;
     var sbtn2 = document.getElementById('settingsBtn');
     if(sbtn2) sbtn2.textContent = t.settings;
     var tb = document.getElementById('themeBtn');
     if(tb) tb.title = t.themeTitle;
+    // 页面标题/副标题/栏目/小节（data-i18n 元素）
+    document.querySelectorAll('[data-i18n]').forEach(function(el){
+      var k = el.getAttribute('data-i18n');
+      if(t[k]) el.textContent = t[k];
+    });
+    // 设置面板标签与选项
+    [
+      ['spTheme','spTheme'],['spFont','spFont'],['spLang','spLang'],['spMotion','spMotion'],
+      ['spAutoplay','spAutoplay'],['spFx','spFx']
+    ].forEach(function(pair){
+      var g = document.getElementById(pair[0]);
+      if(g){
+        var label = g.previousElementSibling;
+        if(label && t[pair[1]]) label.textContent = t[pair[1]];
+        g.querySelectorAll('.sp-opt').forEach(function(o){
+          var keymap = {auto:'spOptAuto',light:'spOptLight',dark:'spOptDark',default:'spFontDef',kai:'spFontKai',song:'spFontSong',hei:'spFontHei',zh:'spLangZh',en:'spLangEn',full:'spMotionFull',light_m:'spMotionLight',off:'spMotionOff',on:'spOn'};
+          var kk = keymap[o.dataset.v];
+          if(kk && t[kk]) o.textContent = t[kk];
+        });
+      }
+    });
+    // 音乐条提示
+    var mh = document.querySelector('.music-hint');
+    if(mh && !window.__musicStarted) mh.textContent = '· ' + (t.musicHint||'');
+    // 设置面板标题
+    var spHead = document.querySelector('.sp-head span');
+    if(spHead) spHead.textContent = t.settingsTitle || t.settings;
+    // 重建手风琴标题（标题来自 h2 文本，语言切换后更新卡片）
+    document.querySelectorAll('.acc-card .acc-title').forEach(function(at){
+      var src = document.querySelector('[data-i18n]');
+      // 从原 h2 找对应
+    });
+    rebuildAccTitles(t);
+  }
+  function rebuildAccTitles(t){
+    // 手风琴标题：从隐藏的 h2 重新读取并翻译
+    document.querySelectorAll('section.page h2[data-i18n]').forEach(function(h2){
+      var card = h2.parentNode.querySelector ? null : null;
+    });
+    // 简单方案：直接重建所有手风琴卡片标题
+    document.querySelectorAll('.acc-card').forEach(function(card){
+      var titleEl = card.querySelector('.acc-title');
+      var countEl = card.querySelector('.acc-count');
+      if(!titleEl) return;
+      // 找对应 h2：手风琴由 h2 构建，h2 被隐藏且保留
+      var pid = card.closest('section.page').id;
+      var sec = document.getElementById(pid);
+      var h2s = sec ? sec.querySelectorAll('h2[data-i18n]') : [];
+      var idx = Array.prototype.indexOf.call(card.parentNode.children, card);
+      // 用 data-i18n 映射
+      var i18nKey = h2s[idx] ? h2s[idx].getAttribute('data-i18n') : null;
+      if(i18nKey && t[i18nKey]) titleEl.textContent = t[i18nKey];
+    });
   }
 
   // 动效：轻量模式复刻移动端降级
