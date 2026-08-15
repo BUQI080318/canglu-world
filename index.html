@@ -237,11 +237,23 @@
   .acc-head:hover{background:rgba(200,162,74,.07)}
   .acc-head .acc-title{color:var(--gold);font-size:17px;letter-spacing:3px;font-weight:bold}
   .acc-count{color:var(--ink-dim);font-size:12px;letter-spacing:1px;padding:2px 9px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
-  .acc-arrow{margin-left:auto;color:var(--gold-dim);font-size:14px;transition:transform .25s}
+  .acc-arrow{margin-left:auto;color:var(--gold-dim);font-size:14px;transition:transform .3s cubic-bezier(.4,0,.2,1)}
   .acc-card.open .acc-arrow{transform:rotate(180deg)}
-  .acc-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
-  .acc-card.open .acc-body{max-height:4000px}
-  .acc-body .acc-inner{padding:4px 18px 16px}
+  /* 手风琴展开：grid-rows 平滑动画 + 内容淡入 */
+  .acc-body{
+    display:grid;grid-template-rows:0fr;overflow:hidden;
+    transition:grid-template-rows .6s cubic-bezier(.4,0,.2,1);
+  }
+  .acc-card.open .acc-body{grid-template-rows:1fr}
+  .acc-body .acc-inner{
+    min-height:0;overflow:hidden;padding:4px 18px 16px;
+    opacity:0;transform:translateY(-10px);
+    transition:opacity .45s ease,transform .45s ease;
+  }
+  .acc-card.open .acc-body .acc-inner{
+    opacity:1;transform:none;
+    transition-delay:.12s;
+  }
   .acc-body h3{margin-top:12px}
   /* 月相卡片 */
   .month-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:16px 0}
