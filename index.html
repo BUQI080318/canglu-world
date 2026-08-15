@@ -104,12 +104,60 @@
   .calc-out b{color:var(--gold);font-weight:normal}
   /* 搜索高亮 */
   mark.hl{background:rgba(200,162,74,.28);color:var(--gold);padding:0 2px;border-radius:2px}
+  /* 手风琴章节卡片 */
+  .acc-card{margin:14px 0;background:linear-gradient(160deg,var(--panel),var(--panel2));border:1px solid var(--line);border-radius:8px;overflow:hidden;transition:border-color .25s}
+  .acc-card.open{border-color:var(--gold-dim)}
+  .acc-head{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;user-select:none;transition:background .2s}
+  .acc-head:hover{background:rgba(200,162,74,.07)}
+  .acc-head .acc-title{color:var(--gold);font-size:17px;letter-spacing:3px;font-weight:bold}
+  .acc-count{color:var(--ink-dim);font-size:12px;letter-spacing:1px;padding:2px 9px;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+  .acc-arrow{margin-left:auto;color:var(--gold-dim);font-size:14px;transition:transform .25s}
+  .acc-card.open .acc-arrow{transform:rotate(180deg)}
+  .acc-body{max-height:0;overflow:hidden;transition:max-height .4s ease}
+  .acc-card.open .acc-body{max-height:4000px}
+  .acc-body .acc-inner{padding:4px 18px 16px}
+  .acc-body h3{margin-top:12px}
+  /* 月相卡片 */
+  .month-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:16px 0}
+  .month-card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px;cursor:pointer;transition:all .22s}
+  .month-card:hover{border-color:var(--gold-dim);transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.3)}
+  .month-card .m-num{color:var(--ink-dim);font-size:11px;letter-spacing:2px}
+  .month-card .m-name{color:var(--gold);font-size:18px;letter-spacing:4px;margin:3px 0}
+  .month-card .m-desc{font-size:12.5px;color:var(--ink);line-height:1.75;display:none;margin-top:6px;text-indent:0}
+  .month-card.open{border-color:var(--gold-dim);background:linear-gradient(160deg,var(--panel),var(--panel2))}
+  .month-card.open .m-desc{display:block}
+  /* 时间线渐入 */
+  .tl-item{opacity:0;transform:translateY(16px);transition:opacity .55s ease,transform .55s ease}
+  .tl-item.in{opacity:1;transform:none}
+  /* 鼠标特效 */
+  #cursorRing{position:fixed;left:0;top:0;width:26px;height:26px;border:1px solid var(--gold);border-radius:50%;pointer-events:none;z-index:9999;opacity:0;transform:translate(-50%,-50%);box-shadow:0 0 12px rgba(200,162,74,.35),inset 0 0 6px rgba(200,162,74,.15);transition:opacity .25s,width .2s,height .2s}
+  #cursorRing.on{opacity:.8}
+  #cursorRing.hover{width:42px;height:42px;border-color:var(--gold);opacity:.45}
+  .pt{position:fixed;border-radius:50%;pointer-events:none;z-index:9998;background:radial-gradient(circle,rgba(200,162,74,.85) 0%,rgba(200,162,74,.25) 55%,rgba(200,162,74,0) 75%);animation:ptFade 1.1s ease forwards}
+  @keyframes ptFade{to{opacity:0;transform:translateY(-16px) scale(.15)}}
+  .ripple{position:fixed;border:1px solid rgba(200,162,74,.55);border-radius:50%;pointer-events:none;z-index:9997;animation:rip .55s ease-out forwards}
+  @keyframes rip{from{width:8px;height:8px;margin-left:-4px;margin-top:-4px;opacity:.9}to{width:72px;height:72px;margin-left:-36px;margin-top:-36px;opacity:0}}
+  /* 音乐条 */
+  .music-bar{position:fixed;right:18px;bottom:18px;z-index:150;display:flex;align-items:center;gap:10px;background:linear-gradient(160deg,rgba(30,39,54,.96),rgba(20,26,36,.96));border:1px solid var(--gold-dim);border-radius:24px;padding:8px 16px;backdrop-filter:blur(6px);box-shadow:0 8px 28px rgba(0,0,0,.5);cursor:default}
+  .music-btn{background:var(--gold);border:none;color:#141a24;width:34px;height:34px;border-radius:50%;font-size:14px;cursor:pointer;font-family:inherit;transition:all .2s;line-height:1}
+  .music-btn:hover{transform:scale(1.1);box-shadow:0 0 14px rgba(200,162,74,.5)}
+  .music-now{color:var(--ink);font-size:13px;letter-spacing:1px;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .music-now b{color:var(--gold);font-weight:normal;letter-spacing:2px}
+  .music-hint{color:var(--ink-dim);font-size:11.5px;letter-spacing:1px}
+  .music-list{position:fixed;right:18px;bottom:66px;z-index:149;background:var(--panel2);border:1px solid var(--line);border-radius:8px;box-shadow:0 10px 32px rgba(0,0,0,.55);display:none;min-width:210px;max-height:260px;overflow:auto}
+  .music-list.on{display:block}
+  .music-list .song{padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--line);font-size:13.5px;color:var(--ink);letter-spacing:1px;transition:background .15s}
+  .music-list .song:hover{background:var(--panel)}
+  .music-list .song.on{color:var(--gold)}
+  .music-list .song small{color:var(--ink-dim);font-size:11px;display:block;margin-top:2px}
   /* 移动端 */
   @media (max-width:700px){
     .brand{font-size:16px;letter-spacing:3px}
     nav button{font-size:13px;padding:6px 9px;letter-spacing:1px}
     .search-box{width:120px;font-size:13px;padding:6px 8px}
     .search-results{width:270px}
+    .music-now{max-width:90px}
+    #cursorRing,.pt,.ripple{display:none}
   }
 </style>
 </head>
@@ -313,6 +361,13 @@
 </section>
 </main>
 
+<div class="music-list" id="musicList"></div>
+<div class="music-bar" id="musicBar">
+  <button class="music-btn" id="musicBtn">▶</button>
+  <div class="music-now" id="musicNow"><b>沧陆</b><span class="music-hint">· 静候佳音</span></div>
+</div>
+<div id="cursorRing"></div>
+
 <script>
 /* ============ 城邦卡片（完整设定） ============ */
 const CITIES = [
@@ -448,9 +503,12 @@ function applyHash(){
     for(const it of items){
       const b = it.querySelector('b');
       if(b && b.textContent.trim()===kw){
-        it.scrollIntoView({behavior:'smooth', block:'center'});
-        it.style.transition='box-shadow .3s'; it.style.boxShadow='0 0 0 2px var(--gold-dim)';
-        setTimeout(()=>{ it.style.boxShadow=''; }, 2200);
+        revealItem(it);
+        setTimeout(()=>{
+          it.scrollIntoView({behavior:'smooth', block:'center'});
+          it.style.transition='box-shadow .3s'; it.style.boxShadow='0 0 0 2px var(--gold-dim)';
+          setTimeout(()=>{ it.style.boxShadow=''; }, 2200);
+        }, 120);
         return;
       }
     }
@@ -513,9 +571,12 @@ searchResults.addEventListener('click', e=>{
   const found = SEARCH_IDX.find(x=>x.name===kw && x.el);
   if(found){
     switchPage(found.page);
-    found.el.scrollIntoView({behavior:'smooth', block:'center'});
-    found.el.style.transition='box-shadow .3s'; found.el.style.boxShadow='0 0 0 2px var(--gold-dim)';
-    setTimeout(()=>{ found.el.style.boxShadow=''; }, 2200);
+    revealItem(found.el);
+    setTimeout(()=>{
+      found.el.scrollIntoView({behavior:'smooth', block:'center'});
+      found.el.style.transition='box-shadow .3s'; found.el.style.boxShadow='0 0 0 2px var(--gold-dim)';
+      setTimeout(()=>{ found.el.style.boxShadow=''; }, 2200);
+    }, 120);
   }
 });
 document.addEventListener('click', e=>{
@@ -569,6 +630,197 @@ inHengli.addEventListener('input', ()=>{ if(inHengli.value) updateCalc('hengli')
 
 /* ============ 初始定位 ============ */
 applyHash();
+
+/* ============ 手风琴章节卡片（地理/势力） ============ */
+['geoPage','powerPage'].forEach(pid=>{
+  const sec = document.getElementById(pid);
+  if(!sec) return;
+  const h2s = sec.querySelectorAll('h2');
+  h2s.forEach((h2, idx)=>{
+    const card = document.createElement('div');
+    card.className = 'acc-card' + (idx===0 ? ' open' : '');
+    const head = document.createElement('div');
+    head.className = 'acc-head';
+    const body = document.createElement('div');
+    body.className = 'acc-body';
+    const inner = document.createElement('div');
+    inner.className = 'acc-inner';
+    // 把 h2 之后的所有兄弟节点【移动】进卡片（直到下一个 h2）
+    let count = 0;
+    while(h2.nextElementSibling && h2.nextElementSibling.tagName !== 'H2'){
+      const el = h2.nextElementSibling;
+      if(el.classList && el.classList.contains('item')) count++;
+      inner.appendChild(el);
+    }
+    body.appendChild(inner);
+    head.innerHTML = '<span class="acc-title">'+h2.textContent+'</span><span class="acc-count">'+count+' 条</span><span class="acc-arrow">▾</span>';
+    card.appendChild(head);
+    card.appendChild(body);
+    h2.parentNode.insertBefore(card, h2);
+    h2.style.display = 'none';
+    head.onclick = ()=> card.classList.toggle('open');
+  });
+});
+
+/* 定位到条目时自动展开其所在手风琴卡片 */
+function revealItem(el){
+  let acc = el.closest ? el.closest('.acc-card') : null;
+  if(acc) acc.classList.add('open');
+}
+
+/* ============ 月相卡片（历法页） ============ */
+(function(){
+  const table = document.querySelector('#calPage table');
+  if(!table) return;
+  const rows = table.querySelectorAll('tr');
+  const grid = document.createElement('div');
+  grid.className = 'month-grid';
+  rows.forEach((tr, i)=>{
+    if(i===0) return; // 表头
+    const tds = tr.querySelectorAll('td');
+    if(tds.length < 2) return;
+    const m = tds[0].textContent.trim().match(/(\d+)月\s*(\S+)/);
+    if(!m) return;
+    const card = document.createElement('div');
+    card.className = 'month-card';
+    card.innerHTML = '<div class="m-num">'+m[1]+'月</div><div class="m-name">'+m[2]+'</div><div class="m-desc">'+tds[1].textContent.trim()+'</div>';
+    card.onclick = ()=> card.classList.toggle('open');
+    grid.appendChild(card);
+  });
+  table.parentNode.insertBefore(grid, table);
+  table.style.display = 'none';
+})();
+
+/* ============ 时间线渐入 ============ */
+(function(){
+  const items = document.querySelectorAll('.tl-item');
+  if(!('IntersectionObserver' in window) || !items.length){
+    items.forEach(i=>i.classList.add('in'));
+    return;
+  }
+  const io = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, {threshold:.15});
+  items.forEach(i=>io.observe(i));
+})();
+
+/* ============ 鼠标特效 ============ */
+(function(){
+  if(!window.matchMedia || !matchMedia('(pointer:fine)').matches) return;
+  const ring = document.getElementById('cursorRing');
+  if(!ring) return;
+  let mx = -100, my = -100, rx = -100, ry = -100, shown = false;
+  document.addEventListener('mousemove', e=>{
+    mx = e.clientX; my = e.clientY;
+    if(!shown){ ring.classList.add('on'); shown = true; }
+    // 粒子拖尾（节流）
+    const now = Date.now();
+    if(!document._ptLast || now - document._ptLast > 40){
+      document._ptLast = now;
+      const p = document.createElement('div');
+      p.className = 'pt';
+      const s = 4 + Math.random()*7;
+      p.style.width = s+'px'; p.style.height = s+'px';
+      p.style.left = (mx + (Math.random()*10-5)) + 'px';
+      p.style.top = (my + (Math.random()*10-5)) + 'px';
+      document.body.appendChild(p);
+      setTimeout(()=> p.remove(), 1150);
+    }
+    // hover 放大：可点击元素
+    const t = e.target;
+    ring.classList.toggle('hover', !!(t.closest && t.closest('button, a, .city-card, .acc-head, .month-card, .hit, .music-bar')));
+  });
+  (function loop(){
+    rx += (mx - rx) * .18;
+    ry += (my - ry) * .18;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(loop);
+  })();
+  document.addEventListener('mouseleave', ()=>{ ring.classList.remove('on'); shown = false; });
+  document.addEventListener('click', e=>{
+    const r = document.createElement('div');
+    r.className = 'ripple';
+    r.style.left = e.clientX + 'px';
+    r.style.top = e.clientY + 'px';
+    document.body.appendChild(r);
+    setTimeout(()=> r.remove(), 600);
+  });
+})();
+
+/* ============ 音乐播放器 ============ */
+(function(){
+  /* ===== 歌单在此填写：挑好歌后把 URL 填进 SONGS ===== */
+  const SONGS = [
+    // {name:'曲名', src:'https://...mp3'}
+  ];
+  const btn = document.getElementById('musicBtn');
+  const now = document.getElementById('musicNow');
+  const list = document.getElementById('musicList');
+  let audio = null, cur = -1, started = false;
+
+  function renderList(){
+    if(!SONGS.length){
+      list.innerHTML = '<div class="song" style="color:var(--ink-dim);cursor:default">歌单待主人挑选…</div>';
+      return;
+    }
+    list.innerHTML = SONGS.map((s,i)=>{
+      return '<div class="song'+(i===cur?' on':'')+'" data-i="'+i+'">'+s.name+'<small>'+ (i+1) +' / '+SONGS.length+'</small></div>';
+    }).join('');
+    list.querySelectorAll('.song[data-i]').forEach(el=>{
+      el.onclick = ()=>{
+        cur = parseInt(el.dataset.i, 10);
+        playCur();
+        list.classList.remove('on');
+      };
+    });
+  }
+  function playCur(){
+    if(cur < 0 || !SONGS[cur]) return;
+    if(!audio) audio = new Audio();
+    audio.src = SONGS[cur].src;
+    audio.play().then(()=>{
+      started = true;
+      now.innerHTML = '<b>'+SONGS[cur].name+'</b><span class="music-hint"> · 奏响</span>';
+      btn.textContent = '❚❚';
+      renderList();
+    }).catch(()=>{
+      now.innerHTML = '<b>沧陆</b><span class="music-hint"> · 点击页面任意处开始</span>';
+    });
+  }
+  btn.onclick = ()=>{
+    if(!SONGS.length){ list.classList.toggle('on'); return; }
+    if(audio && started){
+      if(audio.paused){
+        audio.play();
+        btn.textContent = '❚❚';
+        now.innerHTML = '<b>'+SONGS[cur].name+'</b><span class="music-hint"> · 奏响</span>';
+      } else {
+        audio.pause();
+        btn.textContent = '▶';
+        now.innerHTML = '<b>'+SONGS[cur].name+'</b><span class="music-hint"> · 暂歇</span>';
+      }
+    } else {
+      playCur();
+    }
+  };
+  now.onclick = ()=> list.classList.toggle('on');
+  document.addEventListener('click', e=>{
+    if(!e.target.closest('.music-bar') && !e.target.closest('.music-list')) list.classList.remove('on');
+  });
+  // 自动播放：用户首次点击页面任意处时启动
+  document.addEventListener('click', function auto(){
+    if(SONGS.length && !started && cur < 0){
+      cur = 0;
+      playCur();
+    }
+    document.removeEventListener('click', auto);
+  }, {once:true});
+  renderList();
+})();
+
 </script>
 </body>
 </html>
