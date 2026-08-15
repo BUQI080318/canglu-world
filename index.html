@@ -1491,8 +1491,8 @@ applyHash();
       } else if(e.type === 'tribute'){
         d += ' Q ' + ((a.x+b.x)/2) + ' ' + (Math.min(a.y,b.y) - 52) + ' ' + b.x + ' ' + b.y;
       } else if(e.type === 'trade' && isH){
-        // 横向贸易线走下方大弯，绕开横排节点
-        d += ' Q ' + ((a.x+b.x)/2) + ' ' + (Math.max(a.y,b.y) + 120) + ' ' + b.x + ' ' + b.y;
+        // 横向贸易线走下方大弯，绕开横排节点；控制点加深让弧线贴近标签
+        d += ' Q ' + ((a.x+b.x)/2) + ' ' + (Math.max(a.y,b.y) + 230) + ' ' + b.x + ' ' + b.y;
       } else {
         // 对角通商/其余：中弯
         d += ' Q ' + ((a.x+b.x)/2) + ' ' + ((a.y+b.y)/2 + 30) + ' ' + b.x + ' ' + b.y;
@@ -1503,7 +1503,8 @@ applyHash();
       var mx = (a.x+b.x)/2;
       var my;
       if(e.type === 'trade' && isH){
-        my = (Math.max(a.y,b.y) + 120) + 6;
+        // 标签放在弧线实际最低点（二次贝塞尔中点）下方10px，线在标签上方
+        my = (a.y + 2*(Math.max(a.y,b.y) + 230) + b.y) / 4 + 10;
       } else if(e.type === 'tribute'){
         my = (Math.min(a.y,b.y) - 52) - 10;
       } else if(e.type === 'hostile'){
