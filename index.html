@@ -394,6 +394,7 @@
   <nav>
     <button class="on" data-page="geoPage">地理</button>
     <button data-page="cityPage">城邦</button>
+    <button data-page="landmarkPage">秘境</button>
     <button data-page="calPage">历法</button>
     <button data-page="timePage">纪年</button>
     <button data-page="powerPage">势力</button>
@@ -476,7 +477,13 @@
     <div class="lead">沧陆四大核心城邦</div>
     <div class="city-grid" id="cityGrid"></div>
     <div id="cityDetail"></div>
-    <h2 style="margin-top:40px">山川人文意象与秘境</h2>
+  </div>
+</section>
+
+<section class="page" id="landmarkPage">
+  <div class="doc fade">
+    <h1><span class="h-diamond"></span><span class="h-title">秘境志</span><span class="h-diamond"></span></h1>
+    <div class="lead">山川人文意象与秘境</div>
     <div class="city-grid" id="landmarkGrid"></div>
     <div id="landmarkDetail"></div>
   </div>
@@ -720,8 +727,14 @@ function applyHash(){
   if(!h) return;
   const parts = h.split('-');
   const pageId = parts[0];
-  const sec = document.getElementById(pageId);
+  let sec = document.getElementById(pageId);
   if(!sec) return;
+  // 兼容旧深链：意象在 cityPage 里的老链接 → 跳到秘境页
+  if(pageId === 'cityPage' && parts[1] && LANDMARKS.find(l=>l.name===parts[1])){
+    switchPage('landmarkPage');
+    showLandmark(LANDMARKS.find(l=>l.name===parts[1]));
+    return;
+  }
   switchPage(pageId);
   if(parts[1]){
     const kw = parts[1];
@@ -767,7 +780,7 @@ function buildIndex(){
     idx.push({page:'cityPage', pageName:'城邦志', name:c.name, text:c.role+' — '+c.summary, city:c});
   });
   LANDMARKS.forEach(l=>{
-    idx.push({page:'cityPage', pageName:'城邦志·意象', name:l.name, text:l.role+' — '+l.summary, landmark:l});
+    idx.push({page:'landmarkPage', pageName:'秘境志', name:l.name, text:l.role+' — '+l.summary, landmark:l});
   });
   return idx;
 }
@@ -800,7 +813,7 @@ searchResults.addEventListener('click', e=>{
   const city = CITIES.find(c=>c.name===kw);
   if(city){ switchPage('cityPage'); showCity(city); return; }
   const lm = LANDMARKS.find(l=>l.name===kw);
-  if(lm){ switchPage('cityPage'); showLandmark(lm); return; }
+  if(lm){ switchPage('landmarkPage'); showLandmark(lm); return; }
   const found = SEARCH_IDX.find(x=>x.name===kw && x.el);
   if(found){
     switchPage(found.page);
