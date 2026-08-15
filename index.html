@@ -79,6 +79,35 @@
     background:rgba(13,16,23,.75);padding:6px 12px;border-radius:6px;border:1px solid var(--line);
   }
   .compass b{font-size:18px;color:#ffe9a8}
+  /* 2D 舆图页 */
+  #map2dPage{overflow:hidden;background:#070a10}
+  #map2dWrap{position:absolute;inset:0;overflow:hidden;cursor:grab}
+  #map2dWrap.dragging{cursor:grabbing}
+  #map2d{position:absolute;top:0;left:0;transform-origin:0 0;will-change:transform}
+  #map2d img{display:block;user-select:none;-webkit-user-drag:none}
+  #marks2d{position:absolute;top:0;left:0;width:100%;height:100%}
+  .m2{position:absolute;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;
+      background:#fff;border:2px solid #2a2016;cursor:pointer;transition:transform .15s;
+      box-shadow:0 0 6px rgba(255,255,255,.7);z-index:5}
+  .m2:hover{transform:scale(1.6)}
+  .m2.imp{width:24px;height:24px;margin:-12px 0 0 -12px;background:#ffd75e;border-color:#3a2c14;
+          box-shadow:0 0 12px rgba(255,215,94,.95);z-index:6}
+  .m2-ui{position:absolute;right:18px;bottom:18px;z-index:60;display:flex;flex-direction:column;gap:8px}
+  .m2-ui button{
+    width:42px;height:42px;border-radius:6px;cursor:pointer;
+    background:rgba(20,16,23,.9);color:var(--gold);font-size:19px;font-family:inherit;
+    border:1px solid var(--line);transition:all .15s;
+  }
+  .m2-ui button:hover{background:var(--panel2);border-color:var(--gold-dim)}
+  .m2-title{position:absolute;left:18px;top:14px;z-index:60;color:var(--gold);font-size:21px;letter-spacing:6px;
+            text-shadow:0 0 14px rgba(200,162,74,.45)}
+  .m2-title small{display:block;font-size:12px;color:var(--ink-dim);letter-spacing:2px;margin-top:4px;text-shadow:none}
+  .m2-hint{
+    position:absolute;left:18px;bottom:18px;z-index:60;pointer-events:none;
+    color:var(--ink-dim);font-size:13px;letter-spacing:1px;text-shadow:0 1px 4px rgba(0,0,0,.8);
+    line-height:1.8;
+  }
+  .m2-hint b{color:var(--gold);font-weight:normal}
   /* 弹窗 */
   .modal-mask{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:none;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
   .modal-mask.on{display:flex}
@@ -126,7 +155,8 @@
 <header>
   <div class="brand">沧陆<small>CANG LU</small></div>
   <nav>
-    <button class="on" data-page="mapPage">🗺 地图</button>
+    <button class="on" data-page="mapPage">🗺 3D地图</button>
+    <button data-page="map2dPage">🛰 舆图</button>
     <button data-page="geoPage">⛰ 地理</button>
     <button data-page="cityPage">🏰 城邦</button>
     <button data-page="calPage">📅 历法</button>
@@ -155,6 +185,23 @@
     <button id="btnFull" title="全屏">⛶</button>
   </div>
   <div class="compass">北 <b>↑</b></div>
+</section>
+
+<section class="page" id="map2dPage">
+  <div id="map2dWrap">
+    <div id="map2d">
+      <img src="map_ui.png" alt="沧陆全境舆图" draggable="false">
+      <div id="marks2d"></div>
+    </div>
+  </div>
+  <div class="m2-ui">
+    <button id="m2In" title="放大">＋</button>
+    <button id="m2Out" title="缩小">－</button>
+    <button id="m2Home" title="复位">⌂</button>
+  </div>
+  <div class="m2-title">沧陆全境舆图<small>点击金色标记查看设定</small></div>
+  <div class="compass">北 <b>↑</b></div>
+  <div class="m2-hint">🖱 <b>左键拖拽</b>平移 ｜ <b>滚轮</b>缩放 ｜ 点击<b>金色光点</b>查看设定</div>
 </section>
 
 <section class="page" id="geoPage">
@@ -749,6 +796,63 @@ function showCity(c){
   detailBox.scrollIntoView({behavior:'smooth'});
 }
 
+/* ============ 2D 舆图交互 ============ */
+const wrap2 = document.getElementById('map2dWrap');
+const map2d = document.getElementById('map2d');
+const m2 = {s:1, tx:0, ty:0, dragging:false, lx:0, ly:0, inited:false};
+const M2W = 2048, M2H = 1536;
+function m2Apply(){ map2d.style.transform = 'translate('+m2.tx+'px,'+m2.ty+'px) scale('+m2.s+')'; }
+function m2Fit(){
+  const r = wrap2.getBoundingClientRect();
+  const s = Math.min(r.width/M2W, r.height/M2H);
+  m2.s = s; m2.tx = (r.width-M2W*s)/2; m2.ty = (r.height-M2H*s)/2; m2Apply();
+}
+function buildMap2D(){
+  const holder = document.getElementById('marks2d');
+  MAPDATA.marks.forEach(m=>{
+    const d = document.createElement('div');
+    d.className = 'm2' + (m.imp?' imp':'');
+    d.style.left = (m.x*100)+'%';
+    d.style.top = (m.y*100)+'%';
+    d.title = m.name;
+    d.onclick = (e)=>{ e.stopPropagation(); openModal(m); };
+    holder.appendChild(d);
+  });
+  m2.inited = true;
+}
+wrap2.addEventListener('wheel', e=>{
+  e.preventDefault();
+  const r = wrap2.getBoundingClientRect();
+  const mx = e.clientX-r.left, my = e.clientY-r.top;
+  const ns = Math.max(0.2, Math.min(10, m2.s*(e.deltaY<0?1.18:1/1.18)));
+  m2.tx = mx-(mx-m2.tx)*(ns/m2.s);
+  m2.ty = my-(my-m2.ty)*(ns/m2.s);
+  m2.s = ns; m2Apply();
+}, {passive:false});
+wrap2.addEventListener('mousedown', e=>{
+  if(e.button===0||e.button===2){ m2.dragging=true; m2.lx=e.clientX; m2.ly=e.clientY; wrap2.classList.add('dragging'); e.preventDefault(); }
+});
+window.addEventListener('mousemove', e=>{
+  if(m2.dragging){ m2.tx+=e.clientX-m2.lx; m2.ty+=e.clientY-m2.ly; m2.lx=e.clientX; m2.ly=e.clientY; m2Apply(); }
+});
+window.addEventListener('mouseup', ()=>{ m2.dragging=false; wrap2.classList.remove('dragging'); });
+wrap2.addEventListener('contextmenu', e=>e.preventDefault());
+document.getElementById('m2In').onclick = ()=>{
+  const r = wrap2.getBoundingClientRect();
+  const ns = Math.min(10, m2.s*1.4);
+  m2.tx = r.width/2-(r.width/2-m2.tx)*(ns/m2.s);
+  m2.ty = r.height/2-(r.height/2-m2.ty)*(ns/m2.s);
+  m2.s = ns; m2Apply();
+};
+document.getElementById('m2Out').onclick = ()=>{
+  const r = wrap2.getBoundingClientRect();
+  const ns = Math.max(0.2, m2.s/1.4);
+  m2.tx = r.width/2-(r.width/2-m2.tx)*(ns/m2.s);
+  m2.ty = r.height/2-(r.height/2-m2.ty)*(ns/m2.s);
+  m2.s = ns; m2Apply();
+};
+document.getElementById('m2Home').onclick = m2Fit;
+
 /* ============ 页面切换 ============ */
 document.querySelectorAll('nav button').forEach(btn=>{
   btn.onclick = ()=>{
@@ -759,8 +863,15 @@ document.querySelectorAll('nav button').forEach(btn=>{
     page.classList.add('on');
     page.scrollTop = 0;
     if(btn.dataset.page==='mapPage') resize();
+    if(btn.dataset.page==='map2dPage'){
+      if(!m2.inited) buildMap2D();
+      m2Fit();
+    }
   };
 });
+// hash 直达：#map2dPage / #geoPage 等
+const _h = location.hash.slice(1);
+if(_h){ const _b = document.querySelector('nav button[data-page="'+_h+'"]'); if(_b) _b.click(); }
 </script>
 </body>
 </html>
