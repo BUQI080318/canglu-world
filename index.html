@@ -605,6 +605,59 @@
     /* 移动端隐藏桌面播放按钮的辅助文字 */
     .music-cover{display:none}
   }
+
+  /* ===== 四方势力博弈图 ===== */
+  .power-map{
+    margin:16px 0 8px;padding:16px;border-radius:16px;
+    background:var(--glass-bg);-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+    border:1px solid var(--glass-brd);box-shadow:var(--glass-hl),var(--glass-shadow);
+    position:relative;overflow:hidden;
+  }
+  .power-map::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(circle at 50% 45%,rgba(200,162,74,.08),transparent 60%);
+  }
+  .power-map svg{display:block;width:100%;height:auto}
+  .pm-node{cursor:pointer}
+  .pm-node circle.pm-ring{fill:none;stroke:var(--gold);stroke-width:1.6;opacity:.75;transition:all .3s}
+  .pm-node circle.pm-core{fill:var(--gold);opacity:.92;transition:all .3s}
+  .pm-node:hover circle.pm-ring{stroke-width:2.6;opacity:1}
+  .pm-node:hover circle.pm-core{fill:#e8cd8a;opacity:1}
+  .pm-node text{fill:var(--ink);font-size:14px;letter-spacing:2px;font-family:inherit;pointer-events:none;text-anchor:middle}
+  .pm-node .pm-sub{fill:var(--ink-dim);font-size:10.5px;letter-spacing:1px;pointer-events:none;text-anchor:middle}
+  .pm-node.active circle.pm-ring{stroke-width:3;stroke:#e8cd8a;filter:drop-shadow(0 0 8px rgba(200,162,74,.9))}
+  .pm-node.active circle.pm-core{fill:#e8cd8a}
+  .pm-line{fill:none;stroke-width:1.6;stroke-dasharray:6 5;animation:pmFlow 2.6s linear infinite}
+  .pm-line.hostile{stroke:rgba(190,80,60,.85)}
+  .pm-line.tribute{stroke:rgba(200,162,74,.8)}
+  .pm-line.trade{stroke:rgba(110,150,205,.75)}
+  .pm-line.isolated{stroke:rgba(150,110,200,.55);stroke-dasharray:2 7;animation:none}
+  .pm-line-label{fill:var(--ink-dim);font-size:10px;letter-spacing:1px;font-family:inherit;pointer-events:none;text-anchor:middle}
+  @keyframes pmFlow{to{stroke-dashoffset:-22}}
+  /* 点击详情面板 */
+  .pm-detail{
+    margin-top:10px;padding:14px 18px;border-radius:12px;border-left:3px solid var(--gold);
+    background:linear-gradient(90deg,rgba(200,162,74,.08),transparent 75%);
+    animation:pmDetailIn .35s cubic-bezier(.22,.61,.36,1);
+  }
+  @keyframes pmDetailIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .pm-detail h4{color:var(--gold);font-size:16px;letter-spacing:3px;margin:0 0 6px;font-weight:bold}
+  .pm-detail p{margin:0;font-size:14px;line-height:1.9;color:var(--ink)}
+  .pm-detail .pm-tag{display:inline-block;padding:1px 9px;border:1px solid var(--gold-dim);border-radius:10px;color:var(--gold-dim);font-size:11px;letter-spacing:2px;margin-bottom:8px}
+  /* 图例 */
+  .pm-legend{display:flex;flex-wrap:wrap;gap:14px;margin:8px 2px 2px;font-size:11.5px;color:var(--ink-dim);letter-spacing:1px}
+  .pm-legend span{display:inline-flex;align-items:center;gap:6px}
+  .pm-legend i{display:inline-block;width:22px;height:0;border-top:2px dashed}
+  .pm-legend .h{border-color:rgba(190,80,60,.85)}
+  .pm-legend .t{border-color:rgba(200,162,74,.8)}
+  .pm-legend .tr{border-color:rgba(110,150,205,.75)}
+  .pm-legend .i{border-color:rgba(150,110,200,.55);border-top-style:dotted}
+  @media (max-width:700px){
+    .power-map{padding:10px}
+    .pm-node text{font-size:11px}
+    .pm-node .pm-sub{font-size:8.5px}
+    .pm-line-label{font-size:8px}
+  }
 </style>
 </head>
 <body>
@@ -855,6 +908,26 @@
   <div class="doc fade">
     <h1><span class="h-diamond"></span><span class="h-title" data-i18n="t_power">势力志</span><span class="h-diamond"></span></h1>
     <div class="lead" data-i18n="l_power">四方势力格局 · 世界核心主线</div>
+<div class="power-map" id="powerMap">
+      <svg viewBox="0 0 720 460" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="pmArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0 0 L10 5 L0 10 z" fill="rgba(200,162,74,.7)"/>
+          </marker>
+        </defs>
+        <!-- 关系连线：敌对(红)/朝贡(金)/贸易(蓝)/孤立(紫虚线) -->
+        <g class="pm-edges" id="pmEdges"></g>
+        <!-- 节点 -->
+        <g class="pm-nodes" id="pmNodes"></g>
+      </svg>
+      <div class="pm-legend">
+        <span><i class="h"></i>对峙 · 摩擦</span>
+        <span><i class="t"></i>朝贡 · 依附</span>
+        <span><i class="tr"></i>贸易 · 往来</span>
+        <span><i class="i"></i>孤立 · 自守</span>
+      </div>
+      <div class="pm-detail" id="pmDetail" style="display:none"></div>
+    </div>
     <h2 data-i18n="h2_pow1">四方势力博弈关系</h2>
     <div class="item"><b>西部：恓鸟城</b>：是唯一能在军事硬实力上与茹章城抗衡的势力，二者长期处于对峙状态，边境摩擦不断。恓鸟城鄙夷茹章城的虚伪神权统治，茹章城则将恓鸟城视作扩张路上的最大障碍。</div>
     <div class="item"><b>中部：茹章城</b>：是名义上的大陆霸主，主导着大陆的秩序，依靠朝贡体系与军事威慑控制多数中小城邦；但内部被寿命诅咒束缚，强盛的根基极其脆弱。</div>
@@ -1266,6 +1339,110 @@ inHengli.addEventListener('input', ()=>{ if(inHengli.value) updateCalc('hengli')
 applyHash();
 
 /* ============ 手风琴章节卡片（地理/势力） ============ */
+
+/* ============ 四方势力博弈图 ============ */
+(function(){
+  var box = document.getElementById('powerMap');
+  if(!box) return;
+  var svg = box.querySelector('svg');
+  var NS = 'http://www.w3.org/2000/svg';
+  // 节点：位置在 viewBox 720x460
+  var NODES = {
+    xuniao:  {x:100, y:150, zh:'恓鸟城', en:'Xuniao', subZh:'西部 · 军邦', subEn:'West · War-State'},
+    ruzhang: {x:360, y:150, zh:'茹章城', en:'Ruzhang', subZh:'中部 · 神权', subEn:'Center · Theocracy'},
+    xunyao:  {x:620, y:150, zh:'眴姚城', en:'Xunyao', subZh:'东部 · 商港', subEn:'East · Trade Port'},
+    fuxun:   {x:360, y:360, zh:'伏熏城', en:'Fuxun', subZh:'南部 · 海岛', subEn:'South · Isle'}
+  };
+  // 关系线：type = hostile/tribute/trade/isolated
+  var EDGES = [
+    {a:'xuniao', b:'ruzhang', type:'hostile', zh:'对峙 · 边境摩擦', en:'Standoff · Border friction'},
+    {a:'ruzhang', b:'xunyao', type:'tribute', zh:'朝贡 · 贸易保护', en:'Tribute · Trade protection'},
+    {a:'xuniao', b:'xunyao', type:'trade', zh:'暗中贸易往来', en:'Covert trade'},
+    {a:'xunyao', b:'fuxun', type:'trade', zh:'通商 · 香料海产', en:'Trade · Spices & seafood'},
+    {a:'fuxun', b:'fuxun', type:'isolated', zh:'孤立主义 · 自守', en:'Isolation · Self-guard'}
+  ];
+  // 详情文案（双语）
+  var DETAILS = {
+    xuniao: {zh:'西部山城军邦，冶铁冠绝沧陆。是唯一能在军事硬实力上与茹章城抗衡的势力，二者长期对峙、边境摩擦不断。恓鸟城鄙夷茹章城的虚伪神权统治，茹章城则将恓鸟城视作扩张路上的最大障碍。',
+             en:'Western mountain war-state, ironworking unrivaled. The only power able to match Ruzhang in military might; the two are locked in standoff with constant border friction. Xuniao scorns Ruzhang\'s hollow theocracy, while Ruzhang sees Xuniao as the greatest obstacle to its expansion.'},
+    ruzhang:{zh:'中部神权霸主，名义上的大陆之主。依靠朝贡体系与军事威慑控制多数中小城邦；但内部被百年寿命诅咒束缚——全城活不过45岁，强盛的根基极其脆弱。',
+             en:'Central theocratic hegemon, nominal overlord of the continent. It dominates through tribute and military deterrence — yet bound by the lifespan curse: none lives past 45, and its might rests on fragile ground.'},
+    xunyao: {zh:'东部商贸港城，各方势力之间的润滑剂与信息枢纽。依靠贸易在博弈中获利，既不敢彻底得罪茹章城，也暗中与恓鸟城、伏熏城保持贸易往来。',
+             en:'Eastern trading port — the lubricant and information hub among powers. Profiting from trade in the balance of games: never daring to offend Ruzhang outright, yet quietly trading with Xuniao and Fuxun.'},
+    fuxun:  {zh:'南部海岛民主之邦，奉行孤立主义，偏安海岛。不主动介入大陆纷争，对外保持戒备，专注于自身的发展与秩序，是沧陆格局中的"旁观者"。',
+             en:'Southern island democracy, isolationist by creed. It stays out of continental strife, wary of the outside, devoted to its own order and development — the "bystander" of Canglu.'}
+  };
+  var TAGS = {xuniao:{zh:'军邦 · 尚武', en:'War-State · Martial'}, ruzhang:{zh:'神权 · 霸主', en:'Theocracy · Hegemon'},
+              xunyao:{zh:'商港 · 中立', en:'Trade Port · Neutral'}, fuxun:{zh:'海岛 · 孤立', en:'Isle · Isolation'}};
+
+  function isEn(){ return window.__lang === 'en'; }
+  function mk(name, attrs){
+    var el = document.createElementNS(NS, name);
+    for(var k in attrs) el.setAttribute(k, attrs[k]);
+    return el;
+  }
+  var activeKey = 'ruzhang';  // 当前选中节点
+  function render(){
+    var en = isEn();
+    var edges = document.getElementById('pmEdges');
+    var nodes = document.getElementById('pmNodes');
+    if(!edges || !nodes) return;
+    edges.innerHTML = ''; nodes.innerHTML = '';
+
+    // 孤立环（伏熏自守虚线环）
+    var f = NODES.fuxun;
+    var iso = mk('ellipse', {cx:f.x, cy:f.y, rx:64, ry:42, fill:'none', 'class':'pm-line isolated'});
+    edges.appendChild(iso);
+
+    EDGES.forEach(function(e){
+      if(e.type === 'isolated') return;
+      var a = NODES[e.a], b = NODES[e.b];
+      var line = mk('line', {x1:a.x, y1:a.y, x2:b.x, y2:b.y, 'class':'pm-line ' + e.type});
+      edges.appendChild(line);
+      // 关系标签（中点上方）
+      var mx = (a.x+b.x)/2, my = (a.y+b.y)/2 - 12;
+      var lab = mk('text', {x:mx, y:my, 'class':'pm-line-label'});
+      lab.textContent = en ? e.en : e.zh;
+      edges.appendChild(lab);
+    });
+
+    Object.keys(NODES).forEach(function(key){
+      var n = NODES[key];
+      var g = mk('g', {'class':'pm-node', 'data-key':key});
+      g.appendChild(mk('circle', {cx:n.x, cy:n.y, r:20, 'class':'pm-ring'}));
+      g.appendChild(mk('circle', {cx:n.x, cy:n.y, r:10, 'class':'pm-core'}));
+      var t1 = mk('text', {x:n.x, y:n.y + 40, 'class':'pm-name'});
+      t1.textContent = en ? n.en : n.zh;
+      g.appendChild(t1);
+      var t2 = mk('text', {x:n.x, y:n.y + 58, 'class':'pm-sub'});
+      t2.textContent = en ? n.subEn : n.subZh;
+      g.appendChild(t2);
+      g.addEventListener('click', function(){ showDetail(key); });
+      nodes.appendChild(g);
+    });
+  }
+  function showDetail(key){
+    activeKey = key;
+    var en = isEn();
+    var d = document.getElementById('pmDetail');
+    var info = DETAILS[key], tag = TAGS[key];
+    d.innerHTML = '<span class="pm-tag">' + (en ? tag.en : tag.zh) + '</span><h4>' + (en ? NODES[key].en : NODES[key].zh) + '</h4><p>' + (en ? info.en : info.zh) + '</p>';
+    d.style.display = 'block';
+    // 高亮节点
+    document.querySelectorAll('#pmNodes .pm-node').forEach(function(g){
+      g.classList.toggle('active', g.dataset.key === key);
+    });
+  }
+  render();
+  // 语言切换时重绘（含详情）
+  window.__pmRender = function(){
+    render();
+    showDetail(activeKey);
+  };
+  // 打开页面时默认选中茹章城（霸主视角）
+  showDetail('ruzhang');
+})();
+
 ['geoPage','powerPage'].forEach(pid=>{
   const sec = document.getElementById(pid);
   if(!sec) return;
@@ -1936,6 +2113,8 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
     translateBody(s.lang);
     // 重新渲染城邦/意象卡片
     if(window.__rebuildCards) window.__rebuildCards();
+    // 重新渲染势力博弈图
+    if(window.__pmRender) setTimeout(window.__pmRender, 30);
   }
   function rebuildAccTitles(t){
     // 手风琴标题：用构建时记录的 data-i18n-key 直接翻译
