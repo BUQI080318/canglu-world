@@ -577,14 +577,6 @@
       </div>
     </div>
     <div class="sp-group">
-      <div class="sp-label">动效强度</div>
-      <div class="sp-row" id="spMotion">
-        <button data-v="full" class="sp-opt">完整</button>
-        <button data-v="light" class="sp-opt">轻量</button>
-        <button data-v="off" class="sp-opt">关闭</button>
-      </div>
-    </div>
-    <div class="sp-group">
       <div class="sp-label">进站自动播放音乐</div>
       <div class="sp-row" id="spAutoplay">
         <button data-v="on" class="sp-opt">开启</button>
@@ -908,19 +900,33 @@ const CITIES = [
 ];
 const grid = document.getElementById('cityGrid');
 const detailBox = document.getElementById('cityDetail');
-CITIES.forEach(c=>{
-  const card = document.createElement('div');
-  card.className = 'city-card glass-shine';
-  card.innerHTML = '<h4>'+c.name+'</h4><div class="role">'+c.role+'</div><p>'+c.summary+'</p>';
-  card.onclick = ()=> showCity(c);
-  grid.appendChild(card);
-});
+/* 城邦卡片：语言相关渲染 */
+function cName(c){ return window.__lang==='en' ? (NAMES_EN[c.name]||c.name) : c.name; }
+function cRole(c){ return window.__lang==='en' ? (ROLES_EN[c.role]||c.role) : c.role; }
+function cText(t){
+  if(window.__lang==='en'){
+    if(EN_DETAILS[t]) return EN_DETAILS[t];
+  }
+  return t;
+}
+function renderCities(){
+  if(!grid) return;
+  grid.innerHTML = '';
+  CITIES.forEach(c=>{
+    const card = document.createElement('div');
+    card.className = 'city-card glass-shine';
+    card.innerHTML = '<h4>'+cName(c)+'</h4><div class="role">'+cRole(c)+'</div><p>'+cText(c.summary)+'</p>';
+    card.onclick = ()=> showCity(c);
+    grid.appendChild(card);
+  });
+}
 function showCity(c){
-  let html = '<h2>'+c.name+' · '+c.role+'</h2><p class="note">"'+c.motto+'"</p>';
-  c.detail.forEach(d=>{ html += '<p>'+d+'</p>'; });
+  let html = '<h2>'+cName(c)+' · '+cRole(c)+'</h2><p class="note">"'+c.motto+'"</p>';
+  c.detail.forEach(d=>{ html += '<p>'+cText(d)+'</p>'; });
   detailBox.innerHTML = html;
   detailBox.scrollIntoView({behavior:'smooth'});
 }
+renderCities();
 
 /* ============ 山川人文意象与秘境卡片 ============ */
 const LANDMARKS = [
@@ -941,19 +947,29 @@ const LANDMARKS = [
 ];
 const landmarkGrid = document.getElementById('landmarkGrid');
 const landmarkDetail = document.getElementById('landmarkDetail');
-LANDMARKS.forEach(l=>{
-  const card = document.createElement('div');
-  card.className = 'city-card glass-shine';
-  card.innerHTML = '<h4>'+l.name+'</h4><div class="role">'+l.role+'</div><p>'+l.summary+'</p>';
-  card.onclick = ()=> showLandmark(l);
-  landmarkGrid.appendChild(card);
-});
+function renderLandmarks(){
+  if(!landmarkGrid) return;
+  landmarkGrid.innerHTML = '';
+  LANDMARKS.forEach(l=>{
+    const card = document.createElement('div');
+    card.className = 'city-card glass-shine';
+    card.innerHTML = '<h4>'+cName(l)+'</h4><div class="role">'+cRole(l)+'</div><p>'+cText(l.summary)+'</p>';
+    card.onclick = ()=> showLandmark(l);
+    landmarkGrid.appendChild(card);
+  });
+}
 function showLandmark(l){
-  let html = '<h2>'+l.name+' · '+l.role+'</h2>';
-  l.detail.forEach(d=>{ html += '<p>'+d+'</p>'; });
+  let html = '<h2>'+cName(l)+' · '+cRole(l)+'</h2>';
+  l.detail.forEach(d=>{ html += '<p>'+cText(d)+'</p>'; });
   landmarkDetail.innerHTML = html;
   landmarkDetail.scrollIntoView({behavior:'smooth'});
 }
+renderLandmarks();
+/* 语言切换时重建卡片 */
+window.__rebuildCards = function(){
+  renderCities();
+  renderLandmarks();
+};
 
 /* ============ 页面切换 ============ */
 function switchPage(id){
@@ -1514,10 +1530,19 @@ function animatePageIn(sec){
   apply();
 })();
 
+
+/* ============ 正文英文翻译字典 ============ */
+var NAMES_EN = {"元荒海":"Yuanhuang Sea","苍瀛海":"Cangying Sea","白绫海":"Bailing Sea","肆星海":"Sixing Sea","恓鸟城":"Xuniao","茹章城":"Ruzhang","眴姚城":"Xunyao","伏熏城":"Fuxun","断脊山脉":"Duanji Mountains","眸霞山脉":"Mouxia Mountains","辞君山":"Cijun Mountain","桓山":"Huan Mountain","自鸣山":"Ziming Mountain","狩脊山":"Shouji Mountain","扼根山":"Egen Mountain","无昼碛":"Wuzhou Desert","奇迤岛":"Qiyi Island","吴阳湖":"Wuyang Lake","望暮大桥":"Wangmu Bridge","潜蛟海底隧道":"Qianjiao Undersea Tunnel","延西河":"Yanxi River","连奕江":"Lianyi River","渡蛟裂谷":"Dujiao Rift Valley","东枝崖":"Dongzhi Cliff","双生湾":"Shuangsheng Bay","泊月湾":"Boyue Bay","承晚海峡":"Chengwan Strait","望暮海峡":"Wangmu Strait","荻瑟湖":"Dise Lake","雁南岛":"Yannan Island","盎季地":"Angji Land","东生半岛":"Dongsheng Peninsula","赎誓阁":"Shushi Pavilion","伏熏岛":"Fuxun Island","归尘屿":"Guichen Isle","斯瑜群岛":"Siyu Islands","南引群岛":"Nanyin Islands","星沙礁":"Xingsha Reefs","屈海":"Qu Sea","眸霞山脉与自鸣山":"Mouxia Mountains & Ziming"};
+var ROLES_EN = {"山脉":"Mountain Range","山峰":"Peak","秘境":"Mystic Land","城邦":"City-State","海岛":"Island"};
+var EN_ITEMS = {"元荒海：地图最西侧的广阔外海，为西部大陆的西界海域。":["Yuanhuang Sea","The vast outer sea at the western edge of the map, forming the western boundary of the Western Continent."],"苍瀛海：地图最东侧的广阔外海，为东部大陆的东界海域。":["Cangying Sea","The vast outer sea at the eastern edge of the map, forming the eastern boundary of the eastern lands."],"白绫海：地图最北部的陆缘内海，被北部大陆、奇迤岛环绕。":["Bailing Sea","A northern marginal inland sea, enclosed by the northern continent and Qiyi Island."],"肆星海：地图中南部的核心主海域，位于中部大陆、盎季地与南部诸岛之间，是区域通航核心水域，多星礁。":["Sixing Sea","The central sea in the south-central map, lying between the Central Continent, Angji Land and the southern isles — the region's key waterway, dotted with star reefs."],"双生湾：西部大陆南段的元荒海沿岸海湾，为延西河入海口所在区域。":["Shuangsheng Bay","A bay on the Yuanhuang Sea coast of the western continent's south, where the Yanxi River meets the sea."],"泊月湾：中部大陆南段的肆星海北岸海湾，为连奕江入海口所在区域。":["Boyue Bay","A bay on the northern shore of the Sixing Sea, where the Lianyi River empties."],"屈海：东部大陆南段被东枝崖环绕包裹的海湾。":["Qu Sea","A bay on the southern eastern continent, embraced by the Dongzhi Cliff."],"承晚海峡：分隔东生半岛与雁南岛的狭窄水道，连通元荒海与肆星海。":["Chengwan Strait","A narrow channel separating Dongsheng Peninsula from Yannan Island, linking the Yuanhuang and Sixing seas."],"望暮海峡：分隔奇迤岛与北部大陆的狭窄水道，连通白绫海和苍瀛海。":["Wangmu Strait","A narrow channel between Qiyi Island and the northern continent, linking the Bailing and Cangying seas."],"吴阳湖：中东部平原的大型淡水湖，坐落于连奕江下游东侧。":["Wuyang Lake","A great freshwater lake on the central-eastern plain, east of the lower Lianyi River."],"荻瑟湖：雁南岛内部的天然湖泊，为岛上核心水域。":["Dise Lake","A natural lake at the heart of Yannan Island, its central water body."],"西部大陆：元荒海东岸的主陆块，以断脊山脉为地形骨架，是恓鸟城所在的核心陆地区。":["Western Continent","The main landmass east of the Yuanhuang Sea, framed by the Duanji Mountains — homeland of Xuniao."],"中部大陆：眸霞山脉以东、肆星海以北的中央陆块，是茹章城与连奕江流域的核心区域。":["Central Continent","The central landmass east of the Mouxia Mountains and north of the Sixing Sea — heartland of Ruzhang and the Lianyi basin."],"盎季地：地图东侧的大型半岛型陆块，为东部文明的核心区域，南端延伸至东枝崖。":["Angji Land","A great peninsular landmass in the east, core of the eastern civilization, its southern tip reaching Dongzhi Cliff."],"东生半岛：西部大陆向西南延伸的半岛，隔承晚海峡与雁南岛相望。":["Dongsheng Peninsula","A peninsula jutting southwest from the Western Continent, facing Yannan Island across the Chengwan Strait."],"奇迤岛：白绫海东北部的大型岛屿，位于斯瑜群岛西侧。":["Qiyi Island","A large island northeast of the Bailing Sea, west of the Siyu Islands."],"雁南岛：承晚海峡南侧的大陆型岛屿，岛上分布有荻瑟湖，是西南海域的关键陆地节点。":["Yannan Island","A continental isle south of the Chengwan Strait, home to Dise Lake — a key node of the southwestern seas."],"赎誓阁：肆星海南偏的岛屿，是东南海域的关键陆地节点。":["Shushi Pavilion","An isle in the southern Sixing Sea, a key node of the southeastern waters."],"伏熏岛：位于元荒海东南侧与肆星海西南侧的火山岛，是伏熏城、狩脊山的所在地。":["Fuxun Island","A volcanic island between the southeastern Yuanhuang Sea and southwestern Sixing Sea — home to Fuxun and Mount Shouji."],"归尘屿：肆星海南部、盎季地正南方的连片星礁型海岛。":["Guichen Isle","A chain of star-reef islets south of the Sixing Sea, directly south of Angji Land."],"斯瑜群岛：白绫海东侧与苍瀛海西侧交界处的小型群岛。":["Siyu Islands","A small archipelago at the junction of the eastern Bailing Sea and western Cangying Sea."],"南引群岛：地处肆星海东南端的大型火山型群岛。":["Nanyin Islands","A large volcanic archipelago at the southeastern end of the Sixing Sea."],"星沙礁：肆星海南部的大片浅滩/暗星礁群，散布于中部海域。":["Xingsha Reefs","Vast shoals and dark star reefs in the southern Sixing Sea, scattered across its central waters."],"断脊山脉：西部大陆南北走向的主山脉，核心山脊海拔普遍在3000m以上，是西部地形的核心骨架。":["Duanji Mountains","The north-south spine of the Western Continent; its core ridges rise above 3000m, forming the skeleton of the western terrain."],"眸霞山脉：中部南北走向的主山脉，分隔西部内陆与中部平原，是沧陆最重要的地理分界线之一。":["Mouxia Mountains","The central north-south range dividing the western interior from the central plains — one of Canglu's most vital geographic divides."],"辞君山：断脊山脉西北段山峰，海拔1437m。":["Cijun Mountain","A peak in the northwestern Duanji range, 1437m."],"桓山：白绫海南岸、眸霞山脉西北侧山峰，海拔4297m。":["Huan Mountain","A peak on the southern shore of the Bailing Sea, northwest of the Mouxia range, 4297m."],"自鸣山：眸霞山脉主峰，沧陆最高峰，海拔5243m。":["Ziming Mountain","The highest peak in Canglu, chief summit of the Mouxia range, 5243m."],"狩脊山：伏熏岛东部山峰，海拔2136m。":["Shouji Mountain","An eastern peak of Fuxun Island, 2136m."],"扼根山：奇迤岛西侧山峰，海拔1505m。":["Egen Mountain","A western peak of Qiyi Island, 1505m."],"渡蛟裂谷：吴阳湖东侧、盎季地西侧的南北走向裂谷带，为东部的最重要地形分界线。":["Dujiao Rift Valley","A north-south rift east of Wuyang Lake and west of Angji Land — the east's most important terrain divide."],"东枝崖：盎季地最南端的崖岸海角，是大陆向肆星海延伸的最南端区域。":["Dongzhi Cliff","The southernmost headland of Angji Land, where the continent reaches farthest into the Sixing Sea."],"无昼碛：横贯奇迤岛中东部的海岛沙漠，意为\"永无白昼的沙漠\"，沙粒自带吸光特性，哪怕岛外晴空万里，沙漠范围内永远笼罩着一层灰蒙暝色，分不清晨昏昼夜。":["Wuzhou Desert","A desert spanning central-eastern Qiyi Island — \"the desert without daylight.\" Its sand absorbs light, so even under clear skies outside, a grey gloom forever shrouds the desert, blurring day from night."],"延西河：发源于断脊山脉，向南流经西部内陆，注入双生湾附近海域。":["Yanxi River","Rising in the Duanji Mountains, it flows south through the western interior into the seas near Shuangsheng Bay."],"连奕江：发源于眸霞山脉，向东横贯中部平原，流经吴阳湖周边，最终注入泊月湾附近海域。":["Lianyi River","Rising in the Mouxia Mountains, it crosses the central plains eastward, past Wuyang Lake, into the seas near Boyue Bay."],"恓鸟城：西部大陆断脊山脉南段西侧内陆的核心城市，延西河流域重镇。":["Xuniao","The core city of the western interior, west of the southern Duanji range — a stronghold of the Yanxi basin."],"茹章城：中部平原、眸霞山脉东侧的核心都城级城市，中部文明的中心。":["Ruzhang","The paramount city of the central plains east of the Mouxia range — center of the central civilization."],"眴姚城：盎季地东侧沿海的港口城市。":["Xunyao","A port city on the eastern coast of Angji Land."],"伏熏城：伏熏岛中部腹地的核心城，伏熏岛屿文明的中心。":["Fuxun","The core city of Fuxun Island's interior, heart of its insular civilization."],"望暮大桥：横跨白绫海南部海峡的巨型桥梁，连接中部大陆与奇迤岛，是跨区域核心交通枢纽。":["Wangmu Bridge","A colossal bridge spanning the southern Bailing Strait, linking the Central Continent to Qiyi Island — a vital cross-region hub."],"潜蛟海底隧道：穿越承晚海峡附近海域的海底隧道，连通北部陆块与雁南岛。":["Qianjiao Undersea Tunnel","An undersea tunnel beneath the waters near the Chengwan Strait, linking the northern landmass to Yannan Island."],"西部：恓鸟城：是唯一能在军事硬实力上与茹章城抗衡的势力，二者长期处于对峙状态，边境摩擦不断。恓鸟城鄙夷茹章城的虚伪神权统治，茹章城则将恓鸟城视作扩张路上的最大障碍。":["West: Xuniao","The only power able to match Ruzhang in military might; the two have long been locked in standoff, with constant border friction. Xuniao scorns Ruzhang's hollow theocracy, while Ruzhang sees Xuniao as the greatest obstacle to its expansion."],"中部：茹章城：是名义上的大陆霸主，主导着大陆的秩序，依靠朝贡体系与军事威慑控制多数中小城邦；但内部被寿命诅咒束缚，强盛的根基极其脆弱。":["Center: Ruzhang","The nominal overlord of the continent, it dominates order through tribute systems and military deterrence — yet bound by the lifespan curse, its foundations are desperately fragile."],"东部：眴姚城：是各方势力之间的润滑剂与信息枢纽，依靠贸易在博弈中获利，既不敢彻底得罪茹章城，也暗中与恓鸟城、伏熏城保持贸易往来。":["East: Xunyao","The lubricant and information hub among the powers, profiting from trade in the balance of games — never daring to offend Ruzhang outright, yet quietly trading with Xuniao and Fuxun."],"南部：伏熏城：奉行孤立主义，偏安海岛，不主动介入大陆纷争，对外保持戒备，专注于自身的发展与秩序，是沧陆格局中的\"旁观者\"。":["South: Fuxun","An isolationist island power that stays out of continental strife, wary of the outside, devoted to its own order and development — the \"bystander\" of Canglu."],"扼根山：绿洲中的死寂之山，官方否认与茹章城的关联，民间却暗中信奉，相信城邦气运与山体深度绑定。":["Egen Mountain","The dead mountain within the oasis. Officially unconnected to Ruzhang, yet secretly revered by the people, who believe the city's fortune is bound to the peak."],"无昼碛：永无白昼的沙漠，神骸力量外泄扭曲了光线与时空规则的产物，扼根山绿洲是沙漠中唯一的力量锚点。":["Wuzhou Desert","The desert without daylight, born of the divine remains' leaking power that warped light and space — the Egen oasis its sole anchor of strength."],"狩脊山：遍植白色草木的圣山，象征一尘不染的圣洁——而极致的纯白只存在于传说与理想中，现实里的圣洁永远伴随代价与虚伪。":["Shouji Mountain","The sacred mountain clad in white flora, symbol of spotless purity — yet perfect whiteness exists only in legend; true sanctity is always bought with cost and hypocrisy."]};
+var EN_PARAS = {"元年事件：\"幽荧降世\"（官方史书美化后的说法）或\"血祭封神\"（民间隐秘传言）。":"Era founding event: the \"Descent of the Dark Gleam\" (the official chronicles' euphemism) — or the \"Blood Sacrifice and Deification\" (a secret folk tale).","纪元名称：戍城年。元年事件：恓鸟建国为元年，对应祀元200年。":"Era name: the Shucheng Year. Year One marks the founding of Xuniao, corresponding to Siyuan 200.","换算：戍城年份 = 祀元年份 − 200 = 衡历年份 − 40。":"Conversion: Shucheng year = Siyuan year − 200 = Hengli year − 40.","纪元名称：祀元。商行、海关、货单全部写祀元，和茹章通商完全无阻碍。":"Era name: Siyuan. Trading houses, customs and bills all use Siyuan, so commerce with Ruzhang runs without hindrance.","纪元名称：衡历。元年事件：伏熏城邦统一、立衡法、定商事、规整匠艺的建国之年，对应祀元160年。":"Era name: the Hengli Calendar. Year One is the founding of a unified Fuxun, with the Balanced Law, trade regulations and craft standards — corresponding to Siyuan 160.","换算：衡历年份 = 祀元年份 − 160 = 戍城年 + 40。":"Conversion: Hengli year = Siyuan year − 160 = Shucheng year + 40.","茹章城纪元开端。官方史书称之为\"幽荧降世\"；民间隐秘传言则谓\"血祭封神\"——初代茹章王为换取城邦的强盛，将自己献祭，融入神的心脏，以全城邦世代居民的寿命为代价，换来了茹章城的永恒繁荣。诅咒自此而降：茹章城所有人，无论贵贱，都活不过45岁。":"The origin of the Ruzhang era. Official histories call it the \"Descent of the Dark Gleam\"; secret folk tales call it the \"Blood Sacrifice and Deification\" — the first king of Ruzhang, to buy his city's greatness, offered himself to merge with the heart of a god, paying with the lifespans of all his people for Ruzhang's eternal prosperity. The curse fell then: none in Ruzhang, high or low, lives past 45.","伏熏城邦统一，立衡法、定商事、规整匠艺，此年为建国之年，伏熏城官方历法\"衡历\"由此纪元。对应换算：衡历年份 = 祀元年份 − 160。":"The unification of Fuxun: the Balanced Law, trade regulations and craft standards established. This founding year begins the Hengli Calendar. Conversion: Hengli year = Siyuan year − 160.","恓鸟建国，此年为恓鸟城官方历法\"戍城年\"之元年。对应换算：戍城年份 = 祀元年份 − 200 = 衡历年份 − 40。":"The founding of Xuniao marks Year One of its official Shucheng calendar. Conversion: Shucheng year = Siyuan year − 200 = Hengli year − 40.","每隔三年，茹章君主都会率领一支庞大的亲信队伍，于年尾烬月秘密远赴奇迤岛，深入扼根山腹地举行仪式。仪式全程严格保密，对外只宣称\"祭天祈福\"；唯有民间口耳相传：那是延续诅咒、供养神骸的献祭。":"Every three years, the Ruzhang sovereign leads a vast retinue of confidants to Qiyi Island in the year-end Ember Month, deep into Egen Mountain's heart for a ritual. All is kept strictly secret, announced only as \"prayers to heaven\"; only folk whispers tell the truth: it is a sacrifice to sustain the curse and feed the divine remains.","在寿命诅咒之下，茹章城每一代人皆以45年为限，民间私下用\"一轮\"指代一代人。官方以\"删改围罪\"清除所有知晓真相者，靠朝贡与扩张转移民众对寿命异常的注意力。强盛的表象之下，绝望在暗处无声蔓延。":"Under the lifespan curse, every generation of Ruzhang ends at 45; folk privately call one generation \"a round.\" The authorities erase all who know the truth under the \"crime of erasure,\" and distract the people with tribute and expansion. Beneath the mask of strength, despair spreads silently in the dark.","预言中，终有一日神会彻底苏醒，以它的规则重写整个世界的秩序——届时，茹章城的\"奇迹\"将彻底崩塌，而沧陆的格局也将随之改写。":"The prophecy: one day the god will fully awaken and rewrite the order of the world by its own rules — then Ruzhang's \"miracle\" will collapse utterly, and the balance of Canglu will be remade.","茹章城以全城邦世代居民的寿命为代价换来的\"永恒繁荣\"，是沧陆最大的秘密：扼根山深处的灵祠里，沉睡着一具\"不属于这个世界的神之遗骸\"。神骸缓慢吞噬民众的生命余脉以维持城邦气运，全城无论贵贱都活不过45岁。":"The \"eternal prosperity\" of Ruzhang, bought with the lifespans of its people, is Canglu's greatest secret: in a shrine deep within Egen Mountain sleeps a divine relic \"not of this world.\" It slowly devours the people's remaining life to sustain the city's fortune — none, high or low, lives past 45.","官方以\"删改围罪\"清除所有真相知晓者，靠朝贡与扩张转移注意力。但预言中，终有一日神会彻底苏醒，以它的规则重写整个世界的秩序——届时，茹章城的\"奇迹\"将彻底崩塌，而沧陆的格局也将随之改写。":"The authorities erase all who know the truth under the \"crime of erasure,\" distracting the people with tribute and expansion. Yet the prophecy holds: one day the god will fully awaken and rewrite the world's order — then Ruzhang's \"miracle\" will collapse, and the balance of Canglu will be remade.","「单侧羽翼 + 十字佩剑」——沧陆全域世界观总LOGO。从整片沧陆大陆、四海四城邦、世界底层宿命的宏观视角拆解符号内核。":"\"A single wing + a crossed sword\" — the master emblem of the Canglu world. The symbol's core, read from the grand view of the whole continent, its four seas and four city-states, and the fate beneath the world.","十字四向对应沧陆四大核心城邦，是整片大陆的四方缩影：":"The four arms of the cross answer to Canglu's four great city-states — a miniature of the whole continent:","贯穿十字的长剑，代表武力、冲突、制衡：四邦常年对峙、摩擦、博弈，刀剑是沧陆永恒底色；剑身笔直代表这片大陆共通的生存底线——无论制度、信仰差异，所有人都在挣扎求生。":"The sword running through the cross stands for might, conflict and balance: the four states are ever at odds, and the blade is Canglu's eternal ground-tone; the sword's straight spine is the continent's shared floor of survival — whatever the systems or faiths, all are struggling simply to live.","折翼之世，以剑衡四方——整片沧陆，是一片天生残缺、四方势力彼此制衡、永在纷争与挣扎中存续的大地；山河、海域、城邦、凡人，皆困于宿命，却始终持剑守住自身生存的信念。":"\"A broken-winged world, the sword balancing all four quarters\" — Canglu is a land born flawed, its four powers forever checking one another, enduring through strife and struggle; mountains, seas, cities and mortals alike are bound by fate, yet forever keep their blades to hold the faith of survival.","视觉区分优势：恓鸟城专属符号侧重山脉、孤守、兵刃，不用羽翼作核心；茹章城用对称圆满纹样、环形神纹，拒绝残缺意象；眴姚港用双翅、海浪、船帆；伏熏城用纯白草木、日月，无尖锐佩剑。全域LOGO独有的「单残缺羽翼+十字长剑」与四大城邦视觉体系完全割裂，一眼区分「世界总标识」与「单一势力纹章」。":"Distinction: Xuniao's emblem centers on mountains, lone vigils and blades, never wings; Ruzhang uses symmetric, complete patterns and circular divine rings, rejecting brokenness; Xunyao uses twin wings, waves and sails; Fuxun uses white flora, sun and moon, with no sharp sword. The master emblem's lone broken wing and crossed sword stand wholly apart from all four states' visual systems — the \"world insignia\" is instantly told from any \"state heraldry.\"","适配：小说封面、世界观设定集主海报、平台主页背景、世界开篇插图、沧陆全域地图底纹装饰。墨渍、暗沉灰调呼应无昼碛永暗与茹章城诅咒的压抑宿命感。":"For: novel covers, setting-collection posters, platform banners, opening illustrations, map backdrops of Canglu. The ink stains and sombre greys echo the eternal dark of Wuzhou Desert and the suffocating fate of Ruzhang's curse.","短板：细碎污渍、渐变层次过多，无法标准化复用，缩小后糊作一团，仅作美术宣传图。":"Limitation: excessive speckle and gradients make it unfit for standardized reuse — it muddies when shrunk; it serves only as promotional art.","适配：世界观文档插图、四大城邦分卷扉页、美术原画设定稿、PPT演示配图。羽毛、剑身明暗层次完整，手绘厚重感贴合大陆史诗感。":"For: worldbuilding document art, chapter title pages of the four states, concept sheets, presentation illustrations. The full tonal depth of feather and blade carries a hand-drawn weight befitting the continent's epic air.","短板：灰度排线不适合标准化印刷、刺绣、金属铸造，只能作为辅助美术素材。":"Limitation: grey hatching suits neither standardized printing, embroidery nor metal casting — it remains auxiliary artwork.","唯一能全场景通用：超高识别度，缩小为网站头像、水印，或放大做纪念碑、地图边框浮雕均清晰不变形；兼容烫金印刷、布料刺绣、金属徽章、石刻、印章、UI图标；配色自由度极高（正式物料铁黑线条+霜白底；宣传海报深灰底+银白线条）；线条简洁克制，不偏向任意一方城邦。":"The only version universal in every scene: supreme recognizability — clear and undistorted from site avatar and watermark to monument and map-border relief; compatible with foil printing, embroidery, metal badges, stone carving, seals and UI icons; freely recolorable (iron-black lines on frost-white for official material; silver lines on deep grey for posters); its restrained lines favor no single state.","小幅优化建议：羽翼内侧加极简三段起伏折线（暗喻断脊山脉、眸霞山脉），剑格十字四角点缀极短波浪细线（代表元荒海、苍瀛海、白绫海、肆星海），把山川四海意象融入全域LOGO。":"Fine-tuning suggestion: add three minimal undulating lines inside the wing (echoing the Duanji and Mouxia ranges), and tiny wave strokes at the cross's four corners (the Yuanhuang, Cangying, Bailing and Sixing seas) — folding mountains and seas into the master emblem.","短句版：折翼一陆，剑衡四方":"Short motto: A broken-winged land, the sword balancing all four quarters.","史诗长句：沧陆众生皆为恓鸟，山河残缺，兵刃衡世，在宿命裂痕中生生不息。":"Epic line: All souls of Canglu are Xuniao — mountains broken, blades balancing the world, living on unceasingly within fate's cracks."};
+var EN_TDS = {"断脊山脉雪线最低，恓鸟城最苦寒的戍边月。":"The snowline of the Duanji Mountains sinks lowest; Xuniao's bitterest month of frontier duty.","延西河、连奕江开始解冻，春汛初起。":"The Yanxi and Lianyi rivers begin to thaw; spring floods rise.","中部平原春耕，茹章城收粮税的起点。":"Spring plowing on the central plains; Ruzhang begins its grain taxes.","山雪化尽，恓鸟城与茹章城边境摩擦高发期。":"Mountain snows melt away; border friction between Xuniao and Ruzhang peaks.","肆星海风浪最小，眴姚城船队大规模出港的黄金季。":"The Sixing Sea lies calmest; Xunyao's fleets sail en masse — the golden season.","雷雨频发，伏熏岛火山活动相对活跃的月份。":"Thunderstorms frequent; volcanic activity on Fuxun Island stirs.","全年最热，吴阳湖流域的农忙收割期。":"Hottest of the year; the harvest rush across the Wuyang Lake basin.","秋燥起，大陆东部时有小型旱情。":"Autumn dryness sets in; minor droughts flicker across the eastern lands.","白绫海北岸渔猎旺季，也是恓鸟城秋猎练兵月。":"Peak fishing and hunting on the Bailing Sea's north shore; Xuniao's autumn drills.","百物收敛，各城邦清点一年库存、结算商账。":"All things gathered; the states tally their stores and settle accounts.","初雪普降，眸霞山脉开始封山。":"First snows fall; the Mouxia Mountains seal their passes.","年尾大祭，也是茹章城每三年一次秘密前往扼根山的出发月。":"The year-end grand rite — and the month Ruzhang secretly departs for Egen Mountain, once every three years."};
+var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉重的氛围。多年的边境战火给城邦留下了深刻的创伤，也淬炼出了民众极强的凝聚力。城邦曾一度人烟萧条、濒临覆灭，最终凭借全民死守守住疆土，如今已是西部不可小觑的核心势力。":"Called the \"City of Sorrowful Breath,\" the city is forever wrapped in a bleak, heavy air. Years of border war have scarred it deeply — and forged its people's fierce unity. Once nearly ruined and depopulated, it held its land by the stubborn resistance of all, and now stands as a formidable power of the west.","凛冽的山风与寒意是城市的印记，\"薪火相传、守护故土\"是刻在所有民众骨子里的精神内核，凛冽寒风中的万家灯火，是恓鸟城人心中永恒的归宿。":"Bitter mountain wind and chill are the city's mark; \"passing the torch, guarding the homeland\" is etched into every citizen's bones. The ten thousand hearth-lights in the cold wind are Xuniao's eternal home.","经济核心支柱为冶铁业，技术高度发达，出产的兵器、甲胄精良耐用，在全沧陆都享有盛名，是城邦最核心的竞争力与财政来源。农业地处内陆山区，耕地有限、气候寒冷，主产土豆、薯蓣等耐寒耐旱作物，粮食仅能勉强自给。":"Its economic pillar is ironworking: highly advanced, its weapons and armor are famed across all Canglu — the city's core competitiveness and treasury. Farming in the cold mountain interior is limited to hardy crops like potatoes and yams; grain barely suffices for itself.","人口总量不多，但整体民众素质偏高。城邦极度重视知识与文化传承，尤其看重对青年人的价值观塑造，会反复向年轻一代灌输城邦的荣辱历史，强调尚武与守土的信念。":"Small in population but high in quality. The city treasures knowledge and culture, shaping the young with the state's history of honor and shame, instilling the creed of martial valor and steadfast defense.","政治制度为宗族长老制加军事制衡：城邦由单一大宗族世代统治，宗族内部培养体系极其严苛。宗族子弟自幼接受文武双重考核，资质低劣、品行不端者会被直接发配至断脊山脉充军；已居官位者若违德背义、贪腐渎职，同样会被投入牢狱，甚至流放充军。":"Politics: clan eldership plus military balance. A single great clan rules in perpetuity, its training ruthless: clan youths face dual civil-martial trials from childhood; the dull or unworthy are exiled to serve in the Duanji Mountains; officials who betray virtue or take bribes face prison — or exile to the ranks.","最高首领为大长老：从宗族内部的\"崇明者\"（德高望重、能力出众的长辈）中初步选拔，最终需获得民众认可才能正式上位。大长老并非终身制，年迈体衰后必须主动退位；若出现贪腐怠政、拒不退位，民众公认其失德时，有权联合起来将其推翻。":"The highest office is the Grand Elder, first drawn from the \"Luminaries\" (elders of weight and ability) and confirmed only with the people's approval. The office is not for life: the aged must step down, and a corrupt or stubborn Grand Elder may be jointly overthrown when the people deem him unworthy.","军事制衡：卫国者庭。城邦的军事力量不由宗族直接掌控，而是由普通民众组成的卫国者庭掌握，核心职责是守护城邦、制衡统治宗族，防止宗族权力过度膨胀。":"Military balance: the Court of Realm Guardians. Armed power is not the clan's to command — it rests with the Guardians, common folk whose duty is to defend the city and check the ruling clan's overreach.","世袭仲裁：右判决官。宗族内有一支单传的世袭血脉，世袭「右判决官」之职，传承不分男女。右判决官对卫国者庭的所有决议拥有异议权与最终否决权，是宗族制衡军事力量的核心手段；若世袭子嗣意外夭折，则由大长老召集全族召开宗族会议，通过特殊仪式选定新的世袭血脉。":"Hereditary arbitration: the Right Adjudicator. A single unbroken bloodline within the clan holds the office, passing to either sex. The Adjudicator may object to and finally veto every resolution of the Guardians — the clan's key check on arms; should the heir die untimely, the Grand Elder convenes a clan council to choose a new bloodline by special rite.","日常行政：法律编订、民生经济、社会治理等事务由大长老牵头的城邦议会负责，议会下辖多个职能分部处理具体社会事务。":"Daily administration: law, livelihood and governance rest with the city council under the Grand Elder, its many bureaus handling concrete affairs.","社会结构：城邦居民以本地人居多，宗族成员占比接近半数，是统治与中坚阶层；外来人口可定居生产、享有基本公民权利，也需履行纳税、戍边等义务，但没有参政与进入权力体系的资格。":"Society: natives form the majority; clan members, nearly half, are the ruling and backbone class. Outsiders may settle, work and enjoy basic rights, and bear taxes and frontier duties — but hold no part in governance or power.","精神信仰：没有正式宗教体系，核心精神是\"敬自然、重血缘、守故土\"，崇拜断脊山脉，将其视作城邦的守护神；重视宗族血脉传承，将先祖的荣光与教训视为最高行为准则。":"Faith: no formal religion. The core creed is \"revere nature, value blood, hold the homeland,\" worshipping the Duanji Mountains as the city's guardian god; ancestral glory and lessons are the supreme code of conduct.","表象：全盛的大陆中心。是沧陆公认最繁荣、最强大的城邦，经济、文化、军事全面鼎盛，民众生活富庶安乐，疆域面积为诸邦之最，周边大量小城邦主动称臣朝贡。官方修撰的史籍中全是辉煌记载，强盛仿佛亘古不变、天经地义。":"Surface: the continent's radiant center. Universally acknowledged Canglu's richest and strongest state — economy, culture and arms at their zenith, subjects prosperous, territory the largest, small states vassaling and paying tribute. Its official histories are all glory, as if its might were eternal and ordained.","内里：被诅咒的虚假繁荣。辉煌的表象之下藏着毁灭的宿命：茹章城最初只是一个落后的农耕小城邦，却在极短时间内毫无征兆地爆发式崛起，如同一场\"虚伪的奇迹\"，随后开始无休止的对外扩张，疆域不断膨胀。":"Within: a cursed, hollow prosperity. Beneath the splendor hides a doom: Ruzhang began as a backward farming town, then exploded into rise without warning — a \"false miracle\" — and has since expanded without end.","所有知晓城邦崛起真相、质疑统治合法性的人，都会被冠以\"删改围罪\"的罪名秘密处死，绝望在暗处无声蔓延。":"All who learn the truth of its rise or question its rule are secretly put to death on the \"crime of erasure,\" and despair spreads silently in the dark.","政治制度：君主集权神权制。最高统治者集宗教神权、军政大权于一身，自称君权神授，地位至高无上。君主之下设四大核心部门，完全以君主意志为核心运转：":"Politics: absolutist theocracy. The sovereign unites divine and martial authority, ruling by claimed mandate of god. Beneath the throne, four ministries turn wholly on the sovereign's will:","社会部——体系最庞大的部门，掌管户籍、民生、基建、司法、治安等所有基础行政事务，维持城邦日常运转；经济部——完全遵从君主意志制定经济策略，掌控税收、贸易、粮食储备等核心经济命脉；外事部——统管与外邦的外交往来、朝贡制度、跨境贸易规则，维护宗主地位；监察部——纠察官员僭越、民间异端言论，拥有直接羁押审讯的权力，最终处置完全以君主个人意志为准，不受法律约束。":"The Ministry of Society — largest of all, running census, livelihood, works, justice and order; the Ministry of Economy — all policy by royal will, holding taxes, trade and grain reserves; the Ministry of Foreign Affairs — diplomacy, tribute and cross-border rules, upholding suzerainty; the Ministry of Inspection — rooting out official overreach and heretical speech, with power to detain and interrogate, final judgment resting solely on the sovereign, beyond any law.","信仰的真相：茹章城并不信仰某一位具体的神祇，而是将遥远的扼根山作为精神图腾与信仰载体。官方正史始终声称茹章城与奇迤岛毫无关联；但民间隐秘流传着说法——茹章城的先民，最早就来自奇迤岛。":"The truth of faith: Ruzhang worships no single god, but takes the distant Egen Mountain as spiritual totem. Official history insists Ruzhang has no link to Qiyi Island; yet folk lore whispers that Ruzhang's first ancestors came from Qiyi itself.","三年一次的秘密仪式：每隔三年，君主都会率领一支庞大的亲信队伍，秘密远赴奇迤岛，深入扼根山腹地举行仪式。仪式全程严格保密，对外只宣称是\"祭天祈福\"。":"The triennial rite: every three years the sovereign leads a vast retinue secretly to Qiyi Island, into Egen Mountain's depths. All is kept strictly secret, announced only as \"prayers to heaven.\"","百年寿命诅咒：这是茹章城最核心的秘密。扼根山深处的灵祠里，沉睡着一具\"不属于这个世界的神之遗骸\"（已死亡的远古神明）。初代茹章王为了换取城邦的强盛，将自己献祭，融入了神的心脏，以全城邦世代居民的寿命为代价，换来了永恒繁荣。诅咒之下，全城无论贵贱，都活不过45岁；神的遗骸一直在缓慢吞噬民众的生命余脉，以此维持城邦的气运。预言中，终有一日神会彻底苏醒，以它的规则重写整个世界的秩序，届时茹章城的\"奇迹\"也将彻底崩塌。":"The hundred-year lifespan curse: Ruzhang's deepest secret. In a shrine deep within Egen Mountain sleeps a divine relic \"not of this world\" — a dead god of ancient times. The first king offered himself into the god's heart to buy the city's greatness, paying with the lifespans of all generations: eternal prosperity. Under the curse none lives past 45; the relic slowly devours the people's remaining life to sustain the city's fortune. And the prophecy: one day the god will fully awaken and rewrite the world's order — then Ruzhang's \"miracle\" will collapse utterly.","思想管控与对外扩张：对内实行严格的思想管控，禁止任何质疑城邦历史、探讨寿命异常的言论，用\"删改围罪\"清除所有真相的知晓者；对外持续推行扩张政策，一方面通过朝贡体系吸纳周边小邦，另一方面用军事手段征服不臣服的势力，通过不断扩张转移民众对内部寿命问题的注意力。":"Thought control and expansion: within, any doubt of the state's history or talk of the lifespan anomaly is forbidden, and \"crime of erasure\" claims every witness of truth; without, expansion never ceases — tribute absorbs small states, arms subdue the defiant, and ceaseless growth distracts the people from the inner curse.","坐落于盎季地东侧沿海，是沧陆东部最大的港口城市，也是苍瀛海航线的核心枢纽。城市风气开放，人员往来混杂，是全沧陆的信息交汇地与商品集散地。":"On the eastern coast of Angji Land, the largest port of the east and the hub of the Cangying Sea routes. Open in temper and thronged with comers, it is Canglu's clearinghouse of information and goods.","城市依港而建，码头、商行、会馆林立，既有豪奢的商人宅邸，也有拥挤的水手街区，充满了市井与商贸的活力。":"The city rises around its harbor — wharves, trading houses and guild halls everywhere, from opulent merchants' mansions to crowded sailor quarters, alive with commerce and street bustle.","政治运作：海商公会共治。没有强集权的王室或君主，由城内最大的几支海商家族组成海商公会，联合执掌城邦政务。核心决策均由公会议事会共同商议决定，核心诉求是维护贸易秩序与商人利益。":"Governance: the Sea Merchants' Guild. No strong crown or monarch — the greatest seafaring houses form the Guild and jointly rule the city. Key decisions come from the Guild's council, whose core aim is trade order and merchant profit.","贸易网络覆盖沧陆东西南北：向西可通过肆星海抵达中部大陆、西部大陆，向东可远航至苍瀛海诸岛，向南可连通伏熏岛、南引群岛。":"Its trade web spans all Canglu: west across the Sixing Sea to the Central and Western Continents, east to the Cangying isles, south to Fuxun Island and the Nanyin Islands.","核心交易商品包括：恓鸟城的铁器、茹章城的粮食与手工制品、伏熏岛的火山特产、各岛屿的香料与海产，同时也承接信息倒卖、航运雇佣等业务。":"Core goods: Xuniao's ironware, Ruzhang's grain and crafts, Fuxun's volcanic specialties, the isles' spices and seafood — alongside information brokering and shipping contracts.","对外立场：名义上向茹章城称臣、按时朝贡，借此换取茹章城的贸易保护与通航便利；实际上拥有极高的自治权，城邦内部事务茹章城无权干涉。":"Foreign stance: nominally a vassal paying timely tribute to Ruzhang, in exchange for trade protection and free passage — in truth holding great autonomy, with Ruzhang unable to touch its internal affairs.","在各方势力之间奉行左右逢源的中立策略，不主动站队，与所有城邦都保持贸易往来，是大陆势力之间的缓冲带与信息中转站。":"It plays a neutral game of pleasing all sides — never taking sides, trading with every state, the continent's buffer zone and relay of information.","坐落于火山岛伏熏岛的中部腹地，远离大陆，发展出了独立的伏熏文明，与大陆城邦的文化、制度差异显著。":"In the volcanic interior of Fuxun Island, far from the continent, an independent Fuxun civilization grew — markedly different from continental states in culture and system.","岛内修有一条贯穿南北的之丝运河，以伏熏城为中心枢纽，串联起全岛的航运与灌溉，是海岛的经济命脉。":"A north-south canal, the Zhisi Canal, threads the island with Fuxun at its hub, joining shipping and irrigation — the isle's economic lifeline.","对外管控：城邦并非闭关锁国，但对外边界管控极其森严。外来商人只允许在岛屿东部的平安港范围内活动、交易，严禁踏入狩脊山以西的城邦腹地；若有外人违规闯入腹地，会被城邦卫队抓捕审判，最终永久驱逐出岛，终生不得再登伏熏岛。":"External control: not closed, yet sealed. Foreign merchants may trade only within Peaceport in the east, and are forbidden the interior west of Mount Shouji; intruders are seized, tried, and banished from the island forever.","政治制度：政团民主制。所有成年公民都可以自发组建理念不同的政治团体参与城邦治理，人数规模不达标的小型政团没有参选资格。":"Politics: party democracy. Every adult citizen may form a political party of their own creed; parties too small to meet the threshold cannot stand for election.","换届选举：每十年举行一次全城邦换届选举，分两类，各政团可自主选择参选方向——执政团选举（胜出者执掌城邦日常行政事务）与参议团选举（胜出者负责议事监督、提案表决）。":"Elections: every ten years the whole city votes, in two kinds, each party choosing its lane — the Governing Party (winners run daily administration) and the Senate Party (winners oversee debate, scrutiny and motions).","权力制衡：参议团拥有完整的制衡权——对于执政团的决议，参议团全员反对即可直接废除；参议团提出的提案，获得多数同意即可正式生效。":"Balance: the Senate holds full check — unanimous opposition voids any Governing resolution; Senate proposals take effect upon majority approval.","任期与规则：执政团由得票最高的政团出任，参议团总席位不超过十个，二者任期均为十年。所有政团必须先在内部统一立场，再对外进行表决，禁止内部分裂表态。":"Terms: the Governing Party is the top vote-getter; the Senate holds no more than ten seats; both serve ten years. Every party must unify its stance internally before voting outward — internal dissent in votes is forbidden.","信仰与文化：城邦绝大多数民众为无神论者，没有统一的国教，社会整体务实理性。少数民众信奉月教：教义以月亮为尊、以太阳为卑，认为月光是纯净的，日光是污浊的；信徒昼伏夜出，白天闭门不出，刻意规避阳光，所有宗教活动都在夜间举行。":"Faith and culture: most citizens are atheists — no state religion, a pragmatic, rational society. A minority follows the Moon Cult: the moon exalted, the sun despised; moonlight pure, sunlight foul. Its faithful sleep by day and emerge at night, shunning the sun, all rites held in darkness.","是西部大陆的地形骨架，也是恓鸟城的精神图腾，被视为城邦的\"脊梁\"。山脉核心山脊海拔普遍3000米以上，山体嶙峋陡峭，山顶终年苍山负雪，是分隔东西两侧的天然屏障。北端延伸入海，南部是延西河的发源地，高山融雪汇聚成河，滋养了西部内陆的土地。":"The Western Continent's skeletal spine and Xuniao's spiritual totem — the city's \"backbone.\" Core ridges tower past 3000m, jagged and sheer, snow-capped year-round, a natural wall between east and west. Its north runs into the sea; its south births the Yanxi River, whose snowmelt waters the western interior.","恓鸟城将其视作精神象征，城邦战士信奉\"以血作衣，以峰作干\"，将翻越山脉、驻守山巅视为荣耀；同时也是城邦的天然流放地，资质低劣的宗族子弟、获罪官员会被发配至山中充军戍边。":"Xuniao holds it as spiritual symbol; its warriors live by \"blood as garment, peaks as spine,\" counting the crossing of the range and the holding of summits as glory. It is also the city's natural exile: dull clan sons and disgraced officials are sent to soldier in its heights.","位于恓鸟城北部、断脊山脉西北段，海拔1437米。山间云雾缭绕，奇林怪石林立，半山处留有一处古亭悬址，山高路险，高处人迹罕至。是恓鸟城的文化符号之一，常被用来寄托怀古、避世的情绪，也是城邦文人墨客的游历圣地。":"North of Xuniao in the northwestern Duanji range, 1437m. Cloud-wreathed, strange woods and stones crowding its slopes, a ruined ancient pavilion hangs halfway up; the heights are all but unreachable. A cultural emblem of Xuniao, it holds the nostalgia of hermits and the pilgrimage of the city's poets.","位于断脊山脉东侧，海拔4297米，被群山环抱，自古被视作祥瑞之地。民间广泛流传\"真龙降世\"的传说，认为山中藏有真龙气运，登顶者可向天许愿、求偿心愿。但传说的另一面暗含\"天本无情\"的宿命感——愿望从不会真正应验，登顶的人最终只会直面自身的执念。":"East of the Duanji range, 4297m, ringed by peaks, deemed auspicious since antiquity. Folk legend speaks of a true dragon descending — the mountain holds dragon fortune, and those who summit may wish upon heaven. Yet the tale's other face is the fatefulness of \"heaven is heartless\": wishes never truly come true; climbers meet only their own obsessions.","纵贯中部大陆，是沧陆最重要的地理分界线之一，主峰自鸣山海拔5243米，为沧陆全境最高峰。山脉是全境观赏日落的最佳地点，黄昏时分霞光铺满山峦，色彩华丽绚烂，被世人称为\"目遇之即为华丽之霞\"，也被誉为\"心的温柔乡\"，是沧陆公认的盛景。因风景绝美、地理位置居中，是茹章城贵族与文人的重要游历、祭祀场所。":"Splitting the Central Continent, one of Canglu's greatest divides; its chief peak, Ziming Mountain, 5243m, is the realm's highest. The range is the finest place in all the land to watch sunset — at dusk, radiance floods the ridges in gorgeous color, called \"the splendrous haze that meets the eye,\" the \"gentle home of the heart,\" Canglu's acknowledged wonder. Center-laid and beautiful, it is the grand excursion and rite-ground of Ruzhang's nobles and scholars.","坐落于奇迤岛西部的绿洲中心，海拔1505米。身处绿洲之中，山体本身却寸草不生，沙石漫飞，鸟兽绝迹，与周边的绿意形成强烈反差。它是奇迤岛最矛盾的地标：绿洲本是沙漠里的希望象征，但山中的死寂荒芜，又让它成为\"绝望最好的培养皿\"。是茹章城的隐秘信仰圣地。官方正史刻意淡化其存在，声称茹章与奇迤岛毫无关联；但民间暗中信奉这座远海的山峰，相信城邦的气运与山体深度绑定。":"At the oasis's heart in western Qiyi Island, 1505m. Amid the green, the mountain itself is barren — nothing grows, sand and stone fly, no bird or beast approaches: a stark contrast to the surrounding life. It is Qiyi's most contradictory landmark: the oasis is desert hope, yet the mountain's dead waste makes it \"the best petri dish of despair.\" Ruzhang's secret holy site. Official history dims its existence, insisting Ruzhang has nothing to do with Qiyi; but folk secretly revere this far-sea peak, believing the city's fortune is bound to the mountain.","位于伏熏岛东部，海拔2136米，是伏熏城人民瞻仰的精神圣地。山中遍植白色草木，通体素白，象征一尘不染的圣洁。但设定暗含隐喻：极致的纯白只存在于传说与理想中，现实里的圣洁永远伴随代价与虚伪。":"East of Fuxun Island, 2136m, the spiritual sanctuary of Fuxun's people. White flora covers the mountain, pure white throughout, symbol of unstained sanctity. Yet the design hides a metaphor: perfect whiteness lives only in legend; true sanctity is always paid for, and always touched by hypocrisy.","横贯奇迤岛中东部的反常海岛沙漠，沙粒自带吸光特性，无论岛外天气如何晴朗，沙漠范围内永远笼罩着一层灰蒙暝色，没有明确的昼夜晨昏之分。越往沙漠深处，光线越昏暗，空间与方向感会逐渐错乱，是天然的生命禁区。":"An unnatural island desert across central-eastern Qiyi. Its sands absorb light: however clear the sky beyond, a grey gloom forever veils the desert, with no true day or night. Deeper in, light fails and space and direction warp — a natural death zone.","底层成因与扼根山的神之遗骸绑定：神骸的力量外泄扭曲了局部的光线与时空规则，才形成了永无白昼的异象；而扼根山绿洲，正是沙漠中唯一的力量锚点。":"Its root cause is bound to the divine relic of Egen Mountain: the relic's leaking power warped light and the rules of time and space, creating the never-ending twilight; and the Egen oasis is the desert's only anchor of power."};
+
 /* ============ 设置面板 ============ */
 (function(){
   var SKEY = 'canglu-settings';
-  var def = {font:'default', lang:'zh', motion:'full', autoplay:'on', fx:'on'};
+  var def = {font:'default', lang:'zh', autoplay:'on', fx:'on'};
   var s = def;
   try{ s = Object.assign({}, def, JSON.parse(localStorage.getItem(SKEY) || '{}')); }catch(e){}
   window.cangluSettings = { get:function(){ return s; } };
@@ -1526,11 +1551,11 @@ function animatePageIn(sec){
     var el = document.documentElement;
     el.setAttribute('data-font', s.font);
     el.setAttribute('data-lang', s.lang);
-    el.setAttribute('data-motion', s.motion);
+    window.__lang = s.lang;
     el.setAttribute('data-fx', s.fx);
     // 动效关闭时同步移除玻璃高光跟随
     // 同步选中态
-    var groups = {spFont:s.font, spLang:s.lang, spMotion:s.motion, spAutoplay:s.autoplay, spFx:s.fx};
+    var groups = {spFont:s.font, spLang:s.lang, spAutoplay:s.autoplay, spFx:s.fx};
     Object.keys(groups).forEach(function(gid){
       var g = document.getElementById(gid);
       if(!g) return;
@@ -1560,7 +1585,7 @@ function animatePageIn(sec){
   });
 
   // 选项点击
-  var binds = {spFont:'font', spLang:'lang', spMotion:'motion', spAutoplay:'autoplay', spFx:'fx'};
+  var binds = {spFont:'font', spLang:'lang', spAutoplay:'autoplay', spFx:'fx'};
   Object.keys(binds).forEach(function(gid){
     var g = document.getElementById(gid);
     if(!g) return;
@@ -1572,7 +1597,6 @@ function animatePageIn(sec){
       applySettings();
       // 语言切换时更新界面文字
       if(binds[gid] === 'lang') applyLang();
-      if(binds[gid] === 'motion') applyMotion();
     });
   });
 
@@ -1596,12 +1620,11 @@ function animatePageIn(sec){
       h3_c1:'（一）茹章城官方历法', h3_c2:'（二）恓鸟城官方历法',
       h3_c3:'（三）眴姚城官方历法', h3_c4:'（四）伏熏城官方历法',
       h3_c5:'祀元 ⇄ 戍城 ⇄ 衡历',
-      spTheme:'外观主题', spFont:'界面字体', spLang:'界面语言', spMotion:'动效强度',
+      spTheme:'外观主题', spFont:'界面字体', spLang:'界面语言',
       spAutoplay:'进站自动播放音乐', spFx:'鼠标光效（桌面端）',
       spOptAuto:'跟随系统', spOptLight:'浅色', spOptDark:'深色',
       spFontDef:'默认', spFontKai:'楷风', spFontSong:'宋韵', spFontHei:'黑体',
       spLangZh:'中文', spLangEn:'English',
-      spMotionFull:'完整', spMotionLight:'轻量', spMotionOff:'关闭',
       spOn:'开启', spOff:'关闭',
       musicHint:'静候佳音', settingsTitle:'设置',
     },
@@ -1623,30 +1646,16 @@ function animatePageIn(sec){
       h3_c1:'(I) Official Calendar of Ruzhang', h3_c2:'(II) Official Calendar of Xuniao',
       h3_c3:'(III) Official Calendar of Minyao', h3_c4:'(IV) Official Calendar of Fuxun',
       h3_c5:'Siyuan ⇄ Shucheng ⇄ Hengli',
-      spTheme:'Appearance Theme', spFont:'Interface Font', spLang:'Interface Language', spMotion:'Motion Effects',
+      spTheme:'Appearance Theme', spFont:'Interface Font', spLang:'Interface Language',
       spAutoplay:'Auto-play Music on Entry', spFx:'Mouse Effects (Desktop)',
       spOptAuto:'Follow System', spOptLight:'Light', spOptDark:'Dark',
       spFontDef:'Default', spFontKai:'Kai', spFontSong:'Song', spFontHei:'Hei',
       spLangZh:'中文', spLangEn:'English',
-      spMotionFull:'Full', spMotionLight:'Light', spMotionOff:'Off',
       spOn:'On', spOff:'Off',
       musicHint:'Waiting for music', settingsTitle:'Settings',
     }
   };
 
-    zh: {
-      nav: ['地理','城邦','秘境','历法','纪年','势力'],
-      searchPh: '检索地名 / 城邦 / 条目',
-      settings: '设置',
-      themeTitle: '主题设置',
-    },
-    en: {
-      nav: ['Geography','Cities','Mysteries','Calendar','Chronicle','Powers'],
-      searchPh: 'Search places / cities / entries',
-      settings: 'Settings',
-      themeTitle: 'Theme',
-    }
-  };
   function applyLang(){
     var t = I18N[s.lang] || I18N.zh;
     // 导航
@@ -1671,7 +1680,7 @@ function animatePageIn(sec){
     });
     // 设置面板标签与选项
     [
-      ['spTheme','spTheme'],['spFont','spFont'],['spLang','spLang'],['spMotion','spMotion'],
+      ['spTheme','spTheme'],['spFont','spFont'],['spLang','spLang'],
       ['spAutoplay','spAutoplay'],['spFx','spFx']
     ].forEach(function(pair){
       var g = document.getElementById(pair[0]);
@@ -1679,7 +1688,7 @@ function animatePageIn(sec){
         var label = g.previousElementSibling;
         if(label && t[pair[1]]) label.textContent = t[pair[1]];
         g.querySelectorAll('.sp-opt').forEach(function(o){
-          var keymap = {auto:'spOptAuto',light:'spOptLight',dark:'spOptDark',default:'spFontDef',kai:'spFontKai',song:'spFontSong',hei:'spFontHei',zh:'spLangZh',en:'spLangEn',full:'spMotionFull',light_m:'spMotionLight',off:'spMotionOff',on:'spOn'};
+          var keymap = {auto:'spOptAuto',light:'spOptLight',dark:'spOptDark',default:'spFontDef',kai:'spFontKai',song:'spFontSong',hei:'spFontHei',zh:'spLangZh',en:'spLangEn',on:'spOn'};
           var kk = keymap[o.dataset.v];
           if(kk && t[kk]) o.textContent = t[kk];
         });
@@ -1697,6 +1706,10 @@ function animatePageIn(sec){
       // 从原 h2 找对应
     });
     rebuildAccTitles(t);
+    // ===== 正文翻译 =====
+    translateBody(s.lang);
+    // 重新渲染城邦/意象卡片
+    if(window.__rebuildCards) window.__rebuildCards();
   }
   function rebuildAccTitles(t){
     // 手风琴标题：从隐藏的 h2 重新读取并翻译
@@ -1719,18 +1732,72 @@ function animatePageIn(sec){
     });
   }
 
-  // 动效：轻量模式复刻移动端降级
-  function applyMotion(){
-    var el = document.documentElement;
-    if(s.motion === 'light'){
-      var st = document.createElement('style');
-      st.id = 'motion-light-css';
-      st.textContent = 'body::before,body::after,html::after{animation:none;filter:blur(30px);opacity:.5} .glass-shine::after{display:none} .city-card,.acc-card,.month-card,.tl-item,.calc,.doc .item{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}';
-      if(!document.getElementById('motion-light-css')) document.head.appendChild(st);
-    } else {
-      var old = document.getElementById('motion-light-css');
-      if(old) old.remove();
-    }
+
+  /* 正文翻译：en 替换为英文，zh 还原中文（字典反查） */
+  var EN_REV = null;
+  function buildEnRev(){
+    EN_REV = {};
+    Object.keys(EN_ITEMS).forEach(function(k){ EN_REV[EN_ITEMS[k][1]] = k; });
+    Object.keys(EN_PARAS).forEach(function(k){ EN_REV[EN_PARAS[k]] = k; });
+    Object.keys(EN_TDS).forEach(function(k){ EN_REV[EN_TDS[k]] = k; });
+    Object.keys(EN_DETAILS).forEach(function(k){ EN_REV[EN_DETAILS[k]] = k; });
+  }
+  function translateBody(lang){
+    if(!EN_REV) buildEnRev();
+    var zh = lang !== 'en';
+    // 1. .item 条目（<b>名称</b>：描述）
+    document.querySelectorAll('.item').forEach(function(it){
+      var b = it.querySelector('b');
+      if(!b) return;
+      var full = it.textContent.replace(/\s+/g,' ').trim();
+      if(zh){
+        var cn = EN_REV[full];
+        if(cn && EN_ITEMS[cn]){
+          var pair = EN_ITEMS[cn];
+          it.innerHTML = '<b>'+pair[0]+'</b>：'+cn.split('：').slice(1).join('：');
+        }
+      } else {
+        if(EN_ITEMS[full]){
+          var t2 = EN_ITEMS[full];
+          it.innerHTML = '<b>'+t2[0]+'</b>：'+t2[1];
+        }
+      }
+    });
+    // 2. 普通段落（历法/纪年/弹窗等）
+    document.querySelectorAll('.doc p').forEach(function(p){
+      var txt = p.textContent.replace(/\s+/g,' ').trim();
+      if(!txt || txt.length < 8) return;
+      if(zh){
+        var cn2 = EN_REV[txt];
+        if(cn2) p.textContent = cn2;
+      } else {
+        if(EN_PARAS[txt]) p.textContent = EN_PARAS[txt];
+        else if(EN_DETAILS[txt]) p.textContent = EN_DETAILS[txt];
+      }
+    });
+    // 3. 表格单元格（月份表）
+    document.querySelectorAll('td').forEach(function(td){
+      var txt = td.textContent.replace(/\s+/g,' ').trim();
+      if(!txt) return;
+      if(zh){
+        var cn3 = EN_REV[txt];
+        if(cn3) td.textContent = cn3;
+      } else {
+        if(EN_TDS[txt]) td.textContent = EN_TDS[txt];
+      }
+    });
+    // 4. 弹窗内 li
+    document.querySelectorAll('.logo-intro-box li').forEach(function(el){
+      var txt = el.textContent.replace(/\s+/g,' ').trim();
+      if(!txt) return;
+      if(zh){
+        var cn4 = EN_REV[txt];
+        if(cn4) el.textContent = cn4;
+      } else {
+        if(EN_PARAS[txt]) el.textContent = EN_PARAS[txt];
+        else if(EN_DETAILS[txt]) el.textContent = EN_DETAILS[txt];
+      }
+    });
   }
 
   // 自动播放开关接入播放器
@@ -1738,7 +1805,6 @@ function animatePageIn(sec){
 
   applySettings();
   applyLang();
-  applyMotion();
 })();
 </script>
 <div id="cursorRing"></div>
