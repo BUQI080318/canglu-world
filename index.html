@@ -130,9 +130,22 @@
   .tl-item{opacity:0;transform:translateY(16px);transition:opacity .55s ease,transform .55s ease}
   .tl-item.in{opacity:1;transform:none}
   /* 鼠标特效 */
-  #cursorRing{position:fixed;left:0;top:0;width:26px;height:26px;border:1px solid var(--gold);border-radius:50%;pointer-events:none;z-index:9999;opacity:0;transform:translate(-50%,-50%);box-shadow:0 0 12px rgba(200,162,74,.35),inset 0 0 6px rgba(200,162,74,.15);transition:opacity .25s,width .2s,height .2s}
-  #cursorRing.on{opacity:.8}
-  #cursorRing.hover{width:42px;height:42px;border-color:var(--gold);opacity:.45}
+  *{cursor:none !important}
+  input, textarea, select, [contenteditable]{cursor:text !important}
+  #cursorRing{
+    position:fixed;left:0;top:0;width:26px;height:26px;border:1px solid var(--gold);
+    border-radius:50%;pointer-events:none;z-index:9999;opacity:0;transform:translate(-50%,-50%);
+    box-shadow:0 0 12px rgba(200,162,74,.35),inset 0 0 6px rgba(200,162,74,.15);
+    transition:opacity .25s,width .2s,height .2s,transform .12s;
+  }
+  #cursorRing::after{
+    content:"";position:absolute;left:50%;top:50%;width:5px;height:5px;margin:-2.5px 0 0 -2.5px;
+    border-radius:50%;background:var(--gold);box-shadow:0 0 8px rgba(200,162,74,.9);
+  }
+  #cursorRing.on{opacity:1}
+  #cursorRing.hover{width:44px;height:44px;border-color:var(--gold);opacity:.55}
+  #cursorRing.active{transform:translate(-50%,-50%) scale(.68)}
+  #cursorRing.hover.active{transform:translate(-50%,-50%) scale(.8)}
   .pt{position:fixed;border-radius:50%;pointer-events:none;z-index:9998;background:radial-gradient(circle,rgba(200,162,74,.85) 0%,rgba(200,162,74,.25) 55%,rgba(200,162,74,0) 75%);animation:ptFade 1.1s ease forwards}
   @keyframes ptFade{to{opacity:0;transform:translateY(-16px) scale(.15)}}
   .ripple{position:fixed;border:1px solid rgba(200,162,74,.55);border-radius:50%;pointer-events:none;z-index:9997;animation:rip .55s ease-out forwards}
@@ -740,6 +753,8 @@ function revealItem(el){
     requestAnimationFrame(loop);
   })();
   document.addEventListener('mouseleave', ()=>{ ring.classList.remove('on'); shown = false; });
+  document.addEventListener('mousedown', ()=> ring.classList.add('active'));
+  document.addEventListener('mouseup', ()=> ring.classList.remove('active'));
   document.addEventListener('click', e=>{
     const r = document.createElement('div');
     r.className = 'ripple';
