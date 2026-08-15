@@ -102,6 +102,12 @@
   .m2-title{position:absolute;left:18px;top:14px;z-index:60;color:var(--gold);font-size:21px;letter-spacing:6px;
             text-shadow:0 0 14px rgba(200,162,74,.45)}
   .m2-title small{display:block;font-size:12px;color:var(--ink-dim);letter-spacing:2px;margin-top:4px;text-shadow:none}
+  .m2-mode{
+    position:absolute;left:18px;top:88px;z-index:60;cursor:pointer;
+    background:rgba(20,16,23,.9);color:var(--gold);font-size:13px;letter-spacing:2px;
+    padding:7px 14px;border-radius:6px;border:1px solid var(--line);font-family:inherit;transition:all .15s;
+  }
+  .m2-mode:hover{background:var(--panel2);border-color:var(--gold-dim)}
   .m2-hint{
     position:absolute;left:18px;bottom:18px;z-index:60;pointer-events:none;
     color:var(--ink-dim);font-size:13px;letter-spacing:1px;text-shadow:0 1px 4px rgba(0,0,0,.8);
@@ -200,6 +206,7 @@
     <button id="m2Home" title="复位">⌂</button>
   </div>
   <div class="m2-title">沧陆全境舆图<small>点击金色标记查看设定</small></div>
+  <button id="m2Mode" class="m2-mode">🖼 手绘底图</button>
   <div class="compass">北 <b>↑</b></div>
   <div class="m2-hint">🖱 <b>左键拖拽</b>平移 ｜ <b>滚轮</b>缩放 ｜ 点击<b>金色光点</b>查看设定</div>
 </section>
@@ -804,22 +811,66 @@ const M2W = 2048, M2H = 1536;
 function m2Apply(){ map2d.style.transform = 'translate('+m2.tx+'px,'+m2.ty+'px) scale('+m2.s+')'; }
 function m2Fit(){
   const r = wrap2.getBoundingClientRect();
-  const s = Math.min(r.width/M2W, r.height/M2H);
-  m2.s = s; m2.tx = (r.width-M2W*s)/2; m2.ty = (r.height-M2H*s)/2; m2Apply();
+  const img2 = document.querySelector('#map2d img');
+  const iw = img2.naturalWidth || M2W, ih = img2.naturalHeight || M2H;
+  const s = Math.min(r.width/iw, r.height/ih);
+  m2.s = s; m2.tx = (r.width-iw*s)/2; m2.ty = (r.height-ih*s)/2; m2Apply();
 }
-function buildMap2D(){
+function buildMarks2(list){
   const holder = document.getElementById('marks2d');
-  MAPDATA.marks.forEach(m=>{
+  holder.innerHTML = '';
+  list.forEach(m=>{
+    const full = MAPDATA.marks.find(k=>k.name===m.name) || {};
     const d = document.createElement('div');
     d.className = 'm2' + (m.imp?' imp':'');
     d.style.left = (m.x*100)+'%';
     d.style.top = (m.y*100)+'%';
     d.title = m.name;
-    d.onclick = (e)=>{ e.stopPropagation(); openModal(m); };
+    d.onclick = (e)=>{ e.stopPropagation(); openModal(Object.assign({}, full, {name:m.name, x:m.x, y:m.y})); };
     holder.appendChild(d);
   });
-  m2.inited = true;
 }
+// 手绘底图标记（OCR 提取坐标，描述用规范数据）
+const USER_MARKS = [
+  {name:'元荒海', x:0.066, y:0.344, imp:1},
+  {name:'白绫海', x:0.670, y:0.080, imp:1},
+  {name:'肆星海', x:0.550, y:0.620, imp:1},
+  {name:'双生湾', x:0.159, y:0.469},
+  {name:'泊月湾', x:0.521, y:0.512},
+  {name:'屈海',   x:0.797, y:0.465},
+  {name:'承晚海峡', x:0.370, y:0.535},
+  {name:'吴阳湖', x:0.650, y:0.390},
+  {name:'盎季地', x:0.790, y:0.340, imp:1},
+  {name:'东生半岛', x:0.300, y:0.470},
+  {name:'斯瑜群岛', x:0.903, y:0.170},
+  {name:'雁南岛', x:0.281, y:0.711},
+  {name:'南引群岛', x:0.941, y:0.897},
+  {name:'赎誓阁', x:0.770, y:0.730},
+  {name:'桓山',   x:0.357, y:0.199, imp:1},
+  {name:'自鸣山', x:0.382, y:0.325, imp:1},
+  {name:'辞君山', x:0.202, y:0.225},
+  {name:'断脊山脉', x:0.250, y:0.300, imp:1},
+  {name:'眸霞山脉', x:0.440, y:0.360, imp:1},
+  {name:'狩脊山', x:0.185, y:0.829},
+  {name:'延西河', x:0.248, y:0.323},
+  {name:'连奕江', x:0.555, y:0.300},
+  {name:'茹章城', x:0.478, y:0.309, imp:1},
+  {name:'眴姚城', x:0.907, y:0.400, imp:1},
+  {name:'潜蛟隧道', x:0.200, y:0.560},
+];
+let baseMode = 0; // 0=标准舆图 1=手绘底图
+function switchBase(){
+  baseMode = 1 - baseMode;
+  const img2 = document.querySelector('#map2d img');
+  img2.src = baseMode ? 'user_map.jpg' : 'map_ui.png';
+  const list = baseMode
+    ? USER_MARKS
+    : MAPDATA.marks.map(m=>({name:m.name, x:m.x, y:m.y, imp:m.imp}));
+  buildMarks2(list);
+  document.getElementById('m2Mode').textContent = baseMode ? '🗺 标准舆图' : '🖼 手绘底图';
+  m2Fit();
+}
+document.getElementById('m2Mode').onclick = switchBase;
 wrap2.addEventListener('wheel', e=>{
   e.preventDefault();
   const r = wrap2.getBoundingClientRect();
@@ -864,7 +915,10 @@ document.querySelectorAll('nav button').forEach(btn=>{
     page.scrollTop = 0;
     if(btn.dataset.page==='mapPage') resize();
     if(btn.dataset.page==='map2dPage'){
-      if(!m2.inited) buildMap2D();
+      if(!m2.inited){
+        buildMarks2(MAPDATA.marks.map(m=>({name:m.name, x:m.x, y:m.y, imp:m.imp})));
+        m2.inited = true;
+      }
       m2Fit();
     }
   };
