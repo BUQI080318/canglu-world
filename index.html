@@ -51,7 +51,7 @@
     --glass-hl:inset 0 1px 0 rgba(255,255,255,1),inset 0 -1px 0 rgba(255,255,255,.5);
     --glass-shadow:0 8px 32px rgba(60,50,30,.14);
     --glass-blur:blur(22px) saturate(170%);
-    --blob-gold:rgba(212,175,90,.30); --blob-blue:rgba(110,140,215,.24); --blob-violet:rgba(150,110,200,.20);
+    --blob-gold:rgba(212,175,90,.48); --blob-blue:rgba(110,140,215,.38); --blob-violet:rgba(150,110,200,.32);
   }
   @media (prefers-color-scheme: light){
     html:not([data-theme="dark"]){
@@ -68,7 +68,7 @@
       --glass-hl:inset 0 1px 0 rgba(255,255,255,1),inset 0 -1px 0 rgba(255,255,255,.5);
       --glass-shadow:0 8px 32px rgba(60,50,30,.14);
       --glass-blur:blur(22px) saturate(170%);
-      --blob-gold:rgba(212,175,90,.30); --blob-blue:rgba(110,140,215,.24); --blob-violet:rgba(150,110,200,.20);
+      --blob-gold:rgba(212,175,90,.48); --blob-blue:rgba(110,140,215,.38); --blob-violet:rgba(150,110,200,.32);
     }
   }
 
@@ -115,6 +115,13 @@
       radial-gradient(300px circle at var(--gx,50%) var(--gy,50%),rgba(255,255,255,.28),transparent 62%),
       linear-gradient(135deg,rgba(255,255,255,.10) 0%,transparent 42%);
     opacity:0;transition:opacity .3s;z-index:1;
+  }
+  /* 浅色模式：白高光在浅底看不见 → 换金色高光 */
+  html[data-theme="light"] .glass-shine::after,
+  html:not([data-theme="dark"]) .glass-shine::after{
+    background:
+      radial-gradient(300px circle at var(--gx,50%) var(--gy,50%),rgba(200,162,74,.30),transparent 62%),
+      linear-gradient(135deg,rgba(200,162,74,.14) 0%,transparent 42%);
   }
   .glass-shine:hover::after{opacity:1}
   .glass-shine > *{position:relative;z-index:2}
