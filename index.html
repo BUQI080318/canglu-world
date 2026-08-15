@@ -42,6 +42,12 @@
   #mapPage{overflow:hidden;background:#070a10}
   #glCanvas{width:100%;height:100%;display:block;cursor:grab;touch-action:none}
   #glCanvas.dragging{cursor:grabbing}
+  #loading{
+    position:absolute;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(160deg,#0d1420,#0a0e16);color:var(--gold);
+    font-size:20px;letter-spacing:4px;transition:opacity .6s;
+  }
+  #loading.hide{opacity:0;pointer-events:none}
   .gl-hint{
     position:absolute;left:18px;bottom:18px;z-index:60;pointer-events:none;
     color:var(--ink-dim);font-size:13px;letter-spacing:1px;
@@ -131,6 +137,7 @@
 <main>
 <section class="page on" id="mapPage">
   <canvas id="glCanvas"></canvas>
+  <div id="loading">⛰ 沧陆世界 · 地形构建中…</div>
   <div class="gl-hint">🖱 <b>左键拖拽</b>旋转 ｜ <b>滚轮</b>缩放 ｜ <b>右键拖拽</b>平移 ｜ 点击<b>金色光点</b>查看设定</div>
   <div class="gl-legend">
     <div><i class="l-snow"></i>雪峰</div>
@@ -390,8 +397,8 @@ function makeLabel(text, gold){
 }
 
 function buildWorld(){
-  // 地形（高精度 300x225 分段）
-  const geo = new THREE.PlaneGeometry(120, 90, 300, 225);
+  // 地形（高精度 400x300 分段，本地/网页通用）
+  const geo = new THREE.PlaneGeometry(120, 90, 400, 300);
   geo.rotateX(-Math.PI/2);
   const pos = geo.attributes.position.array;
   const colors = new Float32Array(pos.length);
@@ -517,14 +524,20 @@ function buildWorld(){
   starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
   scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({color:0xccd8ee, size:1.1, transparent:true, opacity:0.75})));
 
-  // 河流（z 南北翻转：+z 北端显示原图南端）
+  // 河流（立体河道水面：TubeGeometry 蓝色半透明）
   MAPDATA.rivers.forEach(rv=>{
-    const pts = rv.pts.map(p=>{
+    const pts3 = rv.pts.map(p=>{
       const h = getH(p[0], p[1]);
-      return new THREE.Vector3(p[0]*120-60, h*HSCALE+0.2, (p[1]*90-45));
+      return new THREE.Vector3(p[0]*120-60, h*HSCALE+0.12, (p[1]*90-45));
     });
-    const g = new THREE.BufferGeometry().setFromPoints(pts);
-    scene.add(new THREE.Line(g, new THREE.LineBasicMaterial({color:0x3a7abf})));
+    if(pts3.length >= 2){
+      const curve = new THREE.CatmullRomCurve3(pts3);
+      const tube = new THREE.Mesh(
+        new THREE.TubeGeometry(curve, Math.max(16, pts3.length*8), 0.5, 8, false),
+        new THREE.MeshPhongMaterial({color:0x3f9ad8, transparent:true, opacity:0.8, shininess:60, specular:0x88ccff})
+      );
+      scene.add(tube);
+    }
   });
 
   // 湖泊
@@ -694,6 +707,8 @@ function animate(){
 // 直接构建（无需图片加载）
 buildWorld();
 resize();
+// 隐藏加载遮罩
+setTimeout(()=>{ const ld = document.getElementById('loading'); if(ld) ld.classList.add('hide'); }, 300);
 
 /* ============ 弹窗 ============ */
 const mask = document.getElementById('modalMask');
