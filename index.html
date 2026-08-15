@@ -319,9 +319,9 @@ scene.background = new THREE.Color(0x070a10);
 
 const cam = new THREE.PerspectiveCamera(50, 1, 0.1, 3000);
 const target = new THREE.Vector3(0, 2.2, 0);
-// 标准视角：上北下南、左西右东（相机从正南方高空俯视）
-let dist = 125, theta = Math.PI, phi = 0.62;
-const HOME = {theta: Math.PI, phi: 0.62, dist: 125, tx: 0, ty: 2.2, tz: 0};
+// 标准视角：上北下南、左西右东（相机在正北方向高空，地图南北已翻转保证方位正确）
+let dist = 125, theta = 0, phi = 0.62;
+const HOME = {theta: 0, phi: 0.62, dist: 125, tx: 0, ty: 2.2, tz: 0};
 function goHome(){ theta = HOME.theta; phi = HOME.phi; dist = HOME.dist; target.set(HOME.tx, HOME.ty, HOME.tz); }
 
 function resize(){
@@ -331,7 +331,7 @@ function resize(){
 }
 window.addEventListener('resize', resize);
 
-// 高程采样：HGRID 双线性插值（file:// 环境无法读图片像素，网格数据预生成在 mapdata.js）
+// 高程采样：HGRID 双线性插值。南北翻转：v = (z+45)/90（3D 南端 z=-45 对应原图北端 v=0）
 function getH(u, v){
   const gx = Math.min(SEG_X, Math.max(0, u*SEG_X));
   const gy = Math.min(SEG_Y, Math.max(0, v*SEG_Y));
@@ -392,7 +392,7 @@ function buildWorld(){
   const colors = new Float32Array(pos.length);
   for(let i=0;i<pos.length;i+=3){
     const x = pos[i], z = pos[i+2];
-    const u = (x+60)/120, v = (-z+45)/90;
+    const u = (x+60)/120, v = (z+45)/90;
     const h = getH(u, v);
     pos[i+1] = h*HSCALE;
     const c = colorFor(h);
@@ -435,11 +435,11 @@ function buildWorld(){
   starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
   scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({color:0xccd8ee, size:1.1, transparent:true, opacity:0.75})));
 
-  // 河流
+  // 河流（z 南北翻转：+z 北端显示原图南端）
   MAPDATA.rivers.forEach(rv=>{
     const pts = rv.pts.map(p=>{
       const h = getH(p[0], p[1]);
-      return new THREE.Vector3(p[0]*120-60, h*HSCALE+0.2, -(p[1]*90-45));
+      return new THREE.Vector3(p[0]*120-60, h*HSCALE+0.2, (p[1]*90-45));
     });
     const g = new THREE.BufferGeometry().setFromPoints(pts);
     scene.add(new THREE.Line(g, new THREE.LineBasicMaterial({color:0x3a7abf})));
@@ -453,14 +453,14 @@ function buildWorld(){
       new THREE.MeshPhongMaterial({color:0x2a6a9a, transparent:true, opacity:0.88, shininess:80})
     );
     disc.rotation.x = -Math.PI/2;
-    disc.position.set(lk.x*120-60, h*HSCALE+0.06, -(lk.y*90-45));
+    disc.position.set(lk.x*120-60, h*HSCALE+0.06, (lk.y*90-45));
     scene.add(disc);
   });
 
   // 地标：金球 + 标签
   MAPDATA.marks.forEach(m=>{
     const h = getH(m.x, m.y);
-    const wx = m.x*120-60, wz = -(m.y*90-45);
+    const wx = m.x*120-60, wz = (m.y*90-45);
     const hy = h*HSCALE;
     // 金球
     const ball = new THREE.Mesh(
