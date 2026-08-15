@@ -619,14 +619,7 @@
     .doc{padding-bottom:8px}
     /* 移动端显示封面（保留转动效果） */
     .music-cover{display:block;width:36px;height:36px;border-radius:50%;flex-shrink:0;object-fit:cover}
-    /* 歌名滚动跑马灯 */
     .music-mid{flex:1;min-width:0;overflow:hidden}
-    .music-now{max-width:none;width:100%;position:relative}
-    .music-now .song-marquee{
-      display:inline-block;white-space:nowrap;padding-right:48px;
-      animation:marqueeScroll 10s linear infinite;
-    }
-    @keyframes marqueeScroll{0%{transform:translateX(0)}12%{transform:translateX(0)}88%{transform:translateX(calc(-100% + 120px))}100%{transform:translateX(calc(-100% + 120px))}}
   }
 
   /* ===== 四方势力博弈图 ===== */
@@ -732,6 +725,11 @@
     .music-vol{font-size:15px}
     .music-ctrl{width:24px;height:24px;font-size:12px}
   }
+
+  /* 歌名滚动跑马灯（溢出时由JS加 .marquee 类启动） */
+  .music-now .song-marquee{display:inline-block;white-space:nowrap;padding-right:48px;max-width:none}
+  .music-now.marquee .song-marquee{animation:marqueeScroll 10s linear infinite}
+  @keyframes marqueeScroll{0%{transform:translateX(0)}12%{transform:translateX(0)}88%{transform:translateX(calc(-100% + 120px))}100%{transform:translateX(calc(-100% + 120px))}}
 </style>
 </head>
 <body>
@@ -1505,7 +1503,7 @@ applyHash();
       var mx = (a.x+b.x)/2;
       var my;
       if(e.type === 'trade' && isH){
-        my = (Math.max(a.y,b.y) + 120) + 18;
+        my = (Math.max(a.y,b.y) + 120) + 6;
       } else if(e.type === 'tribute'){
         my = (Math.min(a.y,b.y) - 52) - 10;
       } else if(e.type === 'hostile'){
@@ -1705,6 +1703,14 @@ function revealItem(el){
 /* ============ 音乐播放器 ============ */
 (function(){
   /* ===== 歌单：沧陆之声 ===== */
+  // 歌名溢出检测：放不下时启动滚动，放得下不滚
+  function checkMarquee(){
+    if(!now) return;
+    var nm = now.querySelector('.song-marquee');
+    if(!nm) return;
+    var overflow = nm.scrollWidth > now.clientWidth;
+    now.classList.toggle('marquee', overflow);
+  }
   function songHTML(name, status){
     // 歌名包进滚动容器（移动端跑马灯），桌面端不受影响
     var inner = '<b class="song-name-inner">'+name+'</b><span class="music-hint"> · </span>'+status;
@@ -1881,6 +1887,7 @@ function revealItem(el){
     audio.play().then(()=>{
       started = true;
       now.innerHTML = songHTML(SONGS[cur].name, mh('奏响'));
+      checkMarquee();
       btn.textContent = '❚❚';
       setPlaying(true);
       renderList();
@@ -1888,6 +1895,7 @@ function revealItem(el){
       if(mpKnob) mpKnob.style.left = '0%';
     }).catch(()=>{
       now.innerHTML = songHTML('沧陆', mh('点击页面任意处开始'));
+      checkMarquee();
       setPlaying(false);
     });
   }
@@ -1913,11 +1921,13 @@ function revealItem(el){
         audio.play();
         btn.textContent = '❚❚';
         now.innerHTML = songHTML(SONGS[cur].name, mh('奏响'));
+      checkMarquee();
         setPlaying(true);
       } else {
         audio.pause();
         btn.textContent = '▶';
         now.innerHTML = songHTML(SONGS[cur].name, mh('暂歇'));
+      checkMarquee();
         setPlaying(false);
       }
     } else {
@@ -1942,11 +1952,13 @@ function revealItem(el){
     audio.play().then(()=>{
       started = true;
       now.innerHTML = songHTML(SONGS[cur].name, mh('点击出声'));
+      checkMarquee();
       btn.textContent = '❚❚';
       setPlaying(true);
     }).catch(()=>{
       // 极少数情况连静音也被拦：等首次交互
       now.innerHTML = songHTML('沧陆', mh('轻触页面奏响'));
+      checkMarquee();
       setPlaying(false);
     });
   }
@@ -1958,6 +1970,7 @@ function revealItem(el){
         audio.play().then(()=>{
           started = true;
           now.innerHTML = songHTML(SONGS[cur].name, mh('奏响'));
+      checkMarquee();
           btn.textContent = '❚❚';
           setPlaying(true);
         }).catch(()=>{});
@@ -1967,12 +1980,14 @@ function revealItem(el){
     } else if(started && audio && audio.muted){
       audio.muted = false;   // 已在静音播放中：点击即出声
       now.innerHTML = songHTML(SONGS[cur].name, mh('奏响'));
+      checkMarquee();
     }
     document.removeEventListener('click', auto);
   }, {once:true});
   // 立即尝试静音自动播放
   tryAutoPlay();
   renderList();
+  setTimeout(checkMarquee, 600);
 })();
 
 
