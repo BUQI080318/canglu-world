@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>沧陆 · 架空世界观</title>
+<style>
+  :root{
+    --bg:#0d1017; --bg2:#141a24; --panel:#171e2b; --panel2:#1e2736;
+    --gold:#c8a24a; --gold-dim:#8a6d35; --ink:#e8dcc0; --ink-dim:#9aa8bd;
+    --line:#2a3547;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    background:radial-gradient(ellipse at 50% -20%, #1a2233 0%, var(--bg) 60%);
+    color:var(--ink);
+    font-family:"楷体","KaiTi","STKaiti","SimSun",serif;
+    overflow:hidden;
+  }
+  header{
+    position:fixed;top:0;left:0;right:0;height:56px;z-index:100;
+    display:flex;align-items:center;gap:8px;padding:0 18px;
+    background:linear-gradient(180deg, rgba(13,16,23,.97), rgba(13,16,23,.88));
+    border-bottom:1px solid var(--line);
+    backdrop-filter:blur(6px);
+  }
+  .brand{font-size:20px;letter-spacing:6px;color:var(--gold);font-weight:bold;margin-right:14px;white-space:nowrap}
+  .brand small{font-size:11px;color:var(--ink-dim);letter-spacing:2px;margin-left:6px}
+  nav{display:flex;gap:4px;flex-wrap:wrap}
+  nav button{
+    background:transparent;border:1px solid transparent;color:var(--ink-dim);
+    font-family:inherit;font-size:15px;letter-spacing:3px;padding:7px 16px;border-radius:4px;
+    cursor:pointer;transition:all .2s;
+  }
+  nav button:hover{color:var(--ink);background:var(--panel)}
+  nav button.on{color:var(--gold);border-color:var(--gold-dim);background:var(--panel);text-shadow:0 0 8px rgba(200,162,74,.3)}
+  main{position:fixed;top:56px;left:0;right:0;bottom:0}
+  section.page{position:absolute;inset:0;display:none;overflow:auto}
+  section.page.on{display:block}
+  /* 3D 地图页 */
+  #mapPage{overflow:hidden;background:#070a10}
+  #glCanvas{width:100%;height:100%;display:block;cursor:grab;touch-action:none}
+  #glCanvas.dragging{cursor:grabbing}
+  .gl-hint{
+    position:absolute;left:18px;bottom:18px;z-index:60;pointer-events:none;
+    color:var(--ink-dim);font-size:13px;letter-spacing:1px;
+    background:rgba(13,16,23,.75);padding:8px 14px;border-radius:6px;border:1px solid var(--line);
+    line-height:1.8;
+  }
+  .gl-hint b{color:var(--gold);font-weight:normal}
+  .gl-legend{
+    position:absolute;right:18px;top:18px;z-index:60;pointer-events:none;
+    color:var(--ink-dim);font-size:12px;letter-spacing:1px;
+    background:rgba(13,16,23,.75);padding:8px 12px;border-radius:6px;border:1px solid var(--line);
+    line-height:2;
+  }
+  .gl-legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+  .gl-legend .l-snow{background:#e8e8f0}.gl-legend .l-mnt{background:#6e4a30}
+  .gl-legend .l-hill{background:#7a8f4a}.gl-legend .l-low{background:#5d7f4a}
+  .gl-legend .l-beach{background:#c8b98a}.gl-legend .l-sea{background:#1e5a86}
+  .gl-legend .l-city{background:#ffd75e;border-radius:50%}
+  /* 弹窗 */
+  .modal-mask{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:none;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
+  .modal-mask.on{display:flex}
+  .modal{
+    max-width:480px;width:calc(100% - 60px);max-height:70vh;overflow:auto;
+    background:linear-gradient(160deg, #1e2736, #141a24);
+    border:1px solid var(--gold-dim);border-radius:10px;padding:22px 26px;
+    box-shadow:0 12px 40px rgba(0,0,0,.6);position:relative;
+  }
+  .modal h3{color:var(--gold);font-size:22px;letter-spacing:4px;margin-bottom:4px;border-bottom:1px solid var(--line);padding-bottom:10px}
+  .modal .sub{color:var(--ink-dim);font-size:13px;letter-spacing:2px;margin-bottom:14px}
+  .modal p{line-height:1.9;font-size:15px;color:var(--ink);text-indent:2em}
+  .modal .close{position:absolute;top:10px;right:14px;background:none;border:none;color:var(--ink-dim);font-size:22px;cursor:pointer;font-family:inherit}
+  .modal .close:hover{color:var(--gold)}
+  /* 内容页 */
+  .doc{max-width:880px;margin:0 auto;padding:34px 26px 90px}
+  .doc h1{color:var(--gold);font-size:30px;letter-spacing:8px;text-align:center;margin-bottom:6px;font-weight:bold}
+  .doc .lead{text-align:center;color:var(--ink-dim);letter-spacing:3px;font-size:14px;margin-bottom:30px}
+  .doc h2{color:var(--gold);font-size:21px;letter-spacing:4px;margin:34px 0 14px;padding-left:12px;border-left:3px solid var(--gold-dim);font-weight:bold}
+  .doc h3{color:#e2c47a;font-size:17px;letter-spacing:3px;margin:22px 0 10px;font-weight:bold}
+  .doc p{line-height:1.95;font-size:15.5px;margin:8px 0;text-indent:2em;color:var(--ink)}
+  .doc .item{margin:6px 0;padding:9px 14px;background:var(--panel);border-left:2px solid var(--gold-dim);border-radius:4px}
+  .doc .item b{color:var(--gold);font-weight:normal;letter-spacing:2px;margin-right:6px}
+  .doc table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14.5px}
+  .doc th{background:var(--panel2);color:var(--gold);letter-spacing:2px;padding:9px;border:1px solid var(--line);font-weight:normal}
+  .doc td{padding:8px 10px;border:1px solid var(--line);color:var(--ink);line-height:1.7}
+  .doc .note{color:var(--ink-dim);font-size:13px;text-indent:0}
+  .city-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:8px}
+  .city-card{background:linear-gradient(165deg, var(--panel2), var(--panel));border:1px solid var(--line);border-radius:8px;padding:16px 18px;cursor:pointer;transition:all .2s}
+  .city-card:hover{border-color:var(--gold-dim);transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.4)}
+  .city-card h4{color:var(--gold);font-size:17px;letter-spacing:3px;margin-bottom:6px}
+  .city-card .role{color:var(--ink-dim);font-size:13px;letter-spacing:2px;margin-bottom:10px}
+  .city-card p{font-size:13.5px;color:var(--ink);line-height:1.75;text-indent:0;margin:0;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+  .fade{animation:fadeIn .25s ease}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  @media (max-width:700px){
+    .brand{font-size:16px;letter-spacing:3px}
+    nav button{font-size:13px;padding:6px 9px;letter-spacing:1px}
+    .gl-hint{display:none}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">沧陆<small>CANG LU</small></div>
+  <nav>
+    <button class="on" data-page="mapPage">🗺 地图</button>
+    <button data-page="geoPage">⛰ 地理</button>
+    <button data-page="cityPage">🏰 城邦</button>
+    <button data-page="calPage">📅 历法</button>
+    <button data-page="powerPage">⚔ 势力</button>
+  </nav>
+</header>
+
+<main>
+<section class="page on" id="mapPage">
+  <canvas id="glCanvas"></canvas>
+  <div class="gl-hint">🖱 <b>左键拖拽</b>旋转 ｜ <b>滚轮</b>缩放 ｜ <b>右键拖拽</b>平移 ｜ 点击<b>金色光点</b>查看设定</div>
+  <div class="gl-legend">
+    <div><i class="l-snow"></i>雪峰</div>
+    <div><i class="l-mnt"></i>高山</div>
+    <div><i class="l-hill"></i>丘陵</div>
+    <div><i class="l-low"></i>平原</div>
+    <div><i class="l-beach"></i>海岸</div>
+    <div><i class="l-sea"></i>海洋</div>
+    <div><i class="l-city"></i>城邦 / 地标</div>
+  </div>
+</section>
+
+<section class="page" id="geoPage">
+  <div class="doc fade">
+    <h1>地理志</h1>
+    <div class="lead">沧陆山河 · 海洋与陆地</div>
+    <h2>一、海洋与水域</h2>
+    <h3>1. 大型海域</h3>
+    <div class="item"><b>元荒海</b>：地图最西侧的广阔外海，为西部大陆的西界海域。</div>
+    <div class="item"><b>苍瀛海</b>：地图最东侧的广阔外海，为东部大陆的东界海域。</div>
+    <div class="item"><b>白绫海</b>：地图最北部的陆缘内海，被北部大陆、夺运岛环绕。</div>
+    <div class="item"><b>肆星海</b>：地图中南部的核心主海域，位于中部大陆、盎季地与南部诸岛之间，是区域通航核心水域，多星礁。</div>
+    <h3>2. 海湾与海峡</h3>
+    <div class="item"><b>双生湾</b>：西部大陆南段的元荒海沿岸海湾，为延西河入海口所在区域。</div>
+    <div class="item"><b>泊月湾</b>：中部大陆南段的肆星海北岸海湾，为连奕江入海口所在区域。</div>
+    <div class="item"><b>屈海</b>：东部大陆南段被东枝崖环绕包裹的海湾。</div>
+    <div class="item"><b>承晚海峡</b>：分隔东生半岛与雁南岛的狭窄水道，连通元荒海与肆星海。</div>
+    <div class="item"><b>望暮海峡</b>：分隔奇迤岛与北部大陆的狭窄水道，连通白绫海和苍瀛海。</div>
+    <h3>3. 内陆湖泊</h3>
+    <div class="item"><b>吴阳湖</b>：中东部平原的大型淡水湖，坐落于连奕江下游东侧。</div>
+    <div class="item"><b>荻瑟湖</b>：雁南岛内部的天然湖泊，为岛上核心水域。</div>
+    <h2>二、陆地单元</h2>
+    <h3>1. 主陆块</h3>
+    <div class="item"><b>西部大陆</b>：元荒海东岸的主陆块，以断脊山脉为地形骨架，是恓鸟城所在的核心陆地区。</div>
+    <div class="item"><b>中部大陆</b>：眸霞山脉以东、肆星海以北的中央陆块，是茹章城与连奕江流域的核心区域。</div>
+    <div class="item"><b>盎季地</b>：地图东侧的大型半岛型陆块，为东部文明的核心区域，南端延伸至东枝崖。</div>
+    <h3>2. 半岛</h3>
+    <div class="item"><b>东生半岛</b>：西部大陆向西南延伸的半岛，隔承晚海峡与雁南岛相望。</div>
+    <h3>3. 独立岛屿</h3>
+    <div class="item"><b>奇迤岛</b>：白绫海东北部的大型岛屿，位于斯瑜群岛西侧。</div>
+    <div class="item"><b>雁南岛</b>：承晚海峡南侧的大陆型岛屿，岛上分布有荻瑟湖，是西南海域的关键陆地节点。</div>
+    <div class="item"><b>赎誓阁</b>：肆星海南偏的岛屿，是东南海域的关键陆地节点。</div>
+    <div class="item"><b>伏熏岛</b>：位于元荒海东南侧与肆星海西南侧的火山岛，是伏熏城、狩脊山的所在地。</div>
+    <h3>4. 群岛与礁群</h3>
+    <div class="item"><b>归尘屿</b>：肆星海南部、盎季地正南方的连片星礁型海岛。</div>
+    <div class="item"><b>斯瑜群岛</b>：：白绫海东侧与苍瀛海西侧交界处的小型群岛。</div>
+    <div class="item"><b>南引群岛</b>，地处肆星海东南端的大型火山型群岛。</div>
+    <div class="item"><b>星沙礁</b>：肆星海南部的大片浅滩/暗星礁群，散布于中部海域。</div>
+    <h2>三、地形地貌</h2>
+    <h3>1. 主山脉</h3>
+    <div class="item"><b>断脊山脉</b>：西部大陆南北走向的主山脉，核心山脊海拔普遍在3000m以上，是西部地形的核心骨架。</div>
+    <div class="item"><b>眸霞山脉</b>：中部南北走向的主山脉，分隔西部内陆与中部平原，是沧陆最重要的地理分界线之一。</div>
+    <h3>2. 山峰</h3>
+    <div class="item"><b>辞君山</b>：断脊山脉西北段山峰，海拔1437m。</div>
+    <div class="item"><b>桓山</b>：白绫海南岸、眸霞山脉西北侧山峰，海拔4297m。</div>
+    <div class="item"><b>自鸣山</b>：眸霞山脉主峰，沧陆最高峰，海拔5243m。</div>
+    <div class="item"><b>狩脊山</b>：伏熏岛东部山峰，海拔2136m。</div>
+    <div class="item"><b>扼根山</b>：奇迤岛西侧山峰，海拔1505m。</div>
+    <h3>3. 特殊地貌</h3>
+    <div class="item"><b>渡蛟裂谷</b>：吴阳湖东侧、盎季地西侧的南北走向裂谷带，为东部的最重要地形分界线。</div>
+    <div class="item"><b>东枝崖</b>：盎季地最南端的崖岸海角，是大陆向肆星海延伸的最南端区域。</div>
+    <div class="item"><b>无昼碛</b>：横贯奇迤岛中东部的海岛沙漠，意为“永无白昼的沙漠”，沙粒自带吸光特性，哪怕岛外晴空万里，沙漠范围内永远笼罩着一层灰蒙暝色，分不清晨昏昼夜。</div>
+    <h2>四、河流水系</h2>
+    <div class="item"><b>延西河</b>：发源于断脊山脉，向南流经西部内陆，注入双生湾附近海域。</div>
+    <div class="item"><b>连奕江</b>：发源于眸霞山脉，向东横贯中部平原，流经昊阳湖周边，最终注入泊月湾附近海域。</div>
+    <h2>五、人文聚落</h2>
+    <div class="item"><b>恓鸟城</b>：西部大陆断脊山脉南段西侧内陆的核心城市，延西河流域重镇。</div>
+    <div class="item"><b>茹章城</b>：中部平原、眸霞山脉东侧的核心都城级城市，中部文明的中心。</div>
+    <div class="item"><b>眴姚城</b>：盎季地东侧沿海的港口城市。</div>
+    <div class="item"><b>伏熏城</b>：伏熏岛中部腹地的核心城，伏熏岛屿文明的中心。</div>
+    <h2>六、大型工程地标</h2>
+    <div class="item"><b>望暮大桥</b>：横跨白绫海南部海峡的巨型桥梁，连接中部大陆与奇迤岛，是跨区域核心交通枢纽。</div>
+    <div class="item"><b>潜蛟海底隧道</b>：穿越承晚海峡附近海域的海底隧道，连通北部陆块与雁南岛。</div>
+  </div>
+</section>
+
+<section class="page" id="cityPage">
+  <div class="doc fade">
+    <h1>城邦志</h1>
+    <div class="lead">沧陆四大核心城邦</div>
+    <div class="city-grid" id="cityGrid"></div>
+    <div id="cityDetail"></div>
+    <h2 style="margin-top:40px">山川人文意象与秘境</h2>
+    <h3>断脊山脉</h3>
+    <p>是西部大陆的地形骨架，也是恓鸟城的精神图腾，被视为城邦的“脊梁”。山脉核心山脊海拔普遍3000米以上，山体嶙峋陡峭，山顶终年苍山负雪，是分隔东西两侧的天然屏障。北端延伸入海，南部是延西河的发源地，高山融雪汇聚成河，滋养了西部内陆的土地。</p>
+    <p>恓鸟城将其视作精神象征，城邦战士信奉“以血作衣，以峰作干”，将翻越山脉、驻守山巅视为荣耀；同时也是城邦的天然流放地，资质低劣的宗族子弟、获罪官员会被发配至山中充军戍边。</p>
+    <h3>辞君山</h3>
+    <p>位于恓鸟城北部、断脊山脉西北段，海拔1437米。山间云雾缭绕，奇林怪石林立，半山处留有一处古亭悬址，山高路险，高处人迹罕至。是恓鸟城的文化符号之一，常被用来寄托怀古、避世的情绪，也是城邦文人墨客的游历圣地。</p>
+    <h3>桓山</h3>
+    <p>位于断脊山脉东侧，海拔4297米，被群山环抱，自古被视作祥瑞之地。民间广泛流传“真龙降世”的传说，认为山中藏有真龙气运，登顶者可向天许愿、求偿心愿。但传说的另一面暗含“天本无情”的宿命感——愿望从不会真正应验，登顶的人最终只会直面自身的执念。</p>
+    <h3>眸霞山脉与自鸣山</h3>
+    <p>纵贯中部大陆，是沧陆最重要的地理分界线之一，主峰自鸣山海拔5243米，为沧陆全境最高峰。山脉是全境观赏日落的最佳地点，黄昏时分霞光铺满山峦，色彩华丽绚烂，被世人称为“目遇之即为华丽之霞”，也被誉为“心的温柔乡”，是沧陆公认的盛景。因风景绝美、地理位置居中，是茹章城贵族与文人的重要游历、祭祀场所。</p>
+    <h3>扼根山</h3>
+    <p>坐落于奇迤岛西部的绿洲中心，海拔1505米。身处绿洲之中，山体本身却寸草不生，沙石漫飞，鸟兽绝迹，与周边的绿意形成强烈反差。它是奇迤岛最矛盾的地标：绿洲本是沙漠里的希望象征，但山中的死寂荒芜，又让它成为“绝望最好的培养皿”。是茹章城的隐秘信仰圣地。官方正史刻意淡化其存在，声称茹章与奇迤岛毫无关联；但民间暗中信奉这座远海的山峰，相信城邦的气运与山体深度绑定。</p>
+    <h3>狩脊山</h3>
+    <p>位于伏熏岛东部，海拔2136米，是伏熏城人民瞻仰的精神圣地。山中遍植白色草木，通体素白，象征一尘不染的圣洁。但设定暗含隐喻：极致的纯白只存在于传说与理想中，现实里的圣洁永远伴随代价与虚伪。</p>
+    <h3>无昼碛</h3>
+    <p>横贯奇迤岛中东部的反常海岛沙漠，沙粒自带吸光特性，无论岛外天气如何晴朗，沙漠范围内永远笼罩着一层灰蒙暝色，没有明确的昼夜晨昏之分。越往沙漠深处，光线越昏暗，空间与方向感会逐渐错乱，是天然的生命禁区。</p>
+    <p>底层成因与扼根山的神之遗骸绑定：神骸的力量外泄扭曲了局部的光线与时空规则，才形成了永无白昼的异象；而扼根山绿洲，正是沙漠中唯一的力量锚点。</p>
+  </div>
+</section>
+
+<section class="page" id="calPage">
+  <div class="doc fade">
+    <h1>历法志</h1>
+    <div class="lead">沧陆各邦历法 · 通用月份</div>
+    <h2>沧陆各邦历法</h2>
+    <h3>（一）茹章城官方历法</h3>
+    <p>纪元名称：祀元纪（以“献祭”为纪元开端），简称祀元。</p>
+    <p>元年事件：“幽荧降世”（官方史书美化后的说法）或“血祭封神”（民间隐秘传言）。</p>
+    <p class="note">（补：民间私下有用一轮指代一代人即45年的说法）</p>
+    <h3>（二）恓鸟城官方历法</h3>
+    <p>纪元名称：戍城年。元年事件：恓鸟建国为元年，对应祀元200年。</p>
+    <p>换算：戍城年份 = 祀元年份 − 200 = 衡历年份 − 40。</p>
+    <h3>（三）眴姚城官方历法</h3>
+    <p>纪元名称：祀元。商行、海关、货单全部写祀元，和茹章通商完全无阻碍。</p>
+    <h3>（四）伏熏城官方历法</h3>
+    <p>纪元名称：衡历。元年事件：伏熏城邦统一、立衡法、定商事、规整匠艺的建国之年，对应祀元160年。</p>
+    <p>换算：衡历年份 = 祀元年份 − 160 = 戍城年 + 40。</p>
+    <h2>沧陆通用月份名称</h2>
+    <table>
+      <tr><th style="width:110px">月份</th><th>时令与典故</th></tr>
+      <tr><td>1月 凛月</td><td>断脊山脉雪线最低，恓鸟城最苦寒的戍边月。</td></tr>
+      <tr><td>2月 融月</td><td>延西河、连奕江开始解冻，春汛初起。</td></tr>
+      <tr><td>3月 犁月</td><td>中部平原春耕，茹章城收粮税的起点。</td></tr>
+      <tr><td>4月 烽月</td><td>山雪化尽，恓鸟城与茹章城边境摩擦高发期。</td></tr>
+      <tr><td>5月 商月</td><td>肆星海风浪最小，呴姚城船队大规模出港的黄金季。</td></tr>
+      <tr><td>6月 霆月</td><td>雷雨频发，伏熏岛火山活动相对活跃的月份。</td></tr>
+      <tr><td>7月 灼月</td><td>全年最热，吴阳湖流域的农忙收割期。</td></tr>
+      <tr><td>8月 荒月</td><td>秋燥起，大陆东部时有小型旱情。</td></tr>
+      <tr><td>9月 狩月</td><td>白绫海北岸渔猎旺季，也是恓鸟城秋猎练兵月。</td></tr>
+      <tr><td>10月 敛月</td><td>百物收敛，各城邦清点一年库存、结算商账。</td></tr>
+      <tr><td>11月 霜月</td><td>初雪普降，眸霞山脉开始封山。</td></tr>
+      <tr><td>12月 烬月</td><td>年尾大祭，也是茹章城每三年一次秘密前往扼根山的出发月。</td></tr>
+    </table>
+  </div>
+</section>
+
+<section class="page" id="powerPage">
+  <div class="doc fade">
+    <h1>势力志</h1>
+    <div class="lead">四方势力格局 · 世界核心主线</div>
+    <h2>四方势力博弈关系</h2>
+    <div class="item"><b>西部：恓鸟城</b>：是唯一能在军事硬实力上与茹章城抗衡的势力，二者长期处于对峙状态，边境摩擦不断。恓鸟城鄙夷茹章城的虚伪神权统治，茹章城则将恓鸟城视作扩张路上的最大障碍。</div>
+    <div class="item"><b>中部：茹章城</b>：是名义上的大陆霸主，主导着大陆的秩序，依靠朝贡体系与军事威慑控制多数中小城邦；但内部被寿命诅咒束缚，强盛的根基极其脆弱。</div>
+    <div class="item"><b>东部：眴姚城</b>：是各方势力之间的润滑剂与信息枢纽，依靠贸易在博弈中获利，既不敢彻底得罪茹章城，也暗中与恓鸟城、伏熏城保持贸易往来。</div>
+    <div class="item"><b>南部：伏熏城</b>：奉行孤立主义，偏安海岛，不主动介入大陆纷争，对外保持戒备，专注于自身的发展与秩序，是沧陆格局中的“旁观者”。</div>
+    <h2>核心主线</h2>
+    <p>茹章城以全城邦世代居民的寿命为代价换来的“永恒繁荣”，是沧陆最大的秘密：扼根山深处的灵祠里，沉睡着一具“不属于这个世界的神之遗骸”。神骸缓慢吞噬民众的生命余脉以维持城邦气运，全城无论贵贱都活不过45岁。</p>
+    <p>官方以“删改围罪”清除所有真相知晓者，靠朝贡与扩张转移注意力。但预言中，终有一日神会彻底苏醒，以它的规则重写整个世界的秩序——届时，茹章城的“奇迹”将彻底崩塌，而沧陆的格局也将随之改写。</p>
+    <h2>重要隐喻</h2>
+    <div class="item"><b>扼根山</b>：绿洲中的死寂之山，官方否认与茹章城的关联，民间却暗中信奉，相信城邦气运与山体深度绑定。</div>
+    <div class="item"><b>无昼碛</b>：永无白昼的沙漠，神骸力量外泄扭曲了光线与时空规则的产物，扼根山绿洲是沙漠中唯一的力量锚点。</div>
+    <div class="item"><b>狩脊山</b>：遍植白色草木的圣山，象征一尘不染的圣洁——而极致的纯白只存在于传说与理想中，现实里的圣洁永远伴随代价与虚伪。</div>
+  </div>
+</section>
+</main>
+
+<div class="modal-mask" id="modalMask">
+  <div class="modal">
+    <button class="close" id="modalClose">✕</button>
+    <h3 id="modalTitle">标题</h3>
+    <div class="sub" id="modalSub"></div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script src="three.min.js"></script>
+<script src="mapdata.js"></script>
+<script>
+/* ============ 3D 场景 ============ */
+const MAP_W = MAPDATA.W, MAP_H = MAPDATA.H;
+const HSCALE = 8;
+const canvas = document.getElementById('glCanvas');
+const renderer = new THREE.WebGLRenderer({canvas, antialias:true});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x070a10);
+
+const cam = new THREE.PerspectiveCamera(50, 1, 0.1, 3000);
+const target = new THREE.Vector3(0, 1.6, 0);
+let dist = 95, theta = -0.85, phi = 1.05;
+
+function resize(){
+  const w = canvas.clientWidth, h = canvas.clientHeight;
+  renderer.setSize(w, h, false);
+  cam.aspect = w/h; cam.updateProjectionMatrix();
+}
+window.addEventListener('resize', resize);
+
+// 高程采样：HGRID 双线性插值（file:// 环境无法读图片像素，网格数据预生成在 mapdata.js）
+function getH(u, v){
+  const gx = Math.min(SEG_X, Math.max(0, u*SEG_X));
+  const gy = Math.min(SEG_Y, Math.max(0, v*SEG_Y));
+  const x0 = Math.floor(gx), y0 = Math.floor(gy);
+  const x1 = Math.min(SEG_X, x0+1), y1 = Math.min(SEG_Y, y0+1);
+  const fx = gx-x0, fy = gy-y0;
+  const a = HGRID[y0*(SEG_X+1)+x0], b = HGRID[y0*(SEG_X+1)+x1];
+  const c = HGRID[y1*(SEG_X+1)+x0], d = HGRID[y1*(SEG_X+1)+x1];
+  return ((a*(1-fx)+b*fx)*(1-fy) + (c*(1-fx)+d*fx)*fy)/255;
+}
+const clickables = [];
+const labels3d = [];
+
+function colorFor(h){
+  const stops = [
+    [0.00, 0.03, 0.10, 0.19],  // 深海
+    [0.02, 0.10, 0.20, 0.35],  // 浅海
+    [0.05, 0.45, 0.60, 0.75],  // 浅滩
+    [0.08, 0.78, 0.72, 0.55],  // 沙滩
+    [0.16, 0.36, 0.50, 0.29],  // 低地绿
+    [0.30, 0.48, 0.56, 0.29],  // 丘陵
+    [0.45, 0.55, 0.42, 0.27],  // 山地棕
+    [0.60, 0.43, 0.29, 0.19],  // 高山深棕
+    [0.76, 0.86, 0.86, 0.90],  // 雪线
+    [1.00, 0.95, 0.96, 0.98],  // 雪顶
+  ];
+  for(let i=0;i<stops.length-1;i++){
+    const a = stops[i], b = stops[i+1];
+    if(h >= a[0] && h <= b[0]){
+      const t = (h-a[0])/(b[0]-a[0] || 1);
+      return [a[1]+(b[1]-a[1])*t, a[2]+(b[2]-a[2])*t, a[3]+(b[3]-a[3])*t];
+    }
+  }
+  return [0.95, 0.96, 0.98];
+}
+
+function makeLabel(text, gold){
+  const cv = document.createElement('canvas'); cv.width = 512; cv.height = 96;
+  const c = cv.getContext('2d');
+  c.font = 'bold 54px "楷体","KaiTi","STKaiti",serif';
+  c.textAlign = 'center'; c.textBaseline = 'middle';
+  c.lineWidth = 12; c.strokeStyle = 'rgba(8,6,4,0.9)';
+  c.strokeText(text, 256, 48);
+  c.fillStyle = gold ? '#ffd75e' : '#e8e0cc';
+  c.fillText(text, 256, 48);
+  const tex = new THREE.CanvasTexture(cv);
+  tex.minFilter = THREE.LinearFilter;
+  const sp = new THREE.Sprite(new THREE.SpriteMaterial({map:tex, transparent:true, depthWrite:false}));
+  sp.scale.set(5.6, 1.05, 1);
+  return sp;
+}
+
+function buildWorld(){
+  // 地形
+  const geo = new THREE.PlaneGeometry(120, 90, 200, 150);
+  geo.rotateX(-Math.PI/2);
+  const pos = geo.attributes.position.array;
+  const colors = new Float32Array(pos.length);
+  for(let i=0;i<pos.length;i+=3){
+    const x = pos[i], z = pos[i+2];
+    const u = (x+60)/120, v = (-z+45)/90;
+    const h = getH(u, v);
+    pos[i+1] = h*HSCALE;
+    const c = colorFor(h);
+    colors[i]=c[0]; colors[i+1]=c[1]; colors[i+2]=c[2];
+  }
+  geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+  geo.computeVertexNormals();
+  const terrain = new THREE.Mesh(geo, new THREE.MeshLambertMaterial({vertexColors:true}));
+  scene.add(terrain);
+
+  // 灯光
+  scene.add(new THREE.AmbientLight(0x8fa3c8, 0.55));
+  const sun = new THREE.DirectionalLight(0xfff2d8, 1.1);
+  sun.position.set(50, 70, 35);
+  scene.add(sun);
+  const moon = new THREE.DirectionalLight(0x6a86b8, 0.35);
+  moon.position.set(-40, 25, -50);
+  scene.add(moon);
+
+  // 水面
+  const water = new THREE.Mesh(
+    new THREE.PlaneGeometry(3000, 3000),
+    new THREE.MeshPhongMaterial({color:0x1e5a86, transparent:true, opacity:0.78, shininess:110, specular:0x88bbdd})
+  );
+  water.rotation.x = -Math.PI/2;
+  water.position.y = 0.03;
+  water.renderOrder = 2;
+  scene.add(water);
+
+  // 星空
+  const starGeo = new THREE.BufferGeometry();
+  const starN = 700, starPos = new Float32Array(starN*3);
+  for(let i=0;i<starN;i++){
+    const r = 900 + Math.random()*400;
+    const t = Math.random()*Math.PI*2, p = Math.random()*Math.PI*0.45;
+    starPos[i*3] = r*Math.sin(p)*Math.cos(t);
+    starPos[i*3+1] = r*Math.cos(p)+60;
+    starPos[i*3+2] = r*Math.sin(p)*Math.sin(t);
+  }
+  starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+  scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({color:0xccd8ee, size:1.1, transparent:true, opacity:0.75})));
+
+  // 河流
+  MAPDATA.rivers.forEach(rv=>{
+    const pts = rv.pts.map(p=>{
+      const h = getH(p[0], p[1]);
+      return new THREE.Vector3(p[0]*120-60, h*HSCALE+0.2, -(p[1]*90-45));
+    });
+    const g = new THREE.BufferGeometry().setFromPoints(pts);
+    scene.add(new THREE.Line(g, new THREE.LineBasicMaterial({color:0x3a7abf})));
+  });
+
+  // 湖泊
+  MAPDATA.lakes.forEach(lk=>{
+    const h = getH(lk.x, lk.y);
+    const disc = new THREE.Mesh(
+      new THREE.CircleGeometry(Math.max(0.5, lk.r*120), 32),
+      new THREE.MeshPhongMaterial({color:0x2a6a9a, transparent:true, opacity:0.88, shininess:80})
+    );
+    disc.rotation.x = -Math.PI/2;
+    disc.position.set(lk.x*120-60, h*HSCALE+0.06, -(lk.y*90-45));
+    scene.add(disc);
+  });
+
+  // 地标：金球 + 标签
+  MAPDATA.marks.forEach(m=>{
+    const h = getH(m.x, m.y);
+    const wx = m.x*120-60, wz = -(m.y*90-45);
+    const hy = h*HSCALE;
+    // 金球
+    const ball = new THREE.Mesh(
+      new THREE.SphereGeometry(m.imp ? 0.34 : 0.24, 16, 16),
+      new THREE.MeshBasicMaterial({color:0xffd75e})
+    );
+    ball.position.set(wx, hy + 0.55, wz);
+    ball.userData = {mark:m};
+    // 底座光环
+    const ring = new THREE.Mesh(
+      new THREE.CircleGeometry(m.imp ? 0.85 : 0.6, 32),
+      new THREE.MeshBasicMaterial({color:0xffe9a8, transparent:true, opacity:0.22, side:THREE.DoubleSide})
+    );
+    ring.rotation.x = -Math.PI/2;
+    ring.position.set(wx, hy + 0.05, wz);
+    scene.add(ball); scene.add(ring);
+    clickables.push(ball);
+    // 标签
+    const lb = makeLabel(m.name, !!m.imp);
+    lb.position.set(wx, hy + (m.imp ? 1.9 : 1.5), wz);
+    lb.userData = {mark:m};
+    scene.add(lb);
+    labels3d.push(lb);
+    clickables.push(lb);
+  });
+
+  animate();
+}
+
+// 相机控制
+const ctrl = {rot:false, pan:false, lx:0, ly:0, px:0, py:0};
+canvas.addEventListener('mousedown', e=>{
+  if(e.button===0){ ctrl.rot=true; ctrl.lx=e.clientX; ctrl.ly=e.clientY; canvas.classList.add('dragging'); }
+  else if(e.button===2){ ctrl.pan=true; ctrl.px=e.clientX; ctrl.py=e.clientY; canvas.classList.add('dragging'); }
+});
+window.addEventListener('mousemove', e=>{
+  if(ctrl.rot){
+    theta -= (e.clientX-ctrl.lx)*0.006;
+    phi -= (e.clientY-ctrl.ly)*0.006;
+    phi = Math.max(0.12, Math.min(1.5, phi));
+    ctrl.lx=e.clientX; ctrl.ly=e.clientY;
+  } else if(ctrl.pan){
+    const s = dist*0.0011;
+    target.x += (e.clientX-ctrl.px)*s*Math.cos(theta) + (e.clientY-ctrl.py)*s*Math.sin(theta)*Math.cos(phi);
+    target.z += -(e.clientX-ctrl.px)*s*Math.sin(theta) + (e.clientY-ctrl.py)*s*Math.cos(theta)*Math.cos(phi);
+    target.y = Math.max(0, target.y + (e.clientY-ctrl.py)*s*Math.sin(phi));
+    ctrl.px=e.clientX; ctrl.py=e.clientY;
+  }
+});
+window.addEventListener('mouseup', ()=>{ ctrl.rot=false; ctrl.pan=false; canvas.classList.remove('dragging'); });
+canvas.addEventListener('wheel', e=>{
+  e.preventDefault();
+  dist *= 1 + e.deltaY*0.0012;
+  dist = Math.max(28, Math.min(320, dist));
+}, {passive:false});
+canvas.addEventListener('contextmenu', e=>e.preventDefault());
+
+// 触屏
+let tp = null;
+canvas.addEventListener('touchstart', e=>{ if(e.touches.length===1){ tp={x:e.touches[0].clientX, y:e.touches[0].clientY}; } }, {passive:true});
+canvas.addEventListener('touchmove', e=>{
+  if(e.touches.length===1 && tp){
+    theta -= (e.touches[0].clientX-tp.x)*0.006;
+    phi -= (e.touches[0].clientY-tp.y)*0.006;
+    phi = Math.max(0.12, Math.min(1.5, phi));
+    tp={x:e.touches[0].clientX, y:e.touches[0].clientY};
+  }
+}, {passive:true});
+canvas.addEventListener('touchend', ()=>{ tp=null; });
+
+// 点击拾取
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+canvas.addEventListener('click', e=>{
+  if(Math.abs(e.clientX-ctrl.lx)>4 || Math.abs(e.clientY-ctrl.ly)>4) { /* 拖动不触发 */ }
+  const r = canvas.getBoundingClientRect();
+  mouse.x = ((e.clientX-r.left)/r.width)*2-1;
+  mouse.y = -((e.clientY-r.top)/r.height)*2+1;
+  raycaster.setFromCamera(mouse, cam);
+  const hits = raycaster.intersectObjects(clickables);
+  if(hits.length){
+    const mark = hits[0].object.userData.mark;
+    if(mark) openModal(mark);
+  }
+});
+// 悬停高亮
+canvas.addEventListener('mousemove', e=>{
+  const r = canvas.getBoundingClientRect();
+  mouse.x = ((e.clientX-r.left)/r.width)*2-1;
+  mouse.y = -((e.clientY-r.top)/r.height)*2+1;
+  raycaster.setFromCamera(mouse, cam);
+  const hits = raycaster.intersectObjects(clickables);
+  canvas.style.cursor = hits.length ? 'pointer' : 'grab';
+});
+
+function updateCam(){
+  cam.position.set(
+    target.x + dist*Math.sin(phi)*Math.sin(theta),
+    target.y + dist*Math.cos(phi),
+    target.z + dist*Math.sin(phi)*Math.cos(theta)
+  );
+  cam.lookAt(target);
+}
+function animate(){
+  requestAnimationFrame(animate);
+  updateCam();
+  renderer.render(scene, cam);
+}
+
+// 直接构建（无需图片加载）
+buildWorld();
+resize();
+
+/* ============ 弹窗 ============ */
+const mask = document.getElementById('modalMask');
+function openModal(m){
+  document.getElementById('modalTitle').textContent = m.name;
+  document.getElementById('modalSub').textContent = m.sub || '';
+  document.getElementById('modalBody').innerHTML = '<p>'+(m.desc||'')+'</p>';
+  mask.classList.add('on');
+}
+document.getElementById('modalClose').onclick = ()=> mask.classList.remove('on');
+mask.addEventListener('click', e=>{ if(e.target===mask) mask.classList.remove('on'); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') mask.classList.remove('on'); });
+
+/* ============ 城邦卡片 ============ */
+const CITIES = [
+  {name:'恓鸟城', role:'西部山城军邦', motto:'薪火相传，守护故土', summary:'别称“悲息之城”，冶铁业冠绝沧陆。宗族长老制 + 卫国者庭军事制衡，崇拜断脊山脉。',
+   detail:['多年边境战火淬炼出极强凝聚力，曾濒临覆灭，凭全民死守守住疆土。','核心支柱为冶铁业，兵器甲胄精良耐用，享誉全沧陆；农业贫瘠，主产土豆、薯蓣，粮食勉强自给。','政治制度为宗族长老制加军事制衡：大宗族世代统治，大长老须获民众认可，年迈必退；卫国者庭由民众组成，制衡宗族；世袭「右判决官」对卫国者庭决议拥有最终否决权。','没有正式宗教，核心精神是“敬自然、重血缘、守故土”，视断脊山脉为守护神。']},
+  {name:'茹章城', role:'中部神权霸主', motto:'君权神授 · 永恒繁荣', summary:'沧陆公认最强大的城邦，表面繁华鼎盛——实则被百年寿命诅咒笼罩，全城活不过45岁。',
+   detail:['经济、文化、军事全面鼎盛，疆域为诸邦之最，周边小邦称臣朝贡；官方史籍全是辉煌记载。','真相：初代茹章王为换取城邦强盛，将自己献祭融入神的心脏，以全城邦世代居民的寿命为代价——诅咒之下，无论贵贱都活不过45岁。','君主集神权军政于一身，下设社会、经济、外事、监察四大部门，完全以君主意志运转。','每隔三年，君主秘密远赴奇迤岛扼根山举行仪式；以“删改围罪”清除所有真相知晓者，靠扩张转移民众注意力。']},
+  {name:'眴姚城', role:'东部商贸港城', motto:'左右逢源 · 以商立邦', summary:'沧陆东部最大港口，苍瀛海航线核心枢纽，海商公会共治，全大陆的信息集散地。',
+   detail:['码头商行会馆林立，既有豪奢商人宅邸，也有拥挤水手街区，市井与商贸活力并存。','无王室君主，由最大几支海商家族组成海商公会联合执政，核心诉求是维护贸易秩序与商人利益。','贸易网络覆盖东西南北：西达中部西部大陆，东至苍瀛海诸岛，南通伏熏岛、南引群岛。','名义上向茹章城称臣朝贡换取贸易保护，实际自治权极高；奉行中立策略，是势力间的缓冲带与信息中转站。']},
+  {name:'伏熏城', role:'海岛民主之邦', motto:'政团民主 · 务实理性', summary:'火山岛上的独立文明，政团民主制，十年换届选举，多数民众为无神论者。',
+   detail:['坐落于伏熏岛中部腹地，远离大陆，发展出独立文明；贯穿南北的“之丝运河”是海岛经济命脉。','对外管控森严：外来商人只能在东部平安港活动，擅闯腹地者永久驱逐出岛。','政治制度为政团民主制：成年公民可自发组建政团，每十年换届选举执政团与参议团，参议团拥有完整制衡权。','多数民众为无神论者；少数信奉“月教”——以月亮为尊、太阳为卑，信徒昼伏夜出，宗教活动都在夜间举行。']},
+];
+const grid = document.getElementById('cityGrid');
+const detailBox = document.getElementById('cityDetail');
+CITIES.forEach(c=>{
+  const card = document.createElement('div');
+  card.className = 'city-card';
+  card.innerHTML = '<h4>'+c.name+'</h4><div class="role">'+c.role+'</div><p>'+c.summary+'</p>';
+  card.onclick = ()=> showCity(c);
+  grid.appendChild(card);
+});
+function showCity(c){
+  let html = '<h2>'+c.name+' · '+c.role+'</h2><p class="note">“'+c.motto+'”</p>';
+  c.detail.forEach(d=>{ html += '<p>'+d+'</p>'; });
+  detailBox.innerHTML = html;
+  detailBox.scrollIntoView({behavior:'smooth'});
+}
+
+/* ============ 页面切换 ============ */
+document.querySelectorAll('nav button').forEach(btn=>{
+  btn.onclick = ()=>{
+    document.querySelectorAll('nav button').forEach(b=>b.classList.remove('on'));
+    document.querySelectorAll('section.page').forEach(s=>s.classList.remove('on'));
+    btn.classList.add('on');
+    const page = document.getElementById(btn.dataset.page);
+    page.classList.add('on');
+    page.scrollTop = 0;
+    if(btn.dataset.page==='mapPage') resize();
+  };
+});
+</script>
+</body>
+</html>
