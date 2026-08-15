@@ -1038,6 +1038,7 @@ function revealItem(el){
   function playCur(){
     if(cur < 0 || !SONGS[cur]) return;
     if(!audio) audio = new Audio();
+    audio.muted = false;
     audio.src = SONGS[cur].src;
     setCover(cur);
     audio.play().then(()=>{
@@ -1050,6 +1051,21 @@ function revealItem(el){
       now.innerHTML = '<b>沧陆</b><span class="music-hint"> · 点击页面任意处开始</span>';
       setPlaying(false);
     });
+  }
+  // 随机选曲：排除指定索引，避免连续重复
+  function randSong(exclude){
+    if(SONGS.length <= 1) return 0;
+    let i;
+    do{ i = Math.floor(Math.random() * SONGS.length); }while(i === exclude);
+    return i;
+  }
+  // 播放完毕：随机接下一首
+  function setupEnded(){
+    if(!audio) return;
+    audio.onended = ()=>{
+      cur = randSong(cur);
+      playCur();
+    };
   }
   btn.onclick = ()=>{
     if(!SONGS.length){ list.classList.toggle('on'); return; }
@@ -1073,17 +1089,18 @@ function revealItem(el){
   document.addEventListener('click', e=>{
     if(!e.target.closest('.music-bar') && !e.target.closest('.music-list')) list.classList.remove('on');
   });
-  // 自动播放：静音启动（浏览器允许）→ 首次点击任意处立即出声
+  // 自动播放：进站随机一曲静音启动（浏览器允许）→ 首次点击任意处立即出声
   function tryAutoPlay(){
     if(!SONGS.length || cur >= 0) return;
-    cur = 0;
+    cur = Math.floor(Math.random() * SONGS.length);
     if(!audio) audio = new Audio();
     audio.muted = true;   // 静音自动播放：浏览器允许，绕过拦截
-    audio.src = SONGS[0].src;
-    setCover(0);
+    audio.src = SONGS[cur].src;
+    setCover(cur);
+    setupEnded();
     audio.play().then(()=>{
       started = true;
-      now.innerHTML = '<b>'+SONGS[0].name+'</b><span class="music-hint"> · 点击出声</span>';
+      now.innerHTML = '<b>'+SONGS[cur].name+'</b><span class="music-hint"> · 点击出声</span>';
       btn.textContent = '❚❚';
       setPlaying(true);
     }).catch(()=>{
@@ -1094,7 +1111,7 @@ function revealItem(el){
   }
   document.addEventListener('click', function auto(){
     if(SONGS.length && !started){
-      if(cur < 0) cur = 0;
+      if(cur < 0) cur = Math.floor(Math.random() * SONGS.length);
       if(audio && audio.src){
         audio.muted = false;  // 解锁声音
         audio.play().then(()=>{
