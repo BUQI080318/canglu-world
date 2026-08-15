@@ -3,27 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>沧陆 · 架空世界观</title>
+<title>沧陆 · CANG LU</title>
 <style>
   :root{
-    --bg:#0d1017; --bg2:#141a24; --panel:#171e2b; --panel2:#1e2736;
-    --gold:#c8a24a; --gold-dim:#8a6d35; --ink:#e8dcc0; --ink-dim:#9aa8bd;
-    --line:#2a3547;
+    --bg:#0d1017; --panel:#161b26; --panel2:#1e2736; --line:#2a3344;
+    --ink:#c9d2e0; --ink-dim:#7d8aa0; --gold:#c8a24a; --gold-dim:#8a7038;
   }
   *{margin:0;padding:0;box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    background:radial-gradient(ellipse at 50% -20%, #1a2233 0%, var(--bg) 60%);
-    color:var(--ink);
-    font-family:"楷体","KaiTi","STKaiti","SimSun",serif;
-    overflow:hidden;
-  }
+  body{background:var(--bg);color:var(--ink);font-family:"Microsoft YaHei","PingFang SC",sans-serif;overflow-x:hidden}
   header{
     position:fixed;top:0;left:0;right:0;height:56px;z-index:100;
-    display:flex;align-items:center;gap:8px;padding:0 18px;
-    background:linear-gradient(180deg, rgba(13,16,23,.97), rgba(13,16,23,.88));
-    border-bottom:1px solid var(--line);
-    backdrop-filter:blur(6px);
+    display:flex;align-items:center;padding:0 20px;gap:10px;
+    background:linear-gradient(180deg,rgba(18,22,32,.98),rgba(14,17,26,.96));
+    border-bottom:1px solid var(--line);backdrop-filter:blur(6px);
   }
   .brand{font-size:20px;letter-spacing:6px;color:var(--gold);font-weight:bold;margin-right:14px;white-space:nowrap}
   .brand small{font-size:11px;color:var(--ink-dim);letter-spacing:2px;margin-left:6px}
@@ -35,120 +27,9 @@
   }
   nav button:hover{color:var(--ink);background:var(--panel)}
   nav button.on{color:var(--gold);border-color:var(--gold-dim);background:var(--panel);text-shadow:0 0 8px rgba(200,162,74,.3)}
-  main{position:fixed;top:56px;left:0;right:0;bottom:0}
-  section.page{position:absolute;inset:0;display:none;overflow:auto}
+  main{position:fixed;top:56px;left:0;right:0;bottom:0;overflow-y:auto}
+  section.page{display:none}
   section.page.on{display:block}
-  /* 3D 地图页 */
-  #mapPage{overflow:hidden;background:#070a10}
-  #glCanvas{width:100%;height:100%;display:block;cursor:grab;touch-action:none}
-  #glCanvas.dragging{cursor:grabbing}
-  #loading{
-    position:absolute;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;
-    background:linear-gradient(160deg,#0d1420,#0a0e16);color:var(--gold);
-    font-size:20px;letter-spacing:4px;transition:opacity .6s;
-  }
-  #loading.hide{opacity:0;pointer-events:none}
-  .gl-hint{
-    position:absolute;left:18px;bottom:18px;z-index:60;pointer-events:none;
-    color:var(--ink-dim);font-size:13px;letter-spacing:1px;
-    background:rgba(13,16,23,.75);padding:8px 14px;border-radius:6px;border:1px solid var(--line);
-    line-height:1.8;
-  }
-  .gl-hint b{color:var(--gold);font-weight:normal}
-  .gl-legend{
-    position:absolute;right:18px;top:18px;z-index:60;pointer-events:none;
-    color:var(--ink-dim);font-size:12px;letter-spacing:1px;
-    background:rgba(13,16,23,.75);padding:8px 12px;border-radius:6px;border:1px solid var(--line);
-    line-height:2;
-  }
-  .gl-legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
-  .gl-legend .l-snow{background:#e8e8f0}.gl-legend .l-mnt{background:#6e4a30}
-  .gl-legend .l-hill{background:#7a8f4a}.gl-legend .l-low{background:#5d7f4a}
-  .gl-legend .l-beach{background:#c8b98a}.gl-legend .l-sea{background:#1e5a86}
-  .gl-legend .l-city{background:#ffd75e;border-radius:50%}
-  .map-ui{position:absolute;right:18px;bottom:18px;z-index:60;display:flex;flex-direction:column;gap:8px}
-  .map-ui button{
-    width:42px;height:42px;border-radius:6px;cursor:pointer;
-    background:rgba(20,16,23,.9);color:var(--gold);font-size:19px;font-family:inherit;
-    border:1px solid var(--line);transition:all .15s;
-  }
-  .map-ui button:hover{background:var(--panel2);border-color:var(--gold-dim)}
-  .compass{
-    position:absolute;left:18px;top:18px;z-index:60;pointer-events:none;
-    color:var(--gold);font-size:15px;letter-spacing:2px;
-    background:rgba(13,16,23,.75);padding:6px 12px;border-radius:6px;border:1px solid var(--line);
-  }
-  .compass b{font-size:18px;color:#ffe9a8}
-  /* 2D 舆图页（原神风格） */
-  #map2dPage{overflow:hidden;background:#0a1424}
-  #map2dWrap{position:absolute;inset:0;overflow:hidden;cursor:grab}
-  #map2dWrap.dragging{cursor:grabbing}
-  #map2d{position:absolute;top:0;left:0;transform-origin:0 0;will-change:transform}
-  #map2d img{display:block;user-select:none;-webkit-user-drag:none}
-  #marks2d{position:absolute;top:0;left:0;width:100%;height:100%}
-  .m2{position:absolute;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;
-      background:rgba(255,255,255,.92);border:2px solid rgba(20,30,50,.85);cursor:pointer;
-      transition:transform .15s;box-shadow:0 0 8px rgba(180,220,255,.8);z-index:5}
-  .m2:hover{transform:scale(1.7)}
-  .m2.imp{width:22px;height:22px;margin:-11px 0 0 -11px;background:linear-gradient(145deg,#ffe9a8,#e8b54a);
-          border:2px solid rgba(60,40,10,.9);box-shadow:0 0 12px rgba(255,210,110,.95);z-index:6}
-  .gs-ui{position:absolute;right:20px;bottom:24px;z-index:60;display:flex;flex-direction:column;gap:10px}
-  .gs-ui button{
-    width:44px;height:44px;border-radius:10px;cursor:pointer;font-family:inherit;
-    background:linear-gradient(160deg,rgba(28,38,58,.92),rgba(16,22,36,.92));
-    color:#d8c890;font-size:20px;border:1px solid rgba(150,170,210,.35);
-    backdrop-filter:blur(4px);transition:all .15s;box-shadow:0 4px 14px rgba(0,0,0,.4);
-  }
-  .gs-ui button:hover{color:#ffe9a8;border-color:rgba(232,181,74,.6);transform:translateY(-1px)}
-  .gs-title{
-    position:absolute;left:22px;top:16px;z-index:60;pointer-events:none;
-    color:#f0e6c8;font-size:26px;letter-spacing:8px;font-weight:bold;
-    text-shadow:0 2px 12px rgba(0,0,0,.8),0 0 20px rgba(200,170,90,.35);
-  }
-  .gs-title small{display:block;font-size:12px;color:#a8b8d0;letter-spacing:4px;margin-top:2px;font-weight:normal;text-shadow:0 1px 6px rgba(0,0,0,.8)}
-  .gs-panel{
-    position:absolute;left:22px;top:96px;z-index:60;min-width:210px;
-    background:linear-gradient(160deg,rgba(22,30,48,.88),rgba(14,20,34,.88));
-    border:1px solid rgba(150,170,210,.28);border-radius:12px;padding:14px 16px;
-    backdrop-filter:blur(6px);box-shadow:0 8px 24px rgba(0,0,0,.45);
-  }
-  .gs-panel-title{color:#e0c890;font-size:14px;letter-spacing:4px;margin-bottom:10px;border-bottom:1px solid rgba(150,170,210,.25);padding-bottom:8px}
-  .gs-legend{display:flex;flex-direction:column;gap:7px}
-  .gs-legend span{display:flex;align-items:center;gap:9px;color:#b8c4d8;font-size:13px;letter-spacing:1px}
-  .gs-legend i{width:14px;height:14px;border-radius:3px;display:inline-block;flex:none}
-  .g-snow{background:linear-gradient(145deg,#fff,#c8d4e8)}
-  .g-mnt{background:linear-gradient(145deg,#8a8478,#5a564e)}
-  .g-forest{background:linear-gradient(145deg,#7fb05a,#4a7a38)}
-  .g-city{background:linear-gradient(145deg,#ffe9a8,#e8b54a);border-radius:50%}
-  .g-mark{background:#fff;border-radius:50%}
-  .gs-compass{
-    position:absolute;right:24px;top:20px;z-index:60;pointer-events:none;
-    color:#d8c890;font-size:13px;letter-spacing:2px;text-align:center;
-    background:linear-gradient(160deg,rgba(22,30,48,.85),rgba(14,20,34,.85));
-    padding:10px 12px;border-radius:50%;border:1px solid rgba(150,170,210,.3);
-    width:56px;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;
-    box-shadow:0 4px 14px rgba(0,0,0,.4);
-  }
-  .gs-compass b{font-size:20px;color:#ffb088;line-height:1}
-  .gs-hint{
-    position:absolute;left:22px;bottom:24px;z-index:60;pointer-events:none;
-    color:#8a98b0;font-size:13px;letter-spacing:1px;text-shadow:0 1px 4px rgba(0,0,0,.9);
-    background:linear-gradient(90deg,rgba(14,20,34,.7),rgba(14,20,34,0));padding:6px 14px 6px 0;line-height:1.8;
-  }
-  /* 弹窗 */
-  .modal-mask{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:none;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
-  .modal-mask.on{display:flex}
-  .modal{
-    max-width:480px;width:calc(100% - 60px);max-height:70vh;overflow:auto;
-    background:linear-gradient(160deg, #1e2736, #141a24);
-    border:1px solid var(--gold-dim);border-radius:10px;padding:22px 26px;
-    box-shadow:0 12px 40px rgba(0,0,0,.6);position:relative;
-  }
-  .modal h3{color:var(--gold);font-size:22px;letter-spacing:4px;margin-bottom:4px;border-bottom:1px solid var(--line);padding-bottom:10px}
-  .modal .sub{color:var(--ink-dim);font-size:13px;letter-spacing:2px;margin-bottom:14px}
-  .modal p{line-height:1.9;font-size:15px;color:var(--ink);text-indent:2em}
-  .modal .close{position:absolute;top:10px;right:14px;background:none;border:none;color:var(--ink-dim);font-size:22px;cursor:pointer;font-family:inherit}
-  .modal .close:hover{color:var(--gold)}
   /* 内容页 */
   .doc{max-width:880px;margin:0 auto;padding:34px 26px 90px}
   .doc h1{color:var(--gold);font-size:30px;letter-spacing:8px;text-align:center;margin-bottom:6px;font-weight:bold}
@@ -156,24 +37,42 @@
   .doc h2{color:var(--gold);font-size:21px;letter-spacing:4px;margin:34px 0 14px;padding-left:12px;border-left:3px solid var(--gold-dim);font-weight:bold}
   .doc h3{color:#e2c47a;font-size:17px;letter-spacing:3px;margin:22px 0 10px;font-weight:bold}
   .doc p{line-height:1.95;font-size:15.5px;margin:8px 0;text-indent:2em;color:var(--ink)}
+  .doc p.note{color:var(--gold-dim);font-size:14px;text-indent:0}
   .doc .item{margin:6px 0;padding:9px 14px;background:var(--panel);border-left:2px solid var(--gold-dim);border-radius:4px}
   .doc .item b{color:var(--gold);font-weight:normal;letter-spacing:2px;margin-right:6px}
   .doc table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14.5px}
-  .doc th{background:var(--panel2);color:var(--gold);letter-spacing:2px;padding:9px;border:1px solid var(--line);font-weight:normal}
-  .doc td{padding:8px 10px;border:1px solid var(--line);color:var(--ink);line-height:1.7}
-  .doc .note{color:var(--ink-dim);font-size:13px;text-indent:0}
-  .city-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:8px}
-  .city-card{background:linear-gradient(165deg, var(--panel2), var(--panel));border:1px solid var(--line);border-radius:8px;padding:16px 18px;cursor:pointer;transition:all .2s}
-  .city-card:hover{border-color:var(--gold-dim);transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.4)}
-  .city-card h4{color:var(--gold);font-size:17px;letter-spacing:3px;margin-bottom:6px}
-  .city-card .role{color:var(--ink-dim);font-size:13px;letter-spacing:2px;margin-bottom:10px}
+  .doc th{background:var(--panel2);color:var(--gold);padding:10px;text-align:left;border:1px solid var(--line);font-weight:normal;letter-spacing:2px}
+  .doc td{padding:9px 10px;border:1px solid var(--line);line-height:1.8;vertical-align:top}
+  .doc tr:nth-child(even) td{background:rgba(255,255,255,.02)}
+  /* 城邦卡片 */
+  .city-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;margin:20px 0}
+  .city-card{
+    background:linear-gradient(160deg,var(--panel),var(--panel2));
+    border:1px solid var(--line);border-radius:10px;padding:18px;cursor:pointer;transition:all .2s;
+  }
+  .city-card:hover{border-color:var(--gold-dim);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.35)}
+  .city-card h4{color:var(--gold);font-size:19px;letter-spacing:3px;margin-bottom:4px}
+  .city-card .role{color:var(--ink-dim);font-size:12.5px;letter-spacing:2px;margin-bottom:10px}
   .city-card p{font-size:13.5px;color:var(--ink);line-height:1.75;text-indent:0;margin:0;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
   .fade{animation:fadeIn .25s ease}
   @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  /* 弹窗 */
+  .modal-mask{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:none;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
+  .modal-mask.on{display:flex}
+  .modal{
+    max-width:480px;width:calc(100% - 60px);max-height:70vh;overflow:auto;
+    background:linear-gradient(160deg,#1e2736,#141a24);
+    border:1px solid var(--gold-dim);border-radius:10px;padding:22px 26px;
+    box-shadow:0 12px 40px rgba(0,0,0,.6);position:relative;
+  }
+  .modal h3{color:var(--gold);font-size:22px;letter-spacing:4px;margin-bottom:4px;border-bottom:1px solid var(--line);padding-bottom:10px}
+  .modal .sub{color:var(--ink-dim);font-size:13px;letter-spacing:2px;margin:6px 0 10px}
+  .modal p{line-height:1.9;font-size:14.5px;color:var(--ink)}
+  .modal .close{position:absolute;top:10px;right:14px;background:none;border:none;color:var(--ink-dim);font-size:22px;cursor:pointer;font-family:inherit}
+  .modal .close:hover{color:var(--gold)}
   @media (max-width:700px){
     .brand{font-size:16px;letter-spacing:3px}
     nav button{font-size:13px;padding:6px 9px;letter-spacing:1px}
-    .gl-hint{display:none}
   }
 </style>
 </head>
@@ -182,9 +81,7 @@
 <header>
   <div class="brand">沧陆<small>CANG LU</small></div>
   <nav>
-    <button class="on" data-page="mapPage">🗺 3D地图</button>
-    <button data-page="map2dPage">🛰 舆图</button>
-    <button data-page="geoPage">⛰ 地理</button>
+    <button class="on" data-page="geoPage">⛰ 地理</button>
     <button data-page="cityPage">🏰 城邦</button>
     <button data-page="calPage">📅 历法</button>
     <button data-page="powerPage">⚔ 势力</button>
@@ -192,56 +89,7 @@
 </header>
 
 <main>
-<section class="page on" id="mapPage">
-  <canvas id="glCanvas"></canvas>
-  <div id="loading">⛰ 沧陆世界 · 地形构建中…</div>
-  <div class="gl-hint">🖱 <b>左键拖拽</b>旋转 ｜ <b>滚轮</b>缩放 ｜ <b>右键拖拽</b>平移 ｜ 点击<b>金色光点</b>查看设定</div>
-  <div class="gl-legend">
-    <div><i class="l-snow"></i>雪峰</div>
-    <div><i class="l-mnt"></i>高山</div>
-    <div><i class="l-hill"></i>丘陵</div>
-    <div><i class="l-low"></i>平原</div>
-    <div><i class="l-beach"></i>海岸</div>
-    <div><i class="l-sea"></i>海洋</div>
-    <div><i class="l-city"></i>城邦 / 地标</div>
-  </div>
-  <div class="map-ui">
-    <button id="btnHome" title="复位视角（北朝上）">⌂</button>
-    <button id="btnIn" title="放大">＋</button>
-    <button id="btnOut" title="缩小">－</button>
-    <button id="btnFull" title="全屏">⛶</button>
-  </div>
-  <div class="compass">北 <b>↑</b></div>
-</section>
-
-<section class="page" id="map2dPage">
-  <div id="map2dWrap">
-    <div id="map2d">
-      <img src="genshin_map.jpg" alt="沧陆舆图" draggable="false">
-      <div id="marks2d"></div>
-    </div>
-  </div>
-  <div class="gs-ui">
-    <button id="m2In" title="放大">＋</button>
-    <button id="m2Out" title="缩小">－</button>
-    <button id="m2Home" title="复位">⌂</button>
-  </div>
-  <div class="gs-title">沧陆<small>全境舆图</small></div>
-  <div class="gs-panel">
-    <div class="gs-panel-title">图例</div>
-    <div class="gs-legend">
-      <span><i class="g-snow"></i>雪峰</span>
-      <span><i class="g-mnt"></i>山脉</span>
-      <span><i class="g-forest"></i>林地</span>
-      <span><i class="g-city"></i>城邦</span>
-      <span><i class="g-mark"></i>地标</span>
-    </div>
-  </div>
-  <div class="gs-compass">北 <b>↑</b></div>
-  <div class="gs-hint">🖱 左键拖拽平移 ｜ 滚轮缩放 ｜ 点击标记查看设定</div>
-</section>
-
-<section class="page" id="geoPage">
+<section class="page on" id="geoPage">
   <div class="doc fade">
     <h1>地理志</h1>
     <div class="lead">沧陆山河 · 海洋与陆地</div>
@@ -274,8 +122,8 @@
     <div class="item"><b>伏熏岛</b>：位于元荒海东南侧与肆星海西南侧的火山岛，是伏熏城、狩脊山的所在地。</div>
     <h3>4. 群岛与礁群</h3>
     <div class="item"><b>归尘屿</b>：肆星海南部、盎季地正南方的连片星礁型海岛。</div>
-    <div class="item"><b>斯瑜群岛</b>：：白绫海东侧与苍瀛海西侧交界处的小型群岛。</div>
-    <div class="item"><b>南引群岛</b>，地处肆星海东南端的大型火山型群岛。</div>
+    <div class="item"><b>斯瑜群岛</b>：白绫海东侧与苍瀛海西侧交界处的小型群岛。</div>
+    <div class="item"><b>南引群岛</b>：地处肆星海东南端的大型火山型群岛。</div>
     <div class="item"><b>星沙礁</b>：肆星海南部的大片浅滩/暗星礁群，散布于中部海域。</div>
     <h2>三、地形地貌</h2>
     <h3>1. 主山脉</h3>
@@ -290,7 +138,7 @@
     <h3>3. 特殊地貌</h3>
     <div class="item"><b>渡蛟裂谷</b>：吴阳湖东侧、盎季地西侧的南北走向裂谷带，为东部的最重要地形分界线。</div>
     <div class="item"><b>东枝崖</b>：盎季地最南端的崖岸海角，是大陆向肆星海延伸的最南端区域。</div>
-    <div class="item"><b>无昼碛</b>：横贯奇迤岛中东部的海岛沙漠，意为“永无白昼的沙漠”，沙粒自带吸光特性，哪怕岛外晴空万里，沙漠范围内永远笼罩着一层灰蒙暝色，分不清晨昏昼夜。</div>
+    <div class="item"><b>无昼碛</b>：横贯奇迤岛中东部的海岛沙漠，意为"永无白昼的沙漠"，沙粒自带吸光特性，哪怕岛外晴空万里，沙漠范围内永远笼罩着一层灰蒙暝色，分不清晨昏昼夜。</div>
     <h2>四、河流水系</h2>
     <div class="item"><b>延西河</b>：发源于断脊山脉，向南流经西部内陆，注入双生湾附近海域。</div>
     <div class="item"><b>连奕江</b>：发源于眸霞山脉，向东横贯中部平原，流经昊阳湖周边，最终注入泊月湾附近海域。</div>
@@ -313,16 +161,16 @@
     <div id="cityDetail"></div>
     <h2 style="margin-top:40px">山川人文意象与秘境</h2>
     <h3>断脊山脉</h3>
-    <p>是西部大陆的地形骨架，也是恓鸟城的精神图腾，被视为城邦的“脊梁”。山脉核心山脊海拔普遍3000米以上，山体嶙峋陡峭，山顶终年苍山负雪，是分隔东西两侧的天然屏障。北端延伸入海，南部是延西河的发源地，高山融雪汇聚成河，滋养了西部内陆的土地。</p>
-    <p>恓鸟城将其视作精神象征，城邦战士信奉“以血作衣，以峰作干”，将翻越山脉、驻守山巅视为荣耀；同时也是城邦的天然流放地，资质低劣的宗族子弟、获罪官员会被发配至山中充军戍边。</p>
+    <p>是西部大陆的地形骨架，也是恓鸟城的精神图腾，被视为城邦的"脊梁"。山脉核心山脊海拔普遍3000米以上，山体嶙峋陡峭，山顶终年苍山负雪，是分隔东西两侧的天然屏障。北端延伸入海，南部是延西河的发源地，高山融雪汇聚成河，滋养了西部内陆的土地。</p>
+    <p>恓鸟城将其视作精神象征，城邦战士信奉"以血作衣，以峰作干"，将翻越山脉、驻守山巅视为荣耀；同时也是城邦的天然流放地，资质低劣的宗族子弟、获罪官员会被发配至山中充军戍边。</p>
     <h3>辞君山</h3>
     <p>位于恓鸟城北部、断脊山脉西北段，海拔1437米。山间云雾缭绕，奇林怪石林立，半山处留有一处古亭悬址，山高路险，高处人迹罕至。是恓鸟城的文化符号之一，常被用来寄托怀古、避世的情绪，也是城邦文人墨客的游历圣地。</p>
     <h3>桓山</h3>
-    <p>位于断脊山脉东侧，海拔4297米，被群山环抱，自古被视作祥瑞之地。民间广泛流传“真龙降世”的传说，认为山中藏有真龙气运，登顶者可向天许愿、求偿心愿。但传说的另一面暗含“天本无情”的宿命感——愿望从不会真正应验，登顶的人最终只会直面自身的执念。</p>
+    <p>位于断脊山脉东侧，海拔4297米，被群山环抱，自古被视作祥瑞之地。民间广泛流传"真龙降世"的传说，认为山中藏有真龙气运，登顶者可向天许愿、求偿心愿。但传说的另一面暗含"天本无情"的宿命感——愿望从不会真正应验，登顶的人最终只会直面自身的执念。</p>
     <h3>眸霞山脉与自鸣山</h3>
-    <p>纵贯中部大陆，是沧陆最重要的地理分界线之一，主峰自鸣山海拔5243米，为沧陆全境最高峰。山脉是全境观赏日落的最佳地点，黄昏时分霞光铺满山峦，色彩华丽绚烂，被世人称为“目遇之即为华丽之霞”，也被誉为“心的温柔乡”，是沧陆公认的盛景。因风景绝美、地理位置居中，是茹章城贵族与文人的重要游历、祭祀场所。</p>
+    <p>纵贯中部大陆，是沧陆最重要的地理分界线之一，主峰自鸣山海拔5243米，为沧陆全境最高峰。山脉是全境观赏日落的最佳地点，黄昏时分霞光铺满山峦，色彩华丽绚烂，被世人称为"目遇之即为华丽之霞"，也被誉为"心的温柔乡"，是沧陆公认的盛景。因风景绝美、地理位置居中，是茹章城贵族与文人的重要游历、祭祀场所。</p>
     <h3>扼根山</h3>
-    <p>坐落于奇迤岛西部的绿洲中心，海拔1505米。身处绿洲之中，山体本身却寸草不生，沙石漫飞，鸟兽绝迹，与周边的绿意形成强烈反差。它是奇迤岛最矛盾的地标：绿洲本是沙漠里的希望象征，但山中的死寂荒芜，又让它成为“绝望最好的培养皿”。是茹章城的隐秘信仰圣地。官方正史刻意淡化其存在，声称茹章与奇迤岛毫无关联；但民间暗中信奉这座远海的山峰，相信城邦的气运与山体深度绑定。</p>
+    <p>坐落于奇迤岛西部的绿洲中心，海拔1505米。身处绿洲之中，山体本身却寸草不生，沙石漫飞，鸟兽绝迹，与周边的绿意形成强烈反差。它是奇迤岛最矛盾的地标：绿洲本是沙漠里的希望象征，但山中的死寂荒芜，又让它成为"绝望最好的培养皿"。是茹章城的隐秘信仰圣地。官方正史刻意淡化其存在，声称茹章与奇迤岛毫无关联；但民间暗中信奉这座远海的山峰，相信城邦的气运与山体深度绑定。</p>
     <h3>狩脊山</h3>
     <p>位于伏熏岛东部，海拔2136米，是伏熏城人民瞻仰的精神圣地。山中遍植白色草木，通体素白，象征一尘不染的圣洁。但设定暗含隐喻：极致的纯白只存在于传说与理想中，现实里的圣洁永远伴随代价与虚伪。</p>
     <h3>无昼碛</h3>
@@ -337,8 +185,8 @@
     <div class="lead">沧陆各邦历法 · 通用月份</div>
     <h2>沧陆各邦历法</h2>
     <h3>（一）茹章城官方历法</h3>
-    <p>纪元名称：祀元纪（以“献祭”为纪元开端），简称祀元。</p>
-    <p>元年事件：“幽荧降世”（官方史书美化后的说法）或“血祭封神”（民间隐秘传言）。</p>
+    <p>纪元名称：祀元纪（以"献祭"为纪元开端），简称祀元。</p>
+    <p>元年事件："幽荧降世"（官方史书美化后的说法）或"血祭封神"（民间隐秘传言）。</p>
     <p class="note">（补：民间私下有用一轮指代一代人即45年的说法）</p>
     <h3>（二）恓鸟城官方历法</h3>
     <p>纪元名称：戍城年。元年事件：恓鸟建国为元年，对应祀元200年。</p>
@@ -355,7 +203,7 @@
       <tr><td>2月 融月</td><td>延西河、连奕江开始解冻，春汛初起。</td></tr>
       <tr><td>3月 犁月</td><td>中部平原春耕，茹章城收粮税的起点。</td></tr>
       <tr><td>4月 烽月</td><td>山雪化尽，恓鸟城与茹章城边境摩擦高发期。</td></tr>
-      <tr><td>5月 商月</td><td>肆星海风浪最小，呴姚城船队大规模出港的黄金季。</td></tr>
+      <tr><td>5月 商月</td><td>肆星海风浪最小，眴姚城船队大规模出港的黄金季。</td></tr>
       <tr><td>6月 霆月</td><td>雷雨频发，伏熏岛火山活动相对活跃的月份。</td></tr>
       <tr><td>7月 灼月</td><td>全年最热，吴阳湖流域的农忙收割期。</td></tr>
       <tr><td>8月 荒月</td><td>秋燥起，大陆东部时有小型旱情。</td></tr>
@@ -375,10 +223,10 @@
     <div class="item"><b>西部：恓鸟城</b>：是唯一能在军事硬实力上与茹章城抗衡的势力，二者长期处于对峙状态，边境摩擦不断。恓鸟城鄙夷茹章城的虚伪神权统治，茹章城则将恓鸟城视作扩张路上的最大障碍。</div>
     <div class="item"><b>中部：茹章城</b>：是名义上的大陆霸主，主导着大陆的秩序，依靠朝贡体系与军事威慑控制多数中小城邦；但内部被寿命诅咒束缚，强盛的根基极其脆弱。</div>
     <div class="item"><b>东部：眴姚城</b>：是各方势力之间的润滑剂与信息枢纽，依靠贸易在博弈中获利，既不敢彻底得罪茹章城，也暗中与恓鸟城、伏熏城保持贸易往来。</div>
-    <div class="item"><b>南部：伏熏城</b>：奉行孤立主义，偏安海岛，不主动介入大陆纷争，对外保持戒备，专注于自身的发展与秩序，是沧陆格局中的“旁观者”。</div>
+    <div class="item"><b>南部：伏熏城</b>：奉行孤立主义，偏安海岛，不主动介入大陆纷争，对外保持戒备，专注于自身的发展与秩序，是沧陆格局中的"旁观者"。</div>
     <h2>核心主线</h2>
-    <p>茹章城以全城邦世代居民的寿命为代价换来的“永恒繁荣”，是沧陆最大的秘密：扼根山深处的灵祠里，沉睡着一具“不属于这个世界的神之遗骸”。神骸缓慢吞噬民众的生命余脉以维持城邦气运，全城无论贵贱都活不过45岁。</p>
-    <p>官方以“删改围罪”清除所有真相知晓者，靠朝贡与扩张转移注意力。但预言中，终有一日神会彻底苏醒，以它的规则重写整个世界的秩序——届时，茹章城的“奇迹”将彻底崩塌，而沧陆的格局也将随之改写。</p>
+    <p>茹章城以全城邦世代居民的寿命为代价换来的"永恒繁荣"，是沧陆最大的秘密：扼根山深处的灵祠里，沉睡着一具"不属于这个世界的神之遗骸"。神骸缓慢吞噬民众的生命余脉以维持城邦气运，全城无论贵贱都活不过45岁。</p>
+    <p>官方以"删改围罪"清除所有真相知晓者，靠朝贡与扩张转移注意力。但预言中，终有一日神会彻底苏醒，以它的规则重写整个世界的秩序——届时，茹章城的"奇迹"将彻底崩塌，而沧陆的格局也将随之改写。</p>
     <h2>重要隐喻</h2>
     <div class="item"><b>扼根山</b>：绿洲中的死寂之山，官方否认与茹章城的关联，民间却暗中信奉，相信城邦气运与山体深度绑定。</div>
     <div class="item"><b>无昼碛</b>：永无白昼的沙漠，神骸力量外泄扭曲了光线与时空规则的产物，扼根山绿洲是沙漠中唯一的力量锚点。</div>
@@ -396,404 +244,7 @@
   </div>
 </div>
 
-<script src="three.min.js"></script>
-<script src="mapdata.js"></script>
 <script>
-/* ============ 3D 场景 ============ */
-const MAP_W = MAPDATA.W, MAP_H = MAPDATA.H;
-const HSCALE = 24;  // 垂直系数：海面 0，自鸣山 5243m ≈ 25 单位
-const canvas = document.getElementById('glCanvas');
-const renderer = new THREE.WebGLRenderer({canvas, antialias:true});
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x070a10);
-scene.fog = new THREE.Fog(0x0a0e16, 95, 175);  // 大气雾：远处朦胧
-
-const cam = new THREE.PerspectiveCamera(50, 1, 0.1, 3000);
-const target = new THREE.Vector3(0, 2.2, 0);
-// 标准视角：上北下南、左西右东（相机在正北方向高空，地图南北已翻转保证方位正确）
-let dist = 125, theta = 0, phi = 0.62;
-const HOME = {theta: 0, phi: 0.62, dist: 125, tx: 0, ty: 2.2, tz: 0};
-function goHome(){ theta = HOME.theta; phi = HOME.phi; dist = HOME.dist; target.set(HOME.tx, HOME.ty, HOME.tz); }
-
-// 动画对象（buildWorld 填充）
-let waterGeo = null, wpos = null, wbase = null, clouds = [];
-
-function resize(){
-  const w = canvas.clientWidth, h = canvas.clientHeight;
-  renderer.setSize(w, h, false);
-  cam.aspect = w/h; cam.updateProjectionMatrix();
-}
-window.addEventListener('resize', resize);
-
-// 高程采样：HGRID 双线性插值（存的是偏移映射，反映射回真实海拔归一化：海面=0，自鸣山≈1.05）
-function getH(u, v){
-  const gx = Math.min(SEG_X, Math.max(0, u*SEG_X));
-  const gy = Math.min(SEG_Y, Math.max(0, v*SEG_Y));
-  const x0 = Math.floor(gx), y0 = Math.floor(gy);
-  const x1 = Math.min(SEG_X, x0+1), y1 = Math.min(SEG_Y, y0+1);
-  const fx = gx-x0, fy = gy-y0;
-  const a = HGRID[y0*(SEG_X+1)+x0], b = HGRID[y0*(SEG_X+1)+x1];
-  const c = HGRID[y1*(SEG_X+1)+x0], d = HGRID[y1*(SEG_X+1)+x1];
-  const hv = ((a*(1-fx)+b*fx)*(1-fy) + (c*(1-fx)+d*fx)*fy)/255;
-  return hv*1.4 - 0.3;  // 反映射：-0.3~1.1 → 真实海拔归一化（海面 0，自鸣山 5243m=1.0）
-}
-const clickables = [];
-const labels3d = [];
-let u_cur = 0, v_cur = 0;
-// 确定性 2D 值噪声（打散色带）
-function noise2d(x, y){
-  const s = Math.sin(Math.floor(x*137.1)*127.1 + Math.floor(y*157.7)*311.7) * 43758.5453;
-  return s - Math.floor(s);
-}
-
-function colorFor(h, slope){
-  // 真实海拔归一化（海面0，自鸣山≈1.05；海底-0.23）坡度感知着色
-  const snowLine = 0.72 + 0.13*(1-slope);
-  const rockLine = 0.42 + 0.10*slope;
-  const c = (()=>{
-    if(h <= -0.15) return [0.03, 0.09, 0.19];       // 深海（<-790m）
-    if(h <= -0.05) return [0.07, 0.17, 0.33];       // 深蓝海
-    if(h <= -0.008) return [0.30, 0.55, 0.62];      // 浅滩
-    if(h <= 0.008) return [0.72, 0.76, 0.70];       // 海岸
-    if(h < rockLine) return [0.28, 0.44, 0.22];     // 低地绿（<2200m）
-    if(h < snowLine) return [0.47, 0.39, 0.22];     // 山地岩石
-    return [0.90, 0.92, 0.96];                      // 雪顶
-  })();
-  const n = (noise2d(u_cur, v_cur) - 0.5) * 0.05;
-  return [c[0]+n, c[1]+n, c[2]+n];
-}
-
-function makeLabel(text, gold){
-  const cv = document.createElement('canvas'); cv.width = 512; cv.height = 96;
-  const c = cv.getContext('2d');
-  c.font = 'bold 64px "楷体","KaiTi","STKaiti",serif';
-  c.textAlign = 'center'; c.textBaseline = 'middle';
-  c.lineWidth = 12; c.strokeStyle = 'rgba(8,6,4,0.9)';
-  c.strokeText(text, 256, 48);
-  c.fillStyle = gold ? '#ffd75e' : '#e8e0cc';
-  c.fillText(text, 256, 48);
-  const tex = new THREE.CanvasTexture(cv);
-  tex.minFilter = THREE.LinearFilter;
-  const sp = new THREE.Sprite(new THREE.SpriteMaterial({map:tex, transparent:true, depthWrite:false}));
-  sp.scale.set(8.2, 1.55, 1);
-  return sp;
-}
-
-function buildWorld(){
-  // 地形（高精度 400x300 分段，本地/网页通用）
-  const geo = new THREE.PlaneGeometry(120, 90, 400, 300);
-  geo.rotateX(-Math.PI/2);
-  const pos = geo.attributes.position.array;
-  const colors = new Float32Array(pos.length);
-  for(let i=0;i<pos.length;i+=3){
-    const x = pos[i], z = pos[i+2];
-    const u = (x+60)/120, v = (z+45)/90;
-    const h = getH(u, v);
-    pos[i+1] = h*HSCALE;
-    // 坡度：HGRID 差分
-    const gx = u*SEG_X, gy = v*SEG_Y;
-    const gxi = Math.min(SEG_X-1, Math.max(1, Math.floor(gx)));
-    const gyi = Math.min(SEG_Y-1, Math.max(1, Math.floor(gy)));
-    const idx = gyi*(SEG_X+1)+gxi;
-    const hN = HGRID[idx-(SEG_X+1)]/255, hS = HGRID[idx+(SEG_X+1)]/255;
-    const hE = HGRID[idx+1]/255, hW = HGRID[idx-1]/255;
-    const slope = Math.min(1, (Math.abs(hN-hS)+Math.abs(hE-hW))*2.2);
-    u_cur = u; v_cur = v;
-    const c = colorFor(h, slope);
-    colors[i]=c[0]; colors[i+1]=c[1]; colors[i+2]=c[2];
-  }
-  geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-  geo.computeVertexNormals();
-  const terrain = new THREE.Mesh(geo, new THREE.MeshLambertMaterial({vertexColors:true}));
-  scene.add(terrain);
-
-  // 灯光
-  scene.add(new THREE.AmbientLight(0x8fa3c8, 0.55));
-  const sun = new THREE.DirectionalLight(0xfff2d8, 1.1);
-  sun.position.set(50, 70, 35);
-  scene.add(sun);
-  const moon = new THREE.DirectionalLight(0x6a86b8, 0.35);
-  moon.position.set(-40, 25, -50);
-  scene.add(moon);
-
-  // 水面（动态波浪）
-  waterGeo = new THREE.PlaneGeometry(3000, 3000, 80, 80);
-  waterGeo.rotateX(-Math.PI/2);
-  const water = new THREE.Mesh(waterGeo, new THREE.MeshPhongMaterial({color:0x1e5a86, transparent:true, opacity:0.82, shininess:140, specular:0xaaccff, side:THREE.DoubleSide}));
-  water.position.y = 0.04;
-  water.renderOrder = 2;
-  scene.add(water);
-  wpos = waterGeo.attributes.position.array;
-  wbase = wpos.slice();
-
-  // 云层
-  function makeCloud(scale, op){
-    const cv = document.createElement('canvas'); cv.width = 256; cv.height = 128;
-    const c = cv.getContext('2d');
-    const g = c.createRadialGradient(128, 64, 8, 128, 64, 118);
-    g.addColorStop(0, 'rgba(255,255,255,'+op+')');
-    g.addColorStop(0.55, 'rgba(225,232,245,'+(op*0.65)+')');
-    g.addColorStop(1, 'rgba(255,255,255,0)');
-    c.fillStyle = g; c.fillRect(0, 0, 256, 128);
-    const tex = new THREE.CanvasTexture(cv);
-    const sp = new THREE.Sprite(new THREE.SpriteMaterial({map:tex, transparent:true, depthWrite:false, opacity:0.9}));
-    sp.scale.set(scale, scale*0.5, 1);
-    return sp;
-  }
-  const clouds2 = [];
-  const cld = [[-18,26,-12],[12,28,6],[-4,27,20],[28,26,-22],[-32,29,16],[18,30,-32],[-12,29,32],[38,28,12],[2,31,-5],[22,27,-8]];
-  cld.forEach(p=>{
-    const cl = makeCloud(13+Math.random()*11, 0.45+Math.random()*0.3);
-    cl.position.set(p[0], p[1], p[2]);
-    scene.add(cl); clouds2.push(cl);
-  });
-  clouds = clouds2;
-
-  // 望暮大桥：横跨海峡（桥体 + 桥塔）
-  (function(){
-    const mk = MAPDATA.marks.find(m=>m.name==='望暮大桥');
-    if(!mk) return;
-    const h = getH(mk.x, mk.y);
-    const cx = mk.x*120-60, cz = mk.y*90-45, cy = h*HSCALE;
-    const bridge = new THREE.Mesh(new THREE.BoxGeometry(13, 0.4, 1.15), new THREE.MeshLambertMaterial({color:0x8a6d4a}));
-    bridge.position.set(cx, cy+0.35, cz);
-    bridge.rotation.y = 0.9;
-    scene.add(bridge);
-    [[-6, 0.9], [6, -0.9]].forEach(p=>{
-      const tw = new THREE.Mesh(new THREE.BoxGeometry(0.45, 3.4, 0.45), new THREE.MeshLambertMaterial({color:0x6e5438}));
-      tw.position.set(cx + Math.cos(0.9)*p[0] - Math.sin(0.9)*p[1], cy+1.9, cz + Math.sin(0.9)*p[0] + Math.cos(0.9)*p[1]);
-      scene.add(tw);
-    });
-  })();
-
-  // 城市建筑群（四城：主塔 + 环绕建筑）
-  function buildCity(mk){
-    const h = getH(mk.x, mk.y);
-    const cx = mk.x*120-60, cz = mk.y*90-45, cy = h*HSCALE;
-    const rnd = (s)=>{ const x = Math.sin(s*127.1)*43758.5453; return x-Math.floor(x); };
-    // 中央主塔（金色）
-    const tower = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.6, 2.8, 8), new THREE.MeshLambertMaterial({color:0xc8a24a}));
-    tower.position.set(cx, cy+1.4, cz);
-    scene.add(tower);
-    const roof = new THREE.Mesh(new THREE.ConeGeometry(0.62, 1.1, 8), new THREE.MeshLambertMaterial({color:0x7a4a2a}));
-    roof.position.set(cx, cy+3.1, cz);
-    scene.add(roof);
-    // 环绕民居
-    for(let k=0;k<16;k++){
-      const ang = rnd(k+1)*Math.PI*2, rad = 2.3+rnd(k+7)*4.0;
-      const bx = cx+Math.cos(ang)*rad, bz = cz+Math.sin(ang)*rad;
-      const bh = getH((bx+60)/120, (bz+45)/90)*HSCALE;
-      const s = 0.42+rnd(k+3)*0.42;
-      const b = new THREE.Mesh(new THREE.BoxGeometry(s, s*(0.7+rnd(k+9)*0.9), s), new THREE.MeshLambertMaterial({color:0xd8c9a0}));
-      b.position.set(bx, bh+s*0.4, bz);
-      scene.add(b);
-    }
-  }
-  ['恓鸟城','茹章城','眴姚城','伏熏城'].forEach(n=>{
-    const mk = MAPDATA.marks.find(m=>m.name===n);
-    if(mk) buildCity(mk);
-  });
-
-  // 星空
-  const starGeo = new THREE.BufferGeometry();
-  const starN = 700, starPos = new Float32Array(starN*3);
-  for(let i=0;i<starN;i++){
-    const r = 900 + Math.random()*400;
-    const t = Math.random()*Math.PI*2, p = Math.random()*Math.PI*0.45;
-    starPos[i*3] = r*Math.sin(p)*Math.cos(t);
-    starPos[i*3+1] = r*Math.cos(p)+60;
-    starPos[i*3+2] = r*Math.sin(p)*Math.sin(t);
-  }
-  starGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
-  scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({color:0xccd8ee, size:1.1, transparent:true, opacity:0.75})));
-
-  // 河流（立体河道水面：TubeGeometry 蓝色半透明）
-  MAPDATA.rivers.forEach(rv=>{
-    const pts3 = rv.pts.map(p=>{
-      const h = getH(p[0], p[1]);
-      return new THREE.Vector3(p[0]*120-60, h*HSCALE+0.12, (p[1]*90-45));
-    });
-    if(pts3.length >= 2){
-      const curve = new THREE.CatmullRomCurve3(pts3);
-      const tube = new THREE.Mesh(
-        new THREE.TubeGeometry(curve, Math.max(16, pts3.length*8), 0.5, 8, false),
-        new THREE.MeshPhongMaterial({color:0x3f9ad8, transparent:true, opacity:0.8, shininess:60, specular:0x88ccff})
-      );
-      scene.add(tube);
-    }
-  });
-
-  // 湖泊
-  MAPDATA.lakes.forEach(lk=>{
-    const h = getH(lk.x, lk.y);
-    const disc = new THREE.Mesh(
-      new THREE.CircleGeometry(Math.max(0.5, lk.r*120), 32),
-      new THREE.MeshPhongMaterial({color:0x2a6a9a, transparent:true, opacity:0.88, shininess:80})
-    );
-    disc.rotation.x = -Math.PI/2;
-    disc.position.set(lk.x*120-60, h*HSCALE+0.06, (lk.y*90-45));
-    scene.add(disc);
-  });
-
-  // 地标：金球 + 标签
-  MAPDATA.marks.forEach(m=>{
-    const h = getH(m.x, m.y);
-    const wx = m.x*120-60, wz = (m.y*90-45);
-    const hy = h*HSCALE;
-    // 金球
-    const ball = new THREE.Mesh(
-      new THREE.SphereGeometry(m.imp ? 0.42 : 0.3, 16, 16),
-      new THREE.MeshBasicMaterial({color:0xffd75e})
-    );
-    ball.position.set(wx, hy + 0.8, wz);
-    ball.userData = {mark:m};
-    // 底座光环
-    const ring = new THREE.Mesh(
-      new THREE.CircleGeometry(m.imp ? 0.85 : 0.6, 32),
-      new THREE.MeshBasicMaterial({color:0xffe9a8, transparent:true, opacity:0.22, side:THREE.DoubleSide})
-    );
-    ring.rotation.x = -Math.PI/2;
-    ring.position.set(wx, hy + 0.05, wz);
-    // 光晕（additive 发光）
-    const glowCv = document.createElement('canvas'); glowCv.width = 64; glowCv.height = 64;
-    const gc = glowCv.getContext('2d');
-    const gg = gc.createRadialGradient(32, 32, 2, 32, 32, 30);
-    gg.addColorStop(0, 'rgba(255,225,130,0.95)');
-    gg.addColorStop(0.5, 'rgba(255,195,90,0.4)');
-    gg.addColorStop(1, 'rgba(255,180,60,0)');
-    gc.fillStyle = gg; gc.fillRect(0, 0, 64, 64);
-    const glow = new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(glowCv), transparent:true, blending:THREE.AdditiveBlending, depthWrite:false}));
-    glow.scale.set(m.imp ? 3.2 : 2.4, m.imp ? 3.2 : 2.4, 1);
-    glow.position.set(wx, hy + 0.7, wz);
-    scene.add(ball); scene.add(ring); scene.add(glow);
-    clickables.push(ball);
-    // 标签
-    const lb = makeLabel(m.name, !!m.imp);
-    lb.position.set(wx, hy + (m.imp ? 1.9 : 1.5), wz);
-    lb.userData = {mark:m};
-    scene.add(lb);
-    labels3d.push(lb);
-    clickables.push(lb);
-  });
-
-  animate();
-}
-
-// 相机控制
-const ctrl = {rot:false, pan:false, lx:0, ly:0, px:0, py:0};
-canvas.addEventListener('mousedown', e=>{
-  if(e.button===0){ ctrl.rot=true; ctrl.lx=e.clientX; ctrl.ly=e.clientY; canvas.classList.add('dragging'); }
-  else if(e.button===2){ ctrl.pan=true; ctrl.px=e.clientX; ctrl.py=e.clientY; canvas.classList.add('dragging'); }
-});
-window.addEventListener('mousemove', e=>{
-  if(ctrl.rot){
-    theta -= (e.clientX-ctrl.lx)*0.006;
-    phi -= (e.clientY-ctrl.ly)*0.006;
-    phi = Math.max(0.12, Math.min(1.5, phi));
-    ctrl.lx=e.clientX; ctrl.ly=e.clientY;
-  } else if(ctrl.pan){
-    const s = dist*0.0011;
-    target.x += (e.clientX-ctrl.px)*s*Math.cos(theta) + (e.clientY-ctrl.py)*s*Math.sin(theta)*Math.cos(phi);
-    target.z += -(e.clientX-ctrl.px)*s*Math.sin(theta) + (e.clientY-ctrl.py)*s*Math.cos(theta)*Math.cos(phi);
-    target.y = Math.max(0, target.y + (e.clientY-ctrl.py)*s*Math.sin(phi));
-    ctrl.px=e.clientX; ctrl.py=e.clientY;
-  }
-});
-window.addEventListener('mouseup', ()=>{ ctrl.rot=false; ctrl.pan=false; canvas.classList.remove('dragging'); });
-canvas.addEventListener('wheel', e=>{
-  e.preventDefault();
-  dist *= 1 + e.deltaY*0.0012;
-  dist = Math.max(28, Math.min(320, dist));
-}, {passive:false});
-canvas.addEventListener('contextmenu', e=>e.preventDefault());
-
-// 触屏
-let tp = null;
-canvas.addEventListener('touchstart', e=>{ if(e.touches.length===1){ tp={x:e.touches[0].clientX, y:e.touches[0].clientY}; } }, {passive:true});
-canvas.addEventListener('touchmove', e=>{
-  if(e.touches.length===1 && tp){
-    theta -= (e.touches[0].clientX-tp.x)*0.006;
-    phi -= (e.touches[0].clientY-tp.y)*0.006;
-    phi = Math.max(0.12, Math.min(1.5, phi));
-    tp={x:e.touches[0].clientX, y:e.touches[0].clientY};
-  }
-}, {passive:true});
-canvas.addEventListener('touchend', ()=>{ tp=null; });
-
-// 点击拾取
-const raycaster = new THREE.Raycaster();
-const mouse = new THREE.Vector2();
-canvas.addEventListener('click', e=>{
-  if(Math.abs(e.clientX-ctrl.lx)>4 || Math.abs(e.clientY-ctrl.ly)>4) { /* 拖动不触发 */ }
-  const r = canvas.getBoundingClientRect();
-  mouse.x = ((e.clientX-r.left)/r.width)*2-1;
-  mouse.y = -((e.clientY-r.top)/r.height)*2+1;
-  raycaster.setFromCamera(mouse, cam);
-  const hits = raycaster.intersectObjects(clickables);
-  if(hits.length){
-    const mark = hits[0].object.userData.mark;
-    if(mark) openModal(mark);
-  }
-});
-// 悬停高亮
-canvas.addEventListener('mousemove', e=>{
-  const r = canvas.getBoundingClientRect();
-  mouse.x = ((e.clientX-r.left)/r.width)*2-1;
-  mouse.y = -((e.clientY-r.top)/r.height)*2+1;
-  raycaster.setFromCamera(mouse, cam);
-  const hits = raycaster.intersectObjects(clickables);
-  canvas.style.cursor = hits.length ? 'pointer' : 'grab';
-});
-
-function updateCam(){
-  cam.position.set(
-    target.x + dist*Math.sin(phi)*Math.sin(theta),
-    target.y + dist*Math.cos(phi),
-    target.z + dist*Math.sin(phi)*Math.cos(theta)
-  );
-  cam.lookAt(target);
-}
-/* 控制按钮 */
-function zoomAt(cx, cy, factor){
-  dist = Math.max(28, Math.min(320, dist / factor));
-}
-document.getElementById('btnHome').onclick = goHome;
-document.getElementById('btnIn').onclick = ()=> zoomAt(0,0,1.4);
-document.getElementById('btnOut').onclick = ()=> zoomAt(0,0,1/1.4);
-document.getElementById('btnFull').onclick = ()=>{
-  if(document.fullscreenElement) document.exitFullscreen();
-  else document.documentElement.requestFullscreen().catch(()=>{});
-};
-
-function animate(){
-  requestAnimationFrame(animate);
-  const t = performance.now()*0.001;
-  // 海面波浪
-  if(wpos && wbase){
-    for(let i=0;i<wpos.length;i+=3){
-      const wx = wbase[i], wz = wbase[i+2];
-      wpos[i+1] = Math.sin(wx*0.32 + t*1.5)*0.20 + Math.cos(wz*0.26 + t*1.05)*0.16;
-    }
-    waterGeo.attributes.position.needsUpdate = true;
-    waterGeo.computeVertexNormals();
-  }
-  // 云层漂移
-  clouds.forEach((cl, i)=>{
-    cl.position.x += 0.015*(i%2?1:-1);
-    if(cl.position.x > 62) cl.position.x = -62;
-    if(cl.position.x < -62) cl.position.x = 62;
-  });
-  updateCam();
-  renderer.render(scene, cam);
-}
-
-// 直接构建（无需图片加载）
-buildWorld();
-resize();
-// 隐藏加载遮罩
-setTimeout(()=>{ const ld = document.getElementById('loading'); if(ld) ld.classList.add('hide'); }, 300);
-
 /* ============ 弹窗 ============ */
 const mask = document.getElementById('modalMask');
 function openModal(m){
@@ -808,14 +259,14 @@ document.addEventListener('keydown', e=>{ if(e.key==='Escape') mask.classList.re
 
 /* ============ 城邦卡片 ============ */
 const CITIES = [
-  {name:'恓鸟城', role:'西部山城军邦', motto:'薪火相传，守护故土', summary:'别称“悲息之城”，冶铁业冠绝沧陆。宗族长老制 + 卫国者庭军事制衡，崇拜断脊山脉。',
-   detail:['多年边境战火淬炼出极强凝聚力，曾濒临覆灭，凭全民死守守住疆土。','核心支柱为冶铁业，兵器甲胄精良耐用，享誉全沧陆；农业贫瘠，主产土豆、薯蓣，粮食勉强自给。','政治制度为宗族长老制加军事制衡：大宗族世代统治，大长老须获民众认可，年迈必退；卫国者庭由民众组成，制衡宗族；世袭「右判决官」对卫国者庭决议拥有最终否决权。','没有正式宗教，核心精神是“敬自然、重血缘、守故土”，视断脊山脉为守护神。']},
+  {name:'恓鸟城', role:'西部山城军邦', motto:'薪火相传，守护故土', summary:'别称"悲息之城"，冶铁业冠绝沧陆。宗族长老制 + 卫国者庭军事制衡，崇拜断脊山脉。',
+   detail:['多年边境战火淬炼出极强凝聚力，曾濒临覆灭，凭全民死守守住疆土。','核心支柱为冶铁业，兵器甲胄精良耐用，享誉全沧陆；农业贫瘠，主产土豆、薯蓣，粮食勉强自给。','政治制度为宗族长老制加军事制衡：大宗族世代统治，大长老须获民众认可，年迈必退；卫国者庭由民众组成，制衡宗族；世袭「右判决官」对卫国者庭决议拥有最终否决权。','没有正式宗教，核心精神是"敬自然、重血缘、守故土"，视断脊山脉为守护神。']},
   {name:'茹章城', role:'中部神权霸主', motto:'君权神授 · 永恒繁荣', summary:'沧陆公认最强大的城邦，表面繁华鼎盛——实则被百年寿命诅咒笼罩，全城活不过45岁。',
-   detail:['经济、文化、军事全面鼎盛，疆域为诸邦之最，周边小邦称臣朝贡；官方史籍全是辉煌记载。','真相：初代茹章王为换取城邦强盛，将自己献祭融入神的心脏，以全城邦世代居民的寿命为代价——诅咒之下，无论贵贱都活不过45岁。','君主集神权军政于一身，下设社会、经济、外事、监察四大部门，完全以君主意志运转。','每隔三年，君主秘密远赴奇迤岛扼根山举行仪式；以“删改围罪”清除所有真相知晓者，靠扩张转移民众注意力。']},
+   detail:['经济、文化、军事全面鼎盛，疆域为诸邦之最，周边小邦称臣朝贡；官方史籍全是辉煌记载。','真相：初代茹章王为换取城邦强盛，将自己献祭融入神的心脏，以全城邦世代居民的寿命为代价——诅咒之下，无论贵贱都活不过45岁。','君主集神权军政于一身，下设社会、经济、外事、监察四大部门，完全以君主意志运转。','每隔三年，君主秘密远赴奇迤岛扼根山举行仪式；以"删改围罪"清除所有真相知晓者，靠扩张转移民众注意力。']},
   {name:'眴姚城', role:'东部商贸港城', motto:'左右逢源 · 以商立邦', summary:'沧陆东部最大港口，苍瀛海航线核心枢纽，海商公会共治，全大陆的信息集散地。',
    detail:['码头商行会馆林立，既有豪奢商人宅邸，也有拥挤水手街区，市井与商贸活力并存。','无王室君主，由最大几支海商家族组成海商公会联合执政，核心诉求是维护贸易秩序与商人利益。','贸易网络覆盖东西南北：西达中部西部大陆，东至苍瀛海诸岛，南通伏熏岛、南引群岛。','名义上向茹章城称臣朝贡换取贸易保护，实际自治权极高；奉行中立策略，是势力间的缓冲带与信息中转站。']},
   {name:'伏熏城', role:'海岛民主之邦', motto:'政团民主 · 务实理性', summary:'火山岛上的独立文明，政团民主制，十年换届选举，多数民众为无神论者。',
-   detail:['坐落于伏熏岛中部腹地，远离大陆，发展出独立文明；贯穿南北的“之丝运河”是海岛经济命脉。','对外管控森严：外来商人只能在东部平安港活动，擅闯腹地者永久驱逐出岛。','政治制度为政团民主制：成年公民可自发组建政团，每十年换届选举执政团与参议团，参议团拥有完整制衡权。','多数民众为无神论者；少数信奉“月教”——以月亮为尊、太阳为卑，信徒昼伏夜出，宗教活动都在夜间举行。']},
+   detail:['坐落于伏熏岛中部腹地，远离大陆，发展出独立文明；贯穿南北的"之丝运河"是海岛经济命脉。','对外管控森严：外来商人只能在东部平安港活动，擅闯腹地者永久驱逐出岛。','政治制度为政团民主制：成年公民可自发组建政团，每十年换届选举执政团与参议团，参议团拥有完整制衡权。','多数民众为无神论者；少数信奉"月教"——以月亮为尊、太阳为卑，信徒昼伏夜出，宗教活动都在夜间举行。']},
 ];
 const grid = document.getElementById('cityGrid');
 const detailBox = document.getElementById('cityDetail');
@@ -827,113 +278,11 @@ CITIES.forEach(c=>{
   grid.appendChild(card);
 });
 function showCity(c){
-  let html = '<h2>'+c.name+' · '+c.role+'</h2><p class="note">“'+c.motto+'”</p>';
+  let html = '<h2>'+c.name+' · '+c.role+'</h2><p class="note">"'+c.motto+'"</p>';
   c.detail.forEach(d=>{ html += '<p>'+d+'</p>'; });
   detailBox.innerHTML = html;
   detailBox.scrollIntoView({behavior:'smooth'});
 }
-
-/* ============ 2D 舆图交互（原神风格，参考用户底图再创作布局） ============ */
-const wrap2 = document.getElementById('map2dWrap');
-const map2d = document.getElementById('map2d');
-const m2 = {s:1, tx:0, ty:0, dragging:false, lx:0, ly:0, inited:false};
-const M2W = 2048, M2H = 1536;
-function m2Apply(){ map2d.style.transform = 'translate('+m2.tx+'px,'+m2.ty+'px) scale('+m2.s+')'; }
-function m2Fit(){
-  const r = wrap2.getBoundingClientRect();
-  const img2 = document.querySelector('#map2d img');
-  const iw = img2.naturalWidth || M2W, ih = img2.naturalHeight || M2H;
-  const s = Math.min(r.width/iw, r.height/ih);
-  m2.s = s; m2.tx = (r.width-iw*s)/2; m2.ty = (r.height-ih*s)/2; m2Apply();
-}
-// 布局坐标：以用户底图（豆包水彩版）为参考再创作（OCR 定位 + 规范补全）
-const USER_MARKS = [
-  {name:'元荒海', x:0.066, y:0.344, imp:1},
-  {name:'白绫海', x:0.670, y:0.080, imp:1},
-  {name:'苍瀛海', x:0.940, y:0.300, imp:1},
-  {name:'肆星海', x:0.550, y:0.620, imp:1},
-  {name:'双生湾', x:0.159, y:0.469},
-  {name:'泊月湾', x:0.521, y:0.512},
-  {name:'屈海',   x:0.800, y:0.465},
-  {name:'承晚海峡', x:0.370, y:0.535},
-  {name:'吴阳湖', x:0.650, y:0.390},
-  {name:'西部大陆', x:0.240, y:0.380, imp:1},
-  {name:'中部大陆', x:0.580, y:0.380, imp:1},
-  {name:'盎季地', x:0.870, y:0.340, imp:1},
-  {name:'东生半岛', x:0.300, y:0.470},
-  {name:'奇迤岛', x:0.720, y:0.120, imp:1},
-  {name:'斯瑜群岛', x:0.903, y:0.170},
-  {name:'雁南岛', x:0.281, y:0.711},
-  {name:'伏熏岛', x:0.130, y:0.860, imp:1},
-  {name:'赎誓阁', x:0.770, y:0.730},
-  {name:'归尘屿', x:0.720, y:0.810},
-  {name:'南引群岛', x:0.941, y:0.897},
-  {name:'桓山',   x:0.357, y:0.199, imp:1},
-  {name:'自鸣山', x:0.382, y:0.325, imp:1},
-  {name:'辞君山', x:0.202, y:0.225},
-  {name:'扼根山', x:0.680, y:0.100},
-  {name:'狩脊山', x:0.185, y:0.829},
-  {name:'断脊山脉', x:0.250, y:0.300, imp:1},
-  {name:'眸霞山脉', x:0.440, y:0.360, imp:1},
-  {name:'延西河', x:0.248, y:0.323},
-  {name:'连奕江', x:0.555, y:0.300},
-  {name:'之丝运河', x:0.130, y:0.840},
-  {name:'恓鸟城', x:0.170, y:0.550, imp:1},
-  {name:'茹章城', x:0.478, y:0.309, imp:1},
-  {name:'眴姚城', x:0.907, y:0.400, imp:1},
-  {name:'伏熏城', x:0.120, y:0.875, imp:1},
-  {name:'望暮大桥', x:0.600, y:0.170, imp:1},
-  {name:'潜蛟隧道', x:0.200, y:0.560},
-  {name:'渡蛟裂谷', x:0.720, y:0.420},
-  {name:'东枝崖', x:0.871, y:0.483},
-  {name:'无昼碛', x:0.720, y:0.110},
-];
-function buildMarks2(list){
-  const holder = document.getElementById('marks2d');
-  holder.innerHTML = '';
-  list.forEach(m=>{
-    const full = MAPDATA.marks.find(k=>k.name===m.name) || {};
-    const d = document.createElement('div');
-    d.className = 'm2' + (m.imp?' imp':'');
-    d.style.left = (m.x*100)+'%';
-    d.style.top = (m.y*100)+'%';
-    d.title = m.name;
-    d.onclick = (e)=>{ e.stopPropagation(); openModal(Object.assign({}, full, {name:m.name, x:m.x, y:m.y})); };
-    holder.appendChild(d);
-  });
-}
-wrap2.addEventListener('wheel', e=>{
-  e.preventDefault();
-  const r = wrap2.getBoundingClientRect();
-  const mx = e.clientX-r.left, my = e.clientY-r.top;
-  const ns = Math.max(0.2, Math.min(10, m2.s*(e.deltaY<0?1.18:1/1.18)));
-  m2.tx = mx-(mx-m2.tx)*(ns/m2.s);
-  m2.ty = my-(my-m2.ty)*(ns/m2.s);
-  m2.s = ns; m2Apply();
-}, {passive:false});
-wrap2.addEventListener('mousedown', e=>{
-  if(e.button===0||e.button===2){ m2.dragging=true; m2.lx=e.clientX; m2.ly=e.clientY; wrap2.classList.add('dragging'); e.preventDefault(); }
-});
-window.addEventListener('mousemove', e=>{
-  if(m2.dragging){ m2.tx+=e.clientX-m2.lx; m2.ty+=e.clientY-m2.ly; m2.lx=e.clientX; m2.ly=e.clientY; m2Apply(); }
-});
-window.addEventListener('mouseup', ()=>{ m2.dragging=false; wrap2.classList.remove('dragging'); });
-wrap2.addEventListener('contextmenu', e=>e.preventDefault());
-document.getElementById('m2In').onclick = ()=>{
-  const r = wrap2.getBoundingClientRect();
-  const ns = Math.min(10, m2.s*1.4);
-  m2.tx = r.width/2-(r.width/2-m2.tx)*(ns/m2.s);
-  m2.ty = r.height/2-(r.height/2-m2.ty)*(ns/m2.s);
-  m2.s = ns; m2Apply();
-};
-document.getElementById('m2Out').onclick = ()=>{
-  const r = wrap2.getBoundingClientRect();
-  const ns = Math.max(0.2, m2.s/1.4);
-  m2.tx = r.width/2-(r.width/2-m2.tx)*(ns/m2.s);
-  m2.ty = r.height/2-(r.height/2-m2.ty)*(ns/m2.s);
-  m2.s = ns; m2Apply();
-};
-document.getElementById('m2Home').onclick = m2Fit;
 
 /* ============ 页面切换 ============ */
 document.querySelectorAll('nav button').forEach(btn=>{
@@ -941,20 +290,9 @@ document.querySelectorAll('nav button').forEach(btn=>{
     document.querySelectorAll('nav button').forEach(b=>b.classList.remove('on'));
     document.querySelectorAll('section.page').forEach(s=>s.classList.remove('on'));
     btn.classList.add('on');
-    const page = document.getElementById(btn.dataset.page);
-    page.classList.add('on');
-    page.scrollTop = 0;
-    if(btn.dataset.page==='mapPage') resize();
-    if(btn.dataset.page==='map2dPage'){
-      if(!m2.inited){
-        buildMarks2(MAPDATA.marks.map(m=>({name:m.name, x:m.x, y:m.y, imp:m.imp})));
-        m2.inited = true;
-      }
-      m2Fit();
-    }
+    document.getElementById(btn.dataset.page).classList.add('on');
   };
 });
-// hash 直达：#map2dPage / #geoPage 等
 const _h = location.hash.slice(1);
 if(_h){ const _b = document.querySelector('nav button[data-page="'+_h+'"]'); if(_b) _b.click(); }
 </script>
