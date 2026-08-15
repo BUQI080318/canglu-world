@@ -671,6 +671,53 @@
     .pm-node .pm-sub{font-size:8.5px}
     .pm-line-label{font-size:8px}
   }
+
+  /* ===== 音乐条增强：控制键/进度条/音量 ===== */
+  .music-ctrl{
+    background:none;border:none;color:var(--gold-dim);width:28px;height:28px;border-radius:50%;
+    font-size:13px;cursor:pointer;font-family:inherit;transition:all .2s;flex-shrink:0;line-height:1;
+  }
+  .music-ctrl:hover{color:var(--gold);transform:scale(1.15)}
+  .music-mid{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;cursor:default}
+  .music-now{overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:12.5px}
+  .music-progress{
+    position:relative;height:4px;border-radius:2px;background:rgba(255,255,255,.14);cursor:pointer;
+    transition:height .15s;
+  }
+  .music-progress:hover{height:7px}
+  .music-progress .mp-fill{
+    position:absolute;left:0;top:0;bottom:0;width:0%;border-radius:2px;
+    background:linear-gradient(90deg,var(--gold-dim),var(--gold));
+    box-shadow:0 0 8px var(--glow);
+  }
+  .music-progress .mp-knob{
+    position:absolute;top:50%;left:0%;width:11px;height:11px;border-radius:50%;
+    background:var(--gold);transform:translate(-50%,-50%);
+    box-shadow:0 0 8px var(--glow);opacity:0;transition:opacity .2s;
+  }
+  .music-progress:hover .mp-knob{opacity:1}
+  .music-vol{
+    display:flex;align-items:center;gap:6px;flex-shrink:0;cursor:pointer;
+  }
+  .vol-icon{font-size:13px;color:var(--gold-dim);font-style:normal}
+  .vol-slider{
+    position:relative;width:52px;height:4px;border-radius:2px;background:rgba(255,255,255,.14);cursor:pointer;
+  }
+  .vol-slider .vs-fill{
+    position:absolute;left:0;top:0;bottom:0;width:70%;border-radius:2px;
+    background:linear-gradient(90deg,var(--gold-dim),var(--gold));
+  }
+  .vol-slider .vs-knob{
+    position:absolute;top:50%;left:70%;width:10px;height:10px;border-radius:50%;
+    background:var(--gold);transform:translate(-50%,-50%);
+    box-shadow:0 0 6px var(--glow);
+  }
+  /* 移动端：进度条保留，音量折叠为点击切换静音 */
+  @media (max-width:700px){
+    .music-vol .vol-slider{display:none}
+    .music-vol{font-size:15px}
+    .music-ctrl{width:24px;height:24px;font-size:12px}
+  }
 </style>
 </head>
 <body>
@@ -960,11 +1007,23 @@
 <div class="music-list" id="musicList"></div>
 <div class="music-bar" id="musicBar">
   <img class="music-cover" id="musicCover" src="music/covers/06_odyssey.jpg" alt="专辑封面">
+  <button class="music-ctrl" id="musicPrev" title="上一首">⏮</button>
   <button class="music-btn" id="musicBtn">▶</button>
+  <button class="music-ctrl" id="musicNext" title="下一首">⏭</button>
+  <div class="music-mid">
+    <div class="music-now" id="musicNow"><b>沧陆</b><span class="music-hint">· 静候佳音</span></div>
+    <div class="music-progress" id="musicProgress">
+      <div class="mp-fill" id="mpFill"></div>
+      <div class="mp-knob" id="mpKnob"></div>
+    </div>
+  </div>
+  <div class="music-vol" id="musicVol" title="音量">
+    <span class="vol-icon">🔊</span>
+    <div class="vol-slider" id="volSlider"><div class="vs-fill" id="vsFill"></div><div class="vs-knob" id="vsKnob"></div></div>
+  </div>
   <div class="eq" id="eqBars" aria-hidden="true">
     <span></span><span></span><span></span><span></span><span></span>
   </div>
-  <div class="music-now" id="musicNow"><b>沧陆</b><span class="music-hint">· 静候佳音</span></div>
   </div>
 
   <div class="logo-intro-mask" id="logoIntroMask">
@@ -1659,6 +1718,112 @@ function revealItem(el){
       };
     });
   }
+
+  /* ===== 进度条 / 上下首 / 音量 ===== */
+  const prog = document.getElementById('musicProgress');
+  const mpFill = document.getElementById('mpFill');
+  const mpKnob = document.getElementById('mpKnob');
+  const prevBtn = document.getElementById('musicPrev');
+  const nextBtn = document.getElementById('musicNext');
+  const volBox = document.getElementById('musicVol');
+  const volSlider = document.getElementById('volSlider');
+  const vsFill = document.getElementById('vsFill');
+  const vsKnob = document.getElementById('vsKnob');
+  let vol = 0.7, dragging = false, volDragging = false;
+  try{ vol = parseFloat(localStorage.getItem('canglu-vol') || '0.7'); }catch(e){}
+  if(isNaN(vol)) vol = 0.7;
+
+  function fmt(t){
+    if(!isFinite(t) || t < 0) t = 0;
+    const m = Math.floor(t/60), s = Math.floor(t%60);
+    return m + ':' + (s<10?'0':'') + s;
+  }
+  function updProgress(){
+    if(!audio || !audio.duration) return;
+    const p = audio.currentTime / audio.duration * 100;
+    mpFill.style.width = p + '%';
+    mpKnob.style.left = p + '%';
+    now.title = fmt(audio.currentTime) + ' / ' + fmt(audio.duration);
+  }
+  function setVol(v){
+    vol = Math.min(1, Math.max(0, v));
+    if(audio) audio.volume = vol;
+    vsFill.style.width = (vol*100) + '%';
+    vsKnob.style.left = (vol*100) + '%';
+    try{ localStorage.setItem('canglu-vol', vol); }catch(e){}
+  }
+  prog.addEventListener('click', function(e){
+    if(!audio || !audio.duration) return;
+    const r = prog.getBoundingClientRect();
+    const p = (e.clientX - r.left) / r.width;
+    audio.currentTime = p * audio.duration;
+    updProgress();
+  });
+  prog.addEventListener('mousedown', function(e){
+    dragging = true;
+    const move = function(ev){
+      if(!audio || !audio.duration) return;
+      const r = prog.getBoundingClientRect();
+      const p = Math.min(1, Math.max(0, (ev.clientX - r.left) / r.width));
+      mpFill.style.width = p*100 + '%';
+      mpKnob.style.left = p*100 + '%';
+      audio.currentTime = p * audio.duration;
+      updProgress();
+    };
+    move(e);
+    document.addEventListener('mousemove', move);
+    document.addEventListener('mouseup', function h(){ dragging = false; document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', h); });
+  });
+  volSlider.addEventListener('click', function(e){
+    const r = volSlider.getBoundingClientRect();
+    setVol((e.clientX - r.left) / r.width);
+  });
+  volSlider.addEventListener('mousedown', function(e){
+    volDragging = true;
+    const move = function(ev){
+      const r = volSlider.getBoundingClientRect();
+      setVol((ev.clientX - r.left) / r.width);
+    };
+    move(e);
+    document.addEventListener('mousemove', move);
+    document.addEventListener('mouseup', function h(){ volDragging = false; document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', h); });
+  });
+  // 移动端：点音量图标切换静音
+  volBox.addEventListener('click', function(e){
+    if(e.target.closest('.vol-slider')) return;
+    if(!audio) return;
+    audio.muted = !audio.muted;
+    volBox.querySelector('.vol-icon').textContent = audio.muted ? '🔇' : '🔊';
+  });
+  function playIdx(i){
+    if(i < 0) i = SONGS.length - 1;
+    if(i >= SONGS.length) i = 0;
+    cur = i;
+    playCur();
+  }
+  prevBtn.addEventListener('click', function(e){
+    e.stopPropagation();
+    if(!SONGS.length) return;
+    // 播放超过3秒则回到开头，否则上一首
+    if(audio && audio.currentTime > 3) audio.currentTime = 0;
+    else playIdx(cur - 1);
+  });
+  nextBtn.addEventListener('click', function(e){
+    e.stopPropagation();
+    if(!SONGS.length) return;
+    playIdx(cur + 1);
+  });
+  // 挂到播放器闭包外部可访问
+  window.__musicSeek = { updProgress: updProgress, setVol: setVol, playIdx: playIdx };
+  setVol(vol);
+  // 进度更新循环
+  setInterval(function(){
+    if(audio && started && !audio.paused && !dragging) updProgress();
+  }, 500);
+  // 播放新曲时重置进度条
+  const _origPlayCur = playCur;
+  window.__afterPlay = function(){};
+
   function playCur(){
     if(cur < 0 || !SONGS[cur]) return;
     if(!audio) audio = new Audio();
@@ -1671,6 +1836,8 @@ function revealItem(el){
       btn.textContent = '❚❚';
       setPlaying(true);
       renderList();
+      if(mpFill) mpFill.style.width = '0%';
+      if(mpKnob) mpKnob.style.left = '0%';
     }).catch(()=>{
       now.innerHTML = '<b>沧陆</b><span class="music-hint"> · </span>'+mh('点击页面任意处开始')+'</span>';
       setPlaying(false);
