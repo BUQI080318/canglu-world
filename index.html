@@ -1113,7 +1113,7 @@
         <div class="tr-bar"><div class="tr-fill" id="trFill"></div></div>
         <span class="tr-days" id="trDays"></span>
       </div>
-      <div class="today-anchor" id="tdAnchorLine" data-i18n="td_anchor">历法锚点：祀元元年 ≈ 公元 1000 年</div>
+      <div class="today-anchor" id="tdAnchorLine" data-i18n="td_anchor">历法锚点：祀元元年 ≈ 公元 {N} 年</div>
     </div>
 
     <h2 data-i18n="h2_cal1">沧陆各邦历法</h2>
@@ -2367,7 +2367,11 @@ function revealItem(el){
     var rdays = document.getElementById('trDays');
     rdays.textContent = en ? (days + ' days to Jinyue') : ('距烬月还有 ' + days + ' 天');
     var al = document.getElementById('tdAnchorLine');
-    if(al) al.textContent = al.textContent.replace(/\d+/, String(anchor));
+    if(al){
+      // 用 {N} 占位符替换锚点值（字典里的静态文本）
+      var txt = al.textContent.replace('{N}', String(anchor));
+      al.textContent = txt;
+    }
     card.style.display = 'block';
   }
   render();
@@ -2645,6 +2649,8 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       spLangZh:'中文', spLangEn:'English',
       spOn:'开启', spOff:'关闭',
       lg_t:'徽记释义 · 沧陆全域总LOGO', lg_lead:'「单侧羽翼 + 十字佩剑」——沧陆全域世界观总LOGO。',
+      td_title:'今日沧陆', td_ritual:'烬月祭仪 · 倒计时',
+      td_anchor:'历法锚点：祀元元年 ≈ 公元 {N} 年',
       ga_title:'沧陆舆图 · 山河总览', ga_sub:'点击方位，展开地理篇章',
       ga_1:'海洋与水域', ga_2:'陆地单元', ga_3:'地形地貌', ga_4:'河流水系', ga_5:'人文聚落', ga_6:'大型工程地标',
       spAnchor:'历法锚点（祀元元年≈公元）',
@@ -2684,6 +2690,8 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       spLangZh:'Chinese', spLangEn:'English',
       spOn:'On', spOff:'Off',
       lg_t:'The Emblem · Canglu Global Logo', lg_lead:'A single wing and a cross-sword — the master emblem of the Canglu world.',
+      td_title:'Today in Canglu', td_ritual:'Jinyue Rite · Countdown',
+      td_anchor:'Calendar anchor: Siyuan Year 1 ≈ AD {N}',
       ga_title:'The Atlas of Canglu', ga_sub:'Click a region to open its chapter',
       ga_1:'Seas & Waters', ga_2:'Landmasses', ga_3:'Terrain & Landforms', ga_4:'Rivers & Lakes', ga_5:'Settlements', ga_6:'Great Works',
       spAnchor:'Calendar anchor (Siyuan Year 1 ≈ AD)',
