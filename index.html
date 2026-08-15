@@ -79,41 +79,62 @@
     background:rgba(13,16,23,.75);padding:6px 12px;border-radius:6px;border:1px solid var(--line);
   }
   .compass b{font-size:18px;color:#ffe9a8}
-  /* 2D 舆图页 */
-  #map2dPage{overflow:hidden;background:#070a10}
+  /* 2D 舆图页（原神风格） */
+  #map2dPage{overflow:hidden;background:#0a1424}
   #map2dWrap{position:absolute;inset:0;overflow:hidden;cursor:grab}
   #map2dWrap.dragging{cursor:grabbing}
   #map2d{position:absolute;top:0;left:0;transform-origin:0 0;will-change:transform}
   #map2d img{display:block;user-select:none;-webkit-user-drag:none}
   #marks2d{position:absolute;top:0;left:0;width:100%;height:100%}
-  .m2{position:absolute;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;
-      background:#fff;border:2px solid #2a2016;cursor:pointer;transition:transform .15s;
-      box-shadow:0 0 6px rgba(255,255,255,.7);z-index:5}
-  .m2:hover{transform:scale(1.6)}
-  .m2.imp{width:24px;height:24px;margin:-12px 0 0 -12px;background:#ffd75e;border-color:#3a2c14;
-          box-shadow:0 0 12px rgba(255,215,94,.95);z-index:6}
-  .m2-ui{position:absolute;right:18px;bottom:18px;z-index:60;display:flex;flex-direction:column;gap:8px}
-  .m2-ui button{
-    width:42px;height:42px;border-radius:6px;cursor:pointer;
-    background:rgba(20,16,23,.9);color:var(--gold);font-size:19px;font-family:inherit;
-    border:1px solid var(--line);transition:all .15s;
+  .m2{position:absolute;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;
+      background:rgba(255,255,255,.92);border:2px solid rgba(20,30,50,.85);cursor:pointer;
+      transition:transform .15s;box-shadow:0 0 8px rgba(180,220,255,.8);z-index:5}
+  .m2:hover{transform:scale(1.7)}
+  .m2.imp{width:22px;height:22px;margin:-11px 0 0 -11px;background:linear-gradient(145deg,#ffe9a8,#e8b54a);
+          border:2px solid rgba(60,40,10,.9);box-shadow:0 0 12px rgba(255,210,110,.95);z-index:6}
+  .gs-ui{position:absolute;right:20px;bottom:24px;z-index:60;display:flex;flex-direction:column;gap:10px}
+  .gs-ui button{
+    width:44px;height:44px;border-radius:10px;cursor:pointer;font-family:inherit;
+    background:linear-gradient(160deg,rgba(28,38,58,.92),rgba(16,22,36,.92));
+    color:#d8c890;font-size:20px;border:1px solid rgba(150,170,210,.35);
+    backdrop-filter:blur(4px);transition:all .15s;box-shadow:0 4px 14px rgba(0,0,0,.4);
   }
-  .m2-ui button:hover{background:var(--panel2);border-color:var(--gold-dim)}
-  .m2-title{position:absolute;left:18px;top:14px;z-index:60;color:var(--gold);font-size:21px;letter-spacing:6px;
-            text-shadow:0 0 14px rgba(200,162,74,.45)}
-  .m2-title small{display:block;font-size:12px;color:var(--ink-dim);letter-spacing:2px;margin-top:4px;text-shadow:none}
-  .m2-mode{
-    position:absolute;left:18px;top:88px;z-index:60;cursor:pointer;
-    background:rgba(20,16,23,.9);color:var(--gold);font-size:13px;letter-spacing:2px;
-    padding:7px 14px;border-radius:6px;border:1px solid var(--line);font-family:inherit;transition:all .15s;
+  .gs-ui button:hover{color:#ffe9a8;border-color:rgba(232,181,74,.6);transform:translateY(-1px)}
+  .gs-title{
+    position:absolute;left:22px;top:16px;z-index:60;pointer-events:none;
+    color:#f0e6c8;font-size:26px;letter-spacing:8px;font-weight:bold;
+    text-shadow:0 2px 12px rgba(0,0,0,.8),0 0 20px rgba(200,170,90,.35);
   }
-  .m2-mode:hover{background:var(--panel2);border-color:var(--gold-dim)}
-  .m2-hint{
-    position:absolute;left:18px;bottom:18px;z-index:60;pointer-events:none;
-    color:var(--ink-dim);font-size:13px;letter-spacing:1px;text-shadow:0 1px 4px rgba(0,0,0,.8);
-    line-height:1.8;
+  .gs-title small{display:block;font-size:12px;color:#a8b8d0;letter-spacing:4px;margin-top:2px;font-weight:normal;text-shadow:0 1px 6px rgba(0,0,0,.8)}
+  .gs-panel{
+    position:absolute;left:22px;top:96px;z-index:60;min-width:210px;
+    background:linear-gradient(160deg,rgba(22,30,48,.88),rgba(14,20,34,.88));
+    border:1px solid rgba(150,170,210,.28);border-radius:12px;padding:14px 16px;
+    backdrop-filter:blur(6px);box-shadow:0 8px 24px rgba(0,0,0,.45);
   }
-  .m2-hint b{color:var(--gold);font-weight:normal}
+  .gs-panel-title{color:#e0c890;font-size:14px;letter-spacing:4px;margin-bottom:10px;border-bottom:1px solid rgba(150,170,210,.25);padding-bottom:8px}
+  .gs-legend{display:flex;flex-direction:column;gap:7px}
+  .gs-legend span{display:flex;align-items:center;gap:9px;color:#b8c4d8;font-size:13px;letter-spacing:1px}
+  .gs-legend i{width:14px;height:14px;border-radius:3px;display:inline-block;flex:none}
+  .g-snow{background:linear-gradient(145deg,#fff,#c8d4e8)}
+  .g-mnt{background:linear-gradient(145deg,#8a8478,#5a564e)}
+  .g-forest{background:linear-gradient(145deg,#7fb05a,#4a7a38)}
+  .g-city{background:linear-gradient(145deg,#ffe9a8,#e8b54a);border-radius:50%}
+  .g-mark{background:#fff;border-radius:50%}
+  .gs-compass{
+    position:absolute;right:24px;top:20px;z-index:60;pointer-events:none;
+    color:#d8c890;font-size:13px;letter-spacing:2px;text-align:center;
+    background:linear-gradient(160deg,rgba(22,30,48,.85),rgba(14,20,34,.85));
+    padding:10px 12px;border-radius:50%;border:1px solid rgba(150,170,210,.3);
+    width:56px;height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    box-shadow:0 4px 14px rgba(0,0,0,.4);
+  }
+  .gs-compass b{font-size:20px;color:#ffb088;line-height:1}
+  .gs-hint{
+    position:absolute;left:22px;bottom:24px;z-index:60;pointer-events:none;
+    color:#8a98b0;font-size:13px;letter-spacing:1px;text-shadow:0 1px 4px rgba(0,0,0,.9);
+    background:linear-gradient(90deg,rgba(14,20,34,.7),rgba(14,20,34,0));padding:6px 14px 6px 0;line-height:1.8;
+  }
   /* 弹窗 */
   .modal-mask{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:none;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
   .modal-mask.on{display:flex}
@@ -196,19 +217,28 @@
 <section class="page" id="map2dPage">
   <div id="map2dWrap">
     <div id="map2d">
-      <img src="map_ui.png" alt="沧陆全境舆图" draggable="false">
+      <img src="genshin_map.jpg" alt="沧陆舆图" draggable="false">
       <div id="marks2d"></div>
     </div>
   </div>
-  <div class="m2-ui">
+  <div class="gs-ui">
     <button id="m2In" title="放大">＋</button>
     <button id="m2Out" title="缩小">－</button>
     <button id="m2Home" title="复位">⌂</button>
   </div>
-  <div class="m2-title">沧陆全境舆图<small>点击金色标记查看设定</small></div>
-  <button id="m2Mode" class="m2-mode">🖼 手绘底图</button>
-  <div class="compass">北 <b>↑</b></div>
-  <div class="m2-hint">🖱 <b>左键拖拽</b>平移 ｜ <b>滚轮</b>缩放 ｜ 点击<b>金色光点</b>查看设定</div>
+  <div class="gs-title">沧陆<small>全境舆图</small></div>
+  <div class="gs-panel">
+    <div class="gs-panel-title">图例</div>
+    <div class="gs-legend">
+      <span><i class="g-snow"></i>雪峰</span>
+      <span><i class="g-mnt"></i>山脉</span>
+      <span><i class="g-forest"></i>林地</span>
+      <span><i class="g-city"></i>城邦</span>
+      <span><i class="g-mark"></i>地标</span>
+    </div>
+  </div>
+  <div class="gs-compass">北 <b>↑</b></div>
+  <div class="gs-hint">🖱 左键拖拽平移 ｜ 滚轮缩放 ｜ 点击标记查看设定</div>
 </section>
 
 <section class="page" id="geoPage">
@@ -803,7 +833,7 @@ function showCity(c){
   detailBox.scrollIntoView({behavior:'smooth'});
 }
 
-/* ============ 2D 舆图交互 ============ */
+/* ============ 2D 舆图交互（原神风格，参考用户底图再创作布局） ============ */
 const wrap2 = document.getElementById('map2dWrap');
 const map2d = document.getElementById('map2d');
 const m2 = {s:1, tx:0, ty:0, dragging:false, lx:0, ly:0, inited:false};
@@ -816,6 +846,48 @@ function m2Fit(){
   const s = Math.min(r.width/iw, r.height/ih);
   m2.s = s; m2.tx = (r.width-iw*s)/2; m2.ty = (r.height-ih*s)/2; m2Apply();
 }
+// 布局坐标：以用户底图（豆包水彩版）为参考再创作（OCR 定位 + 规范补全）
+const USER_MARKS = [
+  {name:'元荒海', x:0.066, y:0.344, imp:1},
+  {name:'白绫海', x:0.670, y:0.080, imp:1},
+  {name:'苍瀛海', x:0.940, y:0.300, imp:1},
+  {name:'肆星海', x:0.550, y:0.620, imp:1},
+  {name:'双生湾', x:0.159, y:0.469},
+  {name:'泊月湾', x:0.521, y:0.512},
+  {name:'屈海',   x:0.800, y:0.465},
+  {name:'承晚海峡', x:0.370, y:0.535},
+  {name:'吴阳湖', x:0.650, y:0.390},
+  {name:'西部大陆', x:0.240, y:0.380, imp:1},
+  {name:'中部大陆', x:0.580, y:0.380, imp:1},
+  {name:'盎季地', x:0.870, y:0.340, imp:1},
+  {name:'东生半岛', x:0.300, y:0.470},
+  {name:'奇迤岛', x:0.720, y:0.120, imp:1},
+  {name:'斯瑜群岛', x:0.903, y:0.170},
+  {name:'雁南岛', x:0.281, y:0.711},
+  {name:'伏熏岛', x:0.130, y:0.860, imp:1},
+  {name:'赎誓阁', x:0.770, y:0.730},
+  {name:'归尘屿', x:0.720, y:0.810},
+  {name:'南引群岛', x:0.941, y:0.897},
+  {name:'桓山',   x:0.357, y:0.199, imp:1},
+  {name:'自鸣山', x:0.382, y:0.325, imp:1},
+  {name:'辞君山', x:0.202, y:0.225},
+  {name:'扼根山', x:0.680, y:0.100},
+  {name:'狩脊山', x:0.185, y:0.829},
+  {name:'断脊山脉', x:0.250, y:0.300, imp:1},
+  {name:'眸霞山脉', x:0.440, y:0.360, imp:1},
+  {name:'延西河', x:0.248, y:0.323},
+  {name:'连奕江', x:0.555, y:0.300},
+  {name:'之丝运河', x:0.130, y:0.840},
+  {name:'恓鸟城', x:0.170, y:0.550, imp:1},
+  {name:'茹章城', x:0.478, y:0.309, imp:1},
+  {name:'眴姚城', x:0.907, y:0.400, imp:1},
+  {name:'伏熏城', x:0.120, y:0.875, imp:1},
+  {name:'望暮大桥', x:0.600, y:0.170, imp:1},
+  {name:'潜蛟隧道', x:0.200, y:0.560},
+  {name:'渡蛟裂谷', x:0.720, y:0.420},
+  {name:'东枝崖', x:0.871, y:0.483},
+  {name:'无昼碛', x:0.720, y:0.110},
+];
 function buildMarks2(list){
   const holder = document.getElementById('marks2d');
   holder.innerHTML = '';
@@ -830,47 +902,6 @@ function buildMarks2(list){
     holder.appendChild(d);
   });
 }
-// 手绘底图标记（OCR 提取坐标，描述用规范数据）
-const USER_MARKS = [
-  {name:'元荒海', x:0.066, y:0.344, imp:1},
-  {name:'白绫海', x:0.670, y:0.080, imp:1},
-  {name:'肆星海', x:0.550, y:0.620, imp:1},
-  {name:'双生湾', x:0.159, y:0.469},
-  {name:'泊月湾', x:0.521, y:0.512},
-  {name:'屈海',   x:0.797, y:0.465},
-  {name:'承晚海峡', x:0.370, y:0.535},
-  {name:'吴阳湖', x:0.650, y:0.390},
-  {name:'盎季地', x:0.790, y:0.340, imp:1},
-  {name:'东生半岛', x:0.300, y:0.470},
-  {name:'斯瑜群岛', x:0.903, y:0.170},
-  {name:'雁南岛', x:0.281, y:0.711},
-  {name:'南引群岛', x:0.941, y:0.897},
-  {name:'赎誓阁', x:0.770, y:0.730},
-  {name:'桓山',   x:0.357, y:0.199, imp:1},
-  {name:'自鸣山', x:0.382, y:0.325, imp:1},
-  {name:'辞君山', x:0.202, y:0.225},
-  {name:'断脊山脉', x:0.250, y:0.300, imp:1},
-  {name:'眸霞山脉', x:0.440, y:0.360, imp:1},
-  {name:'狩脊山', x:0.185, y:0.829},
-  {name:'延西河', x:0.248, y:0.323},
-  {name:'连奕江', x:0.555, y:0.300},
-  {name:'茹章城', x:0.478, y:0.309, imp:1},
-  {name:'眴姚城', x:0.907, y:0.400, imp:1},
-  {name:'潜蛟隧道', x:0.200, y:0.560},
-];
-let baseMode = 0; // 0=标准舆图 1=手绘底图
-function switchBase(){
-  baseMode = 1 - baseMode;
-  const img2 = document.querySelector('#map2d img');
-  img2.src = baseMode ? 'user_map.jpg' : 'map_ui.png';
-  const list = baseMode
-    ? USER_MARKS
-    : MAPDATA.marks.map(m=>({name:m.name, x:m.x, y:m.y, imp:m.imp}));
-  buildMarks2(list);
-  document.getElementById('m2Mode').textContent = baseMode ? '🗺 标准舆图' : '🖼 手绘底图';
-  m2Fit();
-}
-document.getElementById('m2Mode').onclick = switchBase;
 wrap2.addEventListener('wheel', e=>{
   e.preventDefault();
   const r = wrap2.getBoundingClientRect();
