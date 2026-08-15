@@ -730,6 +730,54 @@
   .music-now .song-marquee{display:inline-block;white-space:nowrap;padding-right:48px;max-width:none}
   .music-now.marquee .song-marquee{animation:marqueeScroll 10s linear infinite}
   @keyframes marqueeScroll{0%{transform:translateX(0)}12%{transform:translateX(0)}88%{transform:translateX(calc(-100% + 120px))}100%{transform:translateX(calc(-100% + 120px))}}
+
+  /* ===== 今日沧陆历法牌 ===== */
+  .today-card{
+    margin:18px 0 10px;padding:20px 24px;border-radius:18px;position:relative;overflow:hidden;
+    background:var(--glass-bg);-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+    border:1px solid var(--glass-brd);box-shadow:var(--glass-hl),var(--glass-shadow);
+  }
+  .today-card::before{
+    content:"";position:absolute;top:0;left:10%;right:10%;height:1px;
+    background:linear-gradient(90deg,transparent,var(--gold-dim),transparent);
+  }
+  .today-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+  .today-head h2{margin:0;color:var(--gold);font-size:20px;letter-spacing:4px;font-weight:bold}
+  .today-date{color:var(--ink-dim);font-size:13px;letter-spacing:2px}
+  .today-main{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+  .today-month{
+    flex-shrink:0;width:96px;height:96px;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    border:1px solid var(--gold-dim);background:linear-gradient(160deg,rgba(200,162,74,.14),rgba(200,162,74,.03));
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 0 18px rgba(200,162,74,.12);
+  }
+  .today-month .tm-num{color:var(--gold);font-size:30px;line-height:1;font-weight:bold}
+  .today-month .tm-name{color:var(--ink);font-size:15px;letter-spacing:3px;margin-top:5px}
+  .today-info{flex:1;min-width:220px}
+  .today-info .ti-line{font-size:15px;line-height:2.1;color:var(--ink);letter-spacing:1px}
+  .today-info .ti-line b{color:var(--gold);font-weight:normal;margin-right:6px}
+  .today-info .ti-fact{color:var(--ink-dim);font-size:13.5px;line-height:1.9;margin-top:4px;border-left:2px solid var(--gold-dim);padding-left:10px}
+  .today-ritual{margin-top:14px;padding:12px 16px;border-radius:12px;border:1px solid var(--glass-brd);
+    background:linear-gradient(90deg,rgba(200,162,74,.08),transparent 80%);
+    display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .today-ritual .tr-label{color:var(--gold-dim);font-size:12.5px;letter-spacing:2px;flex-shrink:0}
+  .today-ritual .tr-bar{flex:1;min-width:140px;height:8px;border-radius:4px;background:rgba(255,255,255,.1);position:relative;overflow:hidden}
+  .today-ritual .tr-fill{
+    position:absolute;left:0;top:0;bottom:0;width:0%;border-radius:4px;
+    background:linear-gradient(90deg,var(--gold-dim),var(--gold));box-shadow:0 0 10px var(--glow);
+    transition:width .8s cubic-bezier(.22,.61,.36,1);
+  }
+  .today-ritual .tr-days{color:var(--gold);font-size:14px;letter-spacing:1px;flex-shrink:0}
+  .today-anchor{margin-top:10px;color:var(--ink-dim);font-size:12px;letter-spacing:1px;opacity:.75}
+  .today-anchor button{
+    background:none;border:none;color:var(--gold-dim);cursor:pointer;font-family:inherit;font-size:12px;letter-spacing:1px;
+    border-bottom:1px dashed var(--gold-dim);padding:0 2px;
+  }
+  .today-anchor button:hover{color:var(--gold)}
+  @media (max-width:560px){
+    .today-card{padding:16px}
+    .today-month{width:76px;height:76px}
+    .today-month .tm-num{font-size:24px}
+  }
 </style>
 </head>
 <body>
@@ -894,6 +942,29 @@
   <div class="doc fade">
     <h1><span class="h-diamond"></span><span class="h-title" data-i18n="t_cal">历法志</span><span class="h-diamond"></span></h1>
     <div class="lead" data-i18n="l_cal">沧陆各邦历法 · 通用月份</div>
+    <div class="today-card" id="todayCard" style="display:none">
+      <div class="today-head">
+        <h2 data-i18n="td_title">今日沧陆</h2>
+        <span class="today-date" id="todayRealDate"></span>
+      </div>
+      <div class="today-main">
+        <div class="today-month">
+          <span class="tm-num" id="tmNum">1</span>
+          <span class="tm-name" id="tmName">凛月</span>
+        </div>
+        <div class="today-info">
+          <div class="ti-line" id="tiYears"></div>
+          <div class="ti-fact" id="tiFact"></div>
+        </div>
+      </div>
+      <div class="today-ritual">
+        <span class="tr-label" data-i18n="td_ritual">烬月祭仪 · 倒计时</span>
+        <div class="tr-bar"><div class="tr-fill" id="trFill"></div></div>
+        <span class="tr-days" id="trDays"></span>
+      </div>
+      <div class="today-anchor" data-i18n="td_anchor">历法锚点：祀元元年 ≈ 公元 <button id="tdAnchorBtn" type="button">1000</button> 年（点击修改）</div>
+    </div>
+
     <h2 data-i18n="h2_cal1">沧陆各邦历法</h2>
     <h3 data-i18n="h3_c1">（一）茹章城官方历法</h3>
     <p>纪元名称：祀元纪（以"献祭"为纪元开端），简称祀元。</p>
@@ -1994,6 +2065,82 @@ function revealItem(el){
 
 
 
+
+/* ============ 今日沧陆历法牌 ============ */
+(function(){
+  var card = document.getElementById('todayCard');
+  if(!card) return;
+  // 十二个月设定（文档权威）
+  var MONTHS = [
+    {n:1,  zh:'凛月', en:'Linyin', factZh:'断脊山脉雪线最低，恓鸟城最苦寒的戍边月。', factEn:'The snowline of the Duanji Mountains sinks lowest — Xuniao\'s bitterest frontier month.'},
+    {n:2,  zh:'融月', en:'Rongyue', factZh:'延西河、连奕江开始解冻，春汛初起。', factEn:'The Yanxi and Lianyi rivers thaw; spring floods begin.'},
+    {n:3,  zh:'犁月', en:'Liyue', factZh:'中部平原春耕，茹章城收粮税的起点。', factEn:'Spring plowing on the central plains; Ruzhang begins its grain levy.'},
+    {n:4,  zh:'烽月', en:'Fengyue', factZh:'山雪化尽，恓鸟城与茹章城边境摩擦高发期。', factEn:'Snows melt; border friction between Xuniao and Ruzhang peaks.'},
+    {n:5,  zh:'商月', en:'Shangyue', factZh:'肆星海风浪最小，眴姚城船队大规模出港的黄金季。', factEn:'The Sixing Sea runs calm — Xunyao\'s fleets sail in force.'},
+    {n:6,  zh:'霆月', en:'Tingyue', factZh:'雷雨频发，伏熏岛火山活动相对活跃的月份。', factEn:'Thunderstorms frequent; Fuxun Isle\'s volcanoes stir.'},
+    {n:7,  zh:'灼月', en:'Zhuoyue', factZh:'全年最热，吴阳湖流域的农忙收割期。', factEn:'Hottest month; harvest season around Lake Wuyang.'},
+    {n:8,  zh:'荒月', en:'Huangyue', factZh:'秋燥起，大陆东部时有小型旱情。', factEn:'Autumn dryness; small droughts in the east.'},
+    {n:9,  zh:'狩月', en:'Shouyue', factZh:'白绫海北岸渔猎旺季，也是恓鸟城秋猎练兵月。', factEn:'Fishing peak on Bailing Sea\'s north shore; Xuniao\'s autumn drills.'},
+    {n:10, zh:'敛月', en:'Lianyue', factZh:'百物收敛，各城邦清点一年库存、结算商账。', factEn:'All goods gathered; cities tally stocks and settle ledgers.'},
+    {n:11, zh:'霜月', en:'Shuangyue', factZh:'初雪普降，眸霞山脉开始封山。', factEn:'First snow falls; the Mouxia range seals its passes.'},
+    {n:12, zh:'烬月', en:'Jinyue', factZh:'年尾大祭，也是茹章城每三年一次秘密前往扼根山的出发月。', factEn:'Year-end rite — the month Ruzhang secretly departs for Egen Mountain.'}
+  ];
+  var defAnchor = 1000;  // 祀元元年 ≈ 公元1000年（可在设置/锚点按钮修改）
+  var anchor = defAnchor;
+  try{ var a = parseInt(localStorage.getItem('canglu-anchor') || '', 10); if(a && a > 0 && a < 10000) anchor = a; }catch(e){}
+
+  var monthsZh = ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
+  var monthsEn = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  function render(){
+    var en = window.__lang === 'en';
+    var now = new Date();
+    var realY = now.getFullYear(), realM = now.getMonth() + 1, realD = now.getDate();
+    var m = MONTHS[realM - 1];
+    // 三历年份
+    var siyuan = realY - anchor;
+    var shucheng = siyuan - 200;   // 戍城 = 祀元 − 200
+    var hengli = siyuan - 160;     // 衡历 = 祀元 − 160
+    // 烬月倒计时：距今年12月1日（烬月首日）的天数
+    var endOfYear = new Date(realY, 11, 1);
+    var days = Math.max(0, Math.round((endOfYear - now) / 86400000));
+    var totalDays = Math.round((endOfYear - new Date(realY, 0, 1)) / 86400000);
+    var pct = Math.min(100, Math.max(0, (totalDays - days) / totalDays * 100));
+
+    document.getElementById('tmNum').textContent = m.n;
+    document.getElementById('tmName').textContent = en ? m.en : m.zh;
+    document.getElementById('tiFact').textContent = en ? m.factEn : m.factZh;
+    document.getElementById('todayRealDate').textContent =
+      (en ? monthsEn[realM-1] : monthsZh[realM-1]) + ' ' + realD + ', ' + realY +
+      (en ? ' · Today in Canglu' : ' · 换算至沧陆历');
+
+    var yl = document.getElementById('tiYears');
+    if(en){
+      yl.innerHTML = '<b>Siyuan</b>' + siyuan + ' &nbsp;·&nbsp; <b>Shucheng</b> ' + shucheng + ' &nbsp;·&nbsp; <b>Hengli</b> ' + hengli;
+    } else {
+      yl.innerHTML = '<b>祀元</b>' + siyuan + ' 年 &nbsp;·&nbsp; <b>戍城</b>' + shucheng + ' 年 &nbsp;·&nbsp; <b>衡历</b>' + hengli + ' 年';
+    }
+    document.getElementById('trFill').style.width = pct + '%';
+    var rdays = document.getElementById('trDays');
+    rdays.textContent = en ? (days + ' days to Jinyue') : ('距烬月还有 ' + days + ' 天');
+    document.getElementById('tdAnchorBtn').textContent = anchor;
+    card.style.display = 'block';
+  }
+  render();
+  // 锚点修改
+  document.getElementById('tdAnchorBtn').addEventListener('click', function(){
+    var v = prompt(en ? 'Set the calendar anchor:\nSiyuan Year 1 ≈ AD (default 1000)' : '设置历法锚点：\n祀元元年 ≈ 公元（默认1000）', String(anchor));
+    if(v === null) return;
+    var n = parseInt(v, 10);
+    if(!n || n < 1 || n > 9999){ alert(en ? 'Invalid year.' : '年份无效。'); return; }
+    anchor = n;
+    try{ localStorage.setItem('canglu-anchor', String(n)); }catch(e){}
+    render();
+  });
+  // 语言切换时刷新
+  window.__todayRender = render;
+})();
+
 /* ============ 徽记释义弹窗 ============ */
 (function(){
   var mask = document.getElementById('logoIntroMask');
@@ -2360,6 +2507,8 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
     if(window.__rebuildCards) window.__rebuildCards();
     // 重新渲染势力博弈图
     if(window.__pmRender) setTimeout(window.__pmRender, 30);
+    // 刷新今日沧陆历法牌
+    if(window.__todayRender) setTimeout(window.__todayRender, 30);
   }
   function rebuildAccTitles(t){
     // 手风琴标题：用构建时记录的 data-i18n-key 直接翻译
