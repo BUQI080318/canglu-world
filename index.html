@@ -844,6 +844,12 @@
         <button data-v="off" class="sp-opt">关闭</button>
       </div>
     </div>
+    <div class="sp-group">
+      <div class="sp-label" data-i18n="spAnchor">历法锚点（祀元元年≈公元）</div>
+      <div class="sp-row">
+        <input id="spAnchorInput" type="number" min="1" max="9999" value="1000" style="width:100%;padding:7px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font-family:inherit;font-size:13px;letter-spacing:1px">
+      </div>
+    </div>
   </div>
 </div>
 
@@ -962,7 +968,7 @@
         <div class="tr-bar"><div class="tr-fill" id="trFill"></div></div>
         <span class="tr-days" id="trDays"></span>
       </div>
-      <div class="today-anchor" data-i18n="td_anchor">历法锚点：祀元元年 ≈ 公元 <button id="tdAnchorBtn" type="button">1000</button> 年（点击修改）</div>
+      <div class="today-anchor" id="tdAnchorLine" data-i18n="td_anchor">历法锚点：祀元元年 ≈ 公元 1000 年</div>
     </div>
 
     <h2 data-i18n="h2_cal1">沧陆各邦历法</h2>
@@ -2123,20 +2129,11 @@ function revealItem(el){
     document.getElementById('trFill').style.width = pct + '%';
     var rdays = document.getElementById('trDays');
     rdays.textContent = en ? (days + ' days to Jinyue') : ('距烬月还有 ' + days + ' 天');
-    document.getElementById('tdAnchorBtn').textContent = anchor;
+    var al = document.getElementById('tdAnchorLine');
+    if(al) al.textContent = al.textContent.replace(/\d+/, String(anchor));
     card.style.display = 'block';
   }
   render();
-  // 锚点修改
-  document.getElementById('tdAnchorBtn').addEventListener('click', function(){
-    var v = prompt(en ? 'Set the calendar anchor:\nSiyuan Year 1 ≈ AD (default 1000)' : '设置历法锚点：\n祀元元年 ≈ 公元（默认1000）', String(anchor));
-    if(v === null) return;
-    var n = parseInt(v, 10);
-    if(!n || n < 1 || n > 9999){ alert(en ? 'Invalid year.' : '年份无效。'); return; }
-    anchor = n;
-    try{ localStorage.setItem('canglu-anchor', String(n)); }catch(e){}
-    render();
-  });
   // 语言切换时刷新
   window.__todayRender = render;
 })();
@@ -2321,6 +2318,16 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
   try{ s = Object.assign({}, def, JSON.parse(localStorage.getItem(SKEY) || '{}')); }catch(e){}
   window.cangluSettings = { get:function(){ return s; } };
 
+  var anchorInput = document.getElementById('spAnchorInput');
+  if(anchorInput){
+    try{ anchorInput.value = localStorage.getItem('canglu-anchor') || '1000'; }catch(e){}
+    anchorInput.addEventListener('change', function(){
+      var n = parseInt(anchorInput.value, 10);
+      if(!n || n < 1 || n > 9999){ anchorInput.value = '1000'; n = 1000; }
+      try{ localStorage.setItem('canglu-anchor', String(n)); }catch(e){}
+      if(window.__todayRender) window.__todayRender();
+    });
+  }
   function applySettings(){
     var el = document.documentElement;
     el.setAttribute('data-font', s.font);
@@ -2401,6 +2408,7 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       spLangZh:'中文', spLangEn:'English',
       spOn:'开启', spOff:'关闭',
       lg_t:'徽记释义 · 沧陆全域总LOGO', lg_lead:'「单侧羽翼 + 十字佩剑」——沧陆全域世界观总LOGO。',
+      spAnchor:'历法锚点（祀元元年≈公元）',
       lg_hero_t:'沧陆全域徽记', lg_hero_s:'折翼一陆 · 剑衡四方', lg_hero_btn:'徽记释义',
       lg_h1a:'十字剑（承载世界四方势力、世间平衡）', lg_h1a_lead:'十字四向对应沧陆四大核心城邦，是整片大陆的四方缩影：',
       lg_s1b:'剑上竖刃', lg_s1c:'：中部茹章城（大陆中心、神权集权，整片世界权力枢纽）',
@@ -2437,6 +2445,7 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       spLangZh:'Chinese', spLangEn:'English',
       spOn:'On', spOff:'Off',
       lg_t:'The Emblem · Canglu Global Logo', lg_lead:'A single wing and a cross-sword — the master emblem of the Canglu world.',
+      spAnchor:'Calendar anchor (Siyuan Year 1 ≈ AD)',
       lg_hero_t:'The Emblem of Canglu', lg_hero_s:'One broken wing for the land, the sword balances the four realms', lg_hero_btn:'About the Emblem',
       lg_h1a:'The Cross-Sword (the four powers, the balance of the world)', lg_h1a_lead:'The four directions of the cross mirror the four great city-states — a miniature of the whole continent:',
       lg_s1b:'Upper blade', lg_s1c:': central Ruzhang (heart of the continent, theocracy, the world\'s hub of power)',
