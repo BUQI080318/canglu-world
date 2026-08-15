@@ -310,12 +310,13 @@
 <script>
 /* ============ 3D 场景 ============ */
 const MAP_W = MAPDATA.W, MAP_H = MAPDATA.H;
-const HSCALE = 12;
+const HSCALE = 24;  // 垂直系数：海面 0，自鸣山 5243m ≈ 25 单位
 const canvas = document.getElementById('glCanvas');
 const renderer = new THREE.WebGLRenderer({canvas, antialias:true});
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x070a10);
+scene.fog = new THREE.Fog(0x0a0e16, 95, 175);  // 大气雾：远处朦胧
 
 const cam = new THREE.PerspectiveCamera(50, 1, 0.1, 3000);
 const target = new THREE.Vector3(0, 2.2, 0);
@@ -334,7 +335,7 @@ function resize(){
 }
 window.addEventListener('resize', resize);
 
-// 高程采样：HGRID 双线性插值。南北翻转：v = (z+45)/90（3D 南端 z=-45 对应原图北端 v=0）
+// 高程采样：HGRID 双线性插值（存的是偏移映射，反映射回真实海拔归一化：海面=0，自鸣山≈1.05）
 function getH(u, v){
   const gx = Math.min(SEG_X, Math.max(0, u*SEG_X));
   const gy = Math.min(SEG_Y, Math.max(0, v*SEG_Y));
@@ -343,7 +344,8 @@ function getH(u, v){
   const fx = gx-x0, fy = gy-y0;
   const a = HGRID[y0*(SEG_X+1)+x0], b = HGRID[y0*(SEG_X+1)+x1];
   const c = HGRID[y1*(SEG_X+1)+x0], d = HGRID[y1*(SEG_X+1)+x1];
-  return ((a*(1-fx)+b*fx)*(1-fy) + (c*(1-fx)+d*fx)*fy)/255;
+  const hv = ((a*(1-fx)+b*fx)*(1-fy) + (c*(1-fx)+d*fx)*fy)/255;
+  return hv*1.4 - 0.3;  // 反映射：-0.3~1.1 → 真实海拔归一化（海面 0，自鸣山 5243m=1.0）
 }
 const clickables = [];
 const labels3d = [];
@@ -355,19 +357,18 @@ function noise2d(x, y){
 }
 
 function colorFor(h, slope){
-  // 坡度感知：陡坡雪线降低（更易积雪）、陡崖露岩色、缓坡草绿
-  const snowLine = 0.60 + 0.14*(1-slope);
-  const rockLine = 0.46 + 0.10*slope;
+  // 真实海拔归一化（海面0，自鸣山≈1.05；海底-0.23）坡度感知着色
+  const snowLine = 0.72 + 0.13*(1-slope);
+  const rockLine = 0.42 + 0.10*slope;
   const c = (()=>{
-    if(h <= 0.02) return [0.03, 0.09, 0.17];       // 深海
-    if(h <= 0.05) return [0.10, 0.19, 0.33];       // 浅海
-    if(h <= 0.08) return [0.42, 0.56, 0.72];       // 浅滩
-    if(h <= 0.13) return [0.76, 0.70, 0.53];       // 沙滩
-    if(h < rockLine) return [0.34, 0.47, 0.27];    // 低地绿
-    if(h < snowLine) return [0.50, 0.42, 0.26];    // 山地岩石
-    return [0.88, 0.90, 0.95];                     // 雪
+    if(h <= -0.15) return [0.03, 0.09, 0.19];       // 深海（<-790m）
+    if(h <= -0.05) return [0.07, 0.17, 0.33];       // 深蓝海
+    if(h <= -0.008) return [0.30, 0.55, 0.62];      // 浅滩
+    if(h <= 0.008) return [0.72, 0.76, 0.70];       // 海岸
+    if(h < rockLine) return [0.28, 0.44, 0.22];     // 低地绿（<2200m）
+    if(h < snowLine) return [0.47, 0.39, 0.22];     // 山地岩石
+    return [0.90, 0.92, 0.96];                      // 雪顶
   })();
-  // 噪声微调：打散色带边界 + 草地斑驳
   const n = (noise2d(u_cur, v_cur) - 0.5) * 0.05;
   return [c[0]+n, c[1]+n, c[2]+n];
 }
