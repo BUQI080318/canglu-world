@@ -341,11 +341,34 @@
   .music-list .song .song-cover{width:30px;height:30px;border-radius:50%;object-fit:cover;border:1px solid var(--line);flex-shrink:0}
   /* 移动端 */
   @media (max-width:700px){
-    .brand{font-size:16px;letter-spacing:3px}
-    nav button{font-size:13px;padding:6px 9px;letter-spacing:1px}
-    .search-box{width:120px;font-size:13px;padding:6px 8px}
-    .search-results{width:270px}
-    .music-now{max-width:90px}
+    header{height:auto;padding:8px 12px 6px;flex-wrap:wrap;gap:6px 10px}
+    .brand{font-size:16px;letter-spacing:3px;flex:1;min-width:0}
+    .brand small{font-size:9px}
+    .logo-mark{width:30px;height:30px}
+    nav{order:3;width:100%;display:flex;justify-content:center;gap:4px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+    nav::-webkit-scrollbar{display:none}
+    nav button{font-size:13px;padding:6px 10px;letter-spacing:1px;white-space:nowrap;flex-shrink:0}
+    .theme-btn{order:2}
+    .search-wrap{order:4;width:100%}
+    .search-box{width:100%;font-size:13px;padding:7px 10px}
+    .search-results{width:calc(100vw - 24px);right:0;left:auto}
+    .music-now{max-width:80px}
+    .music-cover{width:32px;height:32px}
+    .music-bar{right:10px;bottom:10px;padding:6px 12px}
+    .doc{padding:14px}
+    .doc h1{font-size:26px;letter-spacing:6px;gap:12px}
+    .doc h1::before,.doc h1::after{width:36px}
+    .doc p{font-size:15px;text-indent:1.5em}
+    /* 移动端性能优化：关光斑动画/降低模糊（GPU友好） */
+    body::before,body::after,html::after{animation:none;filter:blur(30px);opacity:.5}
+    .glass-shine::after{display:none}
+    .glass{backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+    .city-card,.acc-card,.month-card,.tl-item,.calc,.search-results,.music-list,.doc .item,.music-bar{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+    .doc h1 .h-title .ch{animation-duration:.4s}
+    .doc .tl-item{transition:none}
+    section.page.on .doc > *{animation-duration:.4s}
+    @keyframes riseInM{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+    section.page.on .doc > *{animation-name:riseInM}
     #cursorRing,.pt,.ripple{display:none}
   }
   /* 主题切换按钮 */
@@ -1158,6 +1181,20 @@ function revealItem(el){
 
 
 
+
+/* ============ 移动端 header 高度自适应 ============ */
+(function(){
+  function fitHeader(){
+    const hd = document.querySelector('header');
+    const mn = document.querySelector('main');
+    if(!hd || !mn) return;
+    mn.style.top = hd.offsetHeight + 'px';
+  }
+  window.addEventListener('load', fitHeader);
+  window.addEventListener('resize', fitHeader);
+  if(window.animateTitle){} // no-op
+  setTimeout(fitHeader, 300);
+})();
 
 /* ============ 标题逐字浮现 + 页面错层动画 ============ */
 function animateTitle(){
