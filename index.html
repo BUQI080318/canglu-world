@@ -271,9 +271,9 @@
   /* 时间线渐入 */
   .tl-item{opacity:0;transform:translateY(16px);transition:opacity .55s ease,transform .55s ease}
   .tl-item.in{opacity:1;transform:none}
-  /* 鼠标特效 */
-  *{cursor:none !important}
-  input, textarea, select, [contenteditable]{cursor:text !important}
+  /* 鼠标特效：系统光标隐藏由 JS 动态启用（html.fx-on），JS 失败自动回退系统光标 */
+  html.fx-on *{cursor:none !important}
+  html.fx-on input, html.fx-on textarea, html.fx-on select, html.fx-on [contenteditable]{cursor:text !important}
   #cursorRing{
     position:fixed;left:0;top:0;width:26px;height:26px;border:1px solid var(--gold);
     border-radius:50%;pointer-events:none;z-index:2147483647;opacity:0;transform:translate(-50%,-50%);
@@ -847,6 +847,7 @@
   </div>
 </div>
 
+<div id="cursorRing"></div>
 <script>
 /* ============ 城邦卡片（完整设定） ============ */
 const CITIES = [
@@ -1222,6 +1223,7 @@ function revealItem(el){
   if(!window.matchMedia || !matchMedia('(pointer:fine)').matches) return;
   const ring = document.getElementById('cursorRing');
   if(!ring) return;
+  document.documentElement.classList.add('fx-on');  // 只有光环就绪才隐藏系统光标
   let mx = -100, my = -100, rx = -100, ry = -100, shown = false;
   document.addEventListener('mousemove', e=>{
     mx = e.clientX; my = e.clientY;
@@ -1807,6 +1809,5 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
   applyLang();
 })();
 </script>
-<div id="cursorRing"></div>
 </body>
 </html>
