@@ -27,6 +27,26 @@
   }
   nav button:hover{color:var(--ink);background:var(--panel)}
   nav button.on{color:var(--gold);border-color:var(--gold-dim);background:var(--panel);text-shadow:0 0 8px rgba(200,162,74,.3)}
+  /* 搜索框 */
+  .search-wrap{position:relative;margin-left:auto}
+  .search-box{
+    background:var(--panel);border:1px solid var(--line);border-radius:4px;
+    color:var(--ink);font-family:inherit;font-size:14px;padding:7px 12px;width:190px;
+    outline:none;transition:border-color .2s;
+  }
+  .search-box:focus{border-color:var(--gold-dim)}
+  .search-box::placeholder{color:var(--ink-dim);letter-spacing:2px}
+  .search-results{
+    position:absolute;top:44px;right:0;width:320px;max-height:340px;overflow:auto;
+    background:var(--panel2);border:1px solid var(--line);border-radius:6px;
+    box-shadow:0 12px 36px rgba(0,0,0,.55);display:none;z-index:120;
+  }
+  .search-results.on{display:block}
+  .search-results .hit{padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--line);transition:background .15s}
+  .search-results .hit:hover{background:var(--panel)}
+  .search-results .hit b{color:var(--gold);font-weight:normal;letter-spacing:2px;font-size:14px}
+  .search-results .hit small{display:block;color:var(--ink-dim);font-size:12px;margin-top:3px;letter-spacing:1px;line-height:1.6}
+  .search-results .no-hit{padding:14px;color:var(--ink-dim);font-size:13px;letter-spacing:2px;text-align:center}
   main{position:fixed;top:56px;left:0;right:0;bottom:0;overflow-y:auto}
   section.page{display:none}
   section.page.on{display:block}
@@ -56,23 +76,40 @@
   .city-card p{font-size:13.5px;color:var(--ink);line-height:1.75;text-indent:0;margin:0;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
   .fade{animation:fadeIn .25s ease}
   @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-  /* 弹窗 */
-  .modal-mask{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:none;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
-  .modal-mask.on{display:flex}
-  .modal{
-    max-width:480px;width:calc(100% - 60px);max-height:70vh;overflow:auto;
-    background:linear-gradient(160deg,#1e2736,#141a24);
-    border:1px solid var(--gold-dim);border-radius:10px;padding:22px 26px;
-    box-shadow:0 12px 40px rgba(0,0,0,.6);position:relative;
+  /* 年表 */
+  .timeline{position:relative;margin:18px 0 8px;padding-left:26px}
+  .timeline::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:var(--gold-dim);opacity:.5}
+  .tl-item{position:relative;margin:0 0 20px;padding:12px 16px;background:var(--panel);border:1px solid var(--line);border-radius:6px}
+  .tl-item::before{
+    content:"";position:absolute;left:-24px;top:17px;width:10px;height:10px;border-radius:50%;
+    background:var(--gold);box-shadow:0 0 10px rgba(200,162,74,.6);
   }
-  .modal h3{color:var(--gold);font-size:22px;letter-spacing:4px;margin-bottom:4px;border-bottom:1px solid var(--line);padding-bottom:10px}
-  .modal .sub{color:var(--ink-dim);font-size:13px;letter-spacing:2px;margin:6px 0 10px}
-  .modal p{line-height:1.9;font-size:14.5px;color:var(--ink)}
-  .modal .close{position:absolute;top:10px;right:14px;background:none;border:none;color:var(--ink-dim);font-size:22px;cursor:pointer;font-family:inherit}
-  .modal .close:hover{color:var(--gold)}
+  .tl-item .era{color:var(--gold);font-size:16px;letter-spacing:2px;font-weight:bold;margin-bottom:4px}
+  .tl-item .era small{color:var(--ink-dim);font-size:12px;letter-spacing:1px;margin-left:8px;font-weight:normal}
+  .tl-item p{text-indent:0;font-size:14.5px;line-height:1.85;margin:0}
+  /* 历法换算器 */
+  .calc{
+    margin:16px 0;padding:18px 20px;background:linear-gradient(160deg,var(--panel),var(--panel2));
+    border:1px solid var(--line);border-radius:8px;
+  }
+  .calc h3{margin-top:0}
+  .calc-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:10px 0}
+  .calc-row label{color:var(--ink-dim);font-size:14px;letter-spacing:2px;width:88px}
+  .calc-row input{
+    background:var(--bg);border:1px solid var(--line);border-radius:4px;color:var(--ink);
+    font-family:inherit;font-size:15px;padding:8px 12px;width:140px;outline:none;letter-spacing:1px;
+  }
+  .calc-row input:focus{border-color:var(--gold-dim)}
+  .calc-out{margin-top:12px;padding:12px 14px;background:var(--bg);border-left:2px solid var(--gold);border-radius:4px;font-size:14.5px;line-height:2;color:var(--ink)}
+  .calc-out b{color:var(--gold);font-weight:normal}
+  /* 搜索高亮 */
+  mark.hl{background:rgba(200,162,74,.28);color:var(--gold);padding:0 2px;border-radius:2px}
+  /* 移动端 */
   @media (max-width:700px){
     .brand{font-size:16px;letter-spacing:3px}
     nav button{font-size:13px;padding:6px 9px;letter-spacing:1px}
+    .search-box{width:120px;font-size:13px;padding:6px 8px}
+    .search-results{width:270px}
   }
 </style>
 </head>
@@ -84,8 +121,13 @@
     <button class="on" data-page="geoPage">⛰ 地理</button>
     <button data-page="cityPage">🏰 城邦</button>
     <button data-page="calPage">📅 历法</button>
+    <button data-page="timePage">📜 纪年</button>
     <button data-page="powerPage">⚔ 势力</button>
   </nav>
+  <div class="search-wrap">
+    <input class="search-box" id="searchBox" type="text" placeholder="🔍 检索地名/城邦/条目" autocomplete="off">
+    <div class="search-results" id="searchResults"></div>
+  </div>
 </header>
 
 <main>
@@ -97,7 +139,7 @@
     <h3>1. 大型海域</h3>
     <div class="item"><b>元荒海</b>：地图最西侧的广阔外海，为西部大陆的西界海域。</div>
     <div class="item"><b>苍瀛海</b>：地图最东侧的广阔外海，为东部大陆的东界海域。</div>
-    <div class="item"><b>白绫海</b>：地图最北部的陆缘内海，被北部大陆、夺运岛环绕。</div>
+    <div class="item"><b>白绫海</b>：地图最北部的陆缘内海，被北部大陆、奇迤岛环绕。</div>
     <div class="item"><b>肆星海</b>：地图中南部的核心主海域，位于中部大陆、盎季地与南部诸岛之间，是区域通航核心水域，多星礁。</div>
     <h3>2. 海湾与海峡</h3>
     <div class="item"><b>双生湾</b>：西部大陆南段的元荒海沿岸海湾，为延西河入海口所在区域。</div>
@@ -196,6 +238,23 @@
     <h3>（四）伏熏城官方历法</h3>
     <p>纪元名称：衡历。元年事件：伏熏城邦统一、立衡法、定商事、规整匠艺的建国之年，对应祀元160年。</p>
     <p>换算：衡历年份 = 祀元年份 − 160 = 戍城年 + 40。</p>
+    <h2>历法换算器</h2>
+    <div class="calc">
+      <h3>祀元 ⇄ 戍城 ⇄ 衡历</h3>
+      <div class="calc-row">
+        <label>祀元</label>
+        <input id="calcSiyuan" type="number" placeholder="祀元年份" min="0">
+      </div>
+      <div class="calc-row">
+        <label>戍城</label>
+        <input id="calcShucheng" type="number" placeholder="戍城年份" min="0">
+      </div>
+      <div class="calc-row">
+        <label>衡历</label>
+        <input id="calcHengli" type="number" placeholder="衡历年份" min="0">
+      </div>
+      <div class="calc-out" id="calcOut">在任意一栏输入年份，自动换算其余两历。</div>
+    </div>
     <h2>沧陆通用月份名称</h2>
     <table>
       <tr><th style="width:110px">月份</th><th>时令与典故</th></tr>
@@ -212,6 +271,39 @@
       <tr><td>11月 霜月</td><td>初雪普降，眸霞山脉开始封山。</td></tr>
       <tr><td>12月 烬月</td><td>年尾大祭，也是茹章城每三年一次秘密前往扼根山的出发月。</td></tr>
     </table>
+  </div>
+</section>
+
+<section class="page" id="timePage">
+  <div class="doc fade">
+    <h1>纪年志</h1>
+    <div class="lead">沧陆大事编年 · 从血祭封神到预言终局</div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="era">祀元元年<small>幽荧降世 · 血祭封神</small></div>
+        <p>茹章城纪元开端。官方史书称之为"幽荧降世"；民间隐秘传言则谓"血祭封神"——初代茹章王为换取城邦的强盛，将自己献祭，融入神的心脏，以全城邦世代居民的寿命为代价，换来了茹章城的永恒繁荣。诅咒自此而降：茹章城所有人，无论贵贱，都活不过45岁。</p>
+      </div>
+      <div class="tl-item">
+        <div class="era">祀元160年<small>衡历元年</small></div>
+        <p>伏熏城邦统一，立衡法、定商事、规整匠艺，此年为建国之年，伏熏城官方历法"衡历"由此纪元。对应换算：衡历年份 = 祀元年份 − 160。</p>
+      </div>
+      <div class="tl-item">
+        <div class="era">祀元200年<small>戍城元年</small></div>
+        <p>恓鸟建国，此年为恓鸟城官方历法"戍城年"之元年。对应换算：戍城年份 = 祀元年份 − 200 = 衡历年份 − 40。</p>
+      </div>
+      <div class="tl-item">
+        <div class="era">每三年一祀<small>烬月 · 秘密祭仪</small></div>
+        <p>每隔三年，茹章君主都会率领一支庞大的亲信队伍，于年尾烬月秘密远赴奇迤岛，深入扼根山腹地举行仪式。仪式全程严格保密，对外只宣称"祭天祈福"；唯有民间口耳相传：那是延续诅咒、供养神骸的献祭。</p>
+      </div>
+      <div class="tl-item">
+        <div class="era">世代轮回<small>一轮即一代</small></div>
+        <p>在寿命诅咒之下，茹章城每一代人皆以45年为限，民间私下用"一轮"指代一代人。官方以"删改围罪"清除所有知晓真相者，靠朝贡与扩张转移民众对寿命异常的注意力。强盛的表象之下，绝望在暗处无声蔓延。</p>
+      </div>
+      <div class="tl-item">
+        <div class="era">预言终局<small>神醒之日 · 奇迹崩塌</small></div>
+        <p>预言中，终有一日神会彻底苏醒，以它的规则重写整个世界的秩序——届时，茹章城的"奇迹"将彻底崩塌，而沧陆的格局也将随之改写。</p>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -235,38 +327,56 @@
 </section>
 </main>
 
-<div class="modal-mask" id="modalMask">
-  <div class="modal">
-    <button class="close" id="modalClose">✕</button>
-    <h3 id="modalTitle">标题</h3>
-    <div class="sub" id="modalSub"></div>
-    <div id="modalBody"></div>
-  </div>
-</div>
-
 <script>
-/* ============ 弹窗 ============ */
-const mask = document.getElementById('modalMask');
-function openModal(m){
-  document.getElementById('modalTitle').textContent = m.name;
-  document.getElementById('modalSub').textContent = m.sub || '';
-  document.getElementById('modalBody').innerHTML = '<p>'+(m.desc||'')+'</p>';
-  mask.classList.add('on');
-}
-document.getElementById('modalClose').onclick = ()=> mask.classList.remove('on');
-mask.addEventListener('click', e=>{ if(e.target===mask) mask.classList.remove('on'); });
-document.addEventListener('keydown', e=>{ if(e.key==='Escape') mask.classList.remove('on'); });
-
-/* ============ 城邦卡片 ============ */
+/* ============ 城邦卡片（完整设定） ============ */
 const CITIES = [
   {name:'恓鸟城', role:'西部山城军邦', motto:'薪火相传，守护故土', summary:'别称"悲息之城"，冶铁业冠绝沧陆。宗族长老制 + 卫国者庭军事制衡，崇拜断脊山脉。',
-   detail:['多年边境战火淬炼出极强凝聚力，曾濒临覆灭，凭全民死守守住疆土。','核心支柱为冶铁业，兵器甲胄精良耐用，享誉全沧陆；农业贫瘠，主产土豆、薯蓣，粮食勉强自给。','政治制度为宗族长老制加军事制衡：大宗族世代统治，大长老须获民众认可，年迈必退；卫国者庭由民众组成，制衡宗族；世袭「右判决官」对卫国者庭决议拥有最终否决权。','没有正式宗教，核心精神是"敬自然、重血缘、守故土"，视断脊山脉为守护神。']},
+   detail:[
+    '别称"悲息之城"，整座城市常年笼罩着苍凉沉重的氛围。多年的边境战火给城邦留下了深刻的创伤，也淬炼出了民众极强的凝聚力。城邦曾一度人烟萧条、濒临覆灭，最终凭借全民死守守住了疆土，如今已是西部不可小觑的核心势力。',
+    '凛冽的山风与寒意是城市的印记，"薪火相传、守护故土"是刻在所有民众骨子里的精神内核，凛冽寒风中的万家灯火，是恓鸟城人心中永恒的归宿。',
+    '经济核心支柱为冶铁业，技术高度发达，出产的兵器、甲胄精良耐用，在全沧陆都享有盛名，是城邦最核心的竞争力与财政来源。农业地处内陆山区，耕地有限、气候寒冷，主产土豆、薯蓣等耐寒耐旱作物，粮食仅能勉强自给。',
+    '人口总量不多，但整体民众素质偏高。城邦极度重视知识与文化传承，尤其看重对青年人的价值观塑造，会反复向年轻一代灌输城邦的荣辱历史，强调尚武与守土的信念。',
+    '政治制度为宗族长老制加军事制衡：城邦由单一大宗族世代统治，宗族内部培养体系极其严苛。宗族子弟自幼接受文武双重考核，资质低劣、品行不端者会被直接发配至断脊山脉充军；已居官位者若违德背义、贪腐渎职，同样会被投入牢狱，甚至流放充军。',
+    '最高首领为大长老：从宗族内部的"崇明者"（德高望重、能力出众的长辈）中初步选拔，最终需获得民众认可才能正式上位。大长老并非终身制，年迈体衰后必须主动退位；若出现贪腐怠政、拒不退位，民众公认其失德时，有权联合起来将其推翻。',
+    '军事制衡：卫国者庭。城邦的军事力量不由宗族直接掌控，而是由普通民众组成的卫国者庭掌握，核心职责是守护城邦、制衡统治宗族，防止宗族权力过度膨胀。',
+    '世袭仲裁：右判决官。宗族内有一支单传的世袭血脉，世袭「右判决官」之职，传承不分男女。右判决官对卫国者庭的所有决议拥有异议权与最终否决权，是宗族制衡军事力量的核心手段；若世袭子嗣意外夭折，则由大长老召集全族召开宗族会议，通过特殊仪式选定新的世袭血脉。',
+    '日常行政：法律编订、民生经济、社会治理等事务由大长老牵头的城邦议会负责，议会下辖多个职能分部处理具体社会事务。',
+    '社会结构：城邦居民以本地人居多，宗族成员占比接近半数，是统治与中坚阶层；外来人口可定居生产、享有基本公民权利，也需履行纳税、戍边等义务，但没有参政与进入权力体系的资格。',
+    '精神信仰：没有正式宗教体系，核心精神是"敬自然、重血缘、守故土"，崇拜断脊山脉，将其视作城邦的守护神；重视宗族血脉传承，将先祖的荣光与教训视为最高行为准则。'
+   ]},
   {name:'茹章城', role:'中部神权霸主', motto:'君权神授 · 永恒繁荣', summary:'沧陆公认最强大的城邦，表面繁华鼎盛——实则被百年寿命诅咒笼罩，全城活不过45岁。',
-   detail:['经济、文化、军事全面鼎盛，疆域为诸邦之最，周边小邦称臣朝贡；官方史籍全是辉煌记载。','真相：初代茹章王为换取城邦强盛，将自己献祭融入神的心脏，以全城邦世代居民的寿命为代价——诅咒之下，无论贵贱都活不过45岁。','君主集神权军政于一身，下设社会、经济、外事、监察四大部门，完全以君主意志运转。','每隔三年，君主秘密远赴奇迤岛扼根山举行仪式；以"删改围罪"清除所有真相知晓者，靠扩张转移民众注意力。']},
+   detail:[
+    '表象：全盛的大陆中心。是沧陆公认最繁荣、最强大的城邦，经济、文化、军事全面鼎盛，民众生活富庶安乐，疆域面积为诸邦之最，周边大量小城邦主动称臣朝贡。官方修撰的史籍中全是辉煌记载，强盛仿佛亘古不变、天经地义。',
+    '内里：被诅咒的虚假繁荣。辉煌的表象之下藏着毁灭的宿命：茹章城最初只是一个落后的农耕小城邦，却在极短时间内毫无征兆地爆发式崛起，如同一场"虚伪的奇迹"，随后开始无休止的对外扩张，疆域不断膨胀。',
+    '所有知晓城邦崛起真相、质疑统治合法性的人，都会被冠以"删改围罪"的罪名秘密处死，绝望在暗处无声蔓延。',
+    '政治制度：君主集权神权制。最高统治者集宗教神权、军政大权于一身，自称君权神授，地位至高无上。君主之下设四大核心部门，完全以君主意志为核心运转：',
+    '社会部——体系最庞大的部门，掌管户籍、民生、基建、司法、治安等所有基础行政事务，维持城邦日常运转；经济部——完全遵从君主意志制定经济策略，掌控税收、贸易、粮食储备等核心经济命脉；外事部——统管与外邦的外交往来、朝贡制度、跨境贸易规则，维护宗主地位；监察部——纠察官员僭越、民间异端言论，拥有直接羁押审讯的权力，最终处置完全以君主个人意志为准，不受法律约束。',
+    '信仰的真相：茹章城并不信仰某一位具体的神祇，而是将遥远的扼根山作为精神图腾与信仰载体。官方正史始终声称茹章城与奇迤岛毫无关联；但民间隐秘流传着说法——茹章城的先民，最早就来自奇迤岛。',
+    '三年一次的秘密仪式：每隔三年，君主都会率领一支庞大的亲信队伍，秘密远赴奇迤岛，深入扼根山腹地举行仪式。仪式全程严格保密，对外只宣称是"祭天祈福"。',
+    '百年寿命诅咒：这是茹章城最核心的秘密。扼根山深处的灵祠里，沉睡着一具"不属于这个世界的神之遗骸"（已死亡的远古神明）。初代茹章王为了换取城邦的强盛，将自己献祭，融入了神的心脏，以全城邦世代居民的寿命为代价，换来了永恒繁荣。诅咒之下，全城无论贵贱，都活不过45岁；神的遗骸一直在缓慢吞噬民众的生命余脉，以此维持城邦的气运。预言中，终有一日神会彻底苏醒，以它的规则重写整个世界的秩序，届时茹章城的"奇迹"也将彻底崩塌。',
+    '思想管控与对外扩张：对内实行严格的思想管控，禁止任何质疑城邦历史、探讨寿命异常的言论，用"删改围罪"清除所有真相的知晓者；对外持续推行扩张政策，一方面通过朝贡体系吸纳周边小邦，另一方面用军事手段征服不臣服的势力，通过不断扩张转移民众对内部寿命问题的注意力。'
+   ]},
   {name:'眴姚城', role:'东部商贸港城', motto:'左右逢源 · 以商立邦', summary:'沧陆东部最大港口，苍瀛海航线核心枢纽，海商公会共治，全大陆的信息集散地。',
-   detail:['码头商行会馆林立，既有豪奢商人宅邸，也有拥挤水手街区，市井与商贸活力并存。','无王室君主，由最大几支海商家族组成海商公会联合执政，核心诉求是维护贸易秩序与商人利益。','贸易网络覆盖东西南北：西达中部西部大陆，东至苍瀛海诸岛，南通伏熏岛、南引群岛。','名义上向茹章城称臣朝贡换取贸易保护，实际自治权极高；奉行中立策略，是势力间的缓冲带与信息中转站。']},
+   detail:[
+    '坐落于盎季地东侧沿海，是沧陆东部最大的港口城市，也是苍瀛海航线的核心枢纽。城市风气开放，人员往来混杂，是全沧陆的信息交汇地与商品集散地。',
+    '城市依港而建，码头、商行、会馆林立，既有豪奢的商人宅邸，也有拥挤的水手街区，充满了市井与商贸的活力。',
+    '政治运作：海商公会共治。没有强集权的王室或君主，由城内最大的几支海商家族组成海商公会，联合执掌城邦政务。核心决策均由公会议事会共同商议决定，核心诉求是维护贸易秩序与商人利益。',
+    '贸易网络覆盖沧陆东西南北：向西可通过肆星海抵达中部大陆、西部大陆，向东可远航至苍瀛海诸岛，向南可连通伏熏岛、南引群岛。',
+    '核心交易商品包括：恓鸟城的铁器、茹章城的粮食与手工制品、伏熏岛的火山特产、各岛屿的香料与海产，同时也承接信息倒卖、航运雇佣等业务。',
+    '对外立场：名义上向茹章城称臣、按时朝贡，借此换取茹章城的贸易保护与通航便利；实际上拥有极高的自治权，城邦内部事务茹章城无权干涉。',
+    '在各方势力之间奉行左右逢源的中立策略，不主动站队，与所有城邦都保持贸易往来，是大陆势力之间的缓冲带与信息中转站。'
+   ]},
   {name:'伏熏城', role:'海岛民主之邦', motto:'政团民主 · 务实理性', summary:'火山岛上的独立文明，政团民主制，十年换届选举，多数民众为无神论者。',
-   detail:['坐落于伏熏岛中部腹地，远离大陆，发展出独立文明；贯穿南北的"之丝运河"是海岛经济命脉。','对外管控森严：外来商人只能在东部平安港活动，擅闯腹地者永久驱逐出岛。','政治制度为政团民主制：成年公民可自发组建政团，每十年换届选举执政团与参议团，参议团拥有完整制衡权。','多数民众为无神论者；少数信奉"月教"——以月亮为尊、太阳为卑，信徒昼伏夜出，宗教活动都在夜间举行。']},
+   detail:[
+    '坐落于火山岛伏熏岛的中部腹地，远离大陆，发展出了独立的伏熏文明，与大陆城邦的文化、制度差异显著。',
+    '岛内修有一条贯穿南北的之丝运河，以伏熏城为中心枢纽，串联起全岛的航运与灌溉，是海岛的经济命脉。',
+    '对外管控：城邦并非闭关锁国，但对外边界管控极其森严。外来商人只允许在岛屿东部的平安港范围内活动、交易，严禁踏入狩脊山以西的城邦腹地；若有外人违规闯入腹地，会被城邦卫队抓捕审判，最终永久驱逐出岛，终生不得再登伏熏岛。',
+    '政治制度：政团民主制。所有成年公民都可以自发组建理念不同的政治团体参与城邦治理，人数规模不达标的小型政团没有参选资格。',
+    '换届选举：每十年举行一次全城邦换届选举，分两类，各政团可自主选择参选方向——执政团选举（胜出者执掌城邦日常行政事务）与参议团选举（胜出者负责议事监督、提案表决）。',
+    '权力制衡：参议团拥有完整的制衡权——对于执政团的决议，参议团全员反对即可直接废除；参议团提出的提案，获得多数同意即可正式生效。',
+    '任期与规则：执政团由得票最高的政团出任，参议团总席位不超过十个，二者任期均为十年。所有政团必须先在内部统一立场，再对外进行表决，禁止内部分裂表态。',
+    '信仰与文化：城邦绝大多数民众为无神论者，没有统一的国教，社会整体务实理性。少数民众信奉月教：教义以月亮为尊、以太阳为卑，认为月光是纯净的，日光是污浊的；信徒昼伏夜出，白天闭门不出，刻意规避阳光，所有宗教活动都在夜间举行。'
+   ]},
 ];
 const grid = document.getElementById('cityGrid');
 const detailBox = document.getElementById('cityDetail');
@@ -285,16 +395,153 @@ function showCity(c){
 }
 
 /* ============ 页面切换 ============ */
+function switchPage(id){
+  document.querySelectorAll('nav button').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('section.page').forEach(s=>s.classList.remove('on'));
+  const btn = document.querySelector('nav button[data-page="'+id+'"]');
+  if(btn) btn.classList.add('on');
+  const sec = document.getElementById(id);
+  if(sec){ sec.classList.add('on'); document.querySelector('main').scrollTop = 0; }
+}
 document.querySelectorAll('nav button').forEach(btn=>{
-  btn.onclick = ()=>{
-    document.querySelectorAll('nav button').forEach(b=>b.classList.remove('on'));
-    document.querySelectorAll('section.page').forEach(s=>s.classList.remove('on'));
-    btn.classList.add('on');
-    document.getElementById(btn.dataset.page).classList.add('on');
-  };
+  btn.onclick = ()=>{ switchPage(btn.dataset.page); location.hash = btn.dataset.page; };
 });
-const _h = location.hash.slice(1);
-if(_h){ const _b = document.querySelector('nav button[data-page="'+_h+'"]'); if(_b) _b.click(); }
+
+/* ============ 深链 ============ */
+function applyHash(){
+  const h = location.hash.slice(1);
+  if(!h) return;
+  const parts = h.split('-');
+  const pageId = parts[0];
+  const sec = document.getElementById(pageId);
+  if(!sec) return;
+  switchPage(pageId);
+  if(parts[1]){
+    const kw = parts[1];
+    // 城邦名 → 展开详情
+    const city = CITIES.find(c=>c.name===kw);
+    if(city){ showCity(city); return; }
+    // 条目 → 滚动并高亮
+    const items = sec.querySelectorAll('.item');
+    for(const it of items){
+      const b = it.querySelector('b');
+      if(b && b.textContent.trim()===kw){
+        it.scrollIntoView({behavior:'smooth', block:'center'});
+        it.style.transition='box-shadow .3s'; it.style.boxShadow='0 0 0 2px var(--gold-dim)';
+        setTimeout(()=>{ it.style.boxShadow=''; }, 2200);
+        return;
+      }
+    }
+  }
+}
+window.addEventListener('hashchange', applyHash);
+
+/* ============ 站内搜索 ============ */
+function buildIndex(){
+  const idx = [];
+  document.querySelectorAll('section.page').forEach(sec=>{
+    const pageId = sec.id;
+    const pageName = sec.querySelector('h1').textContent;
+    sec.querySelectorAll('.item').forEach(it=>{
+      const b = it.querySelector('b');
+      if(b) idx.push({page:pageId, pageName, name:b.textContent.trim(), text:it.textContent.replace(b.textContent,'').trim(), el:it});
+    });
+    sec.querySelectorAll('h3').forEach(h3=>{
+      idx.push({page:pageId, pageName, name:h3.textContent.trim(), text:'', el:h3});
+    });
+  });
+  CITIES.forEach(c=>{
+    idx.push({page:'cityPage', pageName:'城邦志', name:c.name, text:c.role+' — '+c.summary, city:c});
+  });
+  return idx;
+}
+const SEARCH_IDX = buildIndex();
+const searchBox = document.getElementById('searchBox');
+const searchResults = document.getElementById('searchResults');
+function doSearch(q){
+  q = q.trim();
+  if(!q){ searchResults.classList.remove('on'); searchResults.innerHTML=''; return; }
+  const hits = SEARCH_IDX.filter(e=> (e.name+' '+e.text).indexOf(q) >= 0).slice(0, 12);
+  if(!hits.length){
+    searchResults.innerHTML = '<div class="no-hit">未检索到「'+q+'」</div>';
+  } else {
+    searchResults.innerHTML = hits.map(h=>{
+      const i = (h.name+' '+h.text).indexOf(q);
+      const label = (h.name+' '+h.text).slice(0, 46);
+      return '<div class="hit" data-kw="'+h.name+'"><b>'+h.name+'</b><small>'+h.pageName+' · '+label+'</small></div>';
+    }).join('');
+  }
+  searchResults.classList.add('on');
+}
+searchBox.addEventListener('input', ()=> doSearch(searchBox.value));
+searchBox.addEventListener('focus', ()=>{ if(searchBox.value) doSearch(searchBox.value); });
+searchResults.addEventListener('click', e=>{
+  const hit = e.target.closest('.hit');
+  if(!hit) return;
+  const kw = hit.dataset.kw;
+  searchResults.classList.remove('on');
+  searchBox.value = '';
+  const city = CITIES.find(c=>c.name===kw);
+  if(city){ switchPage('cityPage'); showCity(city); return; }
+  const found = SEARCH_IDX.find(x=>x.name===kw && x.el);
+  if(found){
+    switchPage(found.page);
+    found.el.scrollIntoView({behavior:'smooth', block:'center'});
+    found.el.style.transition='box-shadow .3s'; found.el.style.boxShadow='0 0 0 2px var(--gold-dim)';
+    setTimeout(()=>{ found.el.style.boxShadow=''; }, 2200);
+  }
+});
+document.addEventListener('click', e=>{
+  if(!e.target.closest('.search-wrap')) searchResults.classList.remove('on');
+});
+searchBox.addEventListener('keydown', e=>{
+  if(e.key==='Enter' && searchResults.querySelector('.hit')){
+    searchResults.querySelector('.hit').click();
+  }
+});
+
+/* ============ 历法换算器 ============ */
+const inSiyuan = document.getElementById('calcSiyuan');
+const inShucheng = document.getElementById('calcShucheng');
+const inHengli = document.getElementById('calcHengli');
+const calcOut = document.getElementById('calcOut');
+function fmt(n){ return n < 0 ? '祀元前'+(-n)+'年' : n + '年'; }
+function updateCalc(src){
+  let sy = inSiyuan.value, sc = inShucheng.value, hl = inHengli.value;
+  if(src==='siyuan' && sy !== ''){
+    const v = parseInt(sy, 10);
+    if(!isNaN(v)){
+      inShucheng.value = v - 200;
+      inHengli.value = v - 160;
+      calcOut.innerHTML = '祀元 <b>'+fmt(v)+'</b> 即戍城 <b>'+fmt(v-200)+'</b>，衡历 <b>'+fmt(v-160)+'</b>。';
+      return;
+    }
+  }
+  if(src==='shucheng' && sc !== ''){
+    const v = parseInt(sc, 10);
+    if(!isNaN(v)){
+      inSiyuan.value = v + 200;
+      inHengli.value = v + 40;
+      calcOut.innerHTML = '戍城 <b>'+fmt(v)+'</b> 即祀元 <b>'+fmt(v+200)+'</b>，衡历 <b>'+fmt(v+40)+'</b>。';
+      return;
+    }
+  }
+  if(src==='hengli' && hl !== ''){
+    const v = parseInt(hl, 10);
+    if(!isNaN(v)){
+      inSiyuan.value = v + 160;
+      inShucheng.value = v - 40;
+      calcOut.innerHTML = '衡历 <b>'+fmt(v)+'</b> 即祀元 <b>'+fmt(v+160)+'</b>，戍城 <b>'+fmt(v-40)+'</b>。';
+      return;
+    }
+  }
+}
+inSiyuan.addEventListener('input', ()=>{ if(inSiyuan.value) updateCalc('siyuan'); });
+inShucheng.addEventListener('input', ()=>{ if(inShucheng.value) updateCalc('shucheng'); });
+inHengli.addEventListener('input', ()=>{ if(inHengli.value) updateCalc('hengli'); });
+
+/* ============ 初始定位 ============ */
+applyHash();
 </script>
 </body>
 </html>
