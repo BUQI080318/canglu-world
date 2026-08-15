@@ -14,10 +14,11 @@
     --input-bg:var(--panel); --item-bg:var(--panel); --item-hover:var(--panel);
     --glow:rgba(200,162,74,.3); --shadow:rgba(0,0,0,.55);
     --paper-texture:none;
-    --glass-bg:rgba(23,28,40,.55); --glass-brd:rgba(255,255,255,.10);
-    --glass-hl:inset 0 1px 0 rgba(255,255,255,.09); --glass-shadow:0 8px 32px rgba(0,0,0,.38);
-    --glass-blur:blur(18px) saturate(170%);
-    --blob-gold:rgba(200,162,74,.20); --blob-blue:rgba(96,125,190,.16);
+    --glass-bg:rgba(22,28,42,.38); --glass-brd:rgba(255,255,255,.17);
+    --glass-hl:inset 0 1px 0 rgba(255,255,255,.16),inset 0 -1px 0 rgba(255,255,255,.04);
+    --glass-shadow:0 8px 32px rgba(0,0,0,.45);
+    --glass-blur:blur(22px) saturate(190%);
+    --blob-gold:rgba(212,175,90,.38); --blob-blue:rgba(110,140,215,.30); --blob-violet:rgba(150,110,200,.26);
   }
   html[data-theme="light"]{
     --bg:#f2ecdd; --panel:#ece4d2; --panel2:#e4dac2; --line:#cdc2a8;
@@ -30,10 +31,11 @@
     --glow:rgba(166,58,46,.3); --shadow:rgba(60,50,30,.28);
     --paper-texture:url('data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%271600%27%20height=%271000%27%3E%3Cg%20fill=%27none%27%20stroke=%27%234a4238%27%20stroke-width=%272%27%20opacity=%270.08%27%3E%3Cpath%20d=%27M0,640%20Q180,520%20380,600%20T760,540%20T1160,610%20T1600,560%20L1600,1000%20L0,1000%20Z%27%20fill=%27%234a4238%27%20fill-opacity=%270.04%27/%3E%3Cpath%20d=%27M0,720%20Q220,640%20460,700%20T900,660%20T1320,710%20L1600,680%27/%3E%3Cpath%20d=%27M0,800%20Q300,740%20560,790%20T1040,760%20T1600,790%27/%3E%3C/g%3E%3C/svg%3E');
  
-    --glass-bg:rgba(255,255,255,.46); --glass-brd:rgba(255,255,255,.75);
-    --glass-hl:inset 0 1px 0 rgba(255,255,255,.95); --glass-shadow:0 8px 32px rgba(60,50,30,.12);
-    --glass-blur:blur(18px) saturate(160%);
-    --blob-gold:rgba(200,162,74,.16); --blob-blue:rgba(96,125,190,.12);
+    --glass-bg:rgba(255,255,255,.30); --glass-brd:rgba(255,255,255,.9);
+    --glass-hl:inset 0 1px 0 rgba(255,255,255,1),inset 0 -1px 0 rgba(255,255,255,.5);
+    --glass-shadow:0 8px 32px rgba(60,50,30,.14);
+    --glass-blur:blur(22px) saturate(170%);
+    --blob-gold:rgba(212,175,90,.30); --blob-blue:rgba(110,140,215,.24); --blob-violet:rgba(150,110,200,.20);
   }
   @media (prefers-color-scheme: light){
     html:not([data-theme="dark"]){
@@ -46,11 +48,11 @@
       --item-hover:rgba(255,255,255,.6);
       --glow:rgba(166,58,46,.3); --shadow:rgba(60,50,30,.28);
       --paper-texture:url('data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%271600%27%20height=%271000%27%3E%3Cg%20fill=%27none%27%20stroke=%27%234a4238%27%20stroke-width=%272%27%20opacity=%270.08%27%3E%3Cpath%20d=%27M0,640%20Q180,520%20380,600%20T760,540%20T1160,610%20T1600,560%20L1600,1000%20L0,1000%20Z%27%20fill=%27%234a4238%27%20fill-opacity=%270.04%27/%3E%3Cpath%20d=%27M0,720%20Q220,640%20460,700%20T900,660%20T1320,710%20L1600,680%27/%3E%3Cpath%20d=%27M0,800%20Q300,740%20560,790%20T1040,760%20T1600,790%27/%3E%3C/g%3E%3C/svg%3E');
-    }
-    --glass-bg:rgba(255,255,255,.46); --glass-brd:rgba(255,255,255,.75);
-    --glass-hl:inset 0 1px 0 rgba(255,255,255,.95); --glass-shadow:0 8px 32px rgba(60,50,30,.12);
-    --glass-blur:blur(18px) saturate(160%);
-    --blob-gold:rgba(200,162,74,.16); --blob-blue:rgba(96,125,190,.12);
+      --glass-bg:rgba(255,255,255,.30); --glass-brd:rgba(255,255,255,.9);
+      --glass-hl:inset 0 1px 0 rgba(255,255,255,1),inset 0 -1px 0 rgba(255,255,255,.5);
+      --glass-shadow:0 8px 32px rgba(60,50,30,.14);
+      --glass-blur:blur(22px) saturate(170%);
+      --blob-gold:rgba(212,175,90,.30); --blob-blue:rgba(110,140,215,.24); --blob-violet:rgba(150,110,200,.20);
     }
   }
 
@@ -60,13 +62,27 @@
     background-size:1600px 1000px,auto;background-attachment:fixed;
     color:var(--ink);font-family:"Microsoft YaHei","PingFang SC",sans-serif;overflow-x:hidden;
   }
-  /* 环境光斑（液态玻璃的透光来源） */
+  /* 环境光斑（液态玻璃的透光来源，缓慢漂移） */
   body::before,body::after{
-    content:"";position:fixed;width:58vw;height:58vw;border-radius:50%;
-    filter:blur(70px);pointer-events:none;z-index:0;transition:opacity .6s;
+    content:"";position:fixed;width:62vw;height:62vw;border-radius:50%;
+    filter:blur(80px);pointer-events:none;z-index:0;
+    animation:blobDrift 26s ease-in-out infinite alternate;
   }
-  body::before{left:-16vw;top:-22vh;background:radial-gradient(circle,var(--blob-gold),transparent 65%)}
-  body::after{right:-18vw;bottom:-24vh;background:radial-gradient(circle,var(--blob-blue),transparent 65%)}
+  body::before{left:-18vw;top:-24vh;background:radial-gradient(circle,var(--blob-gold),transparent 65%)}
+  body::after{right:-20vw;bottom:-26vh;background:radial-gradient(circle,var(--blob-blue),transparent 65%);animation-delay:-13s}
+  body::marker{display:none}
+  /* 第三个光斑：用 html::after 承载（紫色） */
+  html::after{
+    content:"";position:fixed;width:48vw;height:48vw;border-radius:50%;
+    left:34vw;top:8vh;background:radial-gradient(circle,var(--blob-violet),transparent 65%);
+    filter:blur(90px);pointer-events:none;z-index:0;
+    animation:blobDrift 32s ease-in-out infinite alternate-reverse;
+  }
+  @keyframes blobDrift{
+    0%{transform:translate(0,0) scale(1)}
+    50%{transform:translate(6vw,5vh) scale(1.15)}
+    100%{transform:translate(-4vw,-3vh) scale(.95)}
+  }
   main{position:fixed;top:56px;left:0;right:0;bottom:0;overflow-y:auto;z-index:1}
   /* 玻璃通用类 */
   .glass{
@@ -79,8 +95,10 @@
   .glass-shine{position:relative}
   .glass-shine::after{
     content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
-    background:radial-gradient(260px circle at var(--gx,50%) var(--gy,50%),rgba(255,255,255,.16),transparent 65%);
-    opacity:0;transition:opacity .35s;z-index:1;
+    background:
+      radial-gradient(300px circle at var(--gx,50%) var(--gy,50%),rgba(255,255,255,.28),transparent 62%),
+      linear-gradient(135deg,rgba(255,255,255,.10) 0%,transparent 42%);
+    opacity:0;transition:opacity .3s;z-index:1;
   }
   .glass-shine:hover::after{opacity:1}
   .glass-shine > *{position:relative;z-index:2}
@@ -195,7 +213,7 @@
   mark.hl{background:rgba(200,162,74,.28);color:var(--gold);padding:0 2px;border-radius:2px}
   /* 手风琴章节卡片 */
   .acc-card{margin:14px 0;background:var(--card-bg);border:1px solid var(--line);border-radius:8px;overflow:hidden;transition:border-color .25s}
-  .acc-card.open{border-color:var(--gold-dim);box-shadow:var(--glass-hl),0 10px 34px var(--shadow)}
+  .acc-card.open{border-color:var(--gold);box-shadow:var(--glass-hl),0 12px 40px var(--shadow),0 0 18px var(--glow)}
   .acc-head{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;user-select:none;transition:background .2s}
   .acc-head:hover{background:rgba(200,162,74,.07)}
   .acc-head .acc-title{color:var(--gold);font-size:17px;letter-spacing:3px;font-weight:bold}
