@@ -276,7 +276,7 @@
   input, textarea, select, [contenteditable]{cursor:text !important}
   #cursorRing{
     position:fixed;left:0;top:0;width:26px;height:26px;border:1px solid var(--gold);
-    border-radius:50%;pointer-events:none;z-index:9999;opacity:0;transform:translate(-50%,-50%);
+    border-radius:50%;pointer-events:none;z-index:2147483647;opacity:0;transform:translate(-50%,-50%);
     box-shadow:0 0 12px var(--glow),inset 0 0 6px var(--glow);
     transition:opacity .25s,width .2s,height .2s,transform .12s;
   }
@@ -806,10 +806,9 @@
     <span></span><span></span><span></span><span></span><span></span>
   </div>
   <div class="music-now" id="musicNow"><b>沧陆</b><span class="music-hint">· 静候佳音</span></div>
-</div>
-<div id="cursorRing"></div>
+  </div>
 
-<div class="logo-intro-mask" id="logoIntroMask">
+  <div class="logo-intro-mask" id="logoIntroMask">
   <div class="logo-intro-box">
     <button class="logo-intro-close" id="logoIntroClose">✕</button>
     <h3>徽记释义 · 沧陆全域总LOGO</h3>
@@ -1742,5 +1741,6 @@ function animatePageIn(sec){
   applyMotion();
 })();
 </script>
+<div id="cursorRing"></div>
 </body>
 </html>
