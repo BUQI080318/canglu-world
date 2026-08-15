@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>沧陆 · CANG LU</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2220%22%20fill%3D%22%230d1017%22/%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2250%22%20r%3D%2240%22%20fill%3D%22none%22%20stroke%3D%22%23c8a24a%22%20stroke-width%3D%223%22/%3E%3Cpath%20d%3D%22M24%2060%20L38%2038%20L46%2050%20L54%2036%20L70%2060%20Z%22%20fill%3D%22none%22%20stroke%3D%22%23c8a24a%22%20stroke-width%3D%223%22%20stroke-linejoin%3D%22round%22/%3E%3Cpath%20d%3D%22M24%2066%20Q38%2062%2050%2066%20T76%2066%22%20fill%3D%22none%22%20stroke%3D%22%23c8a24a%22%20stroke-width%3D%222%22%20opacity%3D%220.8%22/%3E%3Ccircle%20cx%3D%2263%22%20cy%3D%2232%22%20r%3D%224%22%20fill%3D%22%23c8a24a%22/%3E%3C/svg%3E">
+<link rel="icon" href="assets/favicon.png">
 <style>
   :root{
     --bg:#0d1017; --panel:#161b26; --panel2:#1e2736; --line:#2a3344;
@@ -359,9 +359,17 @@
   @media (max-width:700px){ .theme-btn{font-size:12px;padding:6px 8px} }
   /* 品牌 LOGO */
   .brand{display:flex;align-items:center;gap:9px}
-  .logo-mark{width:34px;height:34px;color:var(--gold);display:inline-flex;flex-shrink:0;filter:drop-shadow(0 0 6px var(--glow));transition:transform .5s cubic-bezier(.22,.61,.36,1)}
+  .logo-mark{
+    width:36px;height:36px;display:inline-flex;flex-shrink:0;
+    background:url('assets/logo_gold.png') center/contain no-repeat;
+    filter:drop-shadow(0 0 6px var(--glow));
+    transition:transform .5s cubic-bezier(.22,.61,.36,1);
+  }
   .brand:hover .logo-mark{transform:rotate(8deg) scale(1.08)}
-  .logo-mark svg{width:100%;height:100%}
+  html[data-theme="light"] .logo-mark{background-image:url('assets/logo_ink.png')}
+  @media (prefers-color-scheme: light){
+    html:not([data-theme="dark"]) .logo-mark{background-image:url('assets/logo_ink.png')}
+  }
   /* 标题小巧思 */
   .doc h1{display:flex;align-items:center;justify-content:center;gap:18px;font-size:32px;letter-spacing:10px;margin-bottom:8px;font-weight:bold}
   .doc h1::before,.doc h1::after{
@@ -391,18 +399,7 @@
 <body>
 
 <header>
-  <div class="brand"><span class="logo-mark" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <circle cx="50" cy="50" r="47" fill="none" stroke="currentColor" stroke-width="2"/>
-  <circle cx="50" cy="50" r="41" fill="none" stroke="currentColor" stroke-width="0.8" opacity="0.45"/>
-  <circle cx="50" cy="50" r="35" fill="none" stroke="currentColor" stroke-width="0.5" opacity="0.25" stroke-dasharray="2 3"/>
-  <path d="M20 62 L36 36 L45 50 L54 34 L74 62 Z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
-  <path d="M30 50 L36 42 L42 50" fill="none" stroke="currentColor" stroke-width="1.1" opacity="0.55"/>
-  <path d="M18 68 Q34 63.5 50 68 T82 68" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.75" stroke-linecap="round"/>
-  <path d="M18 74 Q34 69.5 50 74 T82 74" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.45" stroke-linecap="round"/>
-  <path d="M18 80 Q34 75.5 50 80 T82 80" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.22" stroke-linecap="round"/>
-  <circle cx="67" cy="28" r="4.5" fill="currentColor"/>
-  <circle cx="67" cy="28" r="8" fill="none" stroke="currentColor" stroke-width="0.7" opacity="0.5"/>
-</svg></span>沧陆<small>CANG LU</small></div>
+  <div class="brand"><span class="logo-mark" aria-hidden="true"></span>沧陆<small>CANG LU</small></div>
   <nav>
     <button class="on" data-page="geoPage">地理</button>
     <button data-page="cityPage">城邦</button>
