@@ -21,6 +21,19 @@
     --glass-blur:blur(22px) saturate(190%);
     --blob-gold:rgba(212,175,90,.38); --blob-blue:rgba(110,140,215,.30); --blob-violet:rgba(150,110,200,.26);
   }
+  :root{
+    --pm-hostile:rgba(196,92,72,.95);
+    --pm-tribute:rgba(212,169,78,.95);
+    --pm-trade:rgba(112,150,210,.9);
+    --pm-isolated:rgba(158,116,208,.8);
+  }
+  html[data-theme="light"], html:not([data-theme="dark"]){
+    --pm-hostile:rgba(176,74,56,.95);
+    --pm-tribute:rgba(168,132,46,.95);
+    --pm-trade:rgba(74,116,168,.95);
+    --pm-isolated:rgba(122,90,168,.9);
+  }
+
   html[data-theme="light"]{
     --bg:#f2ecdd; --panel:#ece4d2; --panel2:#e4dac2; --line:#cdc2a8;
     --ink:#332e26; --ink-dim:#857a67; --gold:#a63a2e; --gold-dim:#b5756a;
@@ -623,15 +636,15 @@
   .pm-node circle.pm-core{fill:var(--gold);opacity:.92;transition:all .3s}
   .pm-node:hover circle.pm-ring{stroke-width:2.6;opacity:1}
   .pm-node:hover circle.pm-core{fill:#e8cd8a;opacity:1}
-  .pm-node text{fill:var(--ink);font-size:14px;letter-spacing:2px;font-family:inherit;pointer-events:none;text-anchor:middle}
+  .pm-node text{fill:var(--ink);font-size:14px;letter-spacing:2px;font-family:inherit;pointer-events:none;text-anchor:middle;paint-order:stroke;stroke:var(--bg);stroke-width:4px;stroke-linejoin:round}
   .pm-node .pm-sub{fill:var(--ink-dim);font-size:10.5px;letter-spacing:1px;pointer-events:none;text-anchor:middle}
   .pm-node.active circle.pm-ring{stroke-width:3;stroke:#e8cd8a;filter:drop-shadow(0 0 8px rgba(200,162,74,.9))}
   .pm-node.active circle.pm-core{fill:#e8cd8a}
   .pm-line{fill:none;stroke-width:1.6;stroke-dasharray:6 5;animation:pmFlow 2.6s linear infinite}
-  .pm-line.hostile{stroke:rgba(190,80,60,.85)}
-  .pm-line.tribute{stroke:rgba(200,162,74,.8)}
-  .pm-line.trade{stroke:rgba(110,150,205,.75)}
-  .pm-line.isolated{stroke:rgba(150,110,200,.55);stroke-dasharray:2 7;animation:none}
+  .pm-line.hostile{stroke:var(--pm-hostile)}
+  .pm-line.tribute{stroke:var(--pm-tribute)}
+  .pm-line.trade{stroke:var(--pm-trade)}
+  .pm-line.isolated{stroke:var(--pm-isolated);stroke-dasharray:2 7;animation:none}
   .pm-line-label{fill:var(--ink-dim);font-size:10px;letter-spacing:1px;font-family:inherit;pointer-events:none;text-anchor:middle}
   @keyframes pmFlow{to{stroke-dashoffset:-22}}
   /* 点击详情面板 */
@@ -648,10 +661,10 @@
   .pm-legend{display:flex;flex-wrap:wrap;gap:14px;margin:8px 2px 2px;font-size:11.5px;color:var(--ink-dim);letter-spacing:1px}
   .pm-legend span{display:inline-flex;align-items:center;gap:6px}
   .pm-legend i{display:inline-block;width:22px;height:0;border-top:2px dashed}
-  .pm-legend .h{border-color:rgba(190,80,60,.85)}
-  .pm-legend .t{border-color:rgba(200,162,74,.8)}
-  .pm-legend .tr{border-color:rgba(110,150,205,.75)}
-  .pm-legend .i{border-color:rgba(150,110,200,.55);border-top-style:dotted}
+  .pm-legend .h{border-color:var(--pm-hostile)}
+  .pm-legend .t{border-color:var(--pm-tribute)}
+  .pm-legend .tr{border-color:var(--pm-trade)}
+  .pm-legend .i{border-color:var(--pm-isolated);border-top-style:dotted}
   @media (max-width:700px){
     .power-map{padding:10px}
     .pm-node text{font-size:11px}
@@ -1391,7 +1404,7 @@ applyHash();
 
     // 孤立环（伏熏自守虚线环）
     var f = NODES.fuxun;
-    var iso = mk('ellipse', {cx:f.x, cy:f.y, rx:64, ry:42, fill:'none', 'class':'pm-line isolated'});
+    var iso = mk('ellipse', {cx:f.x, cy:f.y, rx:56, ry:36, fill:'none', 'class':'pm-line isolated'});
     edges.appendChild(iso);
 
     EDGES.forEach(function(e){
@@ -1400,7 +1413,7 @@ applyHash();
       var line = mk('line', {x1:a.x, y1:a.y, x2:b.x, y2:b.y, 'class':'pm-line ' + e.type});
       edges.appendChild(line);
       // 关系标签（中点上方）
-      var mx = (a.x+b.x)/2, my = (a.y+b.y)/2 - 12;
+      var mx = (a.x+b.x)/2, my = (a.y+b.y)/2 - 16;
       var lab = mk('text', {x:mx, y:my, 'class':'pm-line-label'});
       lab.textContent = en ? e.en : e.zh;
       edges.appendChild(lab);
@@ -1411,10 +1424,10 @@ applyHash();
       var g = mk('g', {'class':'pm-node', 'data-key':key});
       g.appendChild(mk('circle', {cx:n.x, cy:n.y, r:20, 'class':'pm-ring'}));
       g.appendChild(mk('circle', {cx:n.x, cy:n.y, r:10, 'class':'pm-core'}));
-      var t1 = mk('text', {x:n.x, y:n.y + 40, 'class':'pm-name'});
+      var t1 = mk('text', {x:n.x, y:n.y + 46, 'class':'pm-name'});
       t1.textContent = en ? n.en : n.zh;
       g.appendChild(t1);
-      var t2 = mk('text', {x:n.x, y:n.y + 58, 'class':'pm-sub'});
+      var t2 = mk('text', {x:n.x, y:n.y + 66, 'class':'pm-sub'});
       t2.textContent = en ? n.subEn : n.subZh;
       g.appendChild(t2);
       g.addEventListener('click', function(){ showDetail(key); });
