@@ -14,6 +14,10 @@
     --input-bg:var(--panel); --item-bg:var(--panel); --item-hover:var(--panel);
     --glow:rgba(200,162,74,.3); --shadow:rgba(0,0,0,.55);
     --paper-texture:none;
+    --glass-bg:rgba(23,28,40,.55); --glass-brd:rgba(255,255,255,.10);
+    --glass-hl:inset 0 1px 0 rgba(255,255,255,.09); --glass-shadow:0 8px 32px rgba(0,0,0,.38);
+    --glass-blur:blur(18px) saturate(170%);
+    --blob-gold:rgba(200,162,74,.20); --blob-blue:rgba(96,125,190,.16);
   }
   html[data-theme="light"]{
     --bg:#f2ecdd; --panel:#ece4d2; --panel2:#e4dac2; --line:#cdc2a8;
@@ -25,6 +29,11 @@
     --item-hover:rgba(255,255,255,.6);
     --glow:rgba(166,58,46,.3); --shadow:rgba(60,50,30,.28);
     --paper-texture:url('data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%271600%27%20height=%271000%27%3E%3Cg%20fill=%27none%27%20stroke=%27%234a4238%27%20stroke-width=%272%27%20opacity=%270.08%27%3E%3Cpath%20d=%27M0,640%20Q180,520%20380,600%20T760,540%20T1160,610%20T1600,560%20L1600,1000%20L0,1000%20Z%27%20fill=%27%234a4238%27%20fill-opacity=%270.04%27/%3E%3Cpath%20d=%27M0,720%20Q220,640%20460,700%20T900,660%20T1320,710%20L1600,680%27/%3E%3Cpath%20d=%27M0,800%20Q300,740%20560,790%20T1040,760%20T1600,790%27/%3E%3C/g%3E%3C/svg%3E');
+ 
+    --glass-bg:rgba(255,255,255,.46); --glass-brd:rgba(255,255,255,.75);
+    --glass-hl:inset 0 1px 0 rgba(255,255,255,.95); --glass-shadow:0 8px 32px rgba(60,50,30,.12);
+    --glass-blur:blur(18px) saturate(160%);
+    --blob-gold:rgba(200,162,74,.16); --blob-blue:rgba(96,125,190,.12);
   }
   @media (prefers-color-scheme: light){
     html:not([data-theme="dark"]){
@@ -38,15 +47,62 @@
       --glow:rgba(166,58,46,.3); --shadow:rgba(60,50,30,.28);
       --paper-texture:url('data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%271600%27%20height=%271000%27%3E%3Cg%20fill=%27none%27%20stroke=%27%234a4238%27%20stroke-width=%272%27%20opacity=%270.08%27%3E%3Cpath%20d=%27M0,640%20Q180,520%20380,600%20T760,540%20T1160,610%20T1600,560%20L1600,1000%20L0,1000%20Z%27%20fill=%27%234a4238%27%20fill-opacity=%270.04%27/%3E%3Cpath%20d=%27M0,720%20Q220,640%20460,700%20T900,660%20T1320,710%20L1600,680%27/%3E%3Cpath%20d=%27M0,800%20Q300,740%20560,790%20T1040,760%20T1600,790%27/%3E%3C/g%3E%3C/svg%3E');
     }
+    --glass-bg:rgba(255,255,255,.46); --glass-brd:rgba(255,255,255,.75);
+    --glass-hl:inset 0 1px 0 rgba(255,255,255,.95); --glass-shadow:0 8px 32px rgba(60,50,30,.12);
+    --glass-blur:blur(18px) saturate(160%);
+    --blob-gold:rgba(200,162,74,.16); --blob-blue:rgba(96,125,190,.12);
+    }
   }
 
   *{margin:0;padding:0;box-sizing:border-box}
-  body{background:var(--bg);background-image:var(--paper-texture);background-size:1600px 1000px,auto;background-attachment:fixed;color:var(--ink);font-family:"Microsoft YaHei","PingFang SC",sans-serif;overflow-x:hidden}
+  body{
+    background:var(--bg);background-image:var(--paper-texture);
+    background-size:1600px 1000px,auto;background-attachment:fixed;
+    color:var(--ink);font-family:"Microsoft YaHei","PingFang SC",sans-serif;overflow-x:hidden;
+  }
+  /* 环境光斑（液态玻璃的透光来源） */
+  body::before,body::after{
+    content:"";position:fixed;width:58vw;height:58vw;border-radius:50%;
+    filter:blur(70px);pointer-events:none;z-index:0;transition:opacity .6s;
+  }
+  body::before{left:-16vw;top:-22vh;background:radial-gradient(circle,var(--blob-gold),transparent 65%)}
+  body::after{right:-18vw;bottom:-24vh;background:radial-gradient(circle,var(--blob-blue),transparent 65%)}
+  main{position:fixed;top:56px;left:0;right:0;bottom:0;overflow-y:auto;z-index:1}
+  /* 玻璃通用类 */
+  .glass{
+    background:var(--glass-bg) !important;
+    -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+    border-color:var(--glass-brd) !important;
+    box-shadow:var(--glass-hl),var(--glass-shadow) !important;
+  }
+  /* 鼠标高光层（液态玻璃标志） */
+  .glass-shine{position:relative}
+  .glass-shine::after{
+    content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+    background:radial-gradient(260px circle at var(--gx,50%) var(--gy,50%),rgba(255,255,255,.16),transparent 65%);
+    opacity:0;transition:opacity .35s;z-index:1;
+  }
+  .glass-shine:hover::after{opacity:1}
+  .glass-shine > *{position:relative;z-index:2}
+  /* 页面切换动画 */
+  section.page.on .doc{animation:pageIn .5s cubic-bezier(.22,.61,.36,1)}
+  @keyframes pageIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  /* 卡片悬停缩放 */
+  .city-card,.acc-card,.month-card,.tl-item,.calc{transition:transform .25s cubic-bezier(.22,.61,.36,1),box-shadow .25s,border-color .25s}
+  .city-card:hover,.month-card:hover{transform:translateY(-3px) scale(1.012)}
+  .acc-card:hover,.calc:hover,.tl-item:hover{transform:translateY(-2px)}
+  /* 滚动条 */
+  ::-webkit-scrollbar{width:9px;height:9px}
+  ::-webkit-scrollbar-track{background:transparent}
+  ::-webkit-scrollbar-thumb{background:var(--glass-brd);border-radius:5px;border:2px solid transparent;background-clip:content-box}
+  ::-webkit-scrollbar-thumb:hover{background:var(--gold-dim);border:2px solid transparent;background-clip:content-box}
   header{
     position:fixed;top:0;left:0;right:0;height:56px;z-index:100;
     display:flex;align-items:center;padding:0 20px;gap:10px;
-    background:var(--header-bg);
-    border-bottom:1px solid var(--line);backdrop-filter:blur(6px);
+    background:var(--glass-bg);
+    -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+    border-bottom:1px solid var(--glass-brd);
+    box-shadow:var(--glass-hl),0 4px 24px var(--shadow);
   }
   .brand{font-size:20px;letter-spacing:6px;color:var(--gold);font-weight:bold;margin-right:14px;white-space:nowrap}
   .brand small{font-size:11px;color:var(--ink-dim);letter-spacing:2px;margin-left:6px}
@@ -61,10 +117,12 @@
   /* 搜索框 */
   .search-wrap{position:relative;margin-left:auto}
   .search-box{
-    background:var(--input-bg);border:1px solid var(--line);border-radius:4px;
+    background:var(--input-bg);border:1px solid var(--glass-brd);border-radius:8px;
     color:var(--ink);font-family:inherit;font-size:14px;padding:7px 12px;width:190px;
-    outline:none;transition:border-color .2s;
+    outline:none;transition:border-color .2s,box-shadow .2s;
+    -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
   }
+  .search-box:focus{border-color:var(--gold-dim);box-shadow:0 0 0 3px var(--glow)}
   .search-box:focus{border-color:var(--gold-dim)}
   .search-box::placeholder{color:var(--ink-dim);letter-spacing:2px}
   .search-results{
@@ -137,7 +195,7 @@
   mark.hl{background:rgba(200,162,74,.28);color:var(--gold);padding:0 2px;border-radius:2px}
   /* 手风琴章节卡片 */
   .acc-card{margin:14px 0;background:var(--card-bg);border:1px solid var(--line);border-radius:8px;overflow:hidden;transition:border-color .25s}
-  .acc-card.open{border-color:var(--gold-dim)}
+  .acc-card.open{border-color:var(--gold-dim);box-shadow:var(--glass-hl),0 10px 34px var(--shadow)}
   .acc-head{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;user-select:none;transition:background .2s}
   .acc-head:hover{background:rgba(200,162,74,.07)}
   .acc-head .acc-title{color:var(--gold);font-size:17px;letter-spacing:3px;font-weight:bold}
@@ -205,9 +263,10 @@
   }
   /* 主题切换按钮 */
   .theme-btn{
-    background:var(--panel);border:1px solid var(--line);color:var(--ink-dim);
-    font-family:inherit;font-size:13px;letter-spacing:1px;padding:7px 12px;border-radius:4px;
-    cursor:pointer;transition:all .2s;white-space:nowrap;
+    background:var(--glass-bg);border:1px solid var(--glass-brd);color:var(--ink-dim);
+    font-family:inherit;font-size:13px;letter-spacing:1px;padding:7px 12px;border-radius:8px;
+    cursor:pointer;transition:all .25s;white-space:nowrap;
+    -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:var(--glass-hl);
   }
   .theme-btn:hover{color:var(--gold);border-color:var(--gold-dim)}
   @media (max-width:700px){ .theme-btn{font-size:12px;padding:6px 8px} }
@@ -476,7 +535,7 @@ const grid = document.getElementById('cityGrid');
 const detailBox = document.getElementById('cityDetail');
 CITIES.forEach(c=>{
   const card = document.createElement('div');
-  card.className = 'city-card';
+  card.className = 'city-card glass-shine';
   card.innerHTML = '<h4>'+c.name+'</h4><div class="role">'+c.role+'</div><p>'+c.summary+'</p>';
   card.onclick = ()=> showCity(c);
   grid.appendChild(card);
@@ -509,7 +568,7 @@ const landmarkGrid = document.getElementById('landmarkGrid');
 const landmarkDetail = document.getElementById('landmarkDetail');
 LANDMARKS.forEach(l=>{
   const card = document.createElement('div');
-  card.className = 'city-card';
+  card.className = 'city-card glass-shine';
   card.innerHTML = '<h4>'+l.name+'</h4><div class="role">'+l.role+'</div><p>'+l.summary+'</p>';
   card.onclick = ()=> showLandmark(l);
   landmarkGrid.appendChild(card);
@@ -876,6 +935,19 @@ function revealItem(el){
   renderList();
 })();
 
+
+
+/* ============ 液态玻璃鼠标高光 ============ */
+(function(){
+  if(!window.matchMedia || !matchMedia('(pointer:fine)').matches) return;
+  document.addEventListener('mousemove', function(e){
+    var el = e.target.closest ? e.target.closest('.glass-shine') : null;
+    if(!el) return;
+    var r = el.getBoundingClientRect();
+    el.style.setProperty('--gx', (e.clientX - r.left) + 'px');
+    el.style.setProperty('--gy', (e.clientY - r.top) + 'px');
+  });
+})();
 
 /* ============ 深浅主题切换 ============ */
 (function(){
