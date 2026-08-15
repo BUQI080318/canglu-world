@@ -617,8 +617,16 @@
     /* 页面底部留出播放器高度，正文不被遮挡 */
     main{padding-bottom:64px}
     .doc{padding-bottom:8px}
-    /* 移动端隐藏桌面播放按钮的辅助文字 */
-    .music-cover{display:none}
+    /* 移动端显示封面（保留转动效果） */
+    .music-cover{display:block;width:36px;height:36px;border-radius:50%;flex-shrink:0;object-fit:cover}
+    /* 歌名滚动跑马灯 */
+    .music-mid{flex:1;min-width:0;overflow:hidden}
+    .music-now{max-width:none;width:100%;position:relative}
+    .music-now .song-marquee{
+      display:inline-block;white-space:nowrap;padding-right:48px;
+      animation:marqueeScroll 10s linear infinite;
+    }
+    @keyframes marqueeScroll{0%{transform:translateX(0)}12%{transform:translateX(0)}88%{transform:translateX(calc(-100% + 120px))}100%{transform:translateX(calc(-100% + 120px))}}
   }
 
   /* ===== 四方势力博弈图 ===== */
@@ -1685,6 +1693,14 @@ function revealItem(el){
 /* ============ 音乐播放器 ============ */
 (function(){
   /* ===== 歌单：沧陆之声 ===== */
+  function songHTML(name, status){
+    // 歌名包进滚动容器（移动端跑马灯），桌面端不受影响
+    var inner = '<b class="song-name-inner">'+name+'</b><span class="music-hint"> · </span>'+status;
+    return '<span class="song-marquee">'+inner+'</span>';
+  }
+  function songStatus(txt){
+    return mh(txt);
+  }
   function mh(txt){
     // 音乐状态文本：zh/en 双语
     var EN = {'奏响':'Now Playing','暂歇':'Paused','点击出声':'Click to unmute','点击页面任意处开始':'Click anywhere to start','轻触页面奏响':'Tap anywhere to play'};
@@ -1852,14 +1868,14 @@ function revealItem(el){
     setCover(cur);
     audio.play().then(()=>{
       started = true;
-      now.innerHTML = '<b>'+SONGS[cur].name+'</b><span class="music-hint"> · </span>'+mh('奏响')+'</span>';
+      now.innerHTML = songHTML(SONGS[cur].name, mh('奏响'));
       btn.textContent = '❚❚';
       setPlaying(true);
       renderList();
       if(mpFill) mpFill.style.width = '0%';
       if(mpKnob) mpKnob.style.left = '0%';
     }).catch(()=>{
-      now.innerHTML = '<b>沧陆</b><span class="music-hint"> · </span>'+mh('点击页面任意处开始')+'</span>';
+      now.innerHTML = songHTML('沧陆', mh('点击页面任意处开始'));
       setPlaying(false);
     });
   }
@@ -1884,12 +1900,12 @@ function revealItem(el){
       if(audio.paused){
         audio.play();
         btn.textContent = '❚❚';
-        now.innerHTML = '<b>'+SONGS[cur].name+'</b><span class="music-hint"> · </span>'+mh('奏响')+'</span>';
+        now.innerHTML = songHTML(SONGS[cur].name, mh('奏响'));
         setPlaying(true);
       } else {
         audio.pause();
         btn.textContent = '▶';
-        now.innerHTML = '<b>'+SONGS[cur].name+'</b><span class="music-hint"> · </span>'+mh('暂歇')+'</span>';
+        now.innerHTML = songHTML(SONGS[cur].name, mh('暂歇'));
         setPlaying(false);
       }
     } else {
@@ -1913,12 +1929,12 @@ function revealItem(el){
     setupEnded();
     audio.play().then(()=>{
       started = true;
-      now.innerHTML = '<b>'+SONGS[cur].name+'</b><span class="music-hint"> · </span>'+mh('点击出声')+'</span>';
+      now.innerHTML = songHTML(SONGS[cur].name, mh('点击出声'));
       btn.textContent = '❚❚';
       setPlaying(true);
     }).catch(()=>{
       // 极少数情况连静音也被拦：等首次交互
-      now.innerHTML = '<b>沧陆</b><span class="music-hint"> · </span>'+mh('轻触页面奏响')+'</span>';
+      now.innerHTML = songHTML('沧陆', mh('轻触页面奏响'));
       setPlaying(false);
     });
   }
@@ -1929,7 +1945,7 @@ function revealItem(el){
         audio.muted = false;  // 解锁声音
         audio.play().then(()=>{
           started = true;
-          now.innerHTML = '<b>'+SONGS[cur].name+'</b><span class="music-hint"> · </span>'+mh('奏响')+'</span>';
+          now.innerHTML = songHTML(SONGS[cur].name, mh('奏响'));
           btn.textContent = '❚❚';
           setPlaying(true);
         }).catch(()=>{});
@@ -1938,7 +1954,7 @@ function revealItem(el){
       }
     } else if(started && audio && audio.muted){
       audio.muted = false;   // 已在静音播放中：点击即出声
-      now.innerHTML = '<b>'+SONGS[cur].name+'</b><span class="music-hint"> · </span>'+mh('奏响')+'</span>';
+      now.innerHTML = songHTML(SONGS[cur].name, mh('奏响'));
     }
     document.removeEventListener('click', auto);
   }, {once:true});
