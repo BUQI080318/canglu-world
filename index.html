@@ -324,6 +324,9 @@ let dist = 125, theta = 0, phi = 0.62;
 const HOME = {theta: 0, phi: 0.62, dist: 125, tx: 0, ty: 2.2, tz: 0};
 function goHome(){ theta = HOME.theta; phi = HOME.phi; dist = HOME.dist; target.set(HOME.tx, HOME.ty, HOME.tz); }
 
+// 动画对象（buildWorld 填充）
+let waterGeo = null, wpos = null, wbase = null, clouds = [];
+
 function resize(){
   const w = canvas.clientWidth, h = canvas.clientHeight;
   renderer.setSize(w, h, false);
@@ -344,28 +347,29 @@ function getH(u, v){
 }
 const clickables = [];
 const labels3d = [];
+let u_cur = 0, v_cur = 0;
+// 确定性 2D 值噪声（打散色带）
+function noise2d(x, y){
+  const s = Math.sin(Math.floor(x*137.1)*127.1 + Math.floor(y*157.7)*311.7) * 43758.5453;
+  return s - Math.floor(s);
+}
 
-function colorFor(h){
-  const stops = [
-    [0.00, 0.03, 0.10, 0.19],  // 深海
-    [0.02, 0.10, 0.20, 0.35],  // 浅海
-    [0.05, 0.45, 0.60, 0.75],  // 浅滩
-    [0.08, 0.78, 0.72, 0.55],  // 沙滩
-    [0.16, 0.36, 0.50, 0.29],  // 低地绿
-    [0.30, 0.48, 0.56, 0.29],  // 丘陵
-    [0.45, 0.55, 0.42, 0.27],  // 山地棕
-    [0.58, 0.43, 0.29, 0.19],  // 高山深棕
-    [0.66, 0.86, 0.86, 0.90],  // 雪线
-    [1.00, 0.95, 0.96, 0.98],  // 雪顶
-  ];
-  for(let i=0;i<stops.length-1;i++){
-    const a = stops[i], b = stops[i+1];
-    if(h >= a[0] && h <= b[0]){
-      const t = (h-a[0])/(b[0]-a[0] || 1);
-      return [a[1]+(b[1]-a[1])*t, a[2]+(b[2]-a[2])*t, a[3]+(b[3]-a[3])*t];
-    }
-  }
-  return [0.95, 0.96, 0.98];
+function colorFor(h, slope){
+  // 坡度感知：陡坡雪线降低（更易积雪）、陡崖露岩色、缓坡草绿
+  const snowLine = 0.60 + 0.14*(1-slope);
+  const rockLine = 0.46 + 0.10*slope;
+  const c = (()=>{
+    if(h <= 0.02) return [0.03, 0.09, 0.17];       // 深海
+    if(h <= 0.05) return [0.10, 0.19, 0.33];       // 浅海
+    if(h <= 0.08) return [0.42, 0.56, 0.72];       // 浅滩
+    if(h <= 0.13) return [0.76, 0.70, 0.53];       // 沙滩
+    if(h < rockLine) return [0.34, 0.47, 0.27];    // 低地绿
+    if(h < snowLine) return [0.50, 0.42, 0.26];    // 山地岩石
+    return [0.88, 0.90, 0.95];                     // 雪
+  })();
+  // 噪声微调：打散色带边界 + 草地斑驳
+  const n = (noise2d(u_cur, v_cur) - 0.5) * 0.05;
+  return [c[0]+n, c[1]+n, c[2]+n];
 }
 
 function makeLabel(text, gold){
@@ -385,8 +389,8 @@ function makeLabel(text, gold){
 }
 
 function buildWorld(){
-  // 地形
-  const geo = new THREE.PlaneGeometry(120, 90, 200, 150);
+  // 地形（高精度 300x225 分段）
+  const geo = new THREE.PlaneGeometry(120, 90, 300, 225);
   geo.rotateX(-Math.PI/2);
   const pos = geo.attributes.position.array;
   const colors = new Float32Array(pos.length);
@@ -395,7 +399,16 @@ function buildWorld(){
     const u = (x+60)/120, v = (z+45)/90;
     const h = getH(u, v);
     pos[i+1] = h*HSCALE;
-    const c = colorFor(h);
+    // 坡度：HGRID 差分
+    const gx = u*SEG_X, gy = v*SEG_Y;
+    const gxi = Math.min(SEG_X-1, Math.max(1, Math.floor(gx)));
+    const gyi = Math.min(SEG_Y-1, Math.max(1, Math.floor(gy)));
+    const idx = gyi*(SEG_X+1)+gxi;
+    const hN = HGRID[idx-(SEG_X+1)]/255, hS = HGRID[idx+(SEG_X+1)]/255;
+    const hE = HGRID[idx+1]/255, hW = HGRID[idx-1]/255;
+    const slope = Math.min(1, (Math.abs(hN-hS)+Math.abs(hE-hW))*2.2);
+    u_cur = u; v_cur = v;
+    const c = colorFor(h, slope);
     colors[i]=c[0]; colors[i+1]=c[1]; colors[i+2]=c[2];
   }
   geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
@@ -412,15 +425,83 @@ function buildWorld(){
   moon.position.set(-40, 25, -50);
   scene.add(moon);
 
-  // 水面
-  const water = new THREE.Mesh(
-    new THREE.PlaneGeometry(3000, 3000),
-    new THREE.MeshPhongMaterial({color:0x1e5a86, transparent:true, opacity:0.78, shininess:110, specular:0x88bbdd})
-  );
-  water.rotation.x = -Math.PI/2;
-  water.position.y = 0.03;
+  // 水面（动态波浪）
+  waterGeo = new THREE.PlaneGeometry(3000, 3000, 80, 80);
+  waterGeo.rotateX(-Math.PI/2);
+  const water = new THREE.Mesh(waterGeo, new THREE.MeshPhongMaterial({color:0x1e5a86, transparent:true, opacity:0.82, shininess:140, specular:0xaaccff, side:THREE.DoubleSide}));
+  water.position.y = 0.04;
   water.renderOrder = 2;
   scene.add(water);
+  wpos = waterGeo.attributes.position.array;
+  wbase = wpos.slice();
+
+  // 云层
+  function makeCloud(scale, op){
+    const cv = document.createElement('canvas'); cv.width = 256; cv.height = 128;
+    const c = cv.getContext('2d');
+    const g = c.createRadialGradient(128, 64, 8, 128, 64, 118);
+    g.addColorStop(0, 'rgba(255,255,255,'+op+')');
+    g.addColorStop(0.55, 'rgba(225,232,245,'+(op*0.65)+')');
+    g.addColorStop(1, 'rgba(255,255,255,0)');
+    c.fillStyle = g; c.fillRect(0, 0, 256, 128);
+    const tex = new THREE.CanvasTexture(cv);
+    const sp = new THREE.Sprite(new THREE.SpriteMaterial({map:tex, transparent:true, depthWrite:false, opacity:0.9}));
+    sp.scale.set(scale, scale*0.5, 1);
+    return sp;
+  }
+  const clouds2 = [];
+  const cld = [[-18,26,-12],[12,28,6],[-4,27,20],[28,26,-22],[-32,29,16],[18,30,-32],[-12,29,32],[38,28,12],[2,31,-5],[22,27,-8]];
+  cld.forEach(p=>{
+    const cl = makeCloud(13+Math.random()*11, 0.45+Math.random()*0.3);
+    cl.position.set(p[0], p[1], p[2]);
+    scene.add(cl); clouds2.push(cl);
+  });
+  clouds = clouds2;
+
+  // 望暮大桥：横跨海峡（桥体 + 桥塔）
+  (function(){
+    const mk = MAPDATA.marks.find(m=>m.name==='望暮大桥');
+    if(!mk) return;
+    const h = getH(mk.x, mk.y);
+    const cx = mk.x*120-60, cz = mk.y*90-45, cy = h*HSCALE;
+    const bridge = new THREE.Mesh(new THREE.BoxGeometry(13, 0.4, 1.15), new THREE.MeshLambertMaterial({color:0x8a6d4a}));
+    bridge.position.set(cx, cy+0.35, cz);
+    bridge.rotation.y = 0.9;
+    scene.add(bridge);
+    [[-6, 0.9], [6, -0.9]].forEach(p=>{
+      const tw = new THREE.Mesh(new THREE.BoxGeometry(0.45, 3.4, 0.45), new THREE.MeshLambertMaterial({color:0x6e5438}));
+      tw.position.set(cx + Math.cos(0.9)*p[0] - Math.sin(0.9)*p[1], cy+1.9, cz + Math.sin(0.9)*p[0] + Math.cos(0.9)*p[1]);
+      scene.add(tw);
+    });
+  })();
+
+  // 城市建筑群（四城：主塔 + 环绕建筑）
+  function buildCity(mk){
+    const h = getH(mk.x, mk.y);
+    const cx = mk.x*120-60, cz = mk.y*90-45, cy = h*HSCALE;
+    const rnd = (s)=>{ const x = Math.sin(s*127.1)*43758.5453; return x-Math.floor(x); };
+    // 中央主塔（金色）
+    const tower = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.6, 2.8, 8), new THREE.MeshLambertMaterial({color:0xc8a24a}));
+    tower.position.set(cx, cy+1.4, cz);
+    scene.add(tower);
+    const roof = new THREE.Mesh(new THREE.ConeGeometry(0.62, 1.1, 8), new THREE.MeshLambertMaterial({color:0x7a4a2a}));
+    roof.position.set(cx, cy+3.1, cz);
+    scene.add(roof);
+    // 环绕民居
+    for(let k=0;k<16;k++){
+      const ang = rnd(k+1)*Math.PI*2, rad = 2.3+rnd(k+7)*4.0;
+      const bx = cx+Math.cos(ang)*rad, bz = cz+Math.sin(ang)*rad;
+      const bh = getH((bx+60)/120, (bz+45)/90)*HSCALE;
+      const s = 0.42+rnd(k+3)*0.42;
+      const b = new THREE.Mesh(new THREE.BoxGeometry(s, s*(0.7+rnd(k+9)*0.9), s), new THREE.MeshLambertMaterial({color:0xd8c9a0}));
+      b.position.set(bx, bh+s*0.4, bz);
+      scene.add(b);
+    }
+  }
+  ['恓鸟城','茹章城','眴姚城','伏熏城'].forEach(n=>{
+    const mk = MAPDATA.marks.find(m=>m.name===n);
+    if(mk) buildCity(mk);
+  });
 
   // 星空
   const starGeo = new THREE.BufferGeometry();
@@ -476,7 +557,18 @@ function buildWorld(){
     );
     ring.rotation.x = -Math.PI/2;
     ring.position.set(wx, hy + 0.05, wz);
-    scene.add(ball); scene.add(ring);
+    // 光晕（additive 发光）
+    const glowCv = document.createElement('canvas'); glowCv.width = 64; glowCv.height = 64;
+    const gc = glowCv.getContext('2d');
+    const gg = gc.createRadialGradient(32, 32, 2, 32, 32, 30);
+    gg.addColorStop(0, 'rgba(255,225,130,0.95)');
+    gg.addColorStop(0.5, 'rgba(255,195,90,0.4)');
+    gg.addColorStop(1, 'rgba(255,180,60,0)');
+    gc.fillStyle = gg; gc.fillRect(0, 0, 64, 64);
+    const glow = new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(glowCv), transparent:true, blending:THREE.AdditiveBlending, depthWrite:false}));
+    glow.scale.set(m.imp ? 3.2 : 2.4, m.imp ? 3.2 : 2.4, 1);
+    glow.position.set(wx, hy + 0.7, wz);
+    scene.add(ball); scene.add(ring); scene.add(glow);
     clickables.push(ball);
     // 标签
     const lb = makeLabel(m.name, !!m.imp);
@@ -578,6 +670,22 @@ document.getElementById('btnFull').onclick = ()=>{
 
 function animate(){
   requestAnimationFrame(animate);
+  const t = performance.now()*0.001;
+  // 海面波浪
+  if(wpos && wbase){
+    for(let i=0;i<wpos.length;i+=3){
+      const wx = wbase[i], wz = wbase[i+2];
+      wpos[i+1] = Math.sin(wx*0.32 + t*1.5)*0.20 + Math.cos(wz*0.26 + t*1.05)*0.16;
+    }
+    waterGeo.attributes.position.needsUpdate = true;
+    waterGeo.computeVertexNormals();
+  }
+  // 云层漂移
+  clouds.forEach((cl, i)=>{
+    cl.position.x += 0.015*(i%2?1:-1);
+    if(cl.position.x > 62) cl.position.x = -62;
+    if(cl.position.x < -62) cl.position.x = 62;
+  });
   updateCam();
   renderer.render(scene, cam);
 }
