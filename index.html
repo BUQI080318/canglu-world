@@ -371,15 +371,67 @@
     section.page.on .doc > *{animation-name:riseInM}
     #cursorRing,.pt,.ripple{display:none}
   }
-  /* 主题切换按钮 */
+  /* 主题切换按钮（完整文字版） */
   .theme-btn{
     background:var(--glass-bg);border:1px solid var(--glass-brd);color:var(--ink-dim);
-    font-family:inherit;font-size:13px;letter-spacing:1px;padding:7px 12px;border-radius:8px;
+    font-family:inherit;font-size:13px;letter-spacing:1px;padding:7px 14px;border-radius:8px;
     cursor:pointer;transition:all .25s;white-space:nowrap;
     -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:var(--glass-hl);
+    display:inline-flex;align-items:center;gap:6px;
   }
+  .theme-btn::before{content:"◐";font-size:14px;color:var(--gold)}
   .theme-btn:hover{color:var(--gold);border-color:var(--gold-dim)}
-  @media (max-width:700px){ .theme-btn{font-size:12px;padding:6px 8px} }
+  /* 设置按钮 */
+  .settings-btn{
+    background:var(--glass-bg);border:1px solid var(--glass-brd);color:var(--ink-dim);
+    font-family:inherit;font-size:13px;letter-spacing:1px;padding:7px 14px;border-radius:8px;
+    cursor:pointer;transition:all .25s;white-space:nowrap;
+    -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:var(--glass-hl);
+    display:inline-flex;align-items:center;gap:6px;
+  }
+  .settings-btn:hover{color:var(--gold);border-color:var(--gold-dim)}
+  .settings-btn.on{color:var(--gold);border-color:var(--gold-dim);background:var(--item-hover)}
+  /* 设置面板 */
+  .settings-panel{
+    position:fixed;top:64px;right:16px;z-index:200;width:320px;max-height:calc(100vh - 90px);
+    overflow-y:auto;background:var(--glass-bg);
+    -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+    border:1px solid var(--glass-brd);border-radius:16px;
+    box-shadow:var(--glass-hl),0 18px 48px var(--shadow);
+    padding:16px 18px;display:none;transform:translateY(-8px);opacity:0;
+    transition:transform .3s cubic-bezier(.22,.61,.36,1),opacity .3s;
+  }
+  .settings-panel.on{display:block;transform:none;opacity:1}
+  .sp-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+  .sp-head span{color:var(--gold);font-size:17px;letter-spacing:4px;font-weight:bold}
+  .sp-close{
+    background:none;border:none;color:var(--ink-dim);font-size:15px;cursor:pointer;
+    width:28px;height:28px;border-radius:50%;transition:all .2s;font-family:inherit;
+  }
+  .sp-close:hover{color:var(--gold);background:var(--item-hover)}
+  .sp-group{margin-bottom:16px}
+  .sp-label{color:var(--ink-dim);font-size:12.5px;letter-spacing:2px;margin-bottom:8px}
+  .sp-row{display:flex;gap:8px;flex-wrap:wrap}
+  .sp-opt{
+    flex:1;min-width:60px;background:var(--glass-bg);border:1px solid var(--glass-brd);
+    color:var(--ink);font-family:inherit;font-size:13px;letter-spacing:1px;
+    padding:8px 6px;border-radius:8px;cursor:pointer;transition:all .2s;
+  }
+  .sp-opt:hover{border-color:var(--gold-dim);color:var(--gold)}
+  .sp-opt.on{color:var(--gold);border-color:var(--gold);background:var(--item-hover);box-shadow:0 0 10px var(--glow)}
+  /* 字体方案 */
+  html[data-font="kai"] body,html[data-font="kai"] button,html[data-font="kai"] input{font-family:"KaiTi","STKaiti","楷体",serif}
+  html[data-font="song"] body,html[data-font="song"] button,html[data-font="song"] input{font-family:"SimSun","STSong","宋体",serif}
+  html[data-font="hei"] body,html[data-font="hei"] button,html[data-font="hei"] input{font-family:"SimHei","Microsoft YaHei","黑体",sans-serif}
+  /* 动效关闭 */
+  html[data-motion="off"] *,html[data-motion="off"] *::before,html[data-motion="off"] *::after{
+    animation:none !important;transition:none !important;
+  }
+  html[data-motion="light"] body::before,html[data-motion="light"] body::after,html[data-motion="light"] html::after{animation:none}
+  html[data-motion="light"] .glass-shine::after{display:none}
+  /* 鼠标光效关闭 */
+  html[data-fx="off"] #cursorRing,html[data-fx="off"] .pt,html[data-fx="off"] .ripple,html[data-fx="off"] .glass-shine::after{display:none !important}
+  @media (max-width:700px){ .theme-btn,.settings-btn{font-size:12px;padding:6px 10px} .settings-panel{width:calc(100vw - 24px);right:12px;top:auto;bottom:74px} }
   /* 品牌 LOGO */
   .brand{display:flex;align-items:center;gap:9px}
   .logo-mark{
@@ -431,12 +483,68 @@
     <button data-page="timePage">纪年</button>
     <button data-page="powerPage">势力</button>
   </nav>
-  <button class="theme-btn" id="themeBtn" title="切换深浅色主题">随</button>
+  <button class="theme-btn" id="themeBtn" title="主题设置"></button>
   <div class="search-wrap">
     <input class="search-box" id="searchBox" type="text" placeholder="检索地名 / 城邦 / 条目" autocomplete="off">
     <div class="search-results" id="searchResults"></div>
   </div>
+  <button class="settings-btn" id="settingsBtn" title="设置"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.03 1.56V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1.11-1.56 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.7 1.7 0 0 0 .34-1.87 1.7 1.7 0 0 0-1.56-1.03H3a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.56-1.11 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.7 1.7 0 0 0 1.87.34h.01a1.7 1.7 0 0 0 1.03-1.56V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1.03 1.56 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87v.01a1.7 1.7 0 0 0 1.56 1.03H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.56 1.03z"/></svg>设置</button>
 </header>
+
+<div class="settings-panel" id="settingsPanel">
+  <div class="sp-head">
+    <span>设置</span>
+    <button class="sp-close" id="settingsClose">✕</button>
+  </div>
+  <div class="sp-body">
+    <div class="sp-group">
+      <div class="sp-label">外观主题</div>
+      <div class="sp-row" id="spTheme">
+        <button data-v="auto" class="sp-opt">跟随系统</button>
+        <button data-v="light" class="sp-opt">浅色</button>
+        <button data-v="dark" class="sp-opt">深色</button>
+      </div>
+    </div>
+    <div class="sp-group">
+      <div class="sp-label">界面字体</div>
+      <div class="sp-row" id="spFont">
+        <button data-v="default" class="sp-opt">默认</button>
+        <button data-v="kai" class="sp-opt">楷风</button>
+        <button data-v="song" class="sp-opt">宋韵</button>
+        <button data-v="hei" class="sp-opt">黑体</button>
+      </div>
+    </div>
+    <div class="sp-group">
+      <div class="sp-label">界面语言</div>
+      <div class="sp-row" id="spLang">
+        <button data-v="zh" class="sp-opt">中文</button>
+        <button data-v="en" class="sp-opt">English</button>
+      </div>
+    </div>
+    <div class="sp-group">
+      <div class="sp-label">动效强度</div>
+      <div class="sp-row" id="spMotion">
+        <button data-v="full" class="sp-opt">完整</button>
+        <button data-v="light" class="sp-opt">轻量</button>
+        <button data-v="off" class="sp-opt">关闭</button>
+      </div>
+    </div>
+    <div class="sp-group">
+      <div class="sp-label">进站自动播放音乐</div>
+      <div class="sp-row" id="spAutoplay">
+        <button data-v="on" class="sp-opt">开启</button>
+        <button data-v="off" class="sp-opt">关闭</button>
+      </div>
+    </div>
+    <div class="sp-group">
+      <div class="sp-label">鼠标光效（桌面端）</div>
+      <div class="sp-row" id="spFx">
+        <button data-v="on" class="sp-opt">开启</button>
+        <button data-v="off" class="sp-opt">关闭</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <main>
 <section class="page on" id="geoPage">
@@ -1137,6 +1245,8 @@ function revealItem(el){
   // 自动播放：进站随机一曲静音启动（浏览器允许）→ 首次点击任意处立即出声
   function tryAutoPlay(){
     if(!SONGS.length || cur >= 0) return;
+    // 设置里关闭了自动播放则不启动
+    if(window.cangluAutoplay && !window.cangluAutoplay.get()) return;
     cur = Math.floor(Math.random() * SONGS.length);
     if(!audio) audio = new Audio();
     audio.muted = true;   // 静音自动播放：浏览器允许，绕过拦截
@@ -1238,19 +1348,23 @@ function animatePageIn(sec){
   });
 })();
 
-/* ============ 深浅主题切换 ============ */
+/* ============ 深浅主题切换（完整版） ============ */
 (function(){
   var KEY = 'canglu-theme';
   var theme = 'auto';
   try{ theme = localStorage.getItem(KEY) || 'auto'; }catch(e){}
   var btn = document.getElementById('themeBtn');
   var mq = window.matchMedia ? matchMedia('(prefers-color-scheme: light)') : null;
-  var labels = {auto:'随', light:'昼', dark:'夜'};
+  var labels = {auto:'跟随系统', light:'浅色', dark:'深色'};
+  window.cangluTheme = { get:function(){ return theme; } };
   function apply(){
     var light = theme==='light' || (theme==='auto' && mq && mq.matches);
     document.documentElement.setAttribute('data-theme', light ? 'light' : 'dark');
     if(btn) btn.textContent = labels[theme];
-    if(btn) btn.title = '主题：' + (theme==='auto' ? '跟随系统' : theme==='light' ? '浅色' : '深色') + '（点击切换）';
+    if(btn) btn.title = '主题：' + labels[theme] + '（点击切换）';
+    // 同步设置面板选中态
+    var opts = document.querySelectorAll('#spTheme .sp-opt');
+    opts.forEach(function(o){ o.classList.toggle('on', o.dataset.v === theme); });
   }
   if(btn){
     btn.onclick = function(){
@@ -1259,8 +1373,134 @@ function animatePageIn(sec){
       apply();
     };
   }
+  var spTheme = document.getElementById('spTheme');
+  if(spTheme){
+    spTheme.addEventListener('click', function(e){
+      var o = e.target.closest('.sp-opt');
+      if(!o) return;
+      theme = o.dataset.v;
+      try{ localStorage.setItem(KEY, theme); }catch(err){}
+      apply();
+    });
+  }
   if(mq) mq.addEventListener('change', function(){ if(theme==='auto') apply(); });
   apply();
+})();
+
+/* ============ 设置面板 ============ */
+(function(){
+  var SKEY = 'canglu-settings';
+  var def = {font:'default', lang:'zh', motion:'full', autoplay:'on', fx:'on'};
+  var s = def;
+  try{ s = Object.assign({}, def, JSON.parse(localStorage.getItem(SKEY) || '{}')); }catch(e){}
+  window.cangluSettings = { get:function(){ return s; } };
+
+  function applySettings(){
+    var el = document.documentElement;
+    el.setAttribute('data-font', s.font);
+    el.setAttribute('data-lang', s.lang);
+    el.setAttribute('data-motion', s.motion);
+    el.setAttribute('data-fx', s.fx);
+    // 动效关闭时同步移除玻璃高光跟随
+    // 同步选中态
+    var groups = {spFont:s.font, spLang:s.lang, spMotion:s.motion, spAutoplay:s.autoplay, spFx:s.fx};
+    Object.keys(groups).forEach(function(gid){
+      var g = document.getElementById(gid);
+      if(!g) return;
+      g.querySelectorAll('.sp-opt').forEach(function(o){
+        o.classList.toggle('on', o.dataset.v === groups[gid]);
+      });
+    });
+  }
+
+  // 面板开关
+  var panel = document.getElementById('settingsPanel');
+  var sbtn = document.getElementById('settingsBtn');
+  var closeBtn = document.getElementById('settingsClose');
+  function toggle(show){
+    if(show === undefined) show = !panel.classList.contains('on');
+    panel.classList.toggle('on', show);
+    if(sbtn) sbtn.classList.toggle('on', show);
+  }
+  if(sbtn) sbtn.onclick = function(){ toggle(); };
+  if(closeBtn) closeBtn.onclick = function(){ toggle(false); };
+  document.addEventListener('click', function(e){
+    if(panel && panel.classList.contains('on')){
+      if(!panel.contains(e.target) && !(sbtn && sbtn.contains(e.target))){
+        toggle(false);
+      }
+    }
+  });
+
+  // 选项点击
+  var binds = {spFont:'font', spLang:'lang', spMotion:'motion', spAutoplay:'autoplay', spFx:'fx'};
+  Object.keys(binds).forEach(function(gid){
+    var g = document.getElementById(gid);
+    if(!g) return;
+    g.addEventListener('click', function(e){
+      var o = e.target.closest('.sp-opt');
+      if(!o) return;
+      s[binds[gid]] = o.dataset.v;
+      try{ localStorage.setItem(SKEY, JSON.stringify(s)); }catch(err){}
+      applySettings();
+      // 语言切换时更新界面文字
+      if(binds[gid] === 'lang') applyLang();
+      if(binds[gid] === 'motion') applyMotion();
+    });
+  });
+
+  // 语言：界面关键元素切换
+  var I18N = {
+    zh: {
+      nav: ['地理','城邦','秘境','历法','纪年','势力'],
+      searchPh: '检索地名 / 城邦 / 条目',
+      settings: '设置',
+      themeTitle: '主题设置',
+    },
+    en: {
+      nav: ['Geography','Cities','Mysteries','Calendar','Chronicle','Powers'],
+      searchPh: 'Search places / cities / entries',
+      settings: 'Settings',
+      themeTitle: 'Theme',
+    }
+  };
+  function applyLang(){
+    var t = I18N[s.lang] || I18N.zh;
+    var navBtns = document.querySelectorAll('nav button[data-page]');
+    var pages = ['geoPage','cityPage','landmarkPage','calPage','timePage','powerPage'];
+    navBtns.forEach(function(b, i){
+      if(pages.indexOf(b.dataset.page) >= 0 && t.nav[pages.indexOf(b.dataset.page)]){
+        b.textContent = t.nav[pages.indexOf(b.dataset.page)];
+      }
+    });
+    var sb = document.getElementById('searchBox');
+    if(sb) sb.placeholder = t.searchPh;
+    var sbtn2 = document.getElementById('settingsBtn');
+    if(sbtn2) sbtn2.textContent = t.settings;
+    var tb = document.getElementById('themeBtn');
+    if(tb) tb.title = t.themeTitle;
+  }
+
+  // 动效：轻量模式复刻移动端降级
+  function applyMotion(){
+    var el = document.documentElement;
+    if(s.motion === 'light'){
+      var st = document.createElement('style');
+      st.id = 'motion-light-css';
+      st.textContent = 'body::before,body::after,html::after{animation:none;filter:blur(30px);opacity:.5} .glass-shine::after{display:none} .city-card,.acc-card,.month-card,.tl-item,.calc,.doc .item{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}';
+      if(!document.getElementById('motion-light-css')) document.head.appendChild(st);
+    } else {
+      var old = document.getElementById('motion-light-css');
+      if(old) old.remove();
+    }
+  }
+
+  // 自动播放开关接入播放器
+  window.cangluAutoplay = { get:function(){ return s.autoplay !== 'off'; } };
+
+  applySettings();
+  applyLang();
+  applyMotion();
 })();
 </script>
 </body>
