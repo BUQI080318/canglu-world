@@ -280,7 +280,30 @@
   /* 音乐条 */
   .music-bar{position:fixed;right:18px;bottom:18px;z-index:150;display:flex;align-items:center;gap:10px;background:linear-gradient(160deg,rgba(30,39,54,.96),rgba(20,26,36,.96));border:1px solid var(--gold-dim);border-radius:24px;padding:8px 16px;backdrop-filter:blur(6px);box-shadow:0 8px 28px var(--shadow);cursor:default}
   .music-btn{background:var(--gold);border:none;color:#141a24;width:34px;height:34px;border-radius:50%;font-size:14px;cursor:pointer;font-family:inherit;transition:all .2s;line-height:1}
-  .music-btn:hover{transform:scale(1.1);box-shadow:0 0 14px rgba(200,162,74,.5)}
+  .music-btn:hover{transform:scale(1.1);box-shadow:0 0 14px var(--glow)}
+  /* 播放律动：均衡器条 */
+  .eq{display:flex;align-items:flex-end;gap:3px;height:22px;padding:2px 0}
+  .eq span{
+    width:3px;height:100%;border-radius:2px;
+    background:linear-gradient(180deg,var(--gold),var(--gold-dim));
+    transform-origin:bottom;animation:eqBounce 1s ease-in-out infinite;
+    animation-play-state:paused;opacity:.45;
+  }
+  .eq span:nth-child(1){animation-delay:0s}
+  .eq span:nth-child(2){animation-delay:.18s}
+  .eq span:nth-child(3){animation-delay:.36s}
+  .eq span:nth-child(4){animation-delay:.12s}
+  .eq span:nth-child(5){animation-delay:.28s}
+  @keyframes eqBounce{
+    0%,100%{transform:scaleY(.25)}
+    50%{transform:scaleY(1)}
+  }
+  .music-bar.playing .eq span{animation-play-state:running;opacity:1}
+  .music-bar.playing .music-btn{box-shadow:0 0 18px var(--glow);animation:btnPulse 1.6s ease-in-out infinite}
+  @keyframes btnPulse{
+    0%,100%{box-shadow:0 0 10px var(--glow)}
+    50%{box-shadow:0 0 22px var(--glow),0 0 34px var(--glow)}
+  }
   .music-now{color:var(--ink);font-size:13px;letter-spacing:1px;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .music-now b{color:var(--gold);font-weight:normal;letter-spacing:2px}
   .music-hint{color:var(--ink-dim);font-size:11.5px;letter-spacing:1px}
@@ -554,6 +577,9 @@
 <div class="music-list" id="musicList"></div>
 <div class="music-bar" id="musicBar">
   <button class="music-btn" id="musicBtn">▶</button>
+  <div class="eq" id="eqBars" aria-hidden="true">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
   <div class="music-now" id="musicNow"><b>沧陆</b><span class="music-hint">· 静候佳音</span></div>
 </div>
 <div id="cursorRing"></div>
@@ -954,11 +980,21 @@ function revealItem(el){
     {name:'In Time — Talos', src:'music/07_in_time.mp3'},
     {name:'A Dawning — Ólafur Arnalds / Talos', src:'music/08_a_dawning.mp3'},
     {name:'Bedrock (choir) — Ólafur Arnalds / Talos', src:'music/09_bedrock_choir.mp3'},
+    {name:'To Each His Own — Talos', src:'music/10_to_each_his_own.mp3'},
+    {name:'This Is Us Colliding — Talos', src:'music/11_this_is_us_colliding.mp3'},
+    {name:'Piece[s] — Talos', src:'music/12_pieces.mp3'},
+    {name:'Far Out Dust — Talos', src:'music/13_far_out_dust.mp3'},
+    {name:'A Dawning (choir) — Ólafur Arnalds / Talos', src:'music/14_a_dawning_choir.mp3'},
   ];
   const btn = document.getElementById('musicBtn');
   const now = document.getElementById('musicNow');
   const list = document.getElementById('musicList');
+  const bar = document.getElementById('musicBar');
   let audio = null, cur = -1, started = false;
+
+  function setPlaying(on){
+    bar.classList.toggle('playing', on);
+  }
 
   function renderList(){
     if(!SONGS.length){
@@ -984,9 +1020,11 @@ function revealItem(el){
       started = true;
       now.innerHTML = '<b>'+SONGS[cur].name+'</b><span class="music-hint"> · 奏响</span>';
       btn.textContent = '❚❚';
+      setPlaying(true);
       renderList();
     }).catch(()=>{
       now.innerHTML = '<b>沧陆</b><span class="music-hint"> · 点击页面任意处开始</span>';
+      setPlaying(false);
     });
   }
   btn.onclick = ()=>{
@@ -996,10 +1034,12 @@ function revealItem(el){
         audio.play();
         btn.textContent = '❚❚';
         now.innerHTML = '<b>'+SONGS[cur].name+'</b><span class="music-hint"> · 奏响</span>';
+        setPlaying(true);
       } else {
         audio.pause();
         btn.textContent = '▶';
         now.innerHTML = '<b>'+SONGS[cur].name+'</b><span class="music-hint"> · 暂歇</span>';
+        setPlaying(false);
       }
     } else {
       playCur();
@@ -1009,14 +1049,41 @@ function revealItem(el){
   document.addEventListener('click', e=>{
     if(!e.target.closest('.music-bar') && !e.target.closest('.music-list')) list.classList.remove('on');
   });
-  // 自动播放：用户首次点击页面任意处时启动
+  // 自动播放：进站立即尝试；被拦截则首次点击任意处立即接管
+  function tryAutoPlay(){
+    if(!SONGS.length || cur >= 0) return;
+    cur = 0;
+    if(!audio) audio = new Audio();
+    audio.src = SONGS[0].src;
+    audio.play().then(()=>{
+      started = true;
+      now.innerHTML = '<b>'+SONGS[0].name+'</b><span class="music-hint"> · 奏响</span>';
+      btn.textContent = '❚❚';
+      setPlaying(true);
+    }).catch(()=>{
+      // 被浏览器拦截：等首次交互
+      now.innerHTML = '<b>沧陆</b><span class="music-hint"> · 轻触页面奏响</span>';
+      setPlaying(false);
+    });
+  }
   document.addEventListener('click', function auto(){
-    if(SONGS.length && !started && cur < 0){
-      cur = 0;
-      playCur();
+    if(SONGS.length && !started){
+      if(cur < 0) cur = 0;
+      if(audio && audio.src){
+        audio.play().then(()=>{
+          started = true;
+          now.innerHTML = '<b>'+SONGS[cur].name+'</b><span class="music-hint"> · 奏响</span>';
+          btn.textContent = '❚❚';
+          setPlaying(true);
+        }).catch(()=>{});
+      } else {
+        playCur();
+      }
     }
     document.removeEventListener('click', auto);
   }, {once:true});
+  // 立即尝试自动播放
+  tryAutoPlay();
   renderList();
 })();
 
