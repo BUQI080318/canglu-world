@@ -165,7 +165,13 @@
   .doc h3{color:#e2c47a;font-size:17px;letter-spacing:3px;margin:22px 0 10px;font-weight:bold}
   .doc p{line-height:1.95;font-size:15.5px;margin:8px 0;text-indent:2em;color:var(--ink)}
   .doc p.note{color:var(--gold-dim);font-size:14px;text-indent:0}
-  .doc .item{margin:6px 0;padding:9px 14px;background:var(--item-bg);border-left:2px solid var(--gold-dim);border-radius:4px}
+  .doc .item{
+    margin:6px 0;padding:9px 14px;background:var(--glass-bg);
+    -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+    border:1px solid var(--glass-brd);border-left:3px solid var(--gold-dim);border-radius:8px;
+    box-shadow:var(--glass-hl);transition:background .2s;
+  }
+  .doc .item:hover{background:var(--item-hover)}
   .doc .item b{color:var(--gold);font-weight:normal;letter-spacing:2px;margin-right:6px}
   .doc table{width:100%;border-collapse:collapse;margin:12px 0;font-size:14.5px}
   .doc th{background:var(--panel2);color:var(--gold);padding:10px;text-align:left;border:1px solid var(--line);font-weight:normal;letter-spacing:2px}
@@ -174,8 +180,10 @@
   /* 城邦卡片 */
   .city-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;margin:20px 0}
   .city-card{
-    background:var(--card-bg);
-    border:1px solid var(--line);border-radius:10px;padding:18px;cursor:pointer;transition:all .2s;
+    background:var(--glass-bg);
+    -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+    border:1px solid var(--glass-brd);border-radius:14px;padding:18px;cursor:pointer;
+    box-shadow:var(--glass-hl),var(--glass-shadow);overflow:hidden;
   }
   .city-card:hover{border-color:var(--gold-dim);transform:translateY(-2px);box-shadow:var(--card-hover)}
   .city-card h4{color:var(--gold);font-size:19px;letter-spacing:3px;margin-bottom:4px}
@@ -186,7 +194,7 @@
   /* 年表 */
   .timeline{position:relative;margin:18px 0 8px;padding-left:26px}
   .timeline::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:var(--gold-dim);opacity:.5}
-  .tl-item{position:relative;margin:0 0 20px;padding:12px 16px;background:var(--panel);border:1px solid var(--line);border-radius:6px}
+  .tl-item{position:relative;margin:0 0 20px;padding:12px 16px;background:var(--glass-bg);-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);border:1px solid var(--glass-brd);border-radius:12px;box-shadow:var(--glass-hl),var(--glass-shadow)}
   .tl-item::before{
     content:"";position:absolute;left:-24px;top:17px;width:10px;height:10px;border-radius:50%;
     background:var(--gold);box-shadow:0 0 10px rgba(200,162,74,.6);
@@ -196,8 +204,10 @@
   .tl-item p{text-indent:0;font-size:14.5px;line-height:1.85;margin:0}
   /* 历法换算器 */
   .calc{
-    margin:16px 0;padding:18px 20px;background:var(--card-bg);
-    border:1px solid var(--line);border-radius:8px;
+    margin:16px 0;padding:18px 20px;background:var(--glass-bg);
+    -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+    border:1px solid var(--glass-brd);border-radius:14px;
+    box-shadow:var(--glass-hl),var(--glass-shadow);
   }
   .calc h3{margin-top:0}
   .calc-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:10px 0}
@@ -212,7 +222,12 @@
   /* 搜索高亮 */
   mark.hl{background:rgba(200,162,74,.28);color:var(--gold);padding:0 2px;border-radius:2px}
   /* 手风琴章节卡片 */
-  .acc-card{margin:14px 0;background:var(--card-bg);border:1px solid var(--line);border-radius:8px;overflow:hidden;transition:border-color .25s}
+  .acc-card{
+    margin:14px 0;background:var(--glass-bg);
+    -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+    border:1px solid var(--glass-brd);border-radius:14px;overflow:hidden;
+    box-shadow:var(--glass-hl),var(--glass-shadow);
+  }
   .acc-card.open{border-color:var(--gold);box-shadow:var(--glass-hl),0 12px 40px var(--shadow),0 0 18px var(--glow)}
   .acc-head{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;user-select:none;transition:background .2s}
   .acc-head:hover{background:rgba(200,162,74,.07)}
@@ -226,7 +241,11 @@
   .acc-body h3{margin-top:12px}
   /* 月相卡片 */
   .month-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:16px 0}
-  .month-card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px;cursor:pointer;transition:all .22s}
+  .month-card{
+    background:var(--glass-bg);-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+    border:1px solid var(--glass-brd);border-radius:12px;padding:12px 14px;cursor:pointer;
+    box-shadow:var(--glass-hl),var(--glass-shadow);overflow:hidden;
+  }
   .month-card:hover{border-color:var(--gold-dim);transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.3)}
   .month-card .m-num{color:var(--ink-dim);font-size:11px;letter-spacing:2px}
   .month-card .m-name{color:var(--gold);font-size:18px;letter-spacing:4px;margin:3px 0}
