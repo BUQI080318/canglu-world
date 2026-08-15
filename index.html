@@ -524,6 +524,30 @@
   }
   /* 标题悬停微光 */
   .doc h1:hover .h-title{text-shadow:0 0 18px var(--glow)}
+
+  /* ===== 移动端：音乐播放器吸底迷你条 + 侧边栏歌单 ===== */
+  @media (max-width:700px){
+    .music-bar{
+      left:8px;right:8px;bottom:8px;justify-content:space-between;
+      padding:8px 14px;border-radius:16px;z-index:160;
+      background:var(--glass-bg);-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+      border:1px solid var(--glass-brd);box-shadow:var(--glass-hl),0 8px 28px var(--shadow);
+      cursor:pointer;
+    }
+    .music-bar .music-btn{flex-shrink:0}
+    .music-bar .music-now{flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:12.5px}
+    /* 歌单：底部上滑侧边栏 */
+    .music-list{
+      left:8px;right:8px;top:auto;bottom:76px;max-height:42vh;
+      border-radius:16px;transform:translateY(12px);
+    }
+    .music-list.on{transform:none}
+    /* 页面底部留出播放器高度，正文不被遮挡 */
+    main{padding-bottom:64px}
+    .doc{padding-bottom:8px}
+    /* 移动端隐藏桌面播放按钮的辅助文字 */
+    .music-cover{display:none}
+  }
 </style>
 </head>
 <body>
@@ -1266,6 +1290,30 @@ function revealItem(el){
     setTimeout(()=> r.remove(), 600);
   });
 })();
+
+
+  /* ===== 移动端：点击播放条展开歌单 ===== */
+  (function(){
+    if(!window.matchMedia || !matchMedia('(max-width:700px)').matches) return;
+    var bar = document.querySelector('.music-bar');
+    var list = document.getElementById('musicList');
+    var btn = document.getElementById('musicBtn');
+    if(!bar || !list || !btn) return;
+    // 点播放条（非播放按钮区域）展开/收起歌单
+    bar.addEventListener('click', function(e){
+      if(e.target.closest('#musicBtn')) return;  // 播放按钮交给原逻辑
+      list.classList.toggle('on');
+    });
+    // 点播放按钮时收起歌单（避免挡住）
+    btn.addEventListener('click', function(){ list.classList.remove('on'); });
+    // 歌单内点击歌曲后自动收起
+    list.addEventListener('click', function(e){
+      if(e.target.closest('.song')) setTimeout(function(){ list.classList.remove('on'); }, 120);
+    });
+    // 页面滚动时收起歌单
+    var main = document.querySelector('main');
+    if(main) main.addEventListener('scroll', function(){ list.classList.remove('on'); });
+  })();
 
 /* ============ 音乐播放器 ============ */
 (function(){
