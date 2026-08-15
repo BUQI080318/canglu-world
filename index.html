@@ -22,16 +22,18 @@
     --blob-gold:rgba(212,175,90,.38); --blob-blue:rgba(110,140,215,.30); --blob-violet:rgba(150,110,200,.26);
   }
   :root{
-    --pm-hostile:rgba(196,92,72,.95);
-    --pm-tribute:rgba(212,169,78,.95);
-    --pm-trade:rgba(112,150,210,.9);
-    --pm-isolated:rgba(158,116,208,.8);
+    --pm-hostile:#e0604a;
+    --pm-tribute:#e8c060;
+    --pm-trade:#5a9ad8;
+    --pm-isolated:#b48ae0;
+    --pm-label:#a8a090;
   }
   html[data-theme="light"], html:not([data-theme="dark"]){
-    --pm-hostile:rgba(176,74,56,.95);
-    --pm-tribute:rgba(168,132,46,.95);
-    --pm-trade:rgba(74,116,168,.95);
-    --pm-isolated:rgba(122,90,168,.9);
+    --pm-hostile:#c93a26;
+    --pm-tribute:#a67a14;
+    --pm-trade:#2860a8;
+    --pm-isolated:#7a3fa8;
+    --pm-label:#6a5a44;
   }
 
   html[data-theme="light"]{
@@ -640,12 +642,12 @@
   .pm-node .pm-sub{fill:var(--ink-dim);font-size:10.5px;letter-spacing:1px;pointer-events:none;text-anchor:middle}
   .pm-node.active circle.pm-ring{stroke-width:3;stroke:#e8cd8a;filter:drop-shadow(0 0 8px rgba(200,162,74,.9))}
   .pm-node.active circle.pm-core{fill:#e8cd8a}
-  .pm-line{fill:none;stroke-width:1.6;stroke-dasharray:6 5;animation:pmFlow 2.6s linear infinite}
+  .pm-line{fill:none;stroke-width:2.6;stroke-dasharray:8 6;animation:pmFlow 2.6s linear infinite}
   .pm-line.hostile{stroke:var(--pm-hostile)}
   .pm-line.tribute{stroke:var(--pm-tribute)}
   .pm-line.trade{stroke:var(--pm-trade)}
-  .pm-line.isolated{stroke:var(--pm-isolated);stroke-dasharray:2 7;animation:none}
-  .pm-line-label{fill:var(--ink-dim);font-size:10px;letter-spacing:1px;font-family:inherit;pointer-events:none;text-anchor:middle}
+  .pm-line.isolated{stroke:var(--pm-isolated);stroke-width:2.2;stroke-dasharray:2 7;animation:none}
+  .pm-line-label{fill:var(--pm-label);font-size:11px;letter-spacing:1px;font-family:inherit;pointer-events:none;text-anchor:middle;paint-order:stroke;stroke:var(--bg);stroke-width:4px;stroke-linejoin:round;font-weight:bold}
   @keyframes pmFlow{to{stroke-dashoffset:-22}}
   /* 点击详情面板 */
   .pm-detail{
@@ -658,9 +660,13 @@
   .pm-detail p{margin:0;font-size:14px;line-height:1.9;color:var(--ink)}
   .pm-detail .pm-tag{display:inline-block;padding:1px 9px;border:1px solid var(--gold-dim);border-radius:10px;color:var(--gold-dim);font-size:11px;letter-spacing:2px;margin-bottom:8px}
   /* 图例 */
-  .pm-legend{display:flex;flex-wrap:wrap;gap:14px;margin:8px 2px 2px;font-size:11.5px;color:var(--ink-dim);letter-spacing:1px}
-  .pm-legend span{display:inline-flex;align-items:center;gap:6px}
-  .pm-legend i{display:inline-block;width:22px;height:0;border-top:2px dashed}
+  .pm-legend{display:flex;flex-wrap:wrap;gap:8px;margin:10px 2px 2px;font-size:12px;color:var(--ink);letter-spacing:1px}
+  .pm-legend .lg-it{
+    display:inline-flex;align-items:center;gap:8px;padding:4px 12px;border-radius:8px;
+    background:var(--glass-bg);border:1px solid var(--glass-brd);
+    box-shadow:var(--glass-hl);
+  }
+  .pm-legend i{display:inline-block;width:26px;height:0;border-top-width:3px;border-top-style:dashed}
   .pm-legend .h{border-color:var(--pm-hostile)}
   .pm-legend .t{border-color:var(--pm-tribute)}
   .pm-legend .tr{border-color:var(--pm-trade)}
@@ -981,10 +987,10 @@
         <g class="pm-nodes" id="pmNodes"></g>
       </svg>
       <div class="pm-legend">
-        <span><i class="h"></i>对峙 · 摩擦</span>
-        <span><i class="t"></i>朝贡 · 依附</span>
-        <span><i class="tr"></i>贸易 · 往来</span>
-        <span><i class="i"></i>孤立 · 自守</span>
+        <span class="lg-it"><i class="h"></i>对峙 · 摩擦</span>
+        <span class="lg-it"><i class="t"></i>朝贡 · 依附</span>
+        <span class="lg-it"><i class="tr"></i>贸易 · 往来</span>
+        <span class="lg-it"><i class="i"></i>孤立 · 自守</span>
       </div>
       <div class="pm-detail" id="pmDetail" style="display:none"></div>
     </div>
