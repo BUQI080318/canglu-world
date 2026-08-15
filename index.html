@@ -60,6 +60,19 @@
   .gl-legend .l-hill{background:#7a8f4a}.gl-legend .l-low{background:#5d7f4a}
   .gl-legend .l-beach{background:#c8b98a}.gl-legend .l-sea{background:#1e5a86}
   .gl-legend .l-city{background:#ffd75e;border-radius:50%}
+  .map-ui{position:absolute;right:18px;bottom:18px;z-index:60;display:flex;flex-direction:column;gap:8px}
+  .map-ui button{
+    width:42px;height:42px;border-radius:6px;cursor:pointer;
+    background:rgba(20,16,23,.9);color:var(--gold);font-size:19px;font-family:inherit;
+    border:1px solid var(--line);transition:all .15s;
+  }
+  .map-ui button:hover{background:var(--panel2);border-color:var(--gold-dim)}
+  .compass{
+    position:absolute;left:18px;top:18px;z-index:60;pointer-events:none;
+    color:var(--gold);font-size:15px;letter-spacing:2px;
+    background:rgba(13,16,23,.75);padding:6px 12px;border-radius:6px;border:1px solid var(--line);
+  }
+  .compass b{font-size:18px;color:#ffe9a8}
   /* 弹窗 */
   .modal-mask{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;display:none;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
   .modal-mask.on{display:flex}
@@ -128,6 +141,13 @@
     <div><i class="l-sea"></i>海洋</div>
     <div><i class="l-city"></i>城邦 / 地标</div>
   </div>
+  <div class="map-ui">
+    <button id="btnHome" title="复位视角（北朝上）">⌂</button>
+    <button id="btnIn" title="放大">＋</button>
+    <button id="btnOut" title="缩小">－</button>
+    <button id="btnFull" title="全屏">⛶</button>
+  </div>
+  <div class="compass">北 <b>↑</b></div>
 </section>
 
 <section class="page" id="geoPage">
@@ -290,7 +310,7 @@
 <script>
 /* ============ 3D 场景 ============ */
 const MAP_W = MAPDATA.W, MAP_H = MAPDATA.H;
-const HSCALE = 8;
+const HSCALE = 12;
 const canvas = document.getElementById('glCanvas');
 const renderer = new THREE.WebGLRenderer({canvas, antialias:true});
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -298,8 +318,11 @@ const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x070a10);
 
 const cam = new THREE.PerspectiveCamera(50, 1, 0.1, 3000);
-const target = new THREE.Vector3(0, 1.6, 0);
-let dist = 95, theta = -0.85, phi = 1.05;
+const target = new THREE.Vector3(0, 2.2, 0);
+// 标准视角：上北下南、左西右东（相机从正南方高空俯视）
+let dist = 125, theta = Math.PI, phi = 0.62;
+const HOME = {theta: Math.PI, phi: 0.62, dist: 125, tx: 0, ty: 2.2, tz: 0};
+function goHome(){ theta = HOME.theta; phi = HOME.phi; dist = HOME.dist; target.set(HOME.tx, HOME.ty, HOME.tz); }
 
 function resize(){
   const w = canvas.clientWidth, h = canvas.clientHeight;
@@ -331,8 +354,8 @@ function colorFor(h){
     [0.16, 0.36, 0.50, 0.29],  // 低地绿
     [0.30, 0.48, 0.56, 0.29],  // 丘陵
     [0.45, 0.55, 0.42, 0.27],  // 山地棕
-    [0.60, 0.43, 0.29, 0.19],  // 高山深棕
-    [0.76, 0.86, 0.86, 0.90],  // 雪线
+    [0.58, 0.43, 0.29, 0.19],  // 高山深棕
+    [0.66, 0.86, 0.86, 0.90],  // 雪线
     [1.00, 0.95, 0.96, 0.98],  // 雪顶
   ];
   for(let i=0;i<stops.length-1;i++){
@@ -348,7 +371,7 @@ function colorFor(h){
 function makeLabel(text, gold){
   const cv = document.createElement('canvas'); cv.width = 512; cv.height = 96;
   const c = cv.getContext('2d');
-  c.font = 'bold 54px "楷体","KaiTi","STKaiti",serif';
+  c.font = 'bold 64px "楷体","KaiTi","STKaiti",serif';
   c.textAlign = 'center'; c.textBaseline = 'middle';
   c.lineWidth = 12; c.strokeStyle = 'rgba(8,6,4,0.9)';
   c.strokeText(text, 256, 48);
@@ -357,7 +380,7 @@ function makeLabel(text, gold){
   const tex = new THREE.CanvasTexture(cv);
   tex.minFilter = THREE.LinearFilter;
   const sp = new THREE.Sprite(new THREE.SpriteMaterial({map:tex, transparent:true, depthWrite:false}));
-  sp.scale.set(5.6, 1.05, 1);
+  sp.scale.set(8.2, 1.55, 1);
   return sp;
 }
 
@@ -441,10 +464,10 @@ function buildWorld(){
     const hy = h*HSCALE;
     // 金球
     const ball = new THREE.Mesh(
-      new THREE.SphereGeometry(m.imp ? 0.34 : 0.24, 16, 16),
+      new THREE.SphereGeometry(m.imp ? 0.42 : 0.3, 16, 16),
       new THREE.MeshBasicMaterial({color:0xffd75e})
     );
-    ball.position.set(wx, hy + 0.55, wz);
+    ball.position.set(wx, hy + 0.8, wz);
     ball.userData = {mark:m};
     // 底座光环
     const ring = new THREE.Mesh(
@@ -541,6 +564,18 @@ function updateCam(){
   );
   cam.lookAt(target);
 }
+/* 控制按钮 */
+function zoomAt(cx, cy, factor){
+  dist = Math.max(28, Math.min(320, dist / factor));
+}
+document.getElementById('btnHome').onclick = goHome;
+document.getElementById('btnIn').onclick = ()=> zoomAt(0,0,1.4);
+document.getElementById('btnOut').onclick = ()=> zoomAt(0,0,1/1.4);
+document.getElementById('btnFull').onclick = ()=>{
+  if(document.fullscreenElement) document.exitFullscreen();
+  else document.documentElement.requestFullscreen().catch(()=>{});
+};
+
 function animate(){
   requestAnimationFrame(animate);
   updateCam();
