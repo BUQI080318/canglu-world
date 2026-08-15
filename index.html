@@ -103,9 +103,12 @@
   }
   .glass-shine:hover::after{opacity:1}
   .glass-shine > *{position:relative;z-index:2}
-  /* 页面切换动画 */
-  section.page.on .doc{animation:pageIn .5s cubic-bezier(.22,.61,.36,1)}
-  @keyframes pageIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  /* 页面切换：错层浮现动画 */
+  section.page.on .doc > *{opacity:0;transform:translateY(16px);animation:riseIn .55s cubic-bezier(.22,.61,.36,1) forwards;animation-delay:var(--rd,0s)}
+  @keyframes riseIn{
+    from{opacity:0;transform:translateY(18px);filter:blur(3px)}
+    to{opacity:1;transform:none;filter:blur(0)}
+  }
   /* 卡片悬停缩放 */
   .city-card,.acc-card,.month-card,.tl-item,.calc{transition:transform .25s cubic-bezier(.22,.61,.36,1),box-shadow .25s,border-color .25s}
   .city-card:hover,.month-card:hover{transform:translateY(-3px) scale(1.012)}
@@ -307,12 +310,23 @@
   .music-now{color:var(--ink);font-size:13px;letter-spacing:1px;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .music-now b{color:var(--gold);font-weight:normal;letter-spacing:2px}
   .music-hint{color:var(--ink-dim);font-size:11.5px;letter-spacing:1px}
+  /* 专辑封面小头像 */
+  .music-cover{
+    width:38px;height:38px;border-radius:50%;object-fit:cover;flex-shrink:0;
+    border:2px solid var(--gold-dim);box-shadow:0 0 10px var(--glow),0 2px 8px rgba(0,0,0,.4);
+    transition:transform .3s;
+  }
+  .music-bar.playing .music-cover{animation:coverSpin 14s linear infinite}
+  .music-bar:not(.playing) .music-cover{animation-play-state:paused}
+  @keyframes coverSpin{to{transform:rotate(360deg)}}
   .music-list{position:fixed;right:18px;bottom:66px;z-index:149;background:var(--panel2);border:1px solid var(--line);border-radius:8px;box-shadow:0 10px 32px var(--shadow);display:none;min-width:210px;max-height:260px;overflow:auto}
   .music-list.on{display:block}
-  .music-list .song{padding:10px 14px;cursor:pointer;border-bottom:1px solid var(--line);font-size:13.5px;color:var(--ink);letter-spacing:1px;transition:background .15s}
+  .music-list .song{padding:9px 14px;cursor:pointer;border-bottom:1px solid var(--line);font-size:13.5px;color:var(--ink);letter-spacing:1px;transition:background .15s;display:flex;align-items:center;gap:10px}
   .music-list .song:hover{background:var(--panel)}
   .music-list .song.on{color:var(--gold)}
-  .music-list .song small{color:var(--ink-dim);font-size:11px;display:block;margin-top:2px}
+  .music-list .song .song-name{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .music-list .song small{color:var(--ink-dim);font-size:11px}
+  .music-list .song .song-cover{width:30px;height:30px;border-radius:50%;object-fit:cover;border:1px solid var(--line);flex-shrink:0}
   /* 移动端 */
   @media (max-width:700px){
     .brand{font-size:16px;letter-spacing:3px}
@@ -576,6 +590,7 @@
 
 <div class="music-list" id="musicList"></div>
 <div class="music-bar" id="musicBar">
+  <img class="music-cover" id="musicCover" src="music/covers/06_odyssey.jpg" alt="专辑封面">
   <button class="music-btn" id="musicBtn">▶</button>
   <div class="eq" id="eqBars" aria-hidden="true">
     <span></span><span></span><span></span><span></span><span></span>
@@ -693,6 +708,7 @@ function switchPage(id){
   const sec = document.getElementById(id);
   if(sec){ sec.classList.add('on'); document.querySelector('main').scrollTop = 0; }
   if(window.animateTitle) setTimeout(animateTitle, 60);
+  if(window.animatePageIn) setTimeout(()=> animatePageIn(sec), 60);
 }
 document.querySelectorAll('nav button').forEach(btn=>{
   btn.onclick = ()=>{ switchPage(btn.dataset.page); location.hash = btn.dataset.page; };
@@ -973,27 +989,33 @@ function revealItem(el){
 (function(){
   /* ===== 歌单：沧陆之声 ===== */
   const SONGS = [
-    {name:'Landscapes — Talos', src:'music/01_landscapes_talos.mp3'},
-    {name:'Come Back To Me — 宇多田光', src:'music/02_come_back_to_me.mp3'},
-    {name:'Contra — Talos', src:'music/03_contra_talos.mp3'},
-    {name:'Odyssey — Talos', src:'music/06_odyssey.mp3'},
-    {name:'In Time — Talos', src:'music/07_in_time.mp3'},
-    {name:'A Dawning — Ólafur Arnalds / Talos', src:'music/08_a_dawning.mp3'},
-    {name:'Bedrock (choir) — Ólafur Arnalds / Talos', src:'music/09_bedrock_choir.mp3'},
-    {name:'To Each His Own — Talos', src:'music/10_to_each_his_own.mp3'},
-    {name:'This Is Us Colliding — Talos', src:'music/11_this_is_us_colliding.mp3'},
-    {name:'Piece[s] — Talos', src:'music/12_pieces.mp3'},
-    {name:'Far Out Dust — Talos', src:'music/13_far_out_dust.mp3'},
-    {name:'A Dawning (choir) — Ólafur Arnalds / Talos', src:'music/14_a_dawning_choir.mp3'},
+    {name:'Odyssey — Talos', src:'music/06_odyssey.mp3', cover:'music/covers/06_odyssey.jpg'},
+    {name:'In Time — Talos', src:'music/07_in_time.mp3', cover:'music/covers/07_in_time.jpg'},
+    {name:'Contra — Talos', src:'music/03_contra_talos.mp3', cover:'music/covers/03_contra_talos.jpg'},
+    {name:'Landscapes — Talos', src:'music/01_landscapes_talos.mp3', cover:'music/covers/01_landscapes_talos.jpg'},
+    {name:'To Each His Own — Talos', src:'music/10_to_each_his_own.mp3', cover:'music/covers/10_to_each_his_own.jpg'},
+    {name:'This Is Us Colliding — Talos', src:'music/11_this_is_us_colliding.mp3', cover:'music/covers/11_this_is_us_colliding.jpg'},
+    {name:'Piece[s] — Talos', src:'music/12_pieces.mp3', cover:'music/covers/12_pieces.jpg'},
+    {name:'Far Out Dust — Talos', src:'music/13_far_out_dust.mp3', cover:'music/covers/13_far_out_dust.jpg'},
+    {name:'A Dawning — Ólafur Arnalds / Talos', src:'music/08_a_dawning.mp3', cover:'music/covers/08_a_dawning.jpg'},
+    {name:'Bedrock (choir) — Ólafur Arnalds / Talos', src:'music/09_bedrock_choir.mp3', cover:'music/covers/09_bedrock_choir.jpg'},
+    {name:'A Dawning (choir) — Ólafur Arnalds / Talos', src:'music/14_a_dawning_choir.mp3', cover:'music/covers/14_a_dawning_choir.jpg'},
+    {name:'Come Back To Me — 宇多田光', src:'music/02_come_back_to_me.mp3', cover:'music/covers/02_come_back_to_me.jpg'},
   ];
   const btn = document.getElementById('musicBtn');
   const now = document.getElementById('musicNow');
   const list = document.getElementById('musicList');
   const bar = document.getElementById('musicBar');
+  const cover = document.getElementById('musicCover');
   let audio = null, cur = -1, started = false;
 
   function setPlaying(on){
     bar.classList.toggle('playing', on);
+  }
+  function setCover(i){
+    if(cover && SONGS[i] && SONGS[i].cover){
+      cover.src = SONGS[i].cover;
+    }
   }
 
   function renderList(){
@@ -1002,7 +1024,8 @@ function revealItem(el){
       return;
     }
     list.innerHTML = SONGS.map((s,i)=>{
-      return '<div class="song'+(i===cur?' on':'')+'" data-i="'+i+'">'+s.name+'<small>'+ (i+1) +' / '+SONGS.length+'</small></div>';
+      const cov = s.cover ? '<img class="song-cover" src="'+s.cover+'" alt="">' : '';
+      return '<div class="song'+(i===cur?' on':'')+'" data-i="'+i+'">'+cov+'<span class="song-name">'+s.name+'</span><small>'+ (i+1) +' / '+SONGS.length+'</small></div>';
     }).join('');
     list.querySelectorAll('.song[data-i]').forEach(el=>{
       el.onclick = ()=>{
@@ -1016,6 +1039,7 @@ function revealItem(el){
     if(cur < 0 || !SONGS[cur]) return;
     if(!audio) audio = new Audio();
     audio.src = SONGS[cur].src;
+    setCover(cur);
     audio.play().then(()=>{
       started = true;
       now.innerHTML = '<b>'+SONGS[cur].name+'</b><span class="music-hint"> · 奏响</span>';
@@ -1049,19 +1073,21 @@ function revealItem(el){
   document.addEventListener('click', e=>{
     if(!e.target.closest('.music-bar') && !e.target.closest('.music-list')) list.classList.remove('on');
   });
-  // 自动播放：进站立即尝试；被拦截则首次点击任意处立即接管
+  // 自动播放：静音启动（浏览器允许）→ 首次点击任意处立即出声
   function tryAutoPlay(){
     if(!SONGS.length || cur >= 0) return;
     cur = 0;
     if(!audio) audio = new Audio();
+    audio.muted = true;   // 静音自动播放：浏览器允许，绕过拦截
     audio.src = SONGS[0].src;
+    setCover(0);
     audio.play().then(()=>{
       started = true;
-      now.innerHTML = '<b>'+SONGS[0].name+'</b><span class="music-hint"> · 奏响</span>';
+      now.innerHTML = '<b>'+SONGS[0].name+'</b><span class="music-hint"> · 点击出声</span>';
       btn.textContent = '❚❚';
       setPlaying(true);
     }).catch(()=>{
-      // 被浏览器拦截：等首次交互
+      // 极少数情况连静音也被拦：等首次交互
       now.innerHTML = '<b>沧陆</b><span class="music-hint"> · 轻触页面奏响</span>';
       setPlaying(false);
     });
@@ -1070,6 +1096,7 @@ function revealItem(el){
     if(SONGS.length && !started){
       if(cur < 0) cur = 0;
       if(audio && audio.src){
+        audio.muted = false;  // 解锁声音
         audio.play().then(()=>{
           started = true;
           now.innerHTML = '<b>'+SONGS[cur].name+'</b><span class="music-hint"> · 奏响</span>';
@@ -1079,10 +1106,13 @@ function revealItem(el){
       } else {
         playCur();
       }
+    } else if(started && audio && audio.muted){
+      audio.muted = false;   // 已在静音播放中：点击即出声
+      now.innerHTML = '<b>'+SONGS[cur].name+'</b><span class="music-hint"> · 奏响</span>';
     }
     document.removeEventListener('click', auto);
   }, {once:true});
-  // 立即尝试自动播放
+  // 立即尝试静音自动播放
   tryAutoPlay();
   renderList();
 })();
@@ -1090,7 +1120,7 @@ function revealItem(el){
 
 
 
-/* ============ 标题逐字浮现 ============ */
+/* ============ 标题逐字浮现 + 页面错层动画 ============ */
 function animateTitle(){
   document.querySelectorAll('section.page.on .h-title').forEach(t=>{
     if(t.dataset.done) return;
@@ -1104,6 +1134,19 @@ function animateTitle(){
       s.textContent = ch;
       t.appendChild(s);
     });
+  });
+}
+function animatePageIn(sec){
+  if(!sec) return;
+  // 每个直接子元素依次浮现（标题先动，内容后动）
+  const kids = sec.querySelectorAll(':scope > .doc > *');
+  kids.forEach((k, i)=>{
+    k.style.setProperty('--rd', (i * 0.07) + 's');
+  });
+  // 城邦卡片网格内部也错层
+  const cards = sec.querySelectorAll('.city-grid .city-card');
+  cards.forEach((c, i)=>{
+    c.style.setProperty('--rd', (0.15 + i * 0.05) + 's');
   });
 }
 
