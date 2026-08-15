@@ -1484,23 +1484,35 @@ applyHash();
       if(e.type === 'isolated') return;
       var a = NODES[e.a], b = NODES[e.b];
       var d = 'M' + a.x + ' ' + a.y;
+      // 横向贸易（同排节点）与对角通商区分：横向=大幅下弯绕行，对角=中弯
+      var isH = Math.abs(a.y - b.y) < 10;
       // 每条线用不同的贝塞尔弯曲路径，避免相互遮挡：
-      // hostile=微弯向上 / tribute=明显上弯 / trade=大幅下弯绕行 / 对角=中弯
+      // hostile=微弯向上 / tribute=明显上弯 / trade(横向)=大幅下弯绕行 / trade(对角)=中弯
       if(e.type === 'hostile'){
         d += ' Q ' + ((a.x+b.x)/2) + ' ' + (Math.min(a.y,b.y) - 18) + ' ' + b.x + ' ' + b.y;
       } else if(e.type === 'tribute'){
         d += ' Q ' + ((a.x+b.x)/2) + ' ' + (Math.min(a.y,b.y) - 52) + ' ' + b.x + ' ' + b.y;
-      } else if(e.type === 'trade'){
-        // 贸易线走下方大弯，绕开横排节点
+      } else if(e.type === 'trade' && isH){
+        // 横向贸易线走下方大弯，绕开横排节点
         d += ' Q ' + ((a.x+b.x)/2) + ' ' + (Math.max(a.y,b.y) + 120) + ' ' + b.x + ' ' + b.y;
       } else {
-        d += ' Q ' + ((a.x+b.x)/2) + ' ' + ((a.y+b.y)/2 + 20) + ' ' + b.x + ' ' + b.y;
+        // 对角通商/其余：中弯
+        d += ' Q ' + ((a.x+b.x)/2) + ' ' + ((a.y+b.y)/2 + 30) + ' ' + b.x + ' ' + b.y;
       }
       var path = mk('path', {d:d, 'class':'pm-line ' + e.type, fill:'none'});
       edges.appendChild(path);
-      // 关系标签：曲线中点（曲线上方）
+      // 关系标签：曲线中点（横向贸易→标签放曲线下方；其余→曲线上方）
       var mx = (a.x+b.x)/2;
-      var my = e.type === 'trade' ? (Math.max(a.y,b.y) + 120) - 14 : (e.type === 'tribute' ? (Math.min(a.y,b.y) - 52) - 10 : (Math.min(a.y,b.y) - 18) - 10);
+      var my;
+      if(e.type === 'trade' && isH){
+        my = (Math.max(a.y,b.y) + 120) + 18;
+      } else if(e.type === 'tribute'){
+        my = (Math.min(a.y,b.y) - 52) - 10;
+      } else if(e.type === 'hostile'){
+        my = (Math.min(a.y,b.y) - 18) - 10;
+      } else {
+        my = ((a.y+b.y)/2 + 30) - 14;
+      }
       var lab = mk('text', {x:mx, y:my, 'class':'pm-line-label'});
       lab.textContent = en ? e.en : e.zh;
       edges.appendChild(lab);
