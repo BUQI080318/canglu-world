@@ -1729,6 +1729,7 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       spLangZh:'中文', spLangEn:'English',
       spOn:'开启', spOff:'关闭',
       lg_t:'徽记释义 · 沧陆全域总LOGO', lg_lead:'「单侧羽翼 + 十字佩剑」——沧陆全域世界观总LOGO。',
+      lg_hero_t:'沧陆全域徽记', lg_hero_s:'折翼一陆 · 剑衡四方', lg_hero_btn:'徽记释义',
       lg_h1a:'十字剑（承载世界四方势力、世间平衡）', lg_h1a_lead:'十字四向对应沧陆四大核心城邦，是整片大陆的四方缩影：',
       lg_s1b:'剑上竖刃', lg_s1c:'：中部茹章城（大陆中心、神权集权，整片世界权力枢纽）',
       lg_s2b:'剑下竖刃', lg_s2c:'：南部伏熏岛（海岛隔绝、理性民主，世界边缘孤岛）',
@@ -1765,6 +1766,7 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       spLangZh:'Chinese', spLangEn:'English',
       spOn:'On', spOff:'Off',
       lg_t:'The Emblem · Canglu Global Logo', lg_lead:'A single wing and a cross-sword — the master emblem of the Canglu world.',
+      lg_hero_t:'The Emblem of Canglu', lg_hero_s:'One broken wing for the land, the sword balances the four realms', lg_hero_btn:'About the Emblem',
       lg_h1a:'The Cross-Sword (the four powers, the balance of the world)', lg_h1a_lead:'The four directions of the cross mirror the four great city-states — a miniature of the whole continent:',
       lg_s1b:'Upper blade', lg_s1c:': central Ruzhang (heart of the continent, theocracy, the world\'s hub of power)',
       lg_s2b:'Lower blade', lg_s2c:': southern Fuxun Island (isolated, rational democracy, the lone isle at the world\'s edge)',
@@ -1841,6 +1843,12 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       if(!titleEl) return;
       var k = card.dataset ? card.dataset.i18nKey : null;
       if(k && t[k]) titleEl.textContent = t[k];
+      // 条目计数也翻译（N 条 → N items）
+      var countEl = card.querySelector('.acc-count');
+      if(countEl){
+        var n = (countEl.textContent || '').match(/\d+/);
+        if(n) countEl.textContent = (window.__lang==='en' ? n[0]+' items' : n[0]+' 条');
+      }
     });
   }
 
