@@ -3065,6 +3065,7 @@ function revealItem(el){
   var emojiPanel = document.getElementById('caEmojiPanel');
   var likeCount = 0;
   var liked = false;
+  try{ if(localStorage.getItem('canglu_liked') === '1'){ liked = true; } }catch(e){}
   var EMOJIS = ['😀','😄','😁','😂','🤣','😊','😍','🤩','🥰','😎','🤗','😜','🤔','😴','🥳','😇','🙏','👏','👍','👌','🔥','✨','🌟','💫','🌊','⛰️','⚔️','🛡️','🌙','⭐','🐉','🦅','🌸','🍵','📜','🗡️'];
 
   function ghHeaders(extra){
@@ -3088,27 +3089,43 @@ function revealItem(el){
     d.textContent = s;
     return d.innerHTML;
   }
-  // 加载点赞数（issue reactions 公开可读）
+  // 加载点赞数（从 issue 正文 <!--CLK:N--> 标记读取，公开可读）
   function loadLikes(){
-    fetch(API + '/repos/' + REPO + '/issues/' + ISSUE + '/reactions?per_page=100&content=%2B1', {headers: ghHeaders()})
+    fetch(API + '/repos/' + REPO + '/issues/' + ISSUE, {headers: ghHeaders()})
       .then(function(r){ return r.json(); })
-      .then(function(arr){
-        if(Array.isArray(arr)){ likeCount = arr.length; likeNum.textContent = likeCount; }
+      .then(function(issue){
+        if(issue && issue.body){
+          var m = issue.body.match(/<!--CLK:(\d+)-->/);
+          if(m){ likeCount = parseInt(m[1], 10) || 0; likeNum.textContent = likeCount; }
+        }
       }).catch(function(){});
   }
-  // 点赞（token 写 reactions）
+  // 点赞（token 写回 issue 正文计数 +1）
   function doLike(){
     if(liked) return;
-    fetch(API + '/repos/' + REPO + '/issues/' + ISSUE + '/reactions', {
-      method: 'POST',
-      headers: ghHeaders({'Content-Type':'application/json','Authorization':'Bearer ' + TOKEN}),
-      body: JSON.stringify({content:'+1'})
-    }).then(function(r){ return r.json(); }).then(function(){
-      liked = true;
-      likeBtn.classList.add('liked');
-      likeCount++; likeNum.textContent = likeCount;
-      saveLiked();
-    }).catch(function(){ msg('点赞失败，请重试'); });
+    fetch(API + '/repos/' + REPO + '/issues/' + ISSUE, {headers: ghHeaders()})
+      .then(function(r){ return r.json(); })
+      .then(function(issue){
+        var newBody = issue.body || '';
+        var m = newBody.match(/<!--CLK:(\d+)-->/);
+        var cur = m ? parseInt(m[1], 10) : 0;
+        var next = cur + 1;
+        if(m){
+          newBody = newBody.replace(/<!--CLK:\d+-->/, '<!--CLK:' + next + '-->');
+        } else {
+          newBody += '\n\n<!--CLK:' + next + '-->';
+        }
+        return fetch(API + '/repos/' + REPO + '/issues/' + ISSUE, {
+          method: 'PATCH',
+          headers: ghHeaders({'Content-Type':'application/json','Authorization':'Bearer ' + TOKEN}),
+          body: JSON.stringify({body: newBody})
+        }).then(function(r){ return r.json(); }).then(function(){
+          liked = true;
+          likeBtn.classList.add('liked');
+          likeCount = next; likeNum.textContent = next;
+          saveLiked();
+        });
+      }).catch(function(){ msg('点赞失败，请重试'); });
   }
   function saveLiked(){
     try{ localStorage.setItem('canglu_liked', '1'); }catch(e){}
