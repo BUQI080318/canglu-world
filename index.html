@@ -1238,62 +1238,11 @@ html[data-theme="light"] .he-badge{background:rgba(255,255,255,.5)}
   .hh-btn-primary:hover{transform:scale(1.05);box-shadow:0 0 26px var(--glow)}
   .hh-btn-ghost{border:1px solid var(--gold-dim);color:var(--gold);background:transparent}
   .hh-btn-ghost:hover{background:rgba(200,162,74,.08);transform:scale(1.03)}
-  /* 地图卷轴 */
-  .home-map-wrap{margin:56px auto 0;max-width:860px;position:relative}
-  @media (max-width:700px){
-    .home-map-wrap{max-width:calc(100vw - 28px);margin:34px auto 0}
-  }
-  .home-map-card{
-    position:relative;border-radius:16px;overflow:hidden;
-    border:1px solid var(--glass-brd);
-    box-shadow:var(--glass-hl),0 30px 80px rgba(0,0,0,.5),0 0 60px rgba(200,162,74,.08);
-    background:linear-gradient(135deg,#f6ecd4,#e8d9b4);
-    cursor:default;
-  }
-  .home-map-card::before{
-    content:'';position:absolute;inset:0;z-index:2;pointer-events:none;
-    box-shadow:inset 0 0 80px rgba(120,90,30,.18),inset 0 0 6px rgba(120,90,30,.2);
-    border-radius:16px;
-  }
-  .home-map-img{display:block;width:100%;height:auto;position:relative;z-index:1;transition:transform .6s ease}
-  .home-map-card:hover .home-map-img{transform:scale(1.02)}
-  /* 卷轴两端 */
-  .hm-scroll-top{position:absolute;left:0;right:0;top:0;height:10px;z-index:3;
-    background:linear-gradient(180deg,rgba(160,120,50,.5),transparent);pointer-events:none}
-  .hm-scroll-left,.hm-scroll-right{position:absolute;top:0;bottom:0;width:22px;z-index:3;pointer-events:none;
-    background:linear-gradient(90deg,rgba(140,105,45,.4),transparent)}
-  .hm-scroll-right{right:0;background:linear-gradient(270deg,rgba(140,105,45,.4),transparent)}
-  /* 扫描流光 */
-  .hm-shine{position:absolute;top:0;bottom:0;width:40%;z-index:3;pointer-events:none;
-    background:linear-gradient(105deg,transparent,rgba(255,248,225,.35),transparent);
-    animation:hmShine 7s ease-in-out infinite;
-  }
-  @keyframes hmShine{0%,100%{left:-45%}55%{left:105%}}
-  .hm-caption{margin-top:14px;text-align:center;font-size:12px;letter-spacing:3px;color:var(--ink-dim)}
-  /* 六志入口 */
-  .home-grid{margin:60px auto 0;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:860px}
-  .hg-card{
-    display:flex;flex-direction:column;align-items:center;justify-content:center;
-    padding:30px 16px;border-radius:16px;cursor:pointer;text-decoration:none;
-    background:var(--glass-bg);-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
-    border:1px solid var(--glass-brd);box-shadow:var(--glass-hl);
-    transition:transform .3s cubic-bezier(.2,.8,.3,1.1),box-shadow .3s,border-color .3s;
-  }
-  .hg-card:hover{transform:translateY(-5px);border-color:var(--gold-dim);box-shadow:var(--glass-hl),0 14px 34px var(--shadow)}
-  .hg-card b{font-size:20px;letter-spacing:6px;color:var(--gold);font-weight:600}
-  .hg-card span{margin-top:10px;font-size:12px;letter-spacing:2px;color:var(--ink-dim)}
-  /* 底部 */
   .home-footer{margin:70px 0 30px;padding-top:26px;border-top:1px solid var(--glass-brd);
     display:flex;justify-content:center;gap:30px;flex-wrap:wrap}
   .hf-item{font-size:12px;letter-spacing:2px;color:var(--ink-dim);text-decoration:none;transition:color .2s}
   a.hf-item:hover{color:var(--gold)}
   @media (max-width:700px){
-    .home-hero{padding:44px 0 6px}
-    .hh-title .hh-cn{letter-spacing:10px}
-    .hh-sub{font-size:13px;letter-spacing:2px}
-    .home-grid{grid-template-columns:repeat(2,1fr);gap:10px}
-    .hg-card{padding:22px 10px}
-    .hg-card b{font-size:16px;letter-spacing:4px}
     .home-footer{gap:18px}
   }
 
