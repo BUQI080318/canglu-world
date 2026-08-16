@@ -1145,6 +1145,33 @@
     .hg-card b{font-size:16px;letter-spacing:4px}
     .home-footer{gap:18px}
   }
+
+/* ============ 联系弹窗 ============ */
+.contact-mask{position:fixed;inset:0;z-index:1200;display:flex;align-items:center;justify-content:center;background:rgba(6,10,20,.62);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
+.contact-mask.on{opacity:1;visibility:visible}
+.contact-box{position:relative;width:min(560px,92vw);max-height:84vh;overflow-y:auto;background:var(--glass-bg);border:1px solid var(--glass-bd);border-radius:18px;padding:30px 28px 26px;box-shadow:0 18px 50px rgba(0,0,0,.45);transform:translateY(18px) scale(.97);transition:transform .3s cubic-bezier(.22,.61,.36,1)}
+.contact-mask.on .contact-box{transform:none}
+.contact-close{position:absolute;top:12px;right:14px;width:30px;height:30px;border:none;border-radius:50%;background:rgba(200,162,74,.12);color:var(--ink);font-size:15px;cursor:pointer;transition:transform .25s,background .25s}
+.contact-close:hover{transform:rotate(90deg);background:rgba(200,162,74,.22)}
+.contact-title{font-size:19px;letter-spacing:3px;color:var(--gold);text-align:center;margin:0 0 4px}
+.contact-sub{font-size:13px;letter-spacing:1px;color:var(--ink-dim);text-align:center;margin:0 0 20px}
+.contact-row{display:flex;flex-direction:column;gap:14px}
+.contact-card{display:flex;align-items:center;gap:16px;padding:14px 16px;border-radius:14px;border:1px solid var(--glass-bd);background:rgba(255,255,255,.03);transition:border-color .25s,background .25s}
+.contact-card:hover{border-color:rgba(200,162,74,.45);background:rgba(200,162,74,.06)}
+.contact-avatar{width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid rgba(200,162,74,.5);flex-shrink:0}
+.contact-info{display:flex;flex-direction:column;gap:4px;min-width:0}
+.contact-label{font-size:12px;letter-spacing:2px;color:var(--ink-dim)}
+.contact-value{font-size:16px;letter-spacing:1px;color:var(--ink);font-weight:600;word-break:break-all}
+.contact-copy{margin-top:2px;align-self:flex-start;padding:3px 12px;border-radius:8px;border:1px solid rgba(200,162,74,.5);background:transparent;color:var(--gold);font-size:12px;letter-spacing:2px;cursor:pointer;transition:background .2s,color .2s}
+.contact-copy:hover{background:rgba(200,162,74,.18)}
+.contact-copy.copied{background:rgba(200,162,74,.3);color:var(--ink)}
+.contact-row-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(200,162,74,.35),transparent)}
+html[data-lang="en"] .contact-title{letter-spacing:2px}
+@media (max-width:520px){
+  .contact-box{padding:22px 16px 18px}
+  .contact-avatar{width:56px;height:56px}
+}
+
 </style>
 <script>
 var _hmt = _hmt || [];
@@ -1599,6 +1626,33 @@ var _hmt = _hmt || [];
   <div class="eq" id="eqBars" aria-hidden="true">
     <span></span><span></span><span></span><span></span><span></span>
   </div>
+  </div>
+
+  <div class="contact-mask" id="contactMask">
+    <div class="contact-box">
+      <button class="contact-close" id="contactClose">✕</button>
+      <h3 class="contact-title" data-i18n="ct_title">联系沧陆</h3>
+      <p class="contact-sub" data-i18n="ct_sub">来找我聊聊这个世界吧</p>
+      <div class="contact-row">
+        <div class="contact-card">
+          <img class="contact-avatar" src="assets/wechat_avatar.jpg" alt="WeChat">
+          <div class="contact-info">
+            <span class="contact-label" data-i18n="ct_wechat">微信号</span>
+            <span class="contact-value">SwUiFnFtEeRr</span>
+            <button class="contact-copy" data-copy="SwUiFnFtEeRr" data-i18n="ct_copy">复制</button>
+          </div>
+        </div>
+        <div class="contact-row-divider"></div>
+        <div class="contact-card">
+          <img class="contact-avatar" src="assets/qq_avatar.jpg" alt="QQ">
+          <div class="contact-info">
+            <span class="contact-label" data-i18n="ct_qq">QQ号</span>
+            <span class="contact-value">2037917638</span>
+            <button class="contact-copy" data-copy="2037917638" data-i18n="ct_copy">复制</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="logo-intro-mask" id="logoIntroMask">
@@ -2879,6 +2933,53 @@ function revealItem(el){
   });
 })();
 
+
+/* ============ 联系弹窗 ============ */
+(function(){
+  var mask = document.getElementById('contactMask');
+  if(!mask) return;
+  function open(){ mask.classList.add('on'); }
+  function close(){ mask.classList.remove('on'); }
+  var closeBtn = document.getElementById('contactClose');
+  if(closeBtn) closeBtn.addEventListener('click', close);
+  mask.addEventListener('click', function(e){ if(e.target === mask) close(); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') close(); });
+  document.querySelectorAll('a[data-i18n="home_contact"]').forEach(function(a){
+    a.addEventListener('click', function(e){ e.preventDefault(); open(); });
+  });
+  mask.querySelectorAll('.contact-copy').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var val = btn.getAttribute('data-copy');
+      if(!val) return;
+      function done(){
+        btn.classList.add('copied');
+        btn.textContent = '\u2713 ' + (window.__lang === 'en' ? 'Copied' : '已复制');
+        setTimeout(function(){
+          btn.classList.remove('copied');
+          btn.textContent = window.__lang === 'en' ? 'Copy' : '复制';
+        }, 1600);
+      }
+      function fallback(){
+        var ta = document.createElement('textarea');
+        ta.value = val; ta.style.position='fixed'; ta.style.opacity='0';
+        document.body.appendChild(ta); ta.select();
+        try{ document.execCommand('copy'); }catch(e){}
+        document.body.removeChild(ta);
+      }
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(val).then(done).catch(function(){ fallback(); done(); });
+      } else { fallback(); done(); }
+    });
+  });
+  window.__contactLang = function(){
+    var en = window.__lang === 'en';
+    mask.querySelectorAll('.contact-copy').forEach(function(btn){
+      if(btn.classList.contains('copied')) return;
+      btn.textContent = en ? 'Copy' : '复制';
+    });
+  };
+})();
+
 /* ============ 徽记释义弹窗 ============ */
 (function(){
   var mask = document.getElementById('logoIntroMask');
@@ -3125,7 +3226,7 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
   // 语言：界面关键元素切换
   var I18N = {
     zh: {
-      nav: ['地理','城邦','秘境','历法','纪年','势力'],
+      nav: ['首页','地理','城邦','秘境','历法','纪年','势力'],
       searchPh: '检索地名 / 城邦 / 条目',
       settings: '设置',
       themeTitle: '主题设置',
@@ -3171,7 +3272,7 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       musicHint:'静候佳音', settingsTitle:'设置',
     },
     en: {
-      nav: ['Geography','Cities','Mysteries','Calendar','Chronicle','Powers'],
+      nav: ['Home','Geography','Cities','Mysteries','Calendar','Chronicle','Powers'],
       searchPh: 'Search places / cities / entries',
       settings: 'Settings',
       themeTitle: 'Theme',
@@ -3179,7 +3280,8 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       home_btn1:'Explore the World', home_btn2:'About the Emblem', home_mapcap:'Map of Canglu · Hand-drawn Original',
       hg_geo:'Seas, land & the great atlas', hg_city:'Four war-states, one continent', hg_land:'Wilds, spirits & hidden realms',
       hg_cal:'Three calendars, seasons & rites', hg_time:'From blood rites to the final prophecy', hg_power:'Four powers in a sword-balanced world',
-      home_contact:'Contact Us', home_support:'Support Us ★',
+      home_contact:'Contact Us',
+      ct_title:'Contact Canglu', ct_sub:'Come talk to me about this world', ct_wechat:'WeChat ID', ct_qq:'QQ Number', ct_copy:'Copy', home_support:'Support Us ★',
       t_geo:'Geography', t_city:'City-States', t_land:'Mystic Lands', t_cal:'Calendar', t_time:'Chronicle', t_power:'Powers',
       l_geo:'Canglu Mountains & Seas', l_city:'The Four Great City-States', l_land:'Mountains, Icons & Mystic Lands',
       l_cal:'Calendars of the States · Common Months', l_time:'Chronicle of Canglu · From the Blood Sacrifice to the Final Prophecy', l_power:'The Four Powers · Core Threads of the World',
@@ -3279,6 +3381,7 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
     if(window.__rebuildCards) window.__rebuildCards();
     // 重新渲染势力博弈图
     if(window.__pmRender) setTimeout(window.__pmRender, 30);
+    if(window.__contactLang) setTimeout(window.__contactLang, 30);
     // 刷新今日沧陆历法牌
     if(window.__todayRender) setTimeout(window.__todayRender, 30);
     if(window.__atlasRefresh) setTimeout(window.__atlasRefresh, 60);
@@ -3426,5 +3529,6 @@ var ITEM_TITLES = {"元荒海：地图最西侧的广阔外海，为西部大陆
   applyLang();
 })();
 </script>
+
 </body>
 </html>
