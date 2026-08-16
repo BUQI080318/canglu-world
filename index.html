@@ -933,17 +933,23 @@
   /* ===== 进站欢迎弹窗 ===== */
   .welcome-mask{
     position:fixed;inset:0;z-index:400;display:flex;align-items:center;justify-content:center;
-    background:rgba(5,8,14,.62);
-    -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
-    opacity:0;pointer-events:none;transition:opacity .45s ease;
+    background:rgba(8,12,20,.38);
+    -webkit-backdrop-filter:blur(0px) saturate(100%);
+    backdrop-filter:blur(0px) saturate(100%);
+    opacity:0;pointer-events:none;
+    transition:opacity .5s ease,-webkit-backdrop-filter .9s cubic-bezier(.25,.8,.3,1),backdrop-filter .9s cubic-bezier(.25,.8,.3,1);
   }
-  .welcome-mask.on{opacity:1;pointer-events:auto}
+  .welcome-mask.on{
+    opacity:1;pointer-events:auto;
+    -webkit-backdrop-filter:blur(26px) saturate(165%);
+    backdrop-filter:blur(26px) saturate(165%);
+  }
   .welcome-card{
     position:relative;width:min(440px,88vw);padding:44px 40px 36px;text-align:center;
     background:var(--glass-bg);
     -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
-    border:1px solid var(--glass-brd);border-radius:22px;
-    box-shadow:var(--glass-hl),0 18px 60px rgba(0,0,0,.5),0 0 0 1px rgba(200,162,74,.14),0 0 60px rgba(200,162,74,.12);
+    border:1px solid rgba(255,255,255,.14);border-radius:24px;
+    box-shadow:0 24px 80px rgba(0,0,0,.42),0 2px 12px rgba(0,0,0,.25),0 0 0 .5px rgba(255,255,255,.06),0 0 70px rgba(200,162,74,.1);
     transform:translateY(30px) scale(.955) rotate(-.4deg);opacity:0;
     transition:transform .85s cubic-bezier(.16,1.35,.3,1),opacity .55s ease;
   }
