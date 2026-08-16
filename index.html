@@ -372,20 +372,21 @@
   /* 移动端 */
   @media (max-width:700px){
 
-    header{height:auto;padding:10px 14px 8px;flex-wrap:wrap;gap:8px 12px}
+    header{height:auto;padding:10px 14px 8px;flex-wrap:wrap;gap:8px 12px;max-width:100%;box-sizing:border-box}
     nav{gap:14px}
     nav button{font-size:13px;letter-spacing:2px}
-    .brand{font-size:16px;letter-spacing:3px;flex:1;min-width:0}
+    .brand{font-size:16px;letter-spacing:3px;flex:1 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .brand small{font-size:9px}
     .logo-mark{width:30px;height:30px}
-    nav{order:3;width:100%;display:flex;justify-content:center;gap:4px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+    nav{order:3;flex:0 0 100%;min-width:0;max-width:100%;box-sizing:border-box;display:flex;justify-content:center;gap:4px;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px}
     nav::-webkit-scrollbar{display:none}
     nav button{font-size:13px;padding:6px 10px;letter-spacing:1px;white-space:nowrap;flex-shrink:0}
-    .theme-btn{order:2}
+    .theme-btn{order:2;padding:7px 10px;font-size:12px;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    html[data-lang="en"] .theme-btn{font-size:11px;padding:7px 8px;max-width:120px}
     .search-wrap{order:4;width:100%}
     .search-box{width:100%;font-size:13px;padding:7px 10px}
     .search-results{width:calc(100vw - 24px);right:0;left:auto}
-    .music-now{max-width:80px}
+    .music-now{max-width:none;flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
     .music-cover{width:32px;height:32px}
     .music-bar{right:10px;bottom:10px;padding:6px 12px}
     .doc{padding:14px}
@@ -666,7 +667,10 @@
       cursor:pointer;
     }
     .music-bar .music-btn{flex-shrink:0}
-    .music-bar .music-now{flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:12.5px}
+    .music-bar .music-ctrl{flex-shrink:0}
+    .music-bar .music-vol{flex-shrink:0}
+    .music-bar .music-mid{flex:1;min-width:0;overflow:hidden}
+    .music-bar .music-now{flex:1;min-width:0;max-width:none;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:12.5px}
     /* 歌单：底部上滑侧边栏 */
     .music-list{
       left:8px;right:8px;top:auto;bottom:76px;max-height:42vh;
@@ -794,7 +798,7 @@
   }
 
   /* 歌名滚动跑马灯（溢出时由JS加 .marquee 类启动） */
-  .music-now .song-marquee{display:inline-block;white-space:nowrap;padding-right:48px;max-width:none}
+  .music-now .song-marquee{display:inline-block;white-space:nowrap;padding-right:48px;max-width:100vw;overflow:hidden}
   .music-now.marquee .song-marquee{animation:marqueeScroll 10s linear infinite}
   @keyframes marqueeScroll{0%{transform:translateX(0)}12%{transform:translateX(0)}88%{transform:translateX(calc(-100% + 120px))}100%{transform:translateX(calc(-100% + 120px))}}
 
@@ -970,7 +974,7 @@
   }
   .welcome-mask.on .welcome-card{transform:translateY(0) scale(1);opacity:1;transition:transform .85s cubic-bezier(.16,1.35,.3,1),opacity .55s ease}
   .wc-emblem{
-    position:relative;width:92px;height:92px;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;
+    position:relative;width:92px;height:92px;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;overflow:hidden;
     opacity:0;transform:scale(.6) rotate(-14deg);
     transition:opacity .6s ease,transform .9s cubic-bezier(.16,1.35,.3,1);
   }
@@ -1079,6 +1083,11 @@
   .hh-title{margin:0;font-weight:700;line-height:1.1}
   .hh-title .hh-cn{font-size:clamp(56px,10vw,96px);letter-spacing:20px;color:var(--ink);text-shadow:0 0 50px rgba(200,162,74,.25)}
   .hh-title .hh-en{display:block;font-size:clamp(16px,2.6vw,24px);letter-spacing:14px;color:var(--gold);margin-top:10px;font-weight:400}
+  @media (max-width:560px){
+    .hh-title .hh-en{letter-spacing:6px;font-size:15px}
+    .hh-title .hh-cn{font-size:clamp(40px,9vw,64px);letter-spacing:12px}
+  }
+  html[data-lang="en"] .hh-title .hh-cn{font-size:clamp(30px,7.5vw,52px);letter-spacing:6px}
   .hh-sub{margin:22px auto 0;max-width:520px;font-size:15px;letter-spacing:3px;color:var(--ink-dim);line-height:1.9}
   .hh-btns{margin-top:34px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
   .hh-btn{
@@ -1092,6 +1101,9 @@
   .hh-btn-ghost:hover{background:rgba(200,162,74,.08);transform:scale(1.03)}
   /* 地图卷轴 */
   .home-map-wrap{margin:56px auto 0;max-width:860px;position:relative}
+  @media (max-width:700px){
+    .home-map-wrap{max-width:calc(100vw - 28px);margin:34px auto 0}
+  }
   .home-map-card{
     position:relative;border-radius:16px;overflow:hidden;
     border:1px solid var(--glass-brd);
@@ -1159,7 +1171,7 @@
 .contact-row{display:flex;flex-direction:column;gap:14px}
 .contact-card{display:flex;align-items:center;gap:16px;padding:14px 16px;border-radius:14px;border:1px solid var(--glass-bd);background:rgba(255,255,255,.03);transition:border-color .25s,background .25s}
 .contact-card:hover{border-color:rgba(200,162,74,.45);background:rgba(200,162,74,.06)}
-.contact-avatar{width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid rgba(200,162,74,.5);flex-shrink:0}
+.contact-avatar{width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid rgba(200,162,74,.5);flex-shrink:0;box-sizing:border-box}
 .contact-info{display:flex;flex-direction:column;gap:4px;min-width:0}
 .contact-label{font-size:12px;letter-spacing:2px;color:var(--ink-dim)}
 .contact-value{font-size:16px;letter-spacing:1px;color:var(--ink);font-weight:600;word-break:break-all}
@@ -1642,7 +1654,7 @@ var _hmt = _hmt || [];
 <div class="music-list" id="musicList"></div>
 
 <!-- ===== 进站欢迎弹窗 ===== -->
-<div class="welcome-mask" id="welcomeMask">
+<div class="welcome-mask on" id="welcomeMask">
   <div class="welcome-card">
     <div class="wc-emblem">
       <span class="wc-ring"></span>
@@ -2572,7 +2584,7 @@ function revealItem(el){
   // 同一标签页刷新不重复弹（新开/重新进入再弹）
   var seen = false;
   try{ seen = sessionStorage.getItem('canglu-welcome') === '1'; }catch(e){}
-  if(seen) return;
+  if(seen){ mask.classList.remove('on'); return; }
   // 动画时长走完再允许关闭，避免误触
   var closed = false;
   function fadeIn(el, delayMs){
@@ -2609,7 +2621,8 @@ function revealItem(el){
     fadeIn(document.querySelector('.wc-enter'), 1950);
     fadeIn(document.querySelector('.wc-close'), 2250);
   }
-  setTimeout(open, 450);
+  // 立即打开（HTML 已带 on 类，这里负责拆字动画与淡入调度）
+  open();
   var enter = document.getElementById('wcEnter');
   var closeBtn = document.getElementById('wcClose');
   if(enter) enter.onclick = close;
