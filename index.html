@@ -3065,7 +3065,7 @@ function revealItem(el){
   var emojiPanel = document.getElementById('caEmojiPanel');
   var likeCount = 0;
   var liked = false;
-  try{ if(localStorage.getItem('canglu_liked') === '1'){ liked = true; } }catch(e){}
+  try{ if(localStorage.getItem('canglu_liked_v2') === '1'){ liked = true; } }catch(e){}
   var EMOJIS = ['😀','😄','😁','😂','🤣','😊','😍','🤩','🥰','😎','🤗','😜','🤔','😴','🥳','😇','🙏','👏','👍','👌','🔥','✨','🌟','💫','🌊','⛰️','⚔️','🛡️','🌙','⭐','🐉','🦅','🌸','🍵','📜','🗡️'];
 
   function ghHeaders(extra){
@@ -3128,7 +3128,7 @@ function revealItem(el){
       }).catch(function(){ msg('点赞失败，请重试'); });
   }
   function saveLiked(){
-    try{ localStorage.setItem('canglu_liked', '1'); }catch(e){}
+    try{ localStorage.setItem('canglu_liked_v2', '1'); }catch(e){}
   }
   if(likeBtn) likeBtn.addEventListener('click', doLike);
   // 加载评论列表（公开）
