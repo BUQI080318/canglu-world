@@ -701,13 +701,21 @@
   .pm-node .pm-sub{fill:var(--ink-dim);font-size:10.5px;letter-spacing:1px;pointer-events:none;text-anchor:middle}
   .pm-node.active circle.pm-ring{stroke-width:3;stroke:#e8cd8a;filter:drop-shadow(0 0 8px rgba(200,162,74,.9))}
   .pm-node.active circle.pm-core{fill:#e8cd8a}
-  .pm-line{fill:none;stroke-width:2.6;stroke-dasharray:8 6;animation:pmFlow 2.6s linear infinite}
+  .pm-line{
+    fill:none;stroke-width:2.6;stroke-dasharray:8 6;
+    animation:pmFlow 6s linear infinite;
+    will-change:stroke-dashoffset;
+  }
+  /* 各线条错峰启动，避免同步闪烁 */
+  .pm-line:nth-child(2){animation-delay:-1.5s}
+  .pm-line:nth-child(3){animation-delay:-3s}
+  .pm-line:nth-child(4){animation-delay:-4.5s}
   .pm-line.hostile{stroke:var(--pm-hostile)}
   .pm-line.tribute{stroke:var(--pm-tribute)}
   .pm-line.trade{stroke:var(--pm-trade)}
   .pm-line.isolated{stroke:var(--pm-isolated);stroke-width:2.2;stroke-dasharray:2 7;animation:none}
   .pm-line-label{fill:var(--pm-label);font-size:11px;letter-spacing:1px;font-family:inherit;pointer-events:none;text-anchor:middle;paint-order:stroke;stroke:var(--bg);stroke-width:4px;stroke-linejoin:round;font-weight:bold}
-  @keyframes pmFlow{to{stroke-dashoffset:-22}}
+  @keyframes pmFlow{from{stroke-dashoffset:0}to{stroke-dashoffset:-14}}
   /* 点击详情面板 */
   .pm-detail{
     margin-top:10px;padding:14px 18px;border-radius:12px;border-left:3px solid var(--gold);
