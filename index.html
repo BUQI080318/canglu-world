@@ -685,6 +685,19 @@
     .music-mid{flex:1;min-width:0;overflow:hidden}
   }
 
+  /* 城邦详情小节标题 */
+  .city-sec{
+    margin:18px 0 8px;padding:6px 12px 6px 0;
+    font-size:14px;letter-spacing:2px;color:var(--gold);
+    border-bottom:1px solid rgba(200,162,74,.25);
+    display:flex;align-items:center;gap:8px;
+  }
+  .city-sec::before{
+    content:'';width:4px;height:14px;border-radius:2px;flex-shrink:0;
+    background:linear-gradient(180deg,var(--gold),var(--gold-dim));
+  }
+  #cityDetail .city-sec:first-of-type{margin-top:12px}
+
   /* ===== 四方势力博弈图 ===== */
   .power-map{
     margin:16px 0 8px;padding:16px;border-radius:16px;
@@ -1842,6 +1855,13 @@ var _hmt = _hmt || [];
 <div id="cursorRing"></div>
 <script>
 /* ============ 城邦卡片（完整设定） ============ */
+// 城邦详情小节分类（与 detail 数组逐段对应）
+const CITY_SECS = {
+  '恓鸟城': ['城邦气质与历史底色','城邦气质与历史底色','经济与产业特征','经济与产业特征','政治制度：宗族长老制 + 军事制衡','政治制度：宗族长老制 + 军事制衡','政治制度：宗族长老制 + 军事制衡','政治制度：宗族长老制 + 军事制衡','政治制度：宗族长老制 + 军事制衡','社会结构与居民','精神信仰'],
+  '茹章城': ['表象：全盛的大陆中心','内里：被诅咒的虚假繁荣','内里：被诅咒的虚假繁荣','政治制度：君主集权神权制','政治制度：君主集权神权制','核心隐秘：寿命诅咒与神骸信仰','核心隐秘：寿命诅咒与神骸信仰','核心隐秘：寿命诅咒与神骸信仰','思想管控与对外扩张'],
+  '眴姚城': ['城邦定位与风貌','城邦定位与风貌','政治运作：海商公会共治','贸易与航线网络','贸易与航线网络','对外立场','对外立场'],
+  '伏熏城': ['城邦风貌与地理禀赋','城邦风貌与地理禀赋','对外管控规则','政治制度：政团民主制','政治制度：政团民主制','政治制度：政团民主制','政治制度：政团民主制','信仰与文化']
+};
 const CITIES = [
   {name:'恓鸟城', role:'西部山城军邦', motto:'薪火相传，守护故土', summary:'别称"悲息之城"，冶铁业冠绝沧陆。宗族长老制 + 卫国者庭军事制衡，崇拜断脊山脉。',
    detail:[
@@ -1935,7 +1955,17 @@ function renderCities(){
 }
 function showCity(c){
   let html = '<h2>'+cName(c)+' · '+cRole(c)+'</h2><p class="note">"'+(window.__lang==='en'?(EN_MOTTOS[c.motto]||c.motto):c.motto)+'"</p>';
-  c.detail.forEach(d=>{ html += '<p>'+cText(d)+'</p>'; });
+  // 分类小节渲染：分类标题变化时插入小节标题
+  const secs = CITY_SECS[c.name] || [];
+  let lastSec = '';
+  c.detail.forEach((d, i)=>{
+    const sec = secs[i] || '';
+    if(sec && sec !== lastSec){
+      html += '<h5 class="city-sec">'+cText(sec)+'</h5>';
+      lastSec = sec;
+    }
+    html += '<p>'+cText(d)+'</p>';
+  });
   detailBox.innerHTML = html;
   detailBox.scrollIntoView({behavior:'smooth'});
 }
