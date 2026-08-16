@@ -929,6 +929,73 @@
   .hit:hover::before{transform:scaleY(1)}
   /* 月相卡片翻页感：hover 微上浮（已有）+ 打开时内容上滑 */
   .month-card .m-desc{animation:accItemIn .4s ease}
+
+  /* ===== 进站欢迎弹窗 ===== */
+  .welcome-mask{
+    position:fixed;inset:0;z-index:400;display:flex;align-items:center;justify-content:center;
+    background:rgba(5,8,14,.62);
+    -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+    opacity:0;pointer-events:none;transition:opacity .5s ease;
+  }
+  .welcome-mask.on{opacity:1;pointer-events:auto}
+  .welcome-card{
+    position:relative;width:min(440px,88vw);padding:44px 40px 36px;text-align:center;
+    background:var(--glass-bg);
+    -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+    border:1px solid var(--glass-brd);border-radius:22px;
+    box-shadow:var(--glass-hl),0 18px 60px rgba(0,0,0,.5),0 0 0 1px rgba(200,162,74,.14),0 0 60px rgba(200,162,74,.12);
+    transform:translateY(26px) scale(.94);opacity:0;
+    transition:transform .6s cubic-bezier(.2,.8,.25,1.1),opacity .5s ease;
+  }
+  .welcome-mask.on .welcome-card{transform:translateY(0) scale(1);opacity:1}
+  .wc-emblem{
+    position:relative;width:86px;height:86px;margin:0 auto 18px;display:flex;align-items:center;justify-content:center;
+  }
+  .wc-emblem img{width:74px;height:auto;filter:drop-shadow(0 0 14px rgba(200,162,74,.55));animation:wcFloat 3.4s ease-in-out infinite}
+  .wc-ring{
+    position:absolute;inset:0;border-radius:50%;border:1.5px dashed rgba(200,162,74,.6);
+    animation:wcSpin 16s linear infinite;
+  }
+  .wc-ring::after{
+    content:'';position:absolute;top:-3px;left:50%;width:6px;height:6px;border-radius:50%;
+    background:var(--gold);box-shadow:0 0 10px var(--glow);
+  }
+  @keyframes wcSpin{to{transform:rotate(360deg)}}
+  @keyframes wcFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+  .wc-title{
+    margin:0;font-size:30px;letter-spacing:8px;font-weight:600;color:var(--ink);
+    text-shadow:0 0 22px rgba(200,162,74,.35);
+  }
+  .wc-title .ch{display:inline-block;opacity:0;transform:translateY(12px);animation:wcChIn .5s ease forwards}
+  @keyframes wcChIn{to{opacity:1;transform:translateY(0)}}
+  .wc-sub{margin:12px 0 0;font-size:13px;letter-spacing:5px;color:var(--gold-dim);opacity:0}
+  @keyframes wcFadeIn{to{opacity:1}}
+  .wc-version{
+    margin:18px auto 0;display:inline-block;font-size:12px;letter-spacing:2px;color:var(--ink-dim);
+    padding:5px 14px;border-radius:20px;border:1px solid var(--glass-brd);background:rgba(255,255,255,.04);
+    opacity:0;animation:wcFadeIn .8s ease 1.5s forwards;
+  }
+  .wc-line{
+    margin:22px auto 0;width:120px;height:1px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);
+    opacity:0;animation:wcFadeIn .8s ease 1.7s forwards;
+  }
+  .wc-enter{
+    margin-top:22px;padding:10px 34px;border:none;border-radius:24px;cursor:pointer;
+    background:linear-gradient(135deg,var(--gold),var(--gold-dim));color:#141a24;
+    font-family:inherit;font-size:14px;letter-spacing:4px;font-weight:600;
+    opacity:0;animation:wcFadeIn .8s ease 1.9s forwards;transition:transform .2s,box-shadow .2s;
+  }
+  .wc-enter:hover{transform:scale(1.06);box-shadow:0 0 22px var(--glow)}
+  .wc-close{
+    position:absolute;top:14px;right:16px;background:none;border:none;color:var(--ink-dim);
+    font-size:15px;cursor:pointer;opacity:0;transition:color .2s,transform .2s,opacity .5s;
+  }
+  .wc-close:hover{color:var(--ink);transform:rotate(90deg)}
+  @media (max-width:700px){
+    .welcome-card{padding:34px 22px 28px}
+    .wc-title{font-size:24px;letter-spacing:6px}
+  }
 </style>
 <script>
 var _hmt = _hmt || [];
@@ -1299,6 +1366,23 @@ var _hmt = _hmt || [];
 </main>
 
 <div class="music-list" id="musicList"></div>
+
+<!-- ===== 进站欢迎弹窗 ===== -->
+<div class="welcome-mask" id="welcomeMask">
+  <div class="welcome-card">
+    <div class="wc-emblem">
+      <span class="wc-ring"></span>
+      <img src="assets/wing_line.png" alt="沧陆徽记">
+    </div>
+    <h2 class="wc-title" data-txt="欢迎来到沧陆"></h2>
+    <p class="wc-sub">折翼一陆 · 剑衡四方</p>
+    <div class="wc-version" id="wcVersion">当前版本 v3.0 · 沧陆世界</div>
+    <div class="wc-line"></div>
+    <button class="wc-enter" id="wcEnter">踏入沧陆</button>
+    <button class="wc-close" id="wcClose" title="跳过">✕</button>
+  </div>
+</div>
+
 <div class="music-bar" id="musicBar">
   <img class="music-cover" id="musicCover" src="music/covers/06_odyssey.jpg" alt="专辑封面">
   <button class="music-ctrl" id="musicPrev" title="上一首">⏮</button>
@@ -2067,6 +2151,56 @@ function revealItem(el){
     var main = document.querySelector('main');
     if(main) main.addEventListener('scroll', function(){ list.classList.remove('on'); });
   })();
+
+
+/* ============ 进站欢迎弹窗 ============ */
+(function(){
+  var mask = document.getElementById('welcomeMask');
+  if(!mask) return;
+  // 同一标签页刷新不重复弹（新开/重新进入再弹）
+  var seen = false;
+  try{ seen = sessionStorage.getItem('canglu-welcome') === '1'; }catch(e){}
+  if(seen) return;
+  // 动画时长走完再允许关闭，避免误触
+  var closed = false;
+  function fadeIn(el, delayMs){
+    setTimeout(function(){
+      if(el){ el.style.transition = 'opacity .7s ease'; el.style.opacity = '1'; }
+    }, delayMs);
+  }
+  function close(){
+    if(closed) return;
+    closed = true;
+    mask.classList.remove('on');
+    try{ sessionStorage.setItem('canglu-welcome', '1'); }catch(e){}
+  }
+  function open(){
+    mask.classList.add('on');
+    // 逐字浮现标题
+    var t = document.querySelector('.wc-title');
+    if(t){
+      var txt = t.getAttribute('data-txt') || '欢迎来到沧陆';
+      var delay = 0.45;
+      t.innerHTML = txt.split('').map(function(c){
+        delay += 0.07;
+        return '<span class="ch" style="animation-delay:' + delay.toFixed(2) + 's">' + c + '</span>';
+      }).join('');
+    }
+    // 依次淡入副标题/版本/金线/按钮/关闭
+    fadeIn(document.querySelector('.wc-sub'), 1100);
+    fadeIn(document.querySelector('.wc-version'), 1500);
+    fadeIn(document.querySelector('.wc-line'), 1750);
+    fadeIn(document.querySelector('.wc-enter'), 1950);
+    fadeIn(document.querySelector('.wc-close'), 2250);
+  }
+  setTimeout(open, 450);
+  var enter = document.getElementById('wcEnter');
+  var closeBtn = document.getElementById('wcClose');
+  if(enter) enter.onclick = close;
+  if(closeBtn) closeBtn.onclick = close;
+  mask.addEventListener('click', function(e){ if(e.target === mask) close(); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') close(); });
+})();
 
 /* ============ 音乐播放器 ============ */
 (function(){
