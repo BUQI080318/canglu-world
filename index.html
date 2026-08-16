@@ -454,6 +454,9 @@
   html[data-motion="light"] .glass-shine::after{display:none}
   /* 鼠标光效关闭 */
   html[data-fx="off"] #cursorRing,html[data-fx="off"] .pt,html[data-fx="off"] .ripple,html[data-fx="off"] .glass-shine::after{display:none !important}
+  /* 光效关闭时恢复系统光标（特效可以关，光标必须还在） */
+  html.fx-on[data-fx="off"] *{cursor:auto !important}
+  html.fx-on[data-fx="off"] input, html.fx-on[data-fx="off"] textarea, html.fx-on[data-fx="off"] select{cursor:text !important}
   /* 徽记释义弹窗（活力版） */
   .logo-intro-mask{
     position:fixed;inset:0;z-index:300;background:rgba(5,8,14,.74);
