@@ -1340,19 +1340,23 @@ var _hmt = _hmt || [];
     </div>
     <h4 data-i18n="lg_h1b">单侧残缺羽翼（沧陆世界的核心宿命底色）</h4>
     <div class="lg-wing-wrap">
-      <svg class="lg-wing-svg" viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg">
+      <svg class="lg-wing-svg" viewBox="0 0 320 340" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="lgWingGrad" x1="1" y1="0" x2="0" y2="0">
             <stop offset="0" stop-color="#e8cd8a"/><stop offset=".6" stop-color="#c8a24a"/><stop offset="1" stop-color="#8a6d2f"/>
           </linearGradient>
         </defs>
-        <!-- 单侧羽翼：仿鹰翼轮廓手绘（上缘弧线+尖锐翼尖+下缘飞羽阶梯），金色线条描边动画 -->
-        <g fill="none" stroke="url(#lgWingGrad)" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
-          <path class="wg-l" d="M368 208 C 315 140 240 85 150 55 C 95 38 55 40 28 58 L 46 92 L 64 76 L 86 116 L 106 98 L 130 138 L 152 120 L 178 158 L 202 140 L 230 176 L 256 158 L 286 190 L 314 174 L 342 200 L 368 208 Z"/>
-          <path class="wg-l" d="M368 208 C 300 160 210 118 120 92"/>
-          <path class="wg-l" d="M368 208 C 315 178 240 148 165 128"/>
-          <path class="wg-l" d="M368 208 C 330 192 275 175 220 160"/>
-          <path class="wg-l" d="M28 58 C 45 76 58 88 72 98"/>
+        <!-- 单侧羽翼：仿线稿多层斜羽结构（覆羽分层+细长尖飞羽），金色线条描边动画 -->
+        <g fill="none" stroke="url(#lgWingGrad)" stroke-width="3.6" stroke-linejoin="round" stroke-linecap="round">
+          <!-- 主轮廓：上缘弧线+翼尖+下缘羽毛尖端 -->
+          <path class="wg-l" d="M282 322 C 296 240 272 160 200 104 C 142 62 78 44 32 62 C 58 96 90 124 122 144 C 100 132 74 128 52 132 C 82 152 112 168 142 182 C 116 176 88 178 66 188 C 96 206 128 220 162 232 C 138 230 110 236 92 248 C 122 262 154 274 188 284 C 168 286 146 294 132 306 C 164 314 200 320 238 324 C 260 326 274 326 282 322 Z"/>
+          <!-- 覆羽分层线（从根部向右上发散） -->
+          <path class="wg-l" d="M282 322 C 286 260 262 200 214 156"/>
+          <path class="wg-l" d="M282 322 C 290 280 272 236 240 204"/>
+          <path class="wg-l" d="M282 322 C 296 300 286 268 268 246"/>
+          <path class="wg-l" d="M160 150 C 138 120 112 100 84 90"/>
+          <!-- 翼尖主羽分离线 -->
+          <path class="wg-l" d="M32 62 C 52 84 68 100 84 112"/>
         </g>
       </svg>
       <ul class="lg-wing-list">
