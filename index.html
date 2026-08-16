@@ -706,6 +706,40 @@
 @keyframes heBob{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
 @media (prefers-reduced-motion:reduce){.he-arrow{animation:none}}
 
+/* 沧陆舆图（手绘原稿） */
+.he-map-sec{max-width:1000px;margin:0 auto;padding:5rem 24px 1rem;text-align:center}
+.he-map-title{
+  font-size:1.3rem;letter-spacing:8px;color:var(--gold);margin-bottom:26px;
+  font-family:"Noto Serif SC","Source Han Serif SC","SimSun",serif;text-indent:8px;
+  display:flex;align-items:center;justify-content:center;gap:18px;
+}
+.he-map-title::before,.he-map-title::after{
+  content:'';height:1px;width:70px;background:linear-gradient(90deg,transparent,var(--gold-dim));
+}
+.he-map-title::after{background:linear-gradient(90deg,var(--gold-dim),transparent)}
+.he-map-frame{
+  position:relative;border-radius:14px;overflow:hidden;cursor:pointer;
+  border:1px solid rgba(201,168,76,.35);
+  box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 44px rgba(201,168,76,.07);
+  transition:border-color .4s,box-shadow .4s,transform .4s;
+}
+.he-map-frame:hover{border-color:rgba(201,168,76,.7);box-shadow:0 24px 70px rgba(0,0,0,.55),0 0 60px rgba(201,168,76,.14);transform:translateY(-4px)}
+.he-map-img{display:block;width:100%;height:auto;position:relative;z-index:1;transition:transform .7s ease}
+.he-map-frame:hover .he-map-img{transform:scale(1.02)}
+/* 四角金色角花 */
+.hmf-corner{position:absolute;width:22px;height:22px;z-index:3;pointer-events:none;opacity:.75}
+.hmf-tl{top:10px;left:10px;border-top:1.5px solid var(--gold);border-left:1.5px solid var(--gold);border-top-left-radius:6px}
+.hmf-tr{top:10px;right:10px;border-top:1.5px solid var(--gold);border-right:1.5px solid var(--gold);border-top-right-radius:6px}
+.hmf-bl{bottom:10px;left:10px;border-bottom:1.5px solid var(--gold);border-left:1.5px solid var(--gold);border-bottom-left-radius:6px}
+.hmf-br{bottom:10px;right:10px;border-bottom:1.5px solid var(--gold);border-right:1.5px solid var(--gold);border-bottom-right-radius:6px}
+/* 扫描流光 */
+.he-map-shine{position:absolute;top:0;bottom:0;width:36%;z-index:2;pointer-events:none;
+  background:linear-gradient(105deg,transparent,rgba(255,244,210,.14),transparent);
+  animation:heMapShine 8s ease-in-out infinite}
+@keyframes heMapShine{0%,100%{left:-40%}55%{left:105%}}
+@media (prefers-reduced-motion:reduce){.he-map-shine{animation:none}}
+.he-map-cap{margin-top:16px;font-size:12px;letter-spacing:3px;color:var(--ink-dim)}
+
 /* 六大志卡片 */
 .home-epic-grid{
   display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;
@@ -1433,6 +1467,18 @@ var _hmt = _hmt || [];
         <div class="he-arrow"></div>
         <span data-i18n="home_scroll">探索沧陆</span>
       </div>
+    </div>
+
+    <!-- ═══ 沧陆舆图（手绘原稿）═══ -->
+    <div class="he-map-sec" id="heMapSec">
+      <div class="he-map-title" data-i18n="home_map_t">沧陆舆图 · 山河总览</div>
+      <div class="he-map-frame">
+        <div class="hmf-corner hmf-tl"></div><div class="hmf-corner hmf-tr"></div>
+        <div class="hmf-corner hmf-bl"></div><div class="hmf-corner hmf-br"></div>
+        <img class="he-map-img" src="assets/canglu_map.jpg" alt="沧陆舆图·手绘原稿" draggable="false">
+        <div class="he-map-shine"></div>
+      </div>
+      <div class="he-map-cap" data-i18n="home_map_cap">点击地理志，逐章展开山海脉络</div>
     </div>
 
     <!-- ═══ SECTION 2：六大志入口卡片 ═══ -->
@@ -3159,6 +3205,11 @@ function revealItem(el){
 
 /* ============ 首页史诗滚动渐入 + CTA ============ */
 (function(){
+  // 舆图点击 → 进入地理志
+  var mapSec = document.getElementById('heMapSec');
+  if(mapSec) mapSec.addEventListener('click', function(){
+    switchPage('geoPage'); location.hash = 'geoPage';
+  });
   // CTA 探索按钮 → 进入地理志
   var cta = document.getElementById('hecExplore');
   if(cta) cta.addEventListener('click', function(){
@@ -3168,7 +3219,7 @@ function revealItem(el){
   var targets = [];
   var hero = document.getElementById('heHero');
   if(hero) targets.push(hero);
-  document.querySelectorAll('.home-epic .epic-card, .home-epic-cta').forEach(function(el){ targets.push(el); });
+  document.querySelectorAll('.home-epic .epic-card, .home-epic-cta, .he-map-sec').forEach(function(el){ targets.push(el); });
   if('IntersectionObserver' in window){
     var io = new IntersectionObserver(function(entries){
       entries.forEach(function(en){
@@ -3770,6 +3821,7 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       home_time_d:'The Descent of the Dark Gleam; the Blood Sacrifice. The first king of Ruzhang offered himself for eternal prosperity — paid in the lifespans of all his people. The prophecy: one day the god will awaken and rewrite the order of the world.', home_time_f:'Blood sacrifice · Prophecy\'s end',
       home_power_d:'The western war-state stands against the central hegemon, the eastern port plays both sides, the southern island watches coldly. Four powers in a silent game — and upon the board, a sleeping relic slowly stirs.', home_power_f:'See the shape of the realm',
       home_cta:'Step into this land and uncover the truth of the world',
+      home_map_t:'Atlas of Canglu · A Survey of Mountains & Seas', home_map_cap:'Open the Gazetteer of Geography to unfold the land chapter by chapter',
       hg_geo:'Seas, land & the great atlas', hg_city:'Four war-states, one continent', hg_land:'Wilds, spirits & hidden realms',
       hg_cal:'Three calendars, seasons & rites', hg_time:'From blood rites to the final prophecy', hg_power:'Four powers in a sword-balanced world',
       home_contact:'Contact Us',
