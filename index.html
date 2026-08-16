@@ -1007,6 +1007,51 @@
     .welcome-card{padding:34px 22px 28px}
     .wc-title{font-size:24px;letter-spacing:6px}
   }
+
+  /* ===== 徽记弹窗补全：暗纹背景/定场短句/城邦导航/版本注 ===== */
+  .logo-intro-box{overflow:hidden;position:relative}
+  .lg-bg-art{
+    position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;
+    opacity:.75;
+  }
+  .logo-intro-box > *:not(.lg-bg-art){position:relative;z-index:1}
+  .lg-verse{
+    margin:22px 0 6px;text-align:center;font-size:14px;letter-spacing:4px;color:var(--gold);
+    text-shadow:0 0 14px rgba(200,162,74,.3);
+    animation:lgVerseIn .9s ease .3s;
+  }
+  @keyframes lgVerseIn{from{transform:translateY(8px)}to{transform:translateY(0)}}
+  .lg-cities{
+    display:flex;justify-content:center;gap:12px;margin:16px 0 4px;flex-wrap:wrap;
+  }
+  .lg-city{
+    display:flex;align-items:center;gap:8px;padding:7px 14px;border-radius:12px;cursor:pointer;
+    background:var(--glass-bg);border:1px solid var(--glass-brd);
+    box-shadow:var(--glass-hl);transition:all .25s;user-select:none;
+  }
+  .lg-city:hover{transform:translateY(-2px);box-shadow:0 6px 18px var(--shadow)}
+  .lg-city.on{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 6px 18px var(--shadow)}
+  .lg-city .lc-dot{width:9px;height:9px;border-radius:50%;box-shadow:0 0 8px currentColor;flex-shrink:0}
+  .lg-city b{font-size:13px;letter-spacing:2px;color:var(--ink);font-weight:600}
+  .lg-city small{font-size:10px;color:var(--ink-dim);letter-spacing:1px}
+  .lg-src{
+    margin:14px auto 0;text-align:center;font-size:11px;letter-spacing:2px;color:var(--ink-dim);
+    opacity:.8;
+  }
+  @media (max-width:700px){
+    .lg-verse{font-size:12px;letter-spacing:2px}
+    .lg-city{padding:6px 10px}
+    .lg-city small{display:none}
+  }
+
+  .logo-intro-box li.lg-flash{
+    animation:lgFlash 1.4s ease;
+    border-left-color:var(--gold) !important;
+  }
+  @keyframes lgFlash{
+    0%{background:rgba(200,162,74,.28);transform:scale(1.02)}
+    100%{background:transparent;transform:scale(1)}
+  }
 </style>
 <script>
 var _hmt = _hmt || [];
@@ -1417,6 +1462,22 @@ var _hmt = _hmt || [];
 
   <div class="logo-intro-mask" id="logoIntroMask">
   <div class="logo-intro-box">
+    <svg class="lg-bg-art" viewBox="0 0 600 800" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs>
+        <linearGradient id="lgBgGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="rgba(200,162,74,.16)"/>
+          <stop offset=".5" stop-color="rgba(200,162,74,.05)"/>
+          <stop offset="1" stop-color="rgba(110,140,215,.10)"/>
+        </linearGradient>
+      </defs>
+      <path d="M0 520 L90 420 L160 470 L240 380 L330 450 L420 360 L520 440 L600 390 L600 800 L0 800 Z" fill="rgba(200,162,74,.06)"/>
+      <path d="M0 600 L120 500 L210 560 L320 480 L430 550 L540 490 L600 540 L600 800 L0 800 Z" fill="rgba(200,162,74,.05)"/>
+      <path d="M0 700 L90 660 L200 690 L320 650 L440 685 L540 660 L600 680 L600 800 L0 800 Z" fill="rgba(110,140,215,.06)"/>
+      <path d="M0 740 Q60 730 120 740 T240 740 T360 740 T480 740 T600 740" fill="none" stroke="rgba(200,162,74,.12)" stroke-width="1.2"/>
+      <path d="M0 770 Q80 762 160 770 T320 770 T480 770 T600 770" fill="none" stroke="rgba(200,162,74,.08)" stroke-width="1"/>
+      <circle cx="480" cy="150" r="42" fill="rgba(200,162,74,.10)"/>
+      <circle cx="480" cy="150" r="42" fill="none" stroke="rgba(200,162,74,.18)" stroke-width="1"/>
+    </svg>
     <button class="logo-intro-close" id="logoIntroClose">✕</button>
     <div class="lg-hero">
       <div class="lg-emblem">
@@ -1473,6 +1534,17 @@ var _hmt = _hmt || [];
         <li><b data-i18n="lg_w2b">四方皆有伤痕</b><span data-i18n="lg_w2c">：恓鸟城战火濒灭的创伤；茹章城全民短命、虚假繁荣的诅咒；眴姚港夹缝求生、依附霸主的无奈；伏熏城封闭自保、割裂大陆的隔阂。整片大陆没有一方净土，所有人都背负各自残缺与苦痛。</span></li>
       </ul>
     </div>
+    <!-- 定场短句 -->
+    <div class="lg-verse" data-i18n="lg_verse">折翼之世，以剑衡四方 —— 剑守四境，翼承苍生</div>
+    <!-- 四城邦小徽章导航 -->
+    <div class="lg-cities" id="lgCities">
+      <div class="lg-city" data-city="xuniao"><span class="lc-dot" style="background:#c0523a"></span><b>恓鸟</b><small>西·军邦</small></div>
+      <div class="lg-city" data-city="ruzhang"><span class="lc-dot" style="background:#c8a24a"></span><b>茹章</b><small>中·神权</small></div>
+      <div class="lg-city" data-city="xunyao"><span class="lc-dot" style="background:#4a7ab8"></span><b>眴姚</b><small>东·商港</small></div>
+      <div class="lg-city" data-city="fuxun"><span class="lc-dot" style="background:#7a5aa8"></span><b>伏熏</b><small>南·海岛</small></div>
+    </div>
+    <!-- 版本小注 -->
+    <div class="lg-src" data-i18n="lg_src">徽记源自《沧陆世界》设定 · v1.0</div>
   </div>
 </div>
 
@@ -2163,6 +2235,40 @@ function revealItem(el){
     if(main) main.addEventListener('scroll', function(){ list.classList.remove('on'); });
   })();
 
+
+
+/* ============ 徽记弹窗：四城邦导航联动 ============ */
+(function(){
+  var cities = document.getElementById('lgCities');
+  if(!cities) return;
+  var map = {
+    xuniao: ['恓鸟', 'Xuniao', '剑左'],
+    ruzhang: ['茹章', 'Ruzhang', '剑上'],
+    xunyao: ['眴姚', 'Xunyao', '剑右'],
+    fuxun: ['伏熏', 'Fuxun', '剑下']
+  };
+  cities.querySelectorAll('.lg-city').forEach(function(c){
+    c.addEventListener('click', function(){
+      cities.querySelectorAll('.lg-city').forEach(function(x){ x.classList.remove('on'); });
+      c.classList.add('on');
+      var kw = map[c.dataset.city] || [];
+      var found = null;
+      document.querySelectorAll('.logo-intro-box li').forEach(function(li){
+        var txt = li.textContent;
+        if(kw.some(function(k){ return txt.indexOf(k) !== -1; })){
+          found = li;
+        }
+      });
+      if(found){
+        found.scrollIntoView({behavior:'smooth', block:'center'});
+        found.classList.add('lg-flash');
+        setTimeout(function(){ found.classList.remove('lg-flash'); }, 1400);
+      }
+    });
+  });
+  var first = cities.querySelector('.lg-city');
+  if(first) first.classList.add('on');
+})();
 
 /* ============ 进站欢迎弹窗 ============ */
 (function(){
@@ -2858,6 +2964,8 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       ga_1:'海洋与水域', ga_2:'陆地单元', ga_3:'地形地貌', ga_4:'河流水系', ga_5:'人文聚落', ga_6:'大型工程地标',
       spAnchor:'历法锚点（祀元元年≈公元）',
       lg_hero_t:'沧陆全域徽记', lg_hero_s:'折翼一陆 · 剑衡四方', lg_hero_btn:'徽记释义',
+      lg_verse:'折翼之世，以剑衡四方 —— 剑守四境，翼承苍生',
+      lg_src:'徽记源自《沧陆世界》设定 · v1.0',
       lg_h1a:'十字剑（承载世界四方势力、世间平衡）', lg_h1a_lead:'十字四向对应沧陆四大核心城邦，是整片大陆的四方缩影：',
       lg_s1b:'剑上竖刃', lg_s1c:'：中部茹章城（大陆中心、神权集权，整片世界权力枢纽）',
       lg_s2b:'剑下竖刃', lg_s2c:'：南部伏熏岛（海岛隔绝、理性民主，世界边缘孤岛）',
@@ -2900,6 +3008,8 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       ga_1:'Seas & Waters', ga_2:'Landmasses', ga_3:'Terrain & Landforms', ga_4:'Rivers & Lakes', ga_5:'Settlements', ga_6:'Great Works',
       spAnchor:'Calendar anchor (Siyuan Year 1 ≈ AD)',
       lg_hero_t:'The Emblem of Canglu', lg_hero_s:'One broken wing for the land, the sword balances the four realms', lg_hero_btn:'About the Emblem',
+      lg_verse:'A broken-winged world, balanced by the sword — the blade keeps four realms, the wing bears all lives',
+      lg_src:'Emblem from the Canglu World setting · v1.0',
       lg_h1a:'The Cross-Sword (the four powers, the balance of the world)', lg_h1a_lead:'The four directions of the cross mirror the four great city-states — a miniature of the whole continent:',
       lg_s1b:'Upper blade', lg_s1c:': central Ruzhang (heart of the continent, theocracy, the world\'s hub of power)',
       lg_s2b:'Lower blade', lg_s2c:': southern Fuxun Island (isolated, rational democracy, the lone isle at the world\'s edge)',
