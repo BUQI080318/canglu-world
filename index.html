@@ -1430,11 +1430,11 @@ var _hmt = _hmt || [];
       <span class="wc-ring"></span>
       <img src="assets/logo_emblem_full.png" alt="沧陆徽记">
     </div>
-    <h2 class="wc-title" data-txt="欢迎来到沧陆"></h2>
-    <p class="wc-sub">折翼一陆 · 剑衡四方</p>
-    <div class="wc-version" id="wcVersion">当前版本 v1.0 · 沧陆世界</div>
+    <h2 class="wc-title" data-txt="欢迎来到沧陆" data-i18n="wc_t"></h2>
+    <p class="wc-sub" data-i18n="wc_s">折翼一陆 · 剑衡四方</p>
+    <div class="wc-version" id="wcVersion" data-i18n="wc_v">当前版本 v1.0 · 沧陆世界</div>
     <div class="wc-line"></div>
-    <button class="wc-enter" id="wcEnter">踏入沧陆</button>
+    <button class="wc-enter" id="wcEnter" data-i18n="wc_b">踏入沧陆</button>
     <button class="wc-close" id="wcClose" title="跳过">✕</button>
   </div>
 </div>
@@ -1538,10 +1538,10 @@ var _hmt = _hmt || [];
     <div class="lg-verse" data-i18n="lg_verse">折翼之世，以剑衡四方 —— 剑守四境，翼承苍生</div>
     <!-- 四城邦小徽章导航 -->
     <div class="lg-cities" id="lgCities">
-      <div class="lg-city" data-city="xuniao"><span class="lc-dot" style="background:#c0523a"></span><b>恓鸟</b><small>西·军邦</small></div>
-      <div class="lg-city" data-city="ruzhang"><span class="lc-dot" style="background:#c8a24a"></span><b>茹章</b><small>中·神权</small></div>
-      <div class="lg-city" data-city="xunyao"><span class="lc-dot" style="background:#4a7ab8"></span><b>眴姚</b><small>东·商港</small></div>
-      <div class="lg-city" data-city="fuxun"><span class="lc-dot" style="background:#7a5aa8"></span><b>伏熏</b><small>南·海岛</small></div>
+      <div class="lg-city" data-city="xuniao"><span class="lc-dot" style="background:#c0523a"></span><b data-i18n="lg_c1n">恓鸟</b><small data-i18n="lg_c1s">西·军邦</small></div>
+      <div class="lg-city" data-city="ruzhang"><span class="lc-dot" style="background:#c8a24a"></span><b data-i18n="lg_c2n">茹章</b><small data-i18n="lg_c2s">中·神权</small></div>
+      <div class="lg-city" data-city="xunyao"><span class="lc-dot" style="background:#4a7ab8"></span><b data-i18n="lg_c3n">眴姚</b><small data-i18n="lg_c3s">东·商港</small></div>
+      <div class="lg-city" data-city="fuxun"><span class="lc-dot" style="background:#7a5aa8"></span><b data-i18n="lg_c4n">伏熏</b><small data-i18n="lg_c4s">南·海岛</small></div>
     </div>
     <!-- 版本小注 -->
     <div class="lg-src" data-i18n="lg_src">徽记源自《沧陆世界》设定 · v1.0</div>
@@ -2497,6 +2497,21 @@ function revealItem(el){
   setInterval(function(){
     if(audio && started && !audio.paused && !dragging) updProgress();
   }, 500);
+  // 语言切换：重建当前歌名+状态文本
+  window.__musicRefresh = function(){
+    if(!now || cur < 0) return;
+    var st = '静候佳音';
+    if(started){
+      if(audio && audio.muted) st = '点击出声';
+      else if(audio && audio.paused) st = '暂歇';
+      else st = '奏响';
+    } else {
+      st = '轻触页面奏响';
+    }
+    var name = SONGS[cur] ? SONGS[cur].name : '沧陆';
+    now.innerHTML = songHTML(name, mh(st));
+    setTimeout(checkMarquee, 60);
+  };
   // 播放新曲时重置进度条
   const _origPlayCur = playCur;
   window.__afterPlay = function(){};
@@ -2963,8 +2978,10 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       ga_title:'沧陆舆图 · 山河总览', ga_sub:'点击方位，展开地理篇章',
       ga_1:'海洋与水域', ga_2:'陆地单元', ga_3:'地形地貌', ga_4:'河流水系', ga_5:'人文聚落', ga_6:'大型工程地标',
       spAnchor:'历法锚点（祀元元年≈公元）',
+      wc_t:'欢迎来到沧陆', wc_s:'折翼一陆 · 剑衡四方', wc_v:'当前版本 v1.0 · 沧陆世界', wc_b:'踏入沧陆',
       lg_hero_t:'沧陆全域徽记', lg_hero_s:'折翼一陆 · 剑衡四方', lg_hero_btn:'徽记释义',
       lg_verse:'折翼之世，以剑衡四方 —— 剑守四境，翼承苍生',
+      lg_c1n:'恓鸟', lg_c1s:'西·军邦', lg_c2n:'茹章', lg_c2s:'中·神权', lg_c3n:'眴姚', lg_c3s:'东·商港', lg_c4n:'伏熏', lg_c4s:'南·海岛',
       lg_src:'徽记源自《沧陆世界》设定 · v1.0',
       lg_h1a:'十字剑（承载世界四方势力、世间平衡）', lg_h1a_lead:'十字四向对应沧陆四大核心城邦，是整片大陆的四方缩影：',
       lg_s1b:'剑上竖刃', lg_s1c:'：中部茹章城（大陆中心、神权集权，整片世界权力枢纽）',
@@ -3007,8 +3024,10 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       ga_title:'The Atlas of Canglu', ga_sub:'Click a region to open its chapter',
       ga_1:'Seas & Waters', ga_2:'Landmasses', ga_3:'Terrain & Landforms', ga_4:'Rivers & Lakes', ga_5:'Settlements', ga_6:'Great Works',
       spAnchor:'Calendar anchor (Siyuan Year 1 ≈ AD)',
+      wc_t:'Welcome to Canglu', wc_s:'One broken wing, sword-balanced four realms', wc_v:'Version v1.0 · Canglu World', wc_b:'Enter Canglu',
       lg_hero_t:'The Emblem of Canglu', lg_hero_s:'One broken wing for the land, the sword balances the four realms', lg_hero_btn:'About the Emblem',
       lg_verse:'A broken-winged world, balanced by the sword — the blade keeps four realms, the wing bears all lives',
+      lg_c1n:'Xuniao', lg_c1s:'W · War-state', lg_c2n:'Ruzhang', lg_c2s:'C · Theocracy', lg_c3n:'Xunyao', lg_c3s:'E · Trade port', lg_c4n:'Fuxun', lg_c4s:'S · Island',
       lg_src:'Emblem from the Canglu World setting · v1.0',
       lg_h1a:'The Cross-Sword (the four powers, the balance of the world)', lg_h1a_lead:'The four directions of the cross mirror the four great city-states — a miniature of the whole continent:',
       lg_s1b:'Upper blade', lg_s1c:': central Ruzhang (heart of the continent, theocracy, the world\'s hub of power)',
@@ -3061,9 +3080,8 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
         });
       }
     });
-    // 音乐条提示
-    var mh = document.querySelector('.music-hint');
-    if(mh) mh.textContent = '· ' + (t.musicHint||'');
+    // 音乐条状态：重建当前歌名+状态文本（含播放中/暂歇/静音等）
+    if(window.__musicRefresh) setTimeout(window.__musicRefresh, 30);
     // 设置面板标题
     var spHead = document.querySelector('.sp-head span');
     if(spHead) spHead.textContent = t.settingsTitle || t.settings;
