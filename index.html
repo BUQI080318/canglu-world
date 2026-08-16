@@ -791,9 +791,14 @@
 
   /* ===== 今日沧陆历法牌 ===== */
   .today-card{
-    margin:18px 0 10px;padding:20px 24px;border-radius:18px;position:relative;overflow:hidden;
+    margin:6px 0 22px;padding:24px 28px;border-radius:20px;position:relative;overflow:hidden;
     background:var(--glass-bg);-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
-    border:1px solid var(--glass-brd);box-shadow:var(--glass-hl),var(--glass-shadow);
+    border:1px solid var(--glass-brd);
+    box-shadow:var(--glass-hl),var(--glass-shadow),0 0 0 1px rgba(200,162,74,.10),0 0 42px rgba(200,162,74,.08);
+  }
+  .today-card::after{
+    content:'';position:absolute;top:0;left:8%;right:8%;height:1px;
+    background:linear-gradient(90deg,transparent,rgba(200,162,74,.5),transparent);
   }
   .today-card::before{
     content:"";position:absolute;top:0;left:10%;right:10%;height:1px;
@@ -1141,6 +1146,30 @@ var _hmt = _hmt || [];
   <div class="doc fade">
     <h1><span class="h-diamond"></span><span class="h-title" data-i18n="t_geo">地理志</span><span class="h-diamond"></span></h1>
     <div class="lead" data-i18n="l_geo">沧陆山河 · 海洋与陆地</div>
+    
+    
+<div class="today-card" id="todayCard" style="display:none">
+      <div class="today-head">
+        <h2 data-i18n="td_title">今日沧陆</h2>
+        <span class="today-date" id="todayRealDate"></span>
+      </div>
+      <div class="today-main">
+        <div class="today-month">
+          <span class="tm-num" id="tmNum">1</span>
+          <span class="tm-name" id="tmName">凛月</span>
+        </div>
+        <div class="today-info">
+          <div class="ti-line" id="tiYears"></div>
+          <div class="ti-fact" id="tiFact"></div>
+        </div>
+      </div>
+      <div class="today-ritual">
+        <span class="tr-label" data-i18n="td_ritual">烬月祭仪 · 倒计时</span>
+        <div class="tr-bar"><div class="tr-fill" id="trFill"></div></div>
+        <span class="tr-days" id="trDays"></span>
+      </div>
+      <div class="today-anchor" id="tdAnchorLine" data-i18n="td_anchor">历法锚点：祀元元年 ≈ 公元 {N} 年</div>
+    </div>
     <div class="geo-atlas" id="geoAtlas">
       <div class="geo-atlas-title">
         <div class="atlas-h2" data-i18n="ga_title">沧陆舆图 · 山河总览</div>
@@ -1276,28 +1305,7 @@ var _hmt = _hmt || [];
   <div class="doc fade">
     <h1><span class="h-diamond"></span><span class="h-title" data-i18n="t_cal">历法志</span><span class="h-diamond"></span></h1>
     <div class="lead" data-i18n="l_cal">沧陆各邦历法 · 通用月份</div>
-    <div class="today-card" id="todayCard" style="display:none">
-      <div class="today-head">
-        <h2 data-i18n="td_title">今日沧陆</h2>
-        <span class="today-date" id="todayRealDate"></span>
-      </div>
-      <div class="today-main">
-        <div class="today-month">
-          <span class="tm-num" id="tmNum">1</span>
-          <span class="tm-name" id="tmName">凛月</span>
-        </div>
-        <div class="today-info">
-          <div class="ti-line" id="tiYears"></div>
-          <div class="ti-fact" id="tiFact"></div>
-        </div>
-      </div>
-      <div class="today-ritual">
-        <span class="tr-label" data-i18n="td_ritual">烬月祭仪 · 倒计时</span>
-        <div class="tr-bar"><div class="tr-fill" id="trFill"></div></div>
-        <span class="tr-days" id="trDays"></span>
-      </div>
-      <div class="today-anchor" id="tdAnchorLine" data-i18n="td_anchor">历法锚点：祀元元年 ≈ 公元 {N} 年</div>
-    </div>
+    
 
     <h2 data-i18n="h2_cal1">沧陆各邦历法</h2>
     <h3 data-i18n="h3_c1">（一）茹章城官方历法</h3>
