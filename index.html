@@ -471,7 +471,7 @@
   .logo-intro-mask{
     position:fixed;inset:0;z-index:300;background:rgba(5,8,14,.74);
     -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
-    display:none;align-items:flex-start;justify-content:center;padding:20px;
+    display:none;align-items:flex-start;justify-content:center;padding:20px 20px 40px;
     overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;
   }
   .logo-intro-mask.on{display:flex}
@@ -951,7 +951,7 @@
     -webkit-backdrop-filter:blur(0px) saturate(100%);
     backdrop-filter:blur(0px) saturate(100%);
     opacity:0;pointer-events:none;
-    overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:24px 0;
+    overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:24px 0 40px;
     transition:opacity .5s ease,-webkit-backdrop-filter .9s cubic-bezier(.25,.8,.3,1),backdrop-filter .9s cubic-bezier(.25,.8,.3,1);
   }
   .welcome-mask.on{
@@ -1024,10 +1024,10 @@
   }
 
   /* ===== 徽记弹窗补全：暗纹背景/定场短句/城邦导航/版本注 ===== */
-  .logo-intro-box{overflow:hidden;position:relative}
+  .logo-intro-box{overflow:visible;position:relative}
   .lg-bg-art{
-    position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;
-    opacity:.75;
+    position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;
+    opacity:.75;border-radius:inherit;
   }
   .logo-intro-box > *:not(.lg-bg-art){position:relative;z-index:1}
   .lg-verse{
