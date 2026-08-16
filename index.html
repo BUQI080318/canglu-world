@@ -657,7 +657,133 @@
   /* 标题悬停微光 */
   .doc h1:hover .h-title{text-shadow:0 0 18px var(--glow)}
 
-  /* ===== 移动端：音乐播放器吸底迷你条 + 侧边栏歌单 ===== */
+  
+/* ===== 首页史诗化（电影级 Hero + 图标卡 + CTA） ===== */
+.home-epic{overflow:visible}
+.he-hero{
+  position:relative;min-height:calc(100vh - 52px);display:flex;align-items:center;justify-content:center;
+  text-align:center;overflow:hidden;border-radius:0 0 24px 24px;
+}
+.he-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.he-mask{
+  position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(to top,var(--bg) 0%,rgba(10,10,15,.72) 38%,rgba(10,10,15,.35) 100%);
+}
+.he-content{position:relative;z-index:2;padding:80px 24px 120px;max-width:860px}
+.he-badge{
+  display:inline-block;font-size:12px;letter-spacing:5px;color:var(--gold-dim);
+  border:1px solid rgba(201,168,76,.35);border-radius:999px;padding:6px 18px;margin-bottom:26px;
+  background:rgba(10,10,15,.35);
+}
+.he-title{
+  margin:0;font-size:clamp(2.5rem,6vw,5rem);font-weight:700;letter-spacing:.3em;color:var(--ink);
+  font-family:"Noto Serif SC","Source Han Serif SC","SimSun",serif;text-indent:.3em;
+  text-shadow:0 0 46px rgba(201,168,76,.28),0 2px 18px rgba(0,0,0,.6);
+}
+.he-en{
+  margin-top:14px;font-size:clamp(.9rem,2vw,1.15rem);letter-spacing:.6em;text-indent:.6em;
+  color:var(--gold);font-weight:400;
+}
+.he-line{width:40px;height:1px;margin:22px auto 0;background:var(--gold);box-shadow:0 0 12px var(--glow)}
+.he-sub{
+  margin:18px 0 0;font-size:clamp(1rem,2.5vw,1.4rem);color:var(--gold);font-style:italic;
+  font-family:"Noto Serif SC","Source Han Serif SC","SimSun",serif;letter-spacing:2px;
+}
+.he-lead{
+  margin:2rem auto;max-width:600px;font-size:1.05rem;line-height:2;color:var(--ink);
+}
+.he-btns{margin-top:6px;display:flex;justify-content:center;gap:16px;flex-wrap:wrap}
+.he-scroll{
+  position:absolute;bottom:26px;left:50%;transform:translateX(-50%);z-index:2;
+  display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;
+}
+.he-arrow{
+  width:0;height:0;border-left:9px solid transparent;border-right:9px solid transparent;
+  border-top:13px solid var(--gold);
+  animation:heBob 2s ease-in-out infinite;filter:drop-shadow(0 0 6px rgba(201,168,76,.5));
+}
+.he-scroll span{font-size:11px;letter-spacing:4px;color:var(--ink-dim)}
+@keyframes heBob{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
+@media (prefers-reduced-motion:reduce){.he-arrow{animation:none}}
+
+/* 六大志卡片 */
+.home-epic-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;
+  max-width:1400px;margin:0 auto;padding:6rem 24px 2rem;
+}
+.epic-card{
+  position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;
+  padding:34px 26px 28px;border-radius:16px;text-decoration:none;cursor:pointer;
+  background:rgba(20,20,30,.75);border:1px solid rgba(201,168,76,.3);
+  transition:transform .35s cubic-bezier(.22,.61,.36,1),border-color .35s,background .35s,box-shadow .35s;
+}
+.epic-card:hover{
+  transform:translateY(-8px);border-color:rgba(201,168,76,.8);
+  background:rgba(30,30,45,.9);box-shadow:0 16px 40px rgba(0,0,0,.45);
+}
+.epic-card .ec-icon{
+  width:48px;height:48px;color:var(--gold);margin-bottom:18px;transition:filter .35s;
+}
+.epic-card:hover .ec-icon{filter:drop-shadow(0 0 8px rgba(201,168,76,.6))}
+.epic-card:nth-child(2) .ec-icon,.epic-card:nth-child(2):hover .ec-icon{filter:drop-shadow(0 0 8px rgba(139,38,53,.75))}
+.ec-title{
+  margin:0 0 12px;font-size:1.25rem;font-weight:600;letter-spacing:6px;color:var(--ink);
+  font-family:"Noto Serif SC","Source Han Serif SC","SimSun",serif;text-indent:6px;
+}
+.ec-desc{
+  margin:0 0 16px;font-size:.92rem;line-height:1.85;color:var(--ink-dim);flex:1;
+}
+.ec-foot{
+  font-size:.75rem;letter-spacing:2px;color:var(--gold-dim);
+  border-top:1px solid rgba(201,168,76,.18);padding-top:12px;width:100%;
+}
+
+/* CTA 区 */
+.home-epic-cta{padding:5rem 24px 3rem;text-align:center}
+.hec-line{
+  width:60%;height:1px;margin:0 auto;background:linear-gradient(90deg,transparent,var(--gold),transparent);
+}
+.hec-lead{
+  margin:2rem 0 1.6rem;font-size:1.5rem;color:var(--gold);letter-spacing:3px;
+  font-family:"Noto Serif SC","Source Han Serif SC","SimSun",serif;
+}
+.hec-btn{
+  background:transparent;border:1px solid var(--gold);color:var(--gold);
+  padding:.75rem 2.5rem;font-size:1rem;letter-spacing:3px;cursor:pointer;border-radius:8px;
+  transition:background .3s ease,color .3s ease,transform .1s ease;font-family:inherit;
+}
+.hec-btn:hover{background:var(--gold);color:var(--bg)}
+.hec-btn:active{transform:scale(.97)}
+
+/* 滚动渐入 */
+.he-fade{opacity:0;transform:translateY(40px);transition:opacity .8s ease-out,transform .8s ease-out}
+.he-fade.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  .he-fade{opacity:1;transform:none;transition:none}
+  .epic-card,.he-title,.he-sub,.he-lead{transition:none}
+}
+
+/* 响应式 */
+@media (max-width:1023px){
+  .home-epic-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:767px){
+  .home-epic-grid{grid-template-columns:1fr;padding:4rem 16px 1.5rem;gap:1.1rem}
+  .he-hero{min-height:calc(100vh - 52px)}
+  .he-content{padding:70px 16px 110px}
+  .he-title{letter-spacing:.2em;text-indent:.2em}
+  .he-lead{font-size:.95rem}
+  .ec-desc{font-size:.88rem}
+  .hec-lead{font-size:1.2rem}
+}
+
+/* 浅色主题适配 */
+html[data-theme="light"] .epic-card{background:rgba(255,255,255,.72);border-color:rgba(166,130,46,.35)}
+html[data-theme="light"] .epic-card:hover{background:rgba(255,255,255,.92);border-color:rgba(166,130,46,.75)}
+html[data-theme="light"] .he-mask{background:linear-gradient(to top,var(--bg) 0%,rgba(242,236,221,.8) 40%,rgba(242,236,221,.4) 100%)}
+html[data-theme="light"] .he-badge{background:rgba(255,255,255,.5)}
+
+/* ===== 移动端：音乐播放器吸底迷你条 + 侧边栏歌单 ===== */
   @media (max-width:700px){
     .music-bar{
       left:8px;right:8px;bottom:8px;justify-content:space-between;
@@ -1336,36 +1462,77 @@ var _hmt = _hmt || [];
 <main>
 
 <section class="page on" id="homePage">
-  <div class="doc fade home-doc">
-    <!-- Hero -->
-    <div class="home-hero">
-      <div class="hh-badge" data-i18n="home_badge">沧陆世界 · 世界观设定集</div>
-      <h1 class="hh-title"><span class="hh-cn" data-i18n="home_title">沧陆</span><span class="hh-en">CANG LU</span></h1>
-      <p class="hh-sub" data-i18n="home_sub">单侧羽翼，剑衡四方 —— 一座破碎大陆的史诗长卷</p>
-      <div class="hh-btns">
-        <a class="hh-btn hh-btn-primary" id="hhExplore" data-i18n="home_btn1">探索世界</a>
-        <a class="hh-btn hh-btn-ghost" id="hhEmblem" data-i18n="home_btn2">徽记释义</a>
+  <div class="doc fade home-doc home-epic">
+    <!-- ═══ SECTION 1：全屏 Hero ═══ -->
+    <div class="he-hero" id="heHero">
+      <!-- 背景图（占位：替换为你的主视觉图） -->
+      <img class="he-bg" src="./assets/hero-bg.jpg" alt="沧陆世界观主视觉图" onerror="this.style.display='none'">
+      <div class="he-mask"></div>
+      <div class="he-content">
+        <div class="he-badge" data-i18n="home_badge">沧陆世界 · 世界观设定集</div>
+        <h1 class="he-title" data-i18n="home_title">沧 陆</h1>
+        <div class="he-en">CANG LU</div>
+        <div class="he-line"></div>
+        <p class="he-sub" data-i18n="home_sub">单侧羽翼，剑衡四方 —— 一座破碎大陆的史诗长卷</p>
+        <p class="he-lead" data-i18n="home_lead">天下大势，分久必合——而在这片大陆上，合久未必是幸。</p>
+        <div class="he-btns">
+          <a class="hh-btn hh-btn-primary" id="hhExplore" data-i18n="home_btn1">探索世界</a>
+          <a class="hh-btn hh-btn-ghost" id="hhEmblem" data-i18n="home_btn2">徽记释义</a>
+        </div>
+      </div>
+      <div class="he-scroll">
+        <div class="he-arrow"></div>
+        <span data-i18n="home_scroll">探索沧陆</span>
       </div>
     </div>
-    <!-- 地图羊皮卷轴 -->
-    <div class="home-map-wrap">
-      <div class="home-map-card">
-        <div class="hm-scroll-top"></div>
-        <div class="hm-scroll-left"></div>
-        <div class="hm-scroll-right"></div>
-        <img class="home-map-img" src="assets/canglu_map.jpg" alt="沧陆舆图" draggable="false">
-        <div class="hm-shine"></div>
-      </div>
+
+    <!-- ═══ SECTION 2：六大志入口卡片 ═══ -->
+    <div class="home-epic-grid" id="homeGrid">
+      <a class="epic-card" data-go="geoPage">
+        <svg class="ec-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 40 L17 14 L24 27 L29 20 L42 40 Z"/><path d="M6 40 L42 40" opacity=".5"/><path d="M17 14 l-3-5" opacity=".6"/></svg>
+        <h3 class="ec-title" data-i18n="t_geo">地理</h3>
+        <p class="ec-desc" data-i18n="home_geo_d">元荒、苍瀛、白绫、白荒、肆星——五大海域环绕陆块。断脊、眸霞两大主脉纵贯南北，自鸣山以五千二百四十三米冠绝沧陆。渡蛟裂谷撕裂东陆，东枝崖探入南溟。</p>
+        <span class="ec-foot" data-i18n="home_geo_f">点击探索沧陆地形全貌</span>
+      </a>
+      <a class="epic-card" data-go="cityPage">
+        <svg class="ec-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="22" width="8" height="16"/><rect x="20" y="14" width="8" height="24"/><rect x="34" y="26" width="8" height="12"/><path d="M10 22 V16 M24 14 V8 M38 26 V20" opacity=".7"/></svg>
+        <h3 class="ec-title" data-i18n="t_city">城邦</h3>
+        <p class="ec-desc" data-i18n="home_city_d">恓鸟悲息，茹章伪盛，眴姚逐利，伏熏立衡。四大城邦，四种制度，四段宿命。从宗族长老到君主神权，从海商公会给政团民主——沧陆的政治光谱，远比你想象的复杂。</p>
+        <span class="ec-foot" data-i18n="home_city_f">揭开四大城邦的真相</span>
+      </a>
+      <a class="epic-card" data-go="landmarkPage">
+        <svg class="ec-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="15"/><path d="M24 9 A15 15 0 0 1 37 29" opacity=".55"/><path d="M24 9 A15 15 0 0 0 11 29" opacity=".35"/><circle cx="24" cy="24" r="4.5"/></svg>
+        <h3 class="ec-title" data-i18n="t_land">秘境</h3>
+        <p class="ec-desc" data-i18n="home_land_d">无昼碛——沙粒吸光，永无白昼，越深越暗，空间错乱。扼根山——绿洲中心的死寂孤峰，神骸沉睡的锚点。在这里，自然法则被扭曲，现实与虚妄的边界已然模糊。</p>
+        <span class="ec-foot" data-i18n="home_land_f">踏入禁忌之地</span>
+      </a>
+      <a class="epic-card" data-go="calPage">
+        <svg class="ec-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M31 8 A16 16 0 1 0 40 22"/><path d="M31 8 A16 16 0 0 1 40 22" opacity=".8"/><circle cx="33" cy="11" r="2" fill="currentColor" stroke="none"/></svg>
+        <h3 class="ec-title" data-i18n="t_cal">历法</h3>
+        <p class="ec-desc" data-i18n="home_cal_d">祀元、戍城、衡历——三种纪元，同一片天空。十二个月，十二种命运：凛月戍边，烽月交兵，商月出海，烬月祭祀。时间在这里，不只是刻度，更是权力的刻度。</p>
+        <span class="ec-foot" data-i18n="home_cal_f">翻阅沧陆时间线</span>
+      </a>
+      <a class="epic-card" data-go="timePage">
+        <svg class="ec-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M24 6 V42 M6 24 H42" opacity=".45"/><path d="M24 6 L30 16 L18 16 Z"/><path d="M24 42 L18 32 L30 32 Z"/><path d="M6 24 L16 18 L16 30 Z"/><path d="M42 24 L32 18 L32 30 Z"/></svg>
+        <h3 class="ec-title" data-i18n="t_time">纪年</h3>
+        <p class="ec-desc" data-i18n="home_time_d">幽荧降世，血祭封神。初代茹章王献祭自身，换来城邦的永恒繁荣——以全城世代寿命为代价。预言中，终有一日神会彻底苏醒，以它的规则重写整个世界的秩序。</p>
+        <span class="ec-foot" data-i18n="home_time_f">血祭封神 · 预言终局</span>
+      </a>
+      <a class="epic-card" data-go="powerPage">
+        <svg class="ec-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M24 6 L28 14 L20 14 Z" opacity=".85"/><path d="M24 42 L20 34 L28 34 Z" opacity=".85"/><path d="M6 24 L14 20 L14 28 Z" opacity=".85"/><path d="M42 24 L34 20 L34 28 Z" opacity=".85"/><line x1="24" y1="6" x2="24" y2="42" opacity=".35"/><line x1="6" y1="24" x2="42" y2="24" opacity=".35"/></svg>
+        <h3 class="ec-title" data-i18n="t_power">势力</h3>
+        <p class="ec-desc" data-i18n="home_power_d">西境军邦与中部霸主长期对峙，东部港城左右逢源，南部海岛冷眼旁观。四方博弈，暗流涌动。而在这棋盘之上，还有一具沉睡的神骸，正缓缓苏醒。</p>
+        <span class="ec-foot" data-i18n="home_power_f">洞察天下格局</span>
+      </a>
     </div>
-    <!-- 六大志入口 -->
-    <div class="home-grid" id="homeGrid">
-      <a class="hg-card" data-go="geoPage"><b data-i18n="t_geo">地理志</b><span data-i18n="hg_geo">山海舆图 · 大陆全貌</span></a>
-      <a class="hg-card" data-go="cityPage"><b data-i18n="t_city">城邦志</b><span data-i18n="hg_city">四城鼎立 · 众生百态</span></a>
-      <a class="hg-card" data-go="landmarkPage"><b data-i18n="t_land">秘境志</b><span data-i18n="hg_land">山川意象 · 灵异秘境</span></a>
-      <a class="hg-card" data-go="calPage"><b data-i18n="t_cal">历法志</b><span data-i18n="hg_cal">三历并行 · 时令典故</span></a>
-      <a class="hg-card" data-go="timePage"><b data-i18n="t_time">纪年志</b><span data-i18n="hg_time">血祭封神 · 预言终局</span></a>
-      <a class="hg-card" data-go="powerPage"><b data-i18n="t_power">势力志</b><span data-i18n="hg_power">四方博弈 · 剑衡天下</span></a>
+
+    <!-- ═══ SECTION 3：底部 CTA 区 ═══ -->
+    <div class="home-epic-cta">
+      <div class="hec-line"></div>
+      <p class="hec-lead" data-i18n="home_cta">踏入这片天地，揭开世界的真相</p>
+      <button class="hec-btn" id="hecExplore" data-i18n="home_btn1">探索世界观 →</button>
     </div>
+
     <!-- 底部：联系/支持 -->
     <div class="home-footer">
       <span class="hf-item">© 2026 沧陆世界</span>
@@ -3040,6 +3207,47 @@ function revealItem(el){
 })();
 
 
+
+/* ============ 首页史诗滚动渐入 + CTA ============ */
+(function(){
+  // CTA 探索按钮 → 进入地理志
+  var cta = document.getElementById('hecExplore');
+  if(cta) cta.addEventListener('click', function(){
+    switchPage('geoPage'); location.hash = 'geoPage';
+  });
+  // 滚动渐入（Intersection Observer）
+  var targets = [];
+  var hero = document.getElementById('heHero');
+  if(hero) targets.push(hero);
+  document.querySelectorAll('.home-epic .epic-card, .home-epic-cta').forEach(function(el){ targets.push(el); });
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){
+          en.target.classList.add('he-fade','in');
+          io.unobserve(en.target);
+        } else if(!en.target.classList.contains('in')){
+          en.target.classList.add('he-fade');
+        }
+      });
+    }, {threshold: 0.12, rootMargin: '0px 0px -40px 0px'});
+    targets.forEach(function(t){ io.observe(t); });
+    // 首屏 Hero 立即淡入（不等待滚动）
+    setTimeout(function(){
+      if(hero) hero.classList.add('he-fade','in');
+    }, 100);
+  } else {
+    targets.forEach(function(t){ t.classList.add('he-fade','in'); });
+  }
+  // 语言切换时重扫（新增元素可能未加 he-fade）
+  window.__homeReveal = function(){
+    document.querySelectorAll('.home-epic .epic-card, .home-epic-cta').forEach(function(el){
+      var r = el.getBoundingClientRect();
+      if(r.top < window.innerHeight && !el.classList.contains('in')) el.classList.add('he-fade','in');
+    });
+  };
+})();
+
 /* ============ 首页交互 ============ */
 (function(){
   var explore = document.getElementById('hhExplore');
@@ -3605,6 +3813,14 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       themeTitle: 'Theme',
       home_badge:'Canglu World · Worldbuilding Atlas', home_title:'Canglu', home_sub:'One broken wing, a sword that balances four realms — an epic scroll of a fractured continent',
       home_btn1:'Explore the World', home_btn2:'About the Emblem', 
+      home_lead:'All under heaven, long divided must unite — yet on this land, unity is not always a blessing.', home_scroll:'Explore Canglu',
+      home_geo_d:'Five seas encircle the land: Yuanhuang, Cangying, Bailing, Baihuang, Sixing. The Duanji and Mouxia ranges run north and south; Ziming Mountain rises 5,243 meters, the highest in Canglu. The Dujiao Rift tears the east, and Dongzhi Cliff reaches into the southern deep.', home_geo_f:'Explore the full terrain of Canglu',
+      home_city_d:'Xuniao grieves, Ruzhang feigns glory, Xunyao chases profit, Fuxun holds balance. Four city-states, four systems, four fates — from clan elders to divine monarchy, from merchant guilds to party democracy, Canglu\'s political spectrum runs deeper than you imagine.', home_city_f:'Uncover the truth of the four states',
+      home_land_d:'The Wuzhou Desert — sand that drinks light, no day ever dawns, the deeper the darker, space itself unravels. Egen Mountain — a dead peak at the oasis\'s heart, anchor of the sleeping divine relic. Here, the laws of nature bend; the line between reality and illusion dissolves.', home_land_f:'Step into forbidden lands',
+      home_cal_d:'Siyuan, Shucheng, Hengli — three eras beneath one sky. Twelve months, twelve fates: the frontier month, the war month, the sailing month, the sacrifice month. Time here is not a measure, but a measure of power.', home_cal_f:'Turn the pages of Canglu\'s timeline',
+      home_time_d:'The Descent of the Dark Gleam; the Blood Sacrifice. The first king of Ruzhang offered himself for eternal prosperity — paid in the lifespans of all his people. The prophecy: one day the god will awaken and rewrite the order of the world.', home_time_f:'Blood sacrifice · Prophecy\'s end',
+      home_power_d:'The western war-state stands against the central hegemon, the eastern port plays both sides, the southern island watches coldly. Four powers in a silent game — and upon the board, a sleeping relic slowly stirs.', home_power_f:'See the shape of the realm',
+      home_cta:'Step into this land and uncover the truth of the world',
       hg_geo:'Seas, land & the great atlas', hg_city:'Four war-states, one continent', hg_land:'Wilds, spirits & hidden realms',
       hg_cal:'Three calendars, seasons & rites', hg_time:'From blood rites to the final prophecy', hg_power:'Four powers in a sword-balanced world',
       home_contact:'Contact Us',
