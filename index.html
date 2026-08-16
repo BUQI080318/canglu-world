@@ -1146,6 +1146,7 @@
     .home-footer{gap:18px}
   }
 
+
 /* ============ 联系弹窗 ============ */
 .contact-mask{position:fixed;inset:0;z-index:1200;display:flex;align-items:center;justify-content:center;background:rgba(6,10,20,.62);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
 .contact-mask.on{opacity:1;visibility:visible}
@@ -1170,6 +1171,23 @@ html[data-lang="en"] .contact-title{letter-spacing:2px}
 @media (max-width:520px){
   .contact-box{padding:22px 16px 18px}
   .contact-avatar{width:56px;height:56px}
+}
+
+
+/* ============ 支持弹窗 ============ */
+.support-mask{position:fixed;inset:0;z-index:1300;display:flex;align-items:center;justify-content:center;background:rgba(6,10,20,.62);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
+.support-mask.on{opacity:1;visibility:visible}
+.support-box{position:relative;width:min(680px,94vw);max-height:86vh;overflow-y:auto;background:var(--glass-bg);border:1px solid var(--glass-bd);border-radius:18px;padding:30px 28px 26px;box-shadow:0 18px 50px rgba(0,0,0,.45);transform:translateY(18px) scale(.97);transition:transform .3s cubic-bezier(.22,.61,.36,1)}
+.support-mask.on .support-box{transform:none}
+.support-close{position:absolute;top:12px;right:14px;width:30px;height:30px;border:none;border-radius:50%;background:rgba(200,162,74,.12);color:var(--ink);font-size:15px;cursor:pointer;transition:transform .25s,background .25s}
+.support-close:hover{transform:rotate(90deg);background:rgba(200,162,74,.22)}
+.support-title{font-size:19px;letter-spacing:3px;color:var(--gold);text-align:center;margin:0 0 4px}
+.support-sub{font-size:13px;letter-spacing:1px;color:var(--ink-dim);text-align:center;margin:0 0 18px}
+.giscus-wrap{min-height:300px}
+.giscus-loading{text-align:center;color:var(--ink-dim);font-size:13px;letter-spacing:2px;padding:60px 0}
+html[data-lang="en"] .support-title{letter-spacing:2px}
+@media (max-width:520px){
+  .support-box{padding:22px 16px 18px}
 }
 
 </style>
@@ -1280,7 +1298,6 @@ var _hmt = _hmt || [];
         <img class="home-map-img" src="assets/canglu_map.jpg" alt="沧陆舆图" draggable="false">
         <div class="hm-shine"></div>
       </div>
-      <p class="hm-caption" data-i18n="home_mapcap">沧陆全境舆图 · 手绘原稿</p>
     </div>
     <!-- 六大志入口 -->
     <div class="home-grid" id="homeGrid">
@@ -1626,6 +1643,17 @@ var _hmt = _hmt || [];
   <div class="eq" id="eqBars" aria-hidden="true">
     <span></span><span></span><span></span><span></span><span></span>
   </div>
+  </div>
+
+  <div class="support-mask" id="supportMask">
+    <div class="support-box">
+      <button class="support-close" id="supportClose">✕</button>
+      <h3 class="support-title" data-i18n="sp_title">支持沧陆</h3>
+      <p class="support-sub" data-i18n="sp_sub">如果喜欢这个世界，点个赞或留句话吧</p>
+      <div class="giscus-wrap" id="giscusWrap">
+        <div class="giscus-loading" data-i18n="sp_loading">加载评论中…</div>
+      </div>
+    </div>
   </div>
 
   <div class="contact-mask" id="contactMask">
@@ -2934,6 +2962,63 @@ function revealItem(el){
 })();
 
 
+/* ============ 支持弹窗 ============ */
+(function(){
+  var mask = document.getElementById('supportMask');
+  if(!mask) return;
+  var giscusInjected = false;
+  function open(){
+    mask.classList.add('on');
+    if(!giscusInjected){
+      giscusInjected = true;
+      injectGiscus();
+    }
+  }
+  function close(){ mask.classList.remove('on'); }
+  var closeBtn = document.getElementById('supportClose');
+  if(closeBtn) closeBtn.addEventListener('click', close);
+  mask.addEventListener('click', function(e){ if(e.target === mask) close(); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') close(); });
+  // 首页底部"支持一下"链接
+  document.querySelectorAll('a[data-i18n="home_support"]').forEach(function(a){
+    a.addEventListener('click', function(e){ e.preventDefault(); open(); });
+  });
+  function injectGiscus(){
+    var wrap = document.getElementById('giscusWrap');
+    if(!wrap) return;
+    wrap.innerHTML = '';
+    var scr = document.createElement('script');
+    scr.src = 'https://giscus.app/client.js';
+    scr.setAttribute('data-repo', 'BUQI080318/canglu-world');
+    scr.setAttribute('data-repo-id', 'R_kgDOMTMzNTA1MDQ1OQ');
+    scr.setAttribute('data-category', 'General');
+    scr.setAttribute('data-category-id', 'DIC_kwDOT5NA284DDf0S');
+    scr.setAttribute('data-mapping', 'specific');
+    scr.setAttribute('data-term', 'canglu-support-wall');
+    scr.setAttribute('data-strict', '0');
+    scr.setAttribute('data-reactions-enabled', '1');
+    scr.setAttribute('data-emit-metadata', '0');
+    scr.setAttribute('data-input-position', 'top');
+    scr.setAttribute('data-theme', 'dark');
+    scr.setAttribute('data-lang', window.__lang === 'en' ? 'en' : 'zh-CN');
+    scr.setAttribute('data-loading', 'lazy');
+    scr.setAttribute('crossorigin', 'anonymous');
+    scr.async = true;
+    wrap.appendChild(scr);
+  }
+  window.__supportLang = function(){
+    var wrap = document.getElementById('giscusWrap');
+    if(wrap && giscusInjected){
+      // 重建 giscus 以切换语言（iframe 由 client.js 管理）
+      giscusInjected = false;
+      wrap.innerHTML = '<div class="giscus-loading">' + (window.__lang === 'en' ? 'Loading comments…' : '加载评论中…') + '</div>';
+      giscusInjected = true;
+      injectGiscus();
+    }
+  };
+})();
+
+
 /* ============ 联系弹窗 ============ */
 (function(){
   var mask = document.getElementById('contactMask');
@@ -3277,11 +3362,12 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       settings: 'Settings',
       themeTitle: 'Theme',
       home_badge:'Canglu World · Worldbuilding Atlas', home_title:'Canglu', home_sub:'One broken wing, a sword that balances four realms — an epic scroll of a fractured continent',
-      home_btn1:'Explore the World', home_btn2:'About the Emblem', home_mapcap:'Map of Canglu · Hand-drawn Original',
+      home_btn1:'Explore the World', home_btn2:'About the Emblem', 
       hg_geo:'Seas, land & the great atlas', hg_city:'Four war-states, one continent', hg_land:'Wilds, spirits & hidden realms',
       hg_cal:'Three calendars, seasons & rites', hg_time:'From blood rites to the final prophecy', hg_power:'Four powers in a sword-balanced world',
       home_contact:'Contact Us',
       ct_title:'Contact Canglu', ct_sub:'Come talk to me about this world', ct_wechat:'WeChat ID', ct_qq:'QQ Number', ct_copy:'Copy', home_support:'Support Us ★',
+      sp_title:'Support Canglu', sp_sub:'If you love this world, drop a like or a word', sp_loading:'Loading comments…',
       t_geo:'Geography', t_city:'City-States', t_land:'Mystic Lands', t_cal:'Calendar', t_time:'Chronicle', t_power:'Powers',
       l_geo:'Canglu Mountains & Seas', l_city:'The Four Great City-States', l_land:'Mountains, Icons & Mystic Lands',
       l_cal:'Calendars of the States · Common Months', l_time:'Chronicle of Canglu · From the Blood Sacrifice to the Final Prophecy', l_power:'The Four Powers · Core Threads of the World',
@@ -3382,6 +3468,7 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
     // 重新渲染势力博弈图
     if(window.__pmRender) setTimeout(window.__pmRender, 30);
     if(window.__contactLang) setTimeout(window.__contactLang, 30);
+    if(window.__supportLang) setTimeout(window.__supportLang, 30);
     // 刷新今日沧陆历法牌
     if(window.__todayRender) setTimeout(window.__todayRender, 30);
     if(window.__atlasRefresh) setTimeout(window.__atlasRefresh, 60);
