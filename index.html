@@ -935,7 +935,7 @@
     position:fixed;inset:0;z-index:400;display:flex;align-items:center;justify-content:center;
     background:rgba(5,8,14,.62);
     -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
-    opacity:0;pointer-events:none;transition:opacity .5s ease;
+    opacity:0;pointer-events:none;transition:opacity .45s ease;
   }
   .welcome-mask.on{opacity:1;pointer-events:auto}
   .welcome-card{
@@ -944,14 +944,17 @@
     -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
     border:1px solid var(--glass-brd);border-radius:22px;
     box-shadow:var(--glass-hl),0 18px 60px rgba(0,0,0,.5),0 0 0 1px rgba(200,162,74,.14),0 0 60px rgba(200,162,74,.12);
-    transform:translateY(26px) scale(.94);opacity:0;
-    transition:transform .6s cubic-bezier(.2,.8,.25,1.1),opacity .5s ease;
+    transform:translateY(30px) scale(.955) rotate(-.4deg);opacity:0;
+    transition:transform .85s cubic-bezier(.16,1.35,.3,1),opacity .55s ease;
   }
-  .welcome-mask.on .welcome-card{transform:translateY(0) scale(1);opacity:1}
+  .welcome-mask.on .welcome-card{transform:translateY(0) scale(1);opacity:1;transition:transform .85s cubic-bezier(.16,1.35,.3,1),opacity .55s ease}
   .wc-emblem{
-    position:relative;width:86px;height:86px;margin:0 auto 18px;display:flex;align-items:center;justify-content:center;
+    position:relative;width:92px;height:92px;margin:0 auto 20px;display:flex;align-items:center;justify-content:center;
+    opacity:0;transform:scale(.6) rotate(-14deg);
+    transition:opacity .6s ease,transform .9s cubic-bezier(.16,1.35,.3,1);
   }
-  .wc-emblem img{width:74px;height:auto;filter:drop-shadow(0 0 14px rgba(200,162,74,.55));animation:wcFloat 3.4s ease-in-out infinite}
+  .welcome-mask.on .wc-emblem{opacity:1;transform:scale(1) rotate(0)}
+  .wc-emblem img{width:78px;height:auto;border-radius:50%;filter:drop-shadow(0 0 14px rgba(200,162,74,.55));animation:wcFloat 3.4s ease-in-out infinite}
   .wc-ring{
     position:absolute;inset:0;border-radius:50%;border:1.5px dashed rgba(200,162,74,.6);
     animation:wcSpin 16s linear infinite;
@@ -966,25 +969,27 @@
     margin:0;font-size:30px;letter-spacing:8px;font-weight:600;color:var(--ink);
     text-shadow:0 0 22px rgba(200,162,74,.35);
   }
-  .wc-title .ch{display:inline-block;opacity:0;transform:translateY(12px);animation:wcChIn .5s ease forwards}
-  @keyframes wcChIn{to{opacity:1;transform:translateY(0)}}
-  .wc-sub{margin:12px 0 0;font-size:13px;letter-spacing:5px;color:var(--gold-dim);opacity:0}
+  .wc-title .ch{display:inline-block;opacity:0;transform:translateY(18px) rotate(2deg);animation:wcChIn .65s cubic-bezier(.2,1.4,.4,1) forwards}
+  @keyframes wcChIn{to{opacity:1;transform:translateY(0) rotate(0)}}
+  .wc-sub{margin:12px 0 0;font-size:13px;letter-spacing:5px;color:var(--gold-dim);opacity:0;transform:translateY(8px)}
   @keyframes wcFadeIn{to{opacity:1}}
   .wc-version{
     margin:18px auto 0;display:inline-block;font-size:12px;letter-spacing:2px;color:var(--ink-dim);
     padding:5px 14px;border-radius:20px;border:1px solid var(--glass-brd);background:rgba(255,255,255,.04);
-    opacity:0;animation:wcFadeIn .8s ease 1.5s forwards;
+    opacity:0;transform:translateY(8px);
   }
   .wc-line{
     margin:22px auto 0;width:120px;height:1px;
     background:linear-gradient(90deg,transparent,var(--gold),transparent);
-    opacity:0;animation:wcFadeIn .8s ease 1.7s forwards;
+    opacity:0;transform:scaleX(.3);transform-origin:center;
+    transition:transform .9s cubic-bezier(.2,.9,.3,1.1);
   }
   .wc-enter{
     margin-top:22px;padding:10px 34px;border:none;border-radius:24px;cursor:pointer;
     background:linear-gradient(135deg,var(--gold),var(--gold-dim));color:#141a24;
     font-family:inherit;font-size:14px;letter-spacing:4px;font-weight:600;
-    opacity:0;animation:wcFadeIn .8s ease 1.9s forwards;transition:transform .2s,box-shadow .2s;
+    opacity:0;transform:translateY(10px);
+    transition:transform .25s,box-shadow .25s,opacity .8s cubic-bezier(.2,.9,.3,1.1);
   }
   .wc-enter:hover{transform:scale(1.06);box-shadow:0 0 22px var(--glow)}
   .wc-close{
@@ -1372,11 +1377,11 @@ var _hmt = _hmt || [];
   <div class="welcome-card">
     <div class="wc-emblem">
       <span class="wc-ring"></span>
-      <img src="assets/wing_line.png" alt="沧陆徽记">
+      <img src="assets/logo_emblem_full.png" alt="沧陆徽记">
     </div>
     <h2 class="wc-title" data-txt="欢迎来到沧陆"></h2>
     <p class="wc-sub">折翼一陆 · 剑衡四方</p>
-    <div class="wc-version" id="wcVersion">当前版本 v3.0 · 沧陆世界</div>
+    <div class="wc-version" id="wcVersion">当前版本 v1.0 · 沧陆世界</div>
     <div class="wc-line"></div>
     <button class="wc-enter" id="wcEnter">踏入沧陆</button>
     <button class="wc-close" id="wcClose" title="跳过">✕</button>
@@ -2165,7 +2170,11 @@ function revealItem(el){
   var closed = false;
   function fadeIn(el, delayMs){
     setTimeout(function(){
-      if(el){ el.style.transition = 'opacity .7s ease'; el.style.opacity = '1'; }
+      if(el){
+        el.style.transition = 'opacity .8s ease,transform .8s cubic-bezier(.2,.9,.3,1.1)';
+        el.style.opacity = '1';
+        el.style.transform = 'translateY(0)';
+      }
     }, delayMs);
   }
   function close(){
