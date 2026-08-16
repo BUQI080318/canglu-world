@@ -1067,6 +1067,84 @@
     0%{background:rgba(200,162,74,.28);transform:scale(1.02)}
     100%{background:transparent;transform:scale(1)}
   }
+
+  /* ===== 首页（Apple 风） ===== */
+  .home-doc{max-width:960px;margin:0 auto}
+  .home-hero{text-align:center;padding:70px 0 10px}
+  .hh-badge{
+    display:inline-block;font-size:12px;letter-spacing:4px;color:var(--gold);
+    padding:6px 18px;border-radius:20px;border:1px solid var(--gold-dim);
+    background:rgba(200,162,74,.06);margin-bottom:22px;
+  }
+  .hh-title{margin:0;font-weight:700;line-height:1.1}
+  .hh-title .hh-cn{font-size:clamp(56px,10vw,96px);letter-spacing:20px;color:var(--ink);text-shadow:0 0 50px rgba(200,162,74,.25)}
+  .hh-title .hh-en{display:block;font-size:clamp(16px,2.6vw,24px);letter-spacing:14px;color:var(--gold);margin-top:10px;font-weight:400}
+  .hh-sub{margin:22px auto 0;max-width:520px;font-size:15px;letter-spacing:3px;color:var(--ink-dim);line-height:1.9}
+  .hh-btns{margin-top:34px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .hh-btn{
+    display:inline-block;padding:12px 36px;border-radius:24px;cursor:pointer;
+    font-family:inherit;font-size:14px;letter-spacing:3px;text-decoration:none;
+    transition:transform .25s,box-shadow .25s,background .25s;
+  }
+  .hh-btn-primary{background:linear-gradient(135deg,var(--gold),var(--gold-dim));color:#141a24;font-weight:600}
+  .hh-btn-primary:hover{transform:scale(1.05);box-shadow:0 0 26px var(--glow)}
+  .hh-btn-ghost{border:1px solid var(--gold-dim);color:var(--gold);background:transparent}
+  .hh-btn-ghost:hover{background:rgba(200,162,74,.08);transform:scale(1.03)}
+  /* 地图卷轴 */
+  .home-map-wrap{margin:56px auto 0;max-width:860px;position:relative}
+  .home-map-card{
+    position:relative;border-radius:16px;overflow:hidden;
+    border:1px solid var(--glass-brd);
+    box-shadow:var(--glass-hl),0 30px 80px rgba(0,0,0,.5),0 0 60px rgba(200,162,74,.08);
+    background:linear-gradient(135deg,#f6ecd4,#e8d9b4);
+    cursor:default;
+  }
+  .home-map-card::before{
+    content:'';position:absolute;inset:0;z-index:2;pointer-events:none;
+    box-shadow:inset 0 0 80px rgba(120,90,30,.18),inset 0 0 6px rgba(120,90,30,.2);
+    border-radius:16px;
+  }
+  .home-map-img{display:block;width:100%;height:auto;position:relative;z-index:1;transition:transform .6s ease}
+  .home-map-card:hover .home-map-img{transform:scale(1.02)}
+  /* 卷轴两端 */
+  .hm-scroll-top{position:absolute;left:0;right:0;top:0;height:10px;z-index:3;
+    background:linear-gradient(180deg,rgba(160,120,50,.5),transparent);pointer-events:none}
+  .hm-scroll-left,.hm-scroll-right{position:absolute;top:0;bottom:0;width:22px;z-index:3;pointer-events:none;
+    background:linear-gradient(90deg,rgba(140,105,45,.4),transparent)}
+  .hm-scroll-right{right:0;background:linear-gradient(270deg,rgba(140,105,45,.4),transparent)}
+  /* 扫描流光 */
+  .hm-shine{position:absolute;top:0;bottom:0;width:40%;z-index:3;pointer-events:none;
+    background:linear-gradient(105deg,transparent,rgba(255,248,225,.35),transparent);
+    animation:hmShine 7s ease-in-out infinite;
+  }
+  @keyframes hmShine{0%,100%{left:-45%}55%{left:105%}}
+  .hm-caption{margin-top:14px;text-align:center;font-size:12px;letter-spacing:3px;color:var(--ink-dim)}
+  /* 六志入口 */
+  .home-grid{margin:60px auto 0;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:860px}
+  .hg-card{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:30px 16px;border-radius:16px;cursor:pointer;text-decoration:none;
+    background:var(--glass-bg);-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+    border:1px solid var(--glass-brd);box-shadow:var(--glass-hl);
+    transition:transform .3s cubic-bezier(.2,.8,.3,1.1),box-shadow .3s,border-color .3s;
+  }
+  .hg-card:hover{transform:translateY(-5px);border-color:var(--gold-dim);box-shadow:var(--glass-hl),0 14px 34px var(--shadow)}
+  .hg-card b{font-size:20px;letter-spacing:6px;color:var(--gold);font-weight:600}
+  .hg-card span{margin-top:10px;font-size:12px;letter-spacing:2px;color:var(--ink-dim)}
+  /* 底部 */
+  .home-footer{margin:70px 0 30px;padding-top:26px;border-top:1px solid var(--glass-brd);
+    display:flex;justify-content:center;gap:30px;flex-wrap:wrap}
+  .hf-item{font-size:12px;letter-spacing:2px;color:var(--ink-dim);text-decoration:none;transition:color .2s}
+  a.hf-item:hover{color:var(--gold)}
+  @media (max-width:700px){
+    .home-hero{padding:44px 0 6px}
+    .hh-title .hh-cn{letter-spacing:10px}
+    .hh-sub{font-size:13px;letter-spacing:2px}
+    .home-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+    .hg-card{padding:22px 10px}
+    .hg-card b{font-size:16px;letter-spacing:4px}
+    .home-footer{gap:18px}
+  }
 </style>
 <script>
 var _hmt = _hmt || [];
@@ -1152,7 +1230,49 @@ var _hmt = _hmt || [];
 </div>
 
 <main>
-<section class="page on" id="geoPage">
+
+<section class="page on" id="homePage">
+  <div class="doc fade home-doc">
+    <!-- Hero -->
+    <div class="home-hero">
+      <div class="hh-badge" data-i18n="home_badge">沧陆世界 · 世界观设定集</div>
+      <h1 class="hh-title"><span class="hh-cn" data-i18n="home_title">沧陆</span><span class="hh-en">CANG LU</span></h1>
+      <p class="hh-sub" data-i18n="home_sub">单侧羽翼，剑衡四方 —— 一座破碎大陆的史诗长卷</p>
+      <div class="hh-btns">
+        <a class="hh-btn hh-btn-primary" id="hhExplore" data-i18n="home_btn1">探索世界</a>
+        <a class="hh-btn hh-btn-ghost" id="hhEmblem" data-i18n="home_btn2">徽记释义</a>
+      </div>
+    </div>
+    <!-- 地图羊皮卷轴 -->
+    <div class="home-map-wrap">
+      <div class="home-map-card">
+        <div class="hm-scroll-top"></div>
+        <div class="hm-scroll-left"></div>
+        <div class="hm-scroll-right"></div>
+        <img class="home-map-img" src="assets/canglu_map.jpg" alt="沧陆舆图" draggable="false">
+        <div class="hm-shine"></div>
+      </div>
+      <p class="hm-caption" data-i18n="home_mapcap">沧陆全境舆图 · 手绘原稿</p>
+    </div>
+    <!-- 六大志入口 -->
+    <div class="home-grid" id="homeGrid">
+      <a class="hg-card" data-go="geoPage"><b data-i18n="t_geo">地理志</b><span data-i18n="hg_geo">山海舆图 · 大陆全貌</span></a>
+      <a class="hg-card" data-go="cityPage"><b data-i18n="t_city">城邦志</b><span data-i18n="hg_city">四城鼎立 · 众生百态</span></a>
+      <a class="hg-card" data-go="landmarkPage"><b data-i18n="t_land">秘境志</b><span data-i18n="hg_land">山川意象 · 灵异秘境</span></a>
+      <a class="hg-card" data-go="calPage"><b data-i18n="t_cal">历法志</b><span data-i18n="hg_cal">三历并行 · 时令典故</span></a>
+      <a class="hg-card" data-go="timePage"><b data-i18n="t_time">纪年志</b><span data-i18n="hg_time">血祭封神 · 预言终局</span></a>
+      <a class="hg-card" data-go="powerPage"><b data-i18n="t_power">势力志</b><span data-i18n="hg_power">四方博弈 · 剑衡天下</span></a>
+    </div>
+    <!-- 底部：联系/支持 -->
+    <div class="home-footer">
+      <span class="hf-item">© 2026 沧陆世界</span>
+      <a class="hf-item" href="mailto:canglu@example.com" data-i18n="home_contact">联系我们</a>
+      <a class="hf-item" href="https://github.com/BUQI080318/canglu-world" target="_blank" rel="noopener" data-i18n="home_support">支持一下 ★</a>
+    </div>
+  </div>
+</section>
+
+<section class="page" id="geoPage">
   <div class="doc fade">
     <h1><span class="h-diamond"></span><span class="h-title" data-i18n="t_geo">地理志</span><span class="h-diamond"></span></h1>
     <div class="lead" data-i18n="l_geo">沧陆山河 · 海洋与陆地</div>
@@ -2722,6 +2842,28 @@ function revealItem(el){
   window.__todayRender = render;
 })();
 
+
+/* ============ 首页交互 ============ */
+(function(){
+  var explore = document.getElementById('hhExplore');
+  if(explore) explore.addEventListener('click', function(e){
+    e.preventDefault();
+    switchPage('geoPage'); location.hash = 'geoPage';
+  });
+  var emblem = document.getElementById('hhEmblem');
+  if(emblem) emblem.addEventListener('click', function(e){
+    e.preventDefault();
+    var mask = document.getElementById('logoIntroMask');
+    if(mask) mask.classList.add('on');
+  });
+  document.querySelectorAll('#homeGrid .hg-card').forEach(function(c){
+    c.addEventListener('click', function(){
+      var go = c.getAttribute('data-go');
+      if(go){ switchPage(go); location.hash = go; }
+    });
+  });
+})();
+
 /* ============ 徽记释义弹窗 ============ */
 (function(){
   var mask = document.getElementById('logoIntroMask');
@@ -3018,6 +3160,11 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       searchPh: 'Search places / cities / entries',
       settings: 'Settings',
       themeTitle: 'Theme',
+      home_badge:'Canglu World · Worldbuilding Atlas', home_title:'Canglu', home_sub:'One broken wing, a sword that balances four realms — an epic scroll of a fractured continent',
+      home_btn1:'Explore the World', home_btn2:'About the Emblem', home_mapcap:'Map of Canglu · Hand-drawn Original',
+      hg_geo:'Seas, land & the great atlas', hg_city:'Four war-states, one continent', hg_land:'Wilds, spirits & hidden realms',
+      hg_cal:'Three calendars, seasons & rites', hg_time:'From blood rites to the final prophecy', hg_power:'Four powers in a sword-balanced world',
+      home_contact:'Contact Us', home_support:'Support Us ★',
       t_geo:'Geography', t_city:'City-States', t_land:'Mystic Lands', t_cal:'Calendar', t_time:'Chronicle', t_power:'Powers',
       l_geo:'Canglu Mountains & Seas', l_city:'The Four Great City-States', l_land:'Mountains, Icons & Mystic Lands',
       l_cal:'Calendars of the States · Common Months', l_time:'Chronicle of Canglu · From the Blood Sacrifice to the Final Prophecy', l_power:'The Four Powers · Core Threads of the World',
@@ -3065,7 +3212,7 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
     var t = I18N[s.lang] || I18N.zh;
     // 导航
     var navBtns = document.querySelectorAll('nav button[data-page]');
-    var pages = ['geoPage','cityPage','landmarkPage','calPage','timePage','powerPage'];
+    var pages = ['homePage','geoPage','cityPage','landmarkPage','calPage','timePage','powerPage'];
     navBtns.forEach(function(b, i){
       if(pages.indexOf(b.dataset.page) >= 0 && t.nav[pages.indexOf(b.dataset.page)]){
         b.textContent = t.nav[pages.indexOf(b.dataset.page)];
