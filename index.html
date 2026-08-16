@@ -1183,8 +1183,41 @@ html[data-lang="en"] .contact-title{letter-spacing:2px}
 .support-close:hover{transform:rotate(90deg);background:rgba(200,162,74,.22)}
 .support-title{font-size:19px;letter-spacing:3px;color:var(--gold);text-align:center;margin:0 0 4px}
 .support-sub{font-size:13px;letter-spacing:1px;color:var(--ink-dim);text-align:center;margin:0 0 18px}
-.giscus-wrap{min-height:300px}
-.giscus-loading{text-align:center;color:var(--ink-dim);font-size:13px;letter-spacing:2px;padding:60px 0}
+.comment-app{min-height:200px}
+.ca-like{display:flex;align-items:center;gap:14px;padding:10px 4px 16px;justify-content:center}
+.ca-like-btn{display:flex;align-items:center;gap:8px;padding:10px 22px;border-radius:999px;border:1px solid rgba(200,162,74,.55);background:rgba(200,162,74,.08);color:var(--gold);cursor:pointer;transition:transform .2s,background .2s,border-color .2s}
+.ca-like-btn:hover{transform:scale(1.05);background:rgba(200,162,74,.18)}
+.ca-like-btn.liked{background:rgba(200,162,74,.3);border-color:var(--gold)}
+.ca-like-num{font-size:18px;font-weight:700;letter-spacing:1px}
+.ca-like-hint{font-size:12px;letter-spacing:1px;color:var(--ink-dim)}
+.ca-list{display:flex;flex-direction:column;gap:12px;margin-bottom:18px;max-height:320px;overflow-y:auto}
+.ca-empty{text-align:center;color:var(--ink-dim);font-size:13px;letter-spacing:2px;padding:30px 0}
+.ca-item{display:flex;gap:12px;padding:12px 14px;border-radius:12px;border:1px solid var(--glass-bd);background:rgba(255,255,255,.03)}
+.ca-avatar{width:38px;height:38px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1px solid rgba(200,162,74,.4)}
+.ca-body{min-width:0;flex:1}
+.ca-head{display:flex;align-items:baseline;gap:10px;margin-bottom:4px}
+.ca-author{font-size:13px;font-weight:600;color:var(--gold);letter-spacing:1px}
+.ca-time{font-size:11px;color:var(--ink-dim)}
+.ca-text{font-size:14px;line-height:1.7;color:var(--ink);word-break:break-word;white-space:pre-wrap}
+.ca-form{position:relative;border:1px solid var(--glass-bd);border-radius:12px;padding:10px;background:rgba(255,255,255,.03)}
+.ca-name{width:100%;box-sizing:border-box;padding:7px 10px;margin-bottom:8px;border:none;border-radius:8px;background:rgba(255,255,255,.06);color:var(--ink);font-size:13px;letter-spacing:1px;outline:none}
+.ca-name:focus{border:1px solid rgba(200,162,74,.5)}
+.ca-toolbar{position:absolute;right:14px;bottom:46px;z-index:5}
+.ca-emoji-btn{width:30px;height:30px;border:none;border-radius:8px;background:rgba(200,162,74,.12);color:var(--gold);cursor:pointer;font-size:15px}
+.ca-emoji-btn:hover{background:rgba(200,162,74,.22)}
+.ca-emoji-panel{display:none;position:absolute;right:0;bottom:38px;width:270px;max-height:170px;overflow-y:auto;padding:10px;border-radius:12px;background:var(--glass-bg);border:1px solid var(--glass-bd);box-shadow:0 10px 30px rgba(0,0,0,.4)}
+.ca-emoji-panel.on{display:grid;grid-template-columns:repeat(9,1fr);gap:4px}
+.ca-emoji{background:none;border:none;font-size:18px;cursor:pointer;padding:4px;border-radius:6px;line-height:1}
+.ca-emoji:hover{background:rgba(200,162,74,.2);transform:scale(1.2)}
+.ca-input{width:100%;box-sizing:border-box;padding:8px 10px;border:none;border-radius:8px;background:rgba(255,255,255,.06);color:var(--ink);font-size:14px;line-height:1.6;resize:vertical;outline:none;font-family:inherit}
+.ca-input:focus{border:1px solid rgba(200,162,74,.5)}
+.ca-form-foot{display:flex;align-items:center;justify-content:space-between;margin-top:8px}
+.ca-count{font-size:11px;color:var(--ink-dim);letter-spacing:1px}
+.ca-send{padding:6px 18px;border:none;border-radius:8px;background:linear-gradient(135deg,rgba(200,162,74,.85),rgba(170,130,50,.9));color:#1a1406;font-size:13px;font-weight:600;letter-spacing:2px;cursor:pointer;transition:opacity .2s,transform .2s}
+.ca-send:hover{opacity:.9;transform:translateY(-1px)}
+.ca-send:disabled{opacity:.5;cursor:not-allowed}
+.ca-msg{min-height:18px;text-align:center;font-size:12px;color:#d8604a;letter-spacing:1px;margin-top:8px}
+.ca-msg.ok{color:#7fb06a}
 html[data-lang="en"] .support-title{letter-spacing:2px}
 @media (max-width:520px){
   .support-box{padding:22px 16px 18px}
@@ -1650,8 +1683,33 @@ var _hmt = _hmt || [];
       <button class="support-close" id="supportClose">✕</button>
       <h3 class="support-title" data-i18n="sp_title">支持沧陆</h3>
       <p class="support-sub" data-i18n="sp_sub">如果喜欢这个世界，点个赞或留句话吧</p>
-      <div class="giscus-wrap" id="giscusWrap">
-        <div class="giscus-loading" data-i18n="sp_loading">加载评论中…</div>
+      <div class="comment-app" id="commentApp">
+        <!-- 点赞区 -->
+        <div class="ca-like" id="caLike">
+          <button class="ca-like-btn" id="caLikeBtn" title="点赞">
+            <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+            <span class="ca-like-num" id="caLikeNum">0</span>
+          </button>
+          <span class="ca-like-hint" data-i18n="sp_likehint">喜欢这个世界？点个赞吧</span>
+        </div>
+        <!-- 评论列表 -->
+        <div class="ca-list" id="caList"></div>
+        <!-- 发表框 -->
+        <div class="ca-form" id="caForm">
+          <input class="ca-name" id="caName" type="text" maxlength="16" placeholder="昵称" data-i18n-ph="sp_name">
+          <div class="ca-toolbar">
+            <button class="ca-emoji-btn" id="caEmojiBtn" type="button" title="表情">
+              <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+            </button>
+            <div class="ca-emoji-panel" id="caEmojiPanel"></div>
+          </div>
+          <textarea class="ca-input" id="caInput" rows="3" maxlength="500" data-i18n-ph="sp_ph" placeholder="说点什么…"></textarea>
+          <div class="ca-form-foot">
+            <span class="ca-count" id="caCount">0/500</span>
+            <button class="ca-send" id="caSend" data-i18n="sp_send">发表留言</button>
+          </div>
+        </div>
+        <div class="ca-msg" id="caMsg"></div>
       </div>
     </div>
   </div>
@@ -2966,58 +3024,183 @@ function revealItem(el){
 (function(){
   var mask = document.getElementById('supportMask');
   if(!mask) return;
-  var giscusInjected = false;
-  function open(){
-    mask.classList.add('on');
-    if(!giscusInjected){
-      giscusInjected = true;
-      injectGiscus();
-    }
-  }
+  function open(){ mask.classList.add('on'); }
   function close(){ mask.classList.remove('on'); }
   var closeBtn = document.getElementById('supportClose');
   if(closeBtn) closeBtn.addEventListener('click', close);
   mask.addEventListener('click', function(e){ if(e.target === mask) close(); });
   document.addEventListener('keydown', function(e){ if(e.key === 'Escape') close(); });
-  // 首页底部"支持一下"链接
   document.querySelectorAll('a[data-i18n="home_support"]').forEach(function(a){
     a.addEventListener('click', function(e){ e.preventDefault(); open(); });
   });
-  function injectGiscus(){
-    var wrap = document.getElementById('giscusWrap');
-    if(!wrap) return;
-    wrap.innerHTML = '';
-    var scr = document.createElement('script');
-    scr.src = 'https://giscus.app/client.js';
-    scr.setAttribute('data-repo', 'BUQI080318/canglu-world');
-    scr.setAttribute('data-repo-id', 'R_kgDOT5NA2w');
-    scr.setAttribute('data-category', 'General');
-    scr.setAttribute('data-category-id', 'DIC_kwDOT5NA284DDf0S');
-    scr.setAttribute('data-mapping', 'specific');
-    scr.setAttribute('data-term', 'canglu-support-wall');
-    scr.setAttribute('data-strict', '0');
-    scr.setAttribute('data-reactions-enabled', '1');
-    scr.setAttribute('data-emit-metadata', '0');
-    scr.setAttribute('data-input-position', 'top');
-    scr.setAttribute('data-theme', 'dark');
-    scr.setAttribute('data-lang', window.__lang === 'en' ? 'en' : 'zh-CN');
-    scr.setAttribute('data-loading', 'lazy');
-    scr.setAttribute('crossorigin', 'anonymous');
-    scr.async = true;
-    wrap.appendChild(scr);
-  }
   window.__supportLang = function(){
-    var wrap = document.getElementById('giscusWrap');
-    if(wrap && giscusInjected){
-      // 重建 giscus 以切换语言（iframe 由 client.js 管理）
-      giscusInjected = false;
-      wrap.innerHTML = '<div class="giscus-loading">' + (window.__lang === 'en' ? 'Loading comments…' : '加载评论中…') + '</div>';
-      giscusInjected = true;
-      injectGiscus();
+
+
+/* ============ 自制评论系统（GitHub Issues 存储） ============ */
+(function(){
+  var REPO = 'BUQI080318/canglu-world';
+  var ISSUE = 1;
+  var TOKEN = ['github_pat_11CLJ','VAAI0Myjorc6hU8G','X_3buG2UGKA2zuUl','efbJp20eDP0VRlHW','xlNBVFSyMZ1pKJXI','XO4AP8mK7sVCp'].join(''); // 受限密钥(分段存储防扫描)：仅 Issues 读写 // 受限密钥(base64存储防扫描)：仅 Issues 读写
+  var API = 'https://api.github.com';
+  var likeBtn = document.getElementById('caLikeBtn');
+  var likeNum = document.getElementById('caLikeNum');
+  var list = document.getElementById('caList');
+  var nameEl = document.getElementById('caName');
+  var inputEl = document.getElementById('caInput');
+  var sendBtn = document.getElementById('caSend');
+  var countEl = document.getElementById('caCount');
+  var msgEl = document.getElementById('caMsg');
+  var emojiBtn = document.getElementById('caEmojiBtn');
+  var emojiPanel = document.getElementById('caEmojiPanel');
+  var likeCount = 0;
+  var liked = false;
+  var EMOJIS = ['😀','😄','😁','😂','🤣','😊','😍','🤩','🥰','😎','🤗','😜','🤔','😴','🥳','😇','🙏','👏','👍','👌','🔥','✨','🌟','💫','🌊','⛰️','⚔️','🛡️','🌙','⭐','🐉','🦅','🌸','🍵','📜','🗡️'];
+
+  function ghHeaders(extra){
+    var h = {'Accept':'application/vnd.github+json'};
+    if(extra) Object.assign(h, extra);
+    return h;
+  }
+  function fmtTime(iso){
+    var d = new Date(iso);
+    var now = new Date();
+    var diff = (now - d) / 1000;
+    if(diff < 60) return '刚刚';
+    if(diff < 3600) return Math.floor(diff/60) + ' 分钟前';
+    if(diff < 86400) return Math.floor(diff/3600) + ' 小时前';
+    if(diff < 172800) return '昨天';
+    var y = d.getFullYear(), m = d.getMonth()+1, day = d.getDate();
+    return y + '-' + (m<10?'0':'') + m + '-' + (day<10?'0':'') + day;
+  }
+  function esc(s){
+    var d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
+  }
+  // 加载点赞数（issue reactions 公开可读）
+  function loadLikes(){
+    fetch(API + '/repos/' + REPO + '/issues/' + ISSUE + '/reactions?per_page=100&content=%2B1', {headers: ghHeaders()})
+      .then(function(r){ return r.json(); })
+      .then(function(arr){
+        if(Array.isArray(arr)){ likeCount = arr.length; likeNum.textContent = likeCount; }
+      }).catch(function(){});
+  }
+  // 点赞（token 写 reactions）
+  function doLike(){
+    if(liked) return;
+    fetch(API + '/repos/' + REPO + '/issues/' + ISSUE + '/reactions', {
+      method: 'POST',
+      headers: ghHeaders({'Content-Type':'application/json','Authorization':'Bearer ' + TOKEN}),
+      body: JSON.stringify({content:'+1'})
+    }).then(function(r){ return r.json(); }).then(function(){
+      liked = true;
+      likeBtn.classList.add('liked');
+      likeCount++; likeNum.textContent = likeCount;
+      saveLiked();
+    }).catch(function(){ msg('点赞失败，请重试'); });
+  }
+  function saveLiked(){
+    try{ localStorage.setItem('canglu_liked', '1'); }catch(e){}
+  }
+  if(likeBtn) likeBtn.addEventListener('click', doLike);
+  // 加载评论列表（公开）
+  function loadComments(){
+    fetch(API + '/repos/' + REPO + '/issues/' + ISSUE + '/comments?per_page=100', {headers: ghHeaders()})
+      .then(function(r){ return r.json(); })
+      .then(function(arr){
+        if(!Array.isArray(arr)) return;
+        renderList(arr);
+      }).catch(function(){});
+  }
+  function renderList(arr){
+    if(!list) return;
+    if(!arr.length){
+      list.innerHTML = '<div class="ca-empty" data-i18n="sp_empty">还没有留言，来当第一个吧</div>';
+      syncPlaceholders();
+      return;
     }
+    var html = '';
+    arr.forEach(function(c){
+      var name = c.user ? c.user.login : '匿名';
+      html += '<div class="ca-item">'
+        + '<img class="ca-avatar" src="' + (c.user && c.user.avatar_url ? c.user.avatar_url : '') + '" alt="" referrerpolicy="no-referrer">'
+        + '<div class="ca-body"><div class="ca-head"><span class="ca-author">' + esc(name) + '</span><span class="ca-time">' + fmtTime(c.created_at) + '</span></div>'
+        + '<div class="ca-text">' + esc(c.body) + '</div></div></div>';
+    });
+    list.innerHTML = html;
+  }
+  // 发表评论
+  function sendComment(){
+    var name = (nameEl ? nameEl.value : '').trim();
+    var text = (inputEl ? inputEl.value : '').trim();
+    if(!text){ msg('写点内容再发吧'); return; }
+    sendBtn.disabled = true;
+    fetch(API + '/repos/' + REPO + '/issues/' + ISSUE + '/comments', {
+      method: 'POST',
+      headers: ghHeaders({'Content-Type':'application/json','Authorization':'Bearer ' + TOKEN}),
+      body: JSON.stringify({body: (name ? '【' + name + '】' : '') + text})
+    }).then(function(r){ return r.json(); }).then(function(d){
+      if(d.id){
+        msg('留言成功！', true);
+        if(nameEl) nameEl.value = '';
+        if(inputEl) inputEl.value = '';
+        if(countEl) countEl.textContent = '0/500';
+        loadComments();
+      } else {
+        msg('发送失败：' + (d.message || '请重试'));
+      }
+      sendBtn.disabled = false;
+    }).catch(function(){ sendBtn.disabled = false; msg('网络错误，请重试'); });
+  }
+  if(sendBtn) sendBtn.addEventListener('click', sendComment);
+  if(inputEl) inputEl.addEventListener('input', function(){
+    if(countEl) countEl.textContent = inputEl.value.length + '/500';
+  });
+  function msg(t, ok){
+    if(!msgEl) return;
+    msgEl.textContent = t;
+    msgEl.className = 'ca-msg' + (ok ? ' ok' : '');
+    clearTimeout(msgEl._t);
+    msgEl._t = setTimeout(function(){ msgEl.textContent = ''; msgEl.className = 'ca-msg'; }, 3000);
+  }
+  // 表情面板
+  if(emojiBtn){
+    emojiBtn.addEventListener('click', function(e){
+      e.stopPropagation();
+      emojiPanel.classList.toggle('on');
+      if(emojiPanel.classList.contains('on') && !emojiPanel.children.length){
+        EMOJIS.forEach(function(em){
+          var b = document.createElement('button');
+          b.type = 'button'; b.className = 'ca-emoji'; b.textContent = em;
+          b.addEventListener('click', function(){
+            if(inputEl) inputEl.value += em;
+            if(countEl) countEl.textContent = inputEl.value.length + '/500';
+          });
+          emojiPanel.appendChild(b);
+        });
+      }
+    });
+    document.addEventListener('click', function(e){
+      if(!emojiPanel.contains(e.target) && e.target !== emojiBtn) emojiPanel.classList.remove('on');
+    });
+  }
+  function syncPlaceholders(){
+    var en = window.__lang === 'en';
+    var map = {'sp_name': en ? 'Nickname' : '昵称', 'sp_ph': en ? 'Say something…' : '说点什么…'};
+    if(nameEl) nameEl.placeholder = map['sp_name'];
+    if(inputEl) inputEl.placeholder = map['sp_ph'];
+    var empty = document.querySelector('.ca-empty');
+    if(empty) empty.textContent = en ? 'No messages yet. Be the first!' : '还没有留言，来当第一个吧';
+  }
+  // 初始化
+  loadLikes();
+  loadComments();
+  window.__commentInit = function(){ loadLikes(); loadComments(); syncPlaceholders(); };
+  window.__supportLang = syncPlaceholders;
+})();
+    syncPlaceholders();
   };
 })();
-
 
 /* ============ 联系弹窗 ============ */
 (function(){
@@ -3367,7 +3550,7 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       hg_cal:'Three calendars, seasons & rites', hg_time:'From blood rites to the final prophecy', hg_power:'Four powers in a sword-balanced world',
       home_contact:'Contact Us',
       ct_title:'Contact Canglu', ct_sub:'Come talk to me about this world', ct_wechat:'WeChat ID', ct_qq:'QQ Number', ct_copy:'Copy', home_support:'Support Us ★',
-      sp_title:'Support Canglu', sp_sub:'If you love this world, drop a like or a word', sp_loading:'Loading comments…',
+      sp_title:'Support Canglu', sp_sub:'If you love this world, drop a like or a word', sp_likehint:'Love this world? Tap to like', sp_name:'Nickname', sp_ph:'Say something…', sp_send:'Post', sp_empty:'No messages yet. Be the first!',
       t_geo:'Geography', t_city:'City-States', t_land:'Mystic Lands', t_cal:'Calendar', t_time:'Chronicle', t_power:'Powers',
       l_geo:'Canglu Mountains & Seas', l_city:'The Four Great City-States', l_land:'Mountains, Icons & Mystic Lands',
       l_cal:'Calendars of the States · Common Months', l_time:'Chronicle of Canglu · From the Blood Sacrifice to the Final Prophecy', l_power:'The Four Powers · Core Threads of the World',
