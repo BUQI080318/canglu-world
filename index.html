@@ -1852,7 +1852,21 @@ document.querySelectorAll('nav button').forEach(btn=>{
 /* ============ 深链 ============ */
 function applyHash(){
   const h = location.hash.slice(1);
-  if(!h) return;
+  // 空 hash（无锚点/浏览器后退到根）→ 回首页
+  if(!h){
+    document.querySelectorAll('nav button').forEach(b=>b.classList.remove('on'));
+    const homeBtn = document.querySelector('nav button[data-page="homePage"]');
+    if(homeBtn) homeBtn.classList.add('on');
+    const homeSec = document.getElementById('homePage');
+    if(homeSec){
+      document.querySelectorAll('section.page').forEach(s=>s.classList.remove('on'));
+      homeSec.classList.add('on');
+      const m = document.querySelector('main');
+      if(m) m.scrollTop = 0;
+    }
+    if(window.animatePageIn) setTimeout(()=> animatePageIn(homeSec), 60);
+    return;
+  }
   const parts = h.split('-');
   const pageId = parts[0];
   let sec = document.getElementById(pageId);
