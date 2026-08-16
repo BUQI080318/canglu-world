@@ -471,11 +471,12 @@
   .logo-intro-mask{
     position:fixed;inset:0;z-index:300;background:rgba(5,8,14,.74);
     -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
-    display:none;align-items:center;justify-content:center;padding:20px;
+    display:none;align-items:flex-start;justify-content:center;padding:20px;
+    overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;
   }
   .logo-intro-mask.on{display:flex}
   .logo-intro-box{
-    width:min(740px,94vw);max-height:82vh;overflow-y:auto;
+    width:min(740px,94vw);max-height:none;margin:auto;
     background:var(--glass-bg);
     -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
     border:1px solid var(--glass-brd);border-radius:20px;
@@ -945,11 +946,12 @@
 
   /* ===== 进站欢迎弹窗 ===== */
   .welcome-mask{
-    position:fixed;inset:0;z-index:400;display:flex;align-items:center;justify-content:center;
+    position:fixed;inset:0;z-index:400;display:flex;align-items:flex-start;justify-content:center;
     background:rgba(8,12,20,.38);
     -webkit-backdrop-filter:blur(0px) saturate(100%);
     backdrop-filter:blur(0px) saturate(100%);
     opacity:0;pointer-events:none;
+    overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:24px 0;
     transition:opacity .5s ease,-webkit-backdrop-filter .9s cubic-bezier(.25,.8,.3,1),backdrop-filter .9s cubic-bezier(.25,.8,.3,1);
   }
   .welcome-mask.on{
@@ -958,7 +960,7 @@
     backdrop-filter:blur(26px) saturate(165%);
   }
   .welcome-card{
-    position:relative;width:min(440px,88vw);padding:44px 40px 36px;text-align:center;
+    position:relative;width:min(440px,88vw);margin:auto;padding:44px 40px 36px;text-align:center;
     background:var(--glass-bg);
     -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
     border:1px solid rgba(255,255,255,.14);border-radius:24px;
