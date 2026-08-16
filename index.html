@@ -530,9 +530,17 @@
 
   /* 羽翼线条 */
   .lg-wing-wrap{display:flex;align-items:center;gap:20px;margin:6px 0 4px}
-  .lg-wing-svg{width:120px;height:80px;flex-shrink:0;color:var(--gold)}
-  .lg-wing-svg .wing-line{fill:none;stroke:url(#lgWingGrad);stroke-width:2.6;stroke-linecap:round;stroke-dasharray:260;stroke-dashoffset:0;animation:lgWingDraw 3.8s ease-in-out infinite}
-  @keyframes lgWingDraw{0%{stroke-dashoffset:260;opacity:.3}35%{stroke-dashoffset:0;opacity:1}80%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:260;opacity:.3}}
+  .lg-wing-img{
+    width:130px;height:auto;flex-shrink:0;object-fit:contain;
+    filter:drop-shadow(0 0 10px rgba(200,162,74,.35));
+    animation:lgWingBreathe 3.8s ease-in-out infinite;
+  }
+  @keyframes lgWingBreathe{
+    0%{opacity:.55;transform:scale(.96)}
+    35%{opacity:1;transform:scale(1)}
+    80%{opacity:1;transform:scale(1)}
+    100%{opacity:.55;transform:scale(.96)}
+  }
   .lg-wing-list{flex:1;min-width:0;margin:0 !important;padding-left:0 !important;list-style:none}
   .lg-wing-list li{padding:5px 10px;border-radius:8px;border-left:2px solid var(--gold-dim);background:linear-gradient(90deg,rgba(200,162,74,.06),transparent 70%);margin:5px 0;transition:background .25s,border-color .25s,transform .25s}
   .lg-wing-list li:hover{background:linear-gradient(90deg,rgba(200,162,74,.16),transparent 80%);border-left-color:var(--gold);transform:translateX(3px)}
@@ -544,7 +552,7 @@
     .lg-emblem-img{width:68px;height:68px;inset:2px}
     .lg-sword-wrap,.lg-wing-wrap{flex-direction:column;align-items:flex-start;gap:6px}
     .lg-sword-svg{width:100px;height:100px;align-self:center}
-    .lg-wing-svg{width:100px;height:64px;align-self:center}
+    .lg-wing-img{width:110px;align-self:center}
   }
 /* LOGO 展示区（城邦页） */
   .logo-hero{
@@ -1312,17 +1320,7 @@
     </div>
     <h4 data-i18n="lg_h1b">单侧残缺羽翼（沧陆世界的核心宿命底色）</h4>
     <div class="lg-wing-wrap">
-      <svg class="lg-wing-svg" viewBox="0 0 120 80">
-        <defs>
-          <linearGradient id="lgWingGrad" x1="1" y1="0" x2="0" y2="0">
-            <stop offset="0" stop-color="#e8cd8a"/><stop offset=".6" stop-color="#c8a24a"/><stop offset="1" stop-color="#8a6d2f"/>
-          </linearGradient>
-        </defs>
-        <!-- 单侧羽翼：从右侧肩点向左展开的三道飞羽（与LOGO左翼同向） -->
-        <path class="wing-line" d="M110 62 C 92 30, 62 18, 12 14 C 28 30, 42 40, 54 46 C 36 48, 24 50, 16 54 C 32 58, 50 60, 64 62 C 50 66, 40 68, 32 72 C 52 74, 74 74, 96 68 Z"/>
-        <path class="wing-line" d="M110 62 C 96 34, 68 22, 20 16" opacity=".55"/>
-        <path class="wing-line" d="M110 62 C 90 44, 64 34, 36 30" opacity=".35"/>
-      </svg>
+      <img class="lg-wing-img" src="assets/logo_wing.png" alt="单侧羽翼">
       <ul class="lg-wing-list">
         <li><b data-i18n="lg_w1b">世界先天残缺</b><span data-i18n="lg_w1c">：根源是扼根山神骸、茹章全城寿命诅咒、无昼碛时空扭曲——沧陆自诞生起就存在无法修复的先天裂痕，不存在完美、圆满的秩序，对应单翼而非双翼。</span></li>
         <li><b data-i18n="lg_w2b">四方皆有伤痕</b><span data-i18n="lg_w2c">：恓鸟城战火濒灭的创伤；茹章城全民短命、虚假繁荣的诅咒；眴姚港夹缝求生、依附霸主的无奈；伏熏城封闭自保、割裂大陆的隔阂。整片大陆没有一方净土，所有人都背负各自残缺与苦痛。</span></li>
