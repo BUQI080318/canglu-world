@@ -2003,6 +2003,103 @@ html[data-theme="light"] .sc-unlock:hover{background:rgba(138,44,34,.08) !import
 html[data-theme="light"] .es-play{color:#4a3d28 !important}
 html[data-theme="light"] .es-play:hover{color:#8a2c22 !important;border-color:rgba(138,44,34,.45) !important}
 
+/* ============================================================
+   移动端全面优化（操作舒适性 + 帧率）
+   ============================================================ */
+@media (max-width:700px){
+  /* ── 触控舒适：所有交互目标 ≥ 44px ── */
+  nav button{
+    min-height:44px;display:inline-flex;align-items:center;justify-content:center;
+    padding:8px 14px !important;font-size:14px !important;letter-spacing:2px !important;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .hh-btn{min-height:48px;padding:12px 24px !important;font-size:14px !important}
+  .hmx-btn,.sc-unlock,.es-play,.ca-send,.ca-emoji-btn,.sp-opt,.theme-btn,.settings-btn,.search-box,
+  .music-btn,.music-ctrl,.vol-icon,.contact-copy,.logo-intro-btn,.wc-btn{
+    min-height:44px;
+  }
+  /* 点击高亮反馈（移动端 hover 无效 → 用 active） */
+  nav button:active,.hh-btn:active,.faction-card:active,.epic-card:active,.city-card:active,
+  .secret-card:active,.sc-unlock:active,.hm-pin:active,.es-node:active,.music-btn:active{
+    transform:scale(.96);
+    transition:transform .12s ease;
+  }
+  /* 触发元素禁止 iOS 双击缩放/长按菜单 */
+  button,a,.city-card,.acc-head,.faction-card,.secret-card,.hm-pin,.es-node,.music-bar{
+    touch-action:manipulation;
+    -webkit-user-select:none;user-select:none;
+  }
+  /* ── 导航栏：紧凑两行 + 品牌留出空间 ── */
+  header{padding:8px 10px 6px;gap:6px 8px}
+  .brand{font-size:15px;letter-spacing:3px}
+  .brand small{display:none}
+  nav{gap:4px;padding:2px 0}
+  nav button{padding:6px 10px;font-size:13px;letter-spacing:2px}
+  .search-wrap{margin-left:0;width:100%}
+  .search-box{width:100%;min-height:40px}
+  .search-results{width:calc(100vw - 20px);right:0;left:0;margin:0 auto}
+  /* main 顶部留出 header 高度 */
+  main{top:118px}
+  html[data-lang="en"] main{top:128px}
+  /* ── 播放器：吸底 + 安全区 + 不挡内容 ── */
+  .music-bar{
+    right:8px;bottom:calc(8px + env(safe-area-inset-bottom,0px));
+    left:8px;width:auto;padding:8px 12px;border-radius:18px;
+    box-shadow:0 -4px 24px rgba(0,0,0,.45),0 8px 28px var(--shadow);
+  }
+  /* 底部内容留白，避免被播放器挡住 */
+  .doc{padding-bottom:92px}
+  .home-footer{padding-bottom:80px}
+  /* 播放器按钮加大 */
+  .music-btn,.music-ctrl{width:40px;height:40px;flex-shrink:0}
+  .music-cover{width:36px;height:36px}
+  .eq{height:26px}
+  /* ── 弹窗：全屏友好 ── */
+  .logo-intro-box,.contact-box,.support-box,.wc-box{
+    width:calc(100vw - 24px) !important;
+    max-height:78vh;
+    padding:20px 16px !important;
+    border-radius:14px;
+  }
+  .logo-intro-mask .logo-intro-close,.contact-mask .contact-close,
+  .support-mask .support-close,.welcome-mask .wc-close{
+    width:44px;height:44px;font-size:18px;z-index:5;
+  }
+  /* ── 四大城邦阵营卡：图标放大 ── */
+  .faction-card .fc-emblem{width:58px;height:58px}
+  .faction-card .fc-emblem svg{width:32px;height:32px}
+  /* ── 地图标记：加大触控区 ── */
+  .hm-pin .hm-dot{width:16px;height:16px}
+  .hm-pin::after{content:"";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:40px;height:40px;border-radius:50%}
+  /* ── 时间轴节点加大 ── */
+  .es-node{min-width:96px}
+  .es-node .es-dot{width:16px;height:16px}
+  /* ── 手风琴头部加大触控 ── */
+  .acc-head{min-height:50px;padding:12px 14px}
+  /* ── 帧率：移动端裁剪重开销动画 ── */
+  body::before,body::after,html::after{animation:none !important}
+  .glass-shine::after{display:none !important}
+  .he-map-shine{animation:none !important;opacity:.25}
+  .hm-dot{animation-duration:3s}
+  .lg-emblem .ring-outer,.lg-emblem .ring-glow{animation:none}
+  .lg-wing-box:hover{transform:none}
+  .faction-card .fc-emblem,.ph-emblem{animation:none}
+  .cb-emblem{animation-duration:8s}
+  /* 禁止桌面 hover 效果在触摸屏上的粘滞 */
+  .faction-card:hover,.epic-card:hover,.secret-card:hover,.city-card:hover,
+  .acc-card:hover,.ph-card:hover,.month-card:hover,.tl-item:hover{
+    transform:none !important;box-shadow:none !important;
+  }
+  .faction-card:hover .fc-go{opacity:0}
+  /* 搜索框聚焦不放大页面 */
+  input,textarea,select{font-size:16px !important}
+}
+/* 触控反馈的通用 active 态（无 hover 设备） */
+@media (hover:none){
+  .faction-card,.epic-card,.city-card,.secret-card,.ph-card{transition:transform .15s ease,box-shadow .15s ease}
+}
+
 </style>
 <script>
 var _hmt = _hmt || [];
