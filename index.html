@@ -15,10 +15,11 @@
     --input-bg:var(--panel); --item-bg:var(--panel); --item-hover:var(--panel);
     --glow:rgba(200,162,74,.3); --shadow:rgba(0,0,0,.55);
     --paper-texture:none;
-    --glass-bg:rgba(22,28,42,.38); --glass-brd:rgba(255,255,255,.17);
-    --glass-hl:inset 0 1px 0 rgba(255,255,255,.16),inset 0 -1px 0 rgba(255,255,255,.04);
-    --glass-shadow:0 8px 32px rgba(0,0,0,.45);
-    --glass-blur:blur(22px) saturate(190%);
+    --glass-bg:rgba(18,22,32,.82); --glass-brd:rgba(200,162,74,.14);
+    --glass-hl:inset 0 1px 0 rgba(200,162,74,.05);
+    --glass-shadow:0 6px 24px rgba(0,0,0,.55);
+    --glass-blur:none;
+    --arch-seal:#8b2635; --arch-paper:rgba(24,28,40,.9); --arch-line:rgba(200,162,74,.22);
     --blob-gold:rgba(212,175,90,.38); --blob-blue:rgba(110,140,215,.30); --blob-violet:rgba(150,110,200,.26);
   }
   :root{
@@ -47,10 +48,11 @@
     --glow:rgba(166,58,46,.3); --shadow:rgba(60,50,30,.28);
     --paper-texture:url('data:image/svg+xml,%3Csvg%20xmlns=%27http://www.w3.org/2000/svg%27%20width=%271600%27%20height=%271000%27%3E%3Cg%20fill=%27none%27%20stroke=%27%234a4238%27%20stroke-width=%272%27%20opacity=%270.08%27%3E%3Cpath%20d=%27M0,640%20Q180,520%20380,600%20T760,540%20T1160,610%20T1600,560%20L1600,1000%20L0,1000%20Z%27%20fill=%27%234a4238%27%20fill-opacity=%270.04%27/%3E%3Cpath%20d=%27M0,720%20Q220,640%20460,700%20T900,660%20T1320,710%20L1600,680%27/%3E%3Cpath%20d=%27M0,800%20Q300,740%20560,790%20T1040,760%20T1600,790%27/%3E%3C/g%3E%3C/svg%3E');
  
-    --glass-bg:rgba(255,255,255,.30); --glass-brd:rgba(255,255,255,.9);
-    --glass-hl:inset 0 1px 0 rgba(255,255,255,1),inset 0 -1px 0 rgba(255,255,255,.5);
-    --glass-shadow:0 8px 32px rgba(60,50,30,.14);
-    --glass-blur:blur(22px) saturate(170%);
+    --glass-bg:rgba(248,242,228,.9); --glass-brd:rgba(150,110,40,.22);
+    --glass-hl:inset 0 1px 0 rgba(255,255,255,.7);
+    --glass-shadow:0 6px 24px rgba(60,45,20,.12);
+    --glass-blur:none;
+    --arch-seal:#8b2635; --arch-paper:rgba(250,245,232,.95); --arch-line:rgba(150,110,40,.25);
     --blob-gold:rgba(212,175,90,.48); --blob-blue:rgba(110,140,215,.38); --blob-violet:rgba(150,110,200,.32);
   }
   @media (prefers-color-scheme: light){
@@ -77,7 +79,8 @@
     background:var(--bg);background-image:var(--paper-texture);
     background-size:1600px 1000px,auto;background-attachment:fixed;
     color:var(--ink);font-family:"Microsoft YaHei","PingFang SC",sans-serif;overflow-x:hidden;
-  }
+  
+  background-image:radial-gradient(ellipse at 20% 10%,rgba(200,162,74,.035),transparent 55%),radial-gradient(ellipse at 85% 90%,rgba(139,38,53,.03),transparent 50%);}
   /* 环境光斑（液态玻璃的透光来源，缓慢漂移） */
   body::before,body::after{
     content:"";position:fixed;width:62vw;height:62vw;border-radius:50%;
@@ -215,7 +218,7 @@
   .city-card{
     background:var(--glass-bg);
     -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
-    border:1px solid var(--glass-brd);border-radius:14px;padding:18px;cursor:pointer;
+    border:1px solid var(--glass-brd);border-radius:6px;padding:18px;cursor:pointer;
     box-shadow:var(--glass-hl),var(--glass-shadow);overflow:hidden;
   }
   .city-card:hover{border-color:var(--gold-dim);transform:translateY(-2px);box-shadow:var(--card-hover)}
@@ -227,7 +230,7 @@
   /* 年表 */
   .timeline{position:relative;margin:18px 0 8px;padding-left:26px}
   .timeline::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:var(--gold-dim);opacity:.5}
-  .tl-item{position:relative;margin:0 0 20px;padding:12px 16px;background:var(--glass-bg);-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);border:1px solid var(--glass-brd);border-radius:12px;box-shadow:var(--glass-hl),var(--glass-shadow)}
+  .tl-item{position:relative;margin:0 0 20px;padding:12px 16px;background:var(--glass-bg);-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);border:1px solid var(--glass-brd);border-radius:6px;box-shadow:var(--glass-hl),var(--glass-shadow)}
   .tl-item::before{
     content:"";position:absolute;left:-24px;top:17px;width:10px;height:10px;border-radius:50%;
     background:var(--gold);box-shadow:0 0 10px rgba(200,162,74,.6);
@@ -239,7 +242,7 @@
   .calc{
     margin:16px 0;padding:18px 20px;background:var(--glass-bg);
     -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
-    border:1px solid var(--glass-brd);border-radius:14px;
+    border:1px solid var(--glass-brd);border-radius:6px;
     box-shadow:var(--glass-hl),var(--glass-shadow);
   }
   .calc h3{margin-top:0}
@@ -258,7 +261,7 @@
   .acc-card{
     margin:14px 0;background:var(--glass-bg);
     -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
-    border:1px solid var(--glass-brd);border-radius:14px;overflow:hidden;
+    border:1px solid var(--glass-brd);border-radius:6px;overflow:hidden;
     box-shadow:var(--glass-hl),var(--glass-shadow);
   }
   .acc-card.open{border-color:var(--gold);box-shadow:var(--glass-hl),0 12px 40px var(--shadow),0 0 18px var(--glow)}
@@ -289,7 +292,7 @@
   .month-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:16px 0}
   .month-card{
     background:var(--glass-bg);-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
-    border:1px solid var(--glass-brd);border-radius:12px;padding:12px 14px;cursor:pointer;
+    border:1px solid var(--glass-brd);border-radius:6px;padding:12px 14px;cursor:pointer;
     box-shadow:var(--glass-hl),var(--glass-shadow);overflow:hidden;
   }
   .month-card:hover{border-color:var(--gold-dim);transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.3)}
@@ -430,7 +433,7 @@
     position:fixed;top:64px;right:16px;z-index:200;width:320px;max-height:calc(100vh - 90px);
     overflow-y:auto;background:var(--glass-bg);
     -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
-    border:1px solid var(--glass-brd);border-radius:16px;
+    border:1px solid var(--glass-brd);border-radius:6px;
     box-shadow:var(--glass-hl),0 18px 48px var(--shadow);
     padding:16px 18px;display:none;transform:translateY(-8px);opacity:0;
     transition:transform .3s cubic-bezier(.22,.61,.36,1),opacity .3s;
@@ -601,7 +604,7 @@
     display:flex;align-items:center;gap:26px;margin:26px 0 8px;padding:22px 26px;
     background:var(--glass-bg);
     -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
-    border:1px solid var(--glass-brd);border-radius:16px;
+    border:1px solid var(--glass-brd);border-radius:6px;
     box-shadow:var(--glass-hl),var(--glass-shadow);
   }
   .logo-hero-img{width:110px;height:110px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 14px var(--glow))}
@@ -716,7 +719,7 @@
 }
 .he-map-title::after{background:linear-gradient(90deg,var(--gold-dim),transparent)}
 .he-map-frame{
-  position:relative;border-radius:14px;overflow:hidden;cursor:pointer;
+  position:relative;border-radius:6px;overflow:hidden;cursor:pointer;
   border:1px solid rgba(201,168,76,.35);
   box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 44px rgba(201,168,76,.07);
   transition:border-color .4s,box-shadow .4s,transform .4s;
@@ -738,36 +741,64 @@
 @media (prefers-reduced-motion:reduce){.he-map-shine{animation:none}}
 .he-map-cap{margin-top:16px;font-size:12px;letter-spacing:3px;color:var(--ink-dim)}
 
+
+/* 卷首扉页：档案编号 + 收藏印 */
+.he-archno{
+  font-size:10px;letter-spacing:6px;color:var(--ink-dim);margin-bottom:14px;
+  font-style:italic;opacity:.85;
+}
+.he-seal{
+  position:absolute;right:26px;bottom:30px;z-index:2;
+  font-family:"Noto Serif SC","SimSun",serif;font-size:12px;letter-spacing:2px;line-height:1.7;
+  color:var(--arch-seal);text-align:center;padding:8px 7px;
+  border:2px solid var(--arch-seal);border-radius:4px;opacity:.6;
+  transform:rotate(-6deg);user-select:none;
+}
+@media (max-width:767px){.he-seal{display:none}}
+/* 卷宗编号（右上角） */
+.epic-card[data-arch]{padding-top:30px}
 /* 六大志卡片 */
 .home-epic-grid{
   display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;
   max-width:1400px;margin:0 auto;padding:6rem 24px 2rem;
 }
 .epic-card{
-  position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;
-  padding:34px 26px 28px;border-radius:16px;text-decoration:none;cursor:pointer;
-  background:rgba(20,20,30,.75);border:1px solid rgba(201,168,76,.3);
-  transition:transform .35s cubic-bezier(.22,.61,.36,1),border-color .35s,background .35s,box-shadow .35s;
+  position:relative;display:flex;flex-direction:column;align-items:flex-start;text-align:left;
+  padding:26px 24px 22px;border-radius:4px;text-decoration:none;cursor:pointer;
+  background:var(--arch-paper);border:1px solid var(--arch-line);
+  box-shadow:0 4px 14px rgba(0,0,0,.3);
+  transition:border-color .4s,box-shadow .4s,transform .4s;
+}
+.epic-card::before{ /* 卷宗编号 */
+  content:attr(data-arch);position:absolute;top:14px;right:16px;
+  font-size:10px;letter-spacing:3px;color:var(--gold-dim);opacity:.8;
+}
+.epic-card::after{ /* 左下角红泥印 */
+  content:'档案';position:absolute;bottom:12px;left:14px;
+  font-size:9px;letter-spacing:2px;color:var(--arch-seal);
+  border:1px solid var(--arch-seal);padding:1px 5px;border-radius:2px;opacity:.75;
+  transform:rotate(-4deg);
 }
 .epic-card:hover{
-  transform:translateY(-8px);border-color:rgba(201,168,76,.8);
-  background:rgba(30,30,45,.9);box-shadow:0 16px 40px rgba(0,0,0,.45);
+  transform:translateY(-3px);border-color:rgba(201,168,76,.55);
+  box-shadow:0 8px 26px rgba(0,0,0,.4),0 0 0 1px rgba(201,168,76,.12);
 }
 .epic-card .ec-icon{
-  width:48px;height:48px;color:var(--gold);margin-bottom:18px;transition:filter .35s;
+  width:40px;height:40px;color:var(--gold);margin-bottom:14px;transition:filter .35s;
 }
 .epic-card:hover .ec-icon{filter:drop-shadow(0 0 8px rgba(201,168,76,.6))}
 .epic-card:nth-child(2) .ec-icon,.epic-card:nth-child(2):hover .ec-icon{filter:drop-shadow(0 0 8px rgba(139,38,53,.75))}
 .ec-title{
-  margin:0 0 12px;font-size:1.25rem;font-weight:600;letter-spacing:6px;color:var(--ink);
-  font-family:"Noto Serif SC","Source Han Serif SC","SimSun",serif;text-indent:6px;
+  margin:0 0 10px;font-size:1.15rem;font-weight:600;letter-spacing:4px;color:var(--ink);
+  font-family:"Noto Serif SC","Source Han Serif SC","SimSun",serif;text-indent:4px;
 }
 .ec-desc{
   margin:0 0 16px;font-size:.92rem;line-height:1.85;color:var(--ink-dim);flex:1;
 }
 .ec-foot{
-  font-size:.75rem;letter-spacing:2px;color:var(--gold-dim);
-  border-top:1px solid rgba(201,168,76,.18);padding-top:12px;width:100%;
+  font-size:.72rem;letter-spacing:2px;color:var(--gold-dim);
+  border-top:1px solid rgba(201,168,76,.16);padding-top:10px;width:100%;
+  font-style:italic;
 }
 
 /* CTA 区 */
@@ -819,7 +850,7 @@ html[data-theme="light"] .he-badge{background:rgba(255,255,255,.5)}
   @media (max-width:700px){
     .music-bar{
       left:8px;right:8px;bottom:8px;justify-content:space-between;
-      padding:8px 14px;border-radius:16px;z-index:160;
+      padding:8px 14px;border-radius:6px;z-index:160;
       background:var(--glass-bg);-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
       border:1px solid var(--glass-brd);box-shadow:var(--glass-hl),0 8px 28px var(--shadow);
       cursor:pointer;
@@ -832,7 +863,7 @@ html[data-theme="light"] .he-badge{background:rgba(255,255,255,.5)}
     /* 歌单：底部上滑侧边栏 */
     .music-list{
       left:8px;right:8px;top:auto;bottom:76px;max-height:42vh;
-      border-radius:16px;transform:translateY(12px);
+      border-radius:6px;transform:translateY(12px);
     }
     .music-list.on{transform:none}
     /* 页面底部留出播放器高度，正文不被遮挡 */
@@ -858,7 +889,7 @@ html[data-theme="light"] .he-badge{background:rgba(255,255,255,.5)}
 
   /* ===== 四方势力博弈图 ===== */
   .power-map{
-    margin:16px 0 8px;padding:16px;border-radius:16px;
+    margin:16px 0 8px;padding:16px;border-radius:6px;
     background:var(--glass-bg);-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
     border:1px solid var(--glass-brd);box-shadow:var(--glass-hl),var(--glass-shadow);
     position:relative;overflow:hidden;
@@ -894,7 +925,7 @@ html[data-theme="light"] .he-badge{background:rgba(255,255,255,.5)}
   @keyframes pmFlow{from{stroke-dashoffset:0}to{stroke-dashoffset:-14}}
   /* 点击详情面板 */
   .pm-detail{
-    margin-top:10px;padding:14px 18px;border-radius:12px;border-left:3px solid var(--gold);
+    margin-top:10px;padding:14px 18px;border-radius:6px;border-left:3px solid var(--gold);
     background:linear-gradient(90deg,rgba(200,162,74,.08),transparent 75%);
     animation:pmDetailIn .35s cubic-bezier(.22,.61,.36,1);
   }
@@ -993,7 +1024,7 @@ html[data-theme="light"] .he-badge{background:rgba(255,255,255,.5)}
   .today-date{color:var(--ink-dim);font-size:13px;letter-spacing:2px}
   .today-main{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
   .today-month{
-    flex-shrink:0;width:96px;height:96px;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    flex-shrink:0;width:96px;height:96px;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;
     border:1px solid var(--gold-dim);background:linear-gradient(160deg,rgba(200,162,74,.14),rgba(200,162,74,.03));
     box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 0 18px rgba(200,162,74,.12);
   }
@@ -1003,7 +1034,7 @@ html[data-theme="light"] .he-badge{background:rgba(255,255,255,.5)}
   .today-info .ti-line{font-size:15px;line-height:2.1;color:var(--ink);letter-spacing:1px}
   .today-info .ti-line b{color:var(--gold);font-weight:normal;margin-right:6px}
   .today-info .ti-fact{color:var(--ink-dim);font-size:13.5px;line-height:1.9;margin-top:4px;border-left:2px solid var(--gold-dim);padding-left:10px}
-  .today-ritual{margin-top:14px;padding:12px 16px;border-radius:12px;border:1px solid var(--glass-brd);
+  .today-ritual{margin-top:14px;padding:12px 16px;border-radius:6px;border:1px solid var(--glass-brd);
     background:linear-gradient(90deg,rgba(200,162,74,.08),transparent 80%);
     display:flex;align-items:center;gap:14px;flex-wrap:wrap}
   .today-ritual .tr-label{color:var(--gold-dim);font-size:12.5px;letter-spacing:2px;flex-shrink:0}
@@ -1028,7 +1059,7 @@ html[data-theme="light"] .he-badge{background:rgba(255,255,255,.5)}
 
   /* ===== 地理志·沧陆舆图 ===== */
   .geo-atlas{
-    margin:16px 0 12px;padding:18px;border-radius:18px;position:relative;overflow:hidden;
+    margin:16px 0 12px;padding:18px;border-radius:6px;position:relative;overflow:hidden;
     background:var(--glass-bg);-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
     border:1px solid var(--glass-brd);box-shadow:var(--glass-hl),var(--glass-shadow);
   }
@@ -1043,7 +1074,7 @@ html[data-theme="light"] .he-badge{background:rgba(255,255,255,.5)}
     display:grid;grid-template-columns:repeat(6,1fr);gap:10px;
   }
   .atlas-zone{
-    position:relative;border-radius:14px;padding:14px 8px 12px;cursor:pointer;
+    position:relative;border-radius:6px;padding:14px 8px 12px;cursor:pointer;
     border:1px solid var(--glass-brd);background:linear-gradient(165deg,rgba(200,162,74,.07),rgba(200,162,74,.01));
     text-align:center;transition:all .25s cubic-bezier(.22,.61,.36,1);overflow:hidden;
   }
@@ -1215,7 +1246,7 @@ html[data-theme="light"] .he-badge{background:rgba(255,255,255,.5)}
     display:flex;justify-content:center;gap:12px;margin:16px 0 4px;flex-wrap:wrap;
   }
   .lg-city{
-    display:flex;align-items:center;gap:8px;padding:7px 14px;border-radius:12px;cursor:pointer;
+    display:flex;align-items:center;gap:8px;padding:7px 14px;border-radius:6px;cursor:pointer;
     background:var(--glass-bg);border:1px solid var(--glass-brd);
     box-shadow:var(--glass-hl);transition:all .25s;user-select:none;
   }
@@ -1282,14 +1313,14 @@ html[data-theme="light"] .he-badge{background:rgba(255,255,255,.5)}
 /* ============ 联系弹窗 ============ */
 .contact-mask{position:fixed;inset:0;z-index:1200;display:flex;align-items:center;justify-content:center;background:rgba(6,10,20,.62);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
 .contact-mask.on{opacity:1;visibility:visible}
-.contact-box{position:relative;width:min(560px,92vw);max-height:84vh;overflow-y:auto;background:var(--glass-bg);border:1px solid var(--glass-bd);border-radius:18px;padding:30px 28px 26px;box-shadow:0 18px 50px rgba(0,0,0,.45);transform:translateY(18px) scale(.97);transition:transform .3s cubic-bezier(.22,.61,.36,1)}
+.contact-box{position:relative;width:min(560px,92vw);max-height:84vh;overflow-y:auto;background:var(--glass-bg);border:1px solid var(--glass-bd);border-radius:6px;padding:30px 28px 26px;box-shadow:0 18px 50px rgba(0,0,0,.45);transform:translateY(18px) scale(.97);transition:transform .3s cubic-bezier(.22,.61,.36,1)}
 .contact-mask.on .contact-box{transform:none}
 .contact-close{position:absolute;top:12px;right:14px;width:30px;height:30px;border:none;border-radius:50%;background:rgba(200,162,74,.12);color:var(--ink);font-size:15px;cursor:pointer;transition:transform .25s,background .25s}
 .contact-close:hover{transform:rotate(90deg);background:rgba(200,162,74,.22)}
 .contact-title{font-size:19px;letter-spacing:3px;color:var(--gold);text-align:center;margin:0 0 4px}
 .contact-sub{font-size:13px;letter-spacing:1px;color:var(--ink-dim);text-align:center;margin:0 0 20px}
 .contact-row{display:flex;flex-direction:column;gap:14px}
-.contact-card{display:flex;align-items:center;gap:16px;padding:14px 16px;border-radius:14px;border:1px solid var(--glass-bd);background:rgba(255,255,255,.03);transition:border-color .25s,background .25s}
+.contact-card{display:flex;align-items:center;gap:16px;padding:14px 16px;border-radius:6px;border:1px solid var(--glass-bd);background:rgba(255,255,255,.03);transition:border-color .25s,background .25s}
 .contact-card:hover{border-color:rgba(200,162,74,.45);background:rgba(200,162,74,.06)}
 .contact-avatar{width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid rgba(200,162,74,.5);flex-shrink:0;box-sizing:border-box}
 .contact-info{display:flex;flex-direction:column;gap:4px;min-width:0}
@@ -1309,7 +1340,7 @@ html[data-lang="en"] .contact-title{letter-spacing:2px}
 /* ============ 支持弹窗 ============ */
 .support-mask{position:fixed;inset:0;z-index:1300;display:flex;align-items:center;justify-content:center;background:rgba(6,10,20,.62);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
 .support-mask.on{opacity:1;visibility:visible}
-.support-box{position:relative;width:min(680px,94vw);max-height:86vh;overflow-y:auto;background:var(--glass-bg);border:1px solid var(--glass-bd);border-radius:18px;padding:30px 28px 26px;box-shadow:0 18px 50px rgba(0,0,0,.45);transform:translateY(18px) scale(.97);transition:transform .3s cubic-bezier(.22,.61,.36,1)}
+.support-box{position:relative;width:min(680px,94vw);max-height:86vh;overflow-y:auto;background:var(--glass-bg);border:1px solid var(--glass-bd);border-radius:6px;padding:30px 28px 26px;box-shadow:0 18px 50px rgba(0,0,0,.45);transform:translateY(18px) scale(.97);transition:transform .3s cubic-bezier(.22,.61,.36,1)}
 .support-mask.on .support-box{transform:none}
 .support-close{position:absolute;top:12px;right:14px;width:30px;height:30px;border:none;border-radius:50%;background:rgba(200,162,74,.12);color:var(--ink);font-size:15px;cursor:pointer;transition:transform .25s,background .25s}
 .support-close:hover{transform:rotate(90deg);background:rgba(200,162,74,.22)}
@@ -1324,20 +1355,20 @@ html[data-lang="en"] .contact-title{letter-spacing:2px}
 .ca-like-hint{font-size:12px;letter-spacing:1px;color:var(--ink-dim)}
 .ca-list{display:flex;flex-direction:column;gap:12px;margin-bottom:18px;max-height:320px;overflow-y:auto}
 .ca-empty{text-align:center;color:var(--ink-dim);font-size:13px;letter-spacing:2px;padding:30px 0}
-.ca-item{display:flex;gap:12px;padding:12px 14px;border-radius:12px;border:1px solid var(--glass-bd);background:rgba(255,255,255,.03)}
+.ca-item{display:flex;gap:12px;padding:12px 14px;border-radius:6px;border:1px solid var(--glass-bd);background:rgba(255,255,255,.03)}
 .ca-avatar{width:38px;height:38px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1px solid rgba(200,162,74,.4)}
 .ca-body{min-width:0;flex:1}
 .ca-head{display:flex;align-items:baseline;gap:10px;margin-bottom:4px}
 .ca-author{font-size:13px;font-weight:600;color:var(--gold);letter-spacing:1px}
 .ca-time{font-size:11px;color:var(--ink-dim)}
 .ca-text{font-size:14px;line-height:1.7;color:var(--ink);word-break:break-word;white-space:pre-wrap}
-.ca-form{position:relative;border:1px solid var(--glass-bd);border-radius:12px;padding:10px;background:rgba(255,255,255,.03)}
+.ca-form{position:relative;border:1px solid var(--glass-bd);border-radius:6px;padding:10px;background:rgba(255,255,255,.03)}
 .ca-name{width:100%;box-sizing:border-box;padding:7px 10px;margin-bottom:8px;border:none;border-radius:8px;background:rgba(255,255,255,.06);color:var(--ink);font-size:13px;letter-spacing:1px;outline:none}
 .ca-name:focus{border:1px solid rgba(200,162,74,.5)}
 .ca-toolbar{position:absolute;right:14px;bottom:46px;z-index:5}
 .ca-emoji-btn{width:30px;height:30px;border:none;border-radius:8px;background:rgba(200,162,74,.12);color:var(--gold);cursor:pointer;font-size:15px}
 .ca-emoji-btn:hover{background:rgba(200,162,74,.22)}
-.ca-emoji-panel{display:none;position:absolute;right:0;bottom:38px;width:270px;max-height:170px;overflow-y:auto;padding:10px;border-radius:12px;background:var(--glass-bg);border:1px solid var(--glass-bd);box-shadow:0 10px 30px rgba(0,0,0,.4)}
+.ca-emoji-panel{display:none;position:absolute;right:0;bottom:38px;width:270px;max-height:170px;overflow-y:auto;padding:10px;border-radius:6px;background:var(--glass-bg);border:1px solid var(--glass-bd);box-shadow:0 10px 30px rgba(0,0,0,.4)}
 .ca-emoji-panel.on{display:grid;grid-template-columns:repeat(9,1fr);gap:4px}
 .ca-emoji{background:none;border:none;font-size:18px;cursor:pointer;padding:4px;border-radius:6px;line-height:1}
 .ca-emoji:hover{background:rgba(200,162,74,.2);transform:scale(1.2)}
@@ -1450,6 +1481,7 @@ var _hmt = _hmt || [];
       <img class="he-bg" src="./assets/hero-bg.jpg" alt="沧陆世界观主视觉图" onerror="this.style.display='none'">
       <div class="he-mask"></div>
       <div class="he-content">
+        <div class="he-archno">沧陆档案馆 · 收录编号 CL-0001</div>
         <div class="he-badge" data-i18n="home_badge">沧陆世界 · 世界观设定集</div>
         <h1 class="he-title" data-i18n="home_title">沧 陆</h1>
         <div class="he-en">CANG LU</div>
@@ -1460,6 +1492,7 @@ var _hmt = _hmt || [];
           <a class="hh-btn hh-btn-ghost" id="hhEmblem" data-i18n="home_btn2">徽记释义</a>
         </div>
       </div>
+      <div class="he-seal">沧<br>陆<br>之<br>印</div>
       <div class="he-scroll">
         <div class="he-arrow"></div>
         <span data-i18n="home_scroll">探索沧陆</span>
@@ -1480,37 +1513,37 @@ var _hmt = _hmt || [];
 
     <!-- ═══ SECTION 2：六大志入口卡片 ═══ -->
     <div class="home-epic-grid" id="homeGrid">
-      <a class="epic-card" data-go="geoPage">
+      <a class="epic-card" data-go="geoPage" data-arch="卷·壹">
         <svg class="ec-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 40 L17 14 L24 27 L29 20 L42 40 Z"/><path d="M6 40 L42 40" opacity=".5"/><path d="M17 14 l-3-5" opacity=".6"/></svg>
         <h3 class="ec-title" data-i18n="t_geo">地理</h3>
         <p class="ec-desc" data-i18n="home_geo_d">元荒、苍瀛、白绫、白荒、肆星——五大海域环绕陆块。断脊、眸霞两大主脉纵贯南北，自鸣山以五千二百四十三米冠绝沧陆。渡蛟裂谷撕裂东陆，东枝崖探入南溟。</p>
         <span class="ec-foot" data-i18n="home_geo_f">点击探索沧陆地形全貌</span>
       </a>
-      <a class="epic-card" data-go="cityPage">
+      <a class="epic-card" data-go="cityPage" data-arch="卷·贰">
         <svg class="ec-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="22" width="8" height="16"/><rect x="20" y="14" width="8" height="24"/><rect x="34" y="26" width="8" height="12"/><path d="M10 22 V16 M24 14 V8 M38 26 V20" opacity=".7"/></svg>
         <h3 class="ec-title" data-i18n="t_city">城邦</h3>
         <p class="ec-desc" data-i18n="home_city_d">恓鸟悲息，茹章伪盛，眴姚逐利，伏熏立衡。四大城邦，四种制度，四段宿命。从宗族长老到君主神权，从海商公会给政团民主——沧陆的政治光谱，远比你想象的复杂。</p>
         <span class="ec-foot" data-i18n="home_city_f">揭开四大城邦的真相</span>
       </a>
-      <a class="epic-card" data-go="landmarkPage">
+      <a class="epic-card" data-go="landmarkPage" data-arch="卷·叁">
         <svg class="ec-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="15"/><path d="M24 9 A15 15 0 0 1 37 29" opacity=".55"/><path d="M24 9 A15 15 0 0 0 11 29" opacity=".35"/><circle cx="24" cy="24" r="4.5"/></svg>
         <h3 class="ec-title" data-i18n="t_land">秘境</h3>
         <p class="ec-desc" data-i18n="home_land_d">无昼碛——沙粒吸光，永无白昼，越深越暗，空间错乱。扼根山——绿洲中心的死寂孤峰，神骸沉睡的锚点。在这里，自然法则被扭曲，现实与虚妄的边界已然模糊。</p>
         <span class="ec-foot" data-i18n="home_land_f">踏入禁忌之地</span>
       </a>
-      <a class="epic-card" data-go="calPage">
+      <a class="epic-card" data-go="calPage" data-arch="卷·肆">
         <svg class="ec-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M31 8 A16 16 0 1 0 40 22"/><path d="M31 8 A16 16 0 0 1 40 22" opacity=".8"/><circle cx="33" cy="11" r="2" fill="currentColor" stroke="none"/></svg>
         <h3 class="ec-title" data-i18n="t_cal">历法</h3>
         <p class="ec-desc" data-i18n="home_cal_d">祀元、戍城、衡历——三种纪元，同一片天空。十二个月，十二种命运：凛月戍边，烽月交兵，商月出海，烬月祭祀。时间在这里，不只是刻度，更是权力的刻度。</p>
         <span class="ec-foot" data-i18n="home_cal_f">翻阅沧陆时间线</span>
       </a>
-      <a class="epic-card" data-go="timePage">
+      <a class="epic-card" data-go="timePage" data-arch="卷·伍">
         <svg class="ec-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M24 6 V42 M6 24 H42" opacity=".45"/><path d="M24 6 L30 16 L18 16 Z"/><path d="M24 42 L18 32 L30 32 Z"/><path d="M6 24 L16 18 L16 30 Z"/><path d="M42 24 L32 18 L32 30 Z"/></svg>
         <h3 class="ec-title" data-i18n="t_time">纪年</h3>
         <p class="ec-desc" data-i18n="home_time_d">幽荧降世，血祭封神。初代茹章王献祭自身，换来城邦的永恒繁荣——以全城世代寿命为代价。预言中，终有一日神会彻底苏醒，以它的规则重写整个世界的秩序。</p>
         <span class="ec-foot" data-i18n="home_time_f">血祭封神 · 预言终局</span>
       </a>
-      <a class="epic-card" data-go="powerPage">
+      <a class="epic-card" data-go="powerPage" data-arch="卷·陆">
         <svg class="ec-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M24 6 L28 14 L20 14 Z" opacity=".85"/><path d="M24 42 L20 34 L28 34 Z" opacity=".85"/><path d="M6 24 L14 20 L14 28 Z" opacity=".85"/><path d="M42 24 L34 20 L34 28 Z" opacity=".85"/><line x1="24" y1="6" x2="24" y2="42" opacity=".35"/><line x1="6" y1="24" x2="42" y2="24" opacity=".35"/></svg>
         <h3 class="ec-title" data-i18n="t_power">势力</h3>
         <p class="ec-desc" data-i18n="home_power_d">西境军邦与中部霸主长期对峙，东部港城左右逢源，南部海岛冷眼旁观。四方博弈，暗流涌动。而在这棋盘之上，还有一具沉睡的神骸，正缓缓苏醒。</p>
