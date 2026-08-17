@@ -4438,7 +4438,8 @@ function revealItem(el){
     hmExpCity = null;
   }
   var hmxClose = document.getElementById('hmxClose');
-  if(hmxClose) hmxClose.addEventListener('click', closeExplore);
+  if(hmxClose) hmxClose.addEventListener('click', function(e){ e.stopPropagation(); closeExplore(); });
+  if(hmExp) hmExp.addEventListener('click', function(e){ e.stopPropagation(); });
   document.querySelectorAll('.hm-pin[data-city]').forEach(function(p){
     p.addEventListener('click', function(e){
       e.stopPropagation();
@@ -4447,7 +4448,8 @@ function revealItem(el){
     });
   });
   var hmxFull = document.getElementById('hmxFull');
-  if(hmxFull) hmxFull.addEventListener('click', function(){
+  if(hmxFull) hmxFull.addEventListener('click', function(e){
+    e.stopPropagation();
     var city = hmExpCity;
     closeExplore();
     switchPage('cityPage'); location.hash = 'cityPage';
