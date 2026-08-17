@@ -2588,7 +2588,7 @@ var _hmt = _hmt || [];
         <div class="ws-card">
           <span class="ws-ico">⌛</span>
           <span class="ws-k" data-i18n="ws_era_k">沧陆纪元</span>
-          <span class="ws-v" id="wsEra">衡历 · — — —</span>
+          <span class="ws-v" id="wsEra">祀元 · — — —</span>
         </div>
         <div class="ws-card">
           <span class="ws-ico">⚖</span>
@@ -4705,23 +4705,22 @@ var CANG_LU_UPDATES = [
   try{ played = sessionStorage.getItem('canglu-prologue') === '1'; }catch(e){}
   if(played){ mask.parentNode && mask.parentNode.removeChild(mask); return; }
 
-  // 计算当前衡历年份（锚点：祀元元年≈公元1000，衡历=祀元-160 → 需先算祀元）
+  // 计算当前祀元年份（锚点：祀元元年≈公元1000）
   function calcEra(){
     try{
       var anchor = 1000;
       try{ var a = parseInt(localStorage.getItem('canglu-anchor') || '', 10); if(a && a > 1000 && a < 10000) anchor = a; }catch(e){}
       var now = new Date().getFullYear();
       var siyuan = now - anchor + 1;
-      var hengli = siyuan - 160;
-      return {siyuan: siyuan, hengli: hengli};
-    }catch(e){ return {siyuan: 1, hengli: 1}; }
+      return {siyuan: siyuan};
+    }catch(e){ return {siyuan: 1}; }
   }
 
   var L = function(){ return (window.__lang === 'en') ? 'en' : 'zh'; };
   var T = {
-    zh: {era: function(h){ return '衡历' + h + '年。'; }, sub: '大陆之上，四方文明延续千年。',
+    zh: {era: function(h){ return '祀元' + h + '年。'; }, sub: '大陆之上，四方文明延续千年。',
          map: '沧陆大陆 · 山河初现', v1: '四方文明，共同守护这片土地。', v2: '也共同隐藏着历史。'},
-    en: {era: function(h){ return 'Hengli Year ' + h + '.'; }, sub: 'Upon the continent, four civilizations endure for a thousand years.',
+    en: {era: function(h){ return 'Siyuan Year ' + h + '.'; }, sub: 'Upon the continent, four civilizations endure for a thousand years.',
          map: 'The Continent of Canglu', v1: 'Four civilizations, together guarding this land.', v2: 'And together concealing its history.'}
   };
 
@@ -4740,7 +4739,7 @@ var CANG_LU_UPDATES = [
     var eraEl = document.getElementById('plEra');
     var subEl = document.getElementById('plEraSub');
     if(eraEl){
-      var txt = t.era(calcEra().hengli);
+      var txt = t.era(calcEra().siyuan);
       eraEl.textContent = '';
       var delay = 300;
       for(var k=0;k<txt.length;k++){
@@ -4794,7 +4793,7 @@ var CANG_LU_UPDATES = [
     clearTimers();  // 取消未执行的逐字动画，避免重复追加
     var t = T[L()];
     var eraEl = document.getElementById('plEra');
-    if(eraEl && sceneIdx === 0){ eraEl.textContent = t.era(calcEra().hengli); }
+    if(eraEl && sceneIdx === 0){ eraEl.textContent = t.era(calcEra().siyuan); }
     var subEl = document.getElementById('plEraSub');
     if(subEl) subEl.textContent = t.sub;
     var cap = document.getElementById('plMapCap');
@@ -5407,8 +5406,7 @@ var CANG_LU_ARCHIVE = {
     try{ var a = parseInt(localStorage.getItem('canglu-anchor') || '', 10); if(a && a > 0 && a < 10000) anchor = a; }catch(e){}
     var now = new Date().getFullYear();
     var siyuan = now - anchor + 1;
-    var hengli = siyuan - 160;
-    eraEl.textContent = (en ? 'Hengli · ' : '衡历 · ') + hengli;
+    eraEl.textContent = (en ? 'Siyuan · ' : '祀元 · ') + siyuan;
   }
   fill();
   document.addEventListener('cangluLangChange', fill);
