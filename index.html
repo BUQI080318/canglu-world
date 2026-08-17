@@ -689,9 +689,7 @@
   margin:18px 0 0;font-size:clamp(1rem,2.5vw,1.4rem);color:var(--gold);font-style:italic;
   font-family:"Noto Serif SC","Source Han Serif SC","SimSun",serif;letter-spacing:2px;
 }
-.he-lead{
-  margin:2rem auto;max-width:600px;font-size:1.05rem;line-height:2;color:var(--ink);
-}
+
 .he-btns{margin-top:6px;display:flex;justify-content:center;gap:16px;flex-wrap:wrap}
 .he-scroll{
   position:absolute;bottom:26px;left:50%;transform:translateX(-50%);z-index:2;
@@ -794,7 +792,7 @@
 .he-fade.in{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){
   .he-fade{opacity:1;transform:none;transition:none}
-  .epic-card,.he-title,.he-sub,.he-lead{transition:none}
+  .epic-card,.he-title,.he-sub{transition:none}
 }
 
 /* 响应式 */
@@ -806,7 +804,7 @@
   .he-hero{min-height:calc(100vh - 52px)}
   .he-content{padding:70px 16px 110px}
   .he-title{letter-spacing:.2em;text-indent:.2em}
-  .he-lead{font-size:.95rem}
+
   .ec-desc{font-size:.88rem}
   .hec-lead{font-size:1.2rem}
 }
