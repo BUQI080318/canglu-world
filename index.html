@@ -3301,7 +3301,6 @@ function switchPage(id){
   document.querySelectorAll('section.page').forEach(s=>s.classList.remove('on'));
   const btn = document.querySelector('nav button[data-page="'+id+'"]');
   if(btn) btn.classList.add('on');
-  if(window.__musicOnPage) setTimeout(function(){ window.__musicOnPage(id); }, 260);
   const sec = document.getElementById(id);
   if(sec){ sec.classList.add('on'); document.querySelector('main').scrollTop = 0; }
   if(window.animateTitle) setTimeout(animateTitle, 60);
@@ -4278,28 +4277,6 @@ function revealItem(el){
   renderList();
   setTimeout(checkMarquee, 600);
 
-  /* ===== 页面切换主题曲：每页一首氛围曲 ===== */
-  const PAGE_SONGS = {
-    homePage: 3,    // Landscapes — Talos（大气）
-    geoPage: 7,     // Far Out Dust — Talos（山河）
-    cityPage: 0,    // Odyssey — Talos（城邦史诗）
-    landmarkPage: 8,// A Dawning — Ólafur Arnalds（低沉神秘）
-    calPage: 9,     // Bedrock choir — Ólafur Arnalds（时间流转）
-    timePage: 10,   // This Is Us Colliding — Talos（纪年）
-    powerPage: 2    // Contra — Talos（博弈）
-  };
-  window.__musicOnPage = function(pageId){
-    var idx = PAGE_SONGS[pageId];
-    if(idx === undefined || idx === null) return;
-    if(idx === cur) return;         // 已在播该页主题曲
-    if(!started && !audio) return;  // 用户还没启动过音乐：不自动切
-    // 用户正在手动挑选（歌单打开）时不打断
-    if(list.classList.contains('on')) return;
-    cur = idx;
-    if(!audio){ audio = new Audio(); }
-    audio.muted = audio.muted; // 保持当前静音状态
-    playCur();
-  };
 })();
 
 
