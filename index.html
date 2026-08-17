@@ -887,6 +887,61 @@ html[data-theme="light"] .he-badge{background:rgba(255,255,255,.5)}
   }
   #cityDetail .city-sec:first-of-type{margin-top:12px}
 
+  /* ===== 档案馆文献样式 ===== */
+  .arch-doc-head{
+    max-width:720px;margin:18px auto 10px;padding:14px 20px;
+    border:1px solid var(--arch-line);background:var(--arch-paper);
+    font-size:12px;
+  }
+  .adh-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px dashed rgba(200,162,74,.12)}
+  .adh-row:last-child{border-bottom:none}
+  .adh-label{color:var(--gold-dim);letter-spacing:3px;flex-shrink:0;margin-right:14px}
+  .adh-val{color:var(--ink);letter-spacing:1px;text-align:right;font-style:italic}
+  .arch-note{
+    max-width:720px;margin:12px auto 26px;padding:12px 20px;line-height:2;
+    font-size:13px;color:var(--ink-dim);border-left:2px solid var(--arch-line);
+    background:rgba(200,162,74,.03);
+  }
+  .arch-note::first-letter{font-size:17px;color:var(--gold)}
+  .arch-entry{
+    position:relative;max-width:720px;margin:20px auto;padding:18px 22px 16px;
+    border:1px solid var(--arch-line);background:var(--arch-paper);
+    box-shadow:0 3px 10px rgba(0,0,0,.22);
+  }
+  .arch-entry-head{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+  .aeh-no{font-size:11px;letter-spacing:3px;color:var(--gold-dim);flex-shrink:0;font-style:italic}
+  .arch-entry-head h3{margin:0;font-size:15px;letter-spacing:2px;color:var(--ink);flex:1}
+  .aeh-seal{
+    font-size:10px;letter-spacing:2px;color:var(--arch-seal);
+    border:1px solid var(--arch-seal);padding:2px 8px;border-radius:2px;flex-shrink:0;
+    transform:rotate(-2deg);opacity:.85;
+  }
+  .aeh-seal-grey{color:var(--ink-dim);border-color:var(--ink-dim)}
+  .aeh-seal-blue{color:#4a7a9b;border-color:#4a7a9b}
+  .aeh-seal-green{color:#5a8a6a;border-color:#5a8a6a}
+  .arch-fields{margin-bottom:10px}
+  .af-row{display:flex;gap:12px;padding:6px 0;border-bottom:1px dashed rgba(200,162,74,.1);line-height:1.85}
+  .af-row:last-child{border-bottom:none}
+  .af-k{flex-shrink:0;width:64px;font-size:12px;color:var(--gold-dim);letter-spacing:2px;padding-top:1px}
+  .af-v{font-size:13.5px;color:var(--ink)}
+  .arch-gloss{
+    margin:8px 0 6px;padding:8px 12px;font-size:12.5px;line-height:1.9;
+    color:var(--ink-dim);background:rgba(139,38,53,.05);
+    border-left:2px solid rgba(139,38,53,.4);font-style:italic;
+  }
+  .arch-seal-red{
+    margin-top:10px;text-align:right;font-size:10px;letter-spacing:2px;
+    color:var(--arch-seal);opacity:.65;transform:rotate(-3deg);
+    font-family:"Noto Serif SC","SimSun",serif;
+  }
+  .arch-seal-red::after{content:'◆';margin-left:6px;font-size:7px;vertical-align:2px}
+  @media (max-width:640px){
+    .arch-entry{padding:14px 14px 12px}
+    .af-row{flex-direction:column;gap:2px}
+    .af-k{width:auto}
+    .arch-entry-head{flex-wrap:wrap}
+  }
+
   /* ===== 四方势力博弈图 ===== */
   .power-map{
     margin:16px 0 8px;padding:16px;border-radius:6px;
@@ -1710,6 +1765,13 @@ var _hmt = _hmt || [];
   <div class="doc fade">
     <h1><span class="h-diamond"></span><span class="h-title" data-i18n="t_cal">历法志</span><span class="h-diamond"></span></h1>
     <div class="lead" data-i18n="l_cal">沧陆各邦历法 · 通用月份</div>
+    <div class="arch-doc-head">
+      <div class="adh-row"><span class="adh-label">文献编号</span><span class="adh-val">CL-CAL-03</span></div>
+      <div class="adh-row"><span class="adh-label">馆藏来源</span><span class="adh-val" data-i18n="cal_src">沧陆历史研究院 · 历法考据卷宗（祀元纪抄本）</span></div>
+      <div class="adh-row"><span class="adh-label">考据状态</span><span class="adh-val" data-i18n="cal_status">三历互校 · 存疑条目已标注</span></div>
+      <div class="adh-row"><span class="adh-label">整理时间</span><span class="adh-val">沧陆历 烬月 · 研究院壬午批注</span></div>
+    </div>
+    <div class="arch-note" data-i18n="cal_pre">按：历法者，非止计时之具，实为权力之纹章。茹章以祀元纪立正统，恓鸟以戍城年自证独立，伏熏以衡历示其自治，眴姚则借祀元通商八方——每一纪元，都是一座城邦对"我者何属"的回答。下文所录，源自各邦官修正史与民间抄本，其中相抵牾处，皆依研究院旧例并录存疑，不敢妄断。</div>
     
 
     
@@ -1736,18 +1798,49 @@ var _hmt = _hmt || [];
       <div class="today-anchor" id="tdAnchorLine" data-i18n="td_anchor">历法锚点：祀元元年 ≈ 公元 {N} 年</div>
     </div>
     <h2 data-i18n="h2_cal1">沧陆各邦历法</h2>
-    <h3 data-i18n="h3_c1">（一）茹章城官方历法</h3>
-    <p>纪元名称：祀元纪（以"献祭"为纪元开端），简称祀元。</p>
-    <p>元年事件："幽荧降世"（官方史书美化后的说法）或"血祭封神"（民间隐秘传言）。</p>
-    <p class="note">（补：民间私下有用一轮指代一代人即45年的说法）</p>
-    <h3 data-i18n="h3_c2">（二）恓鸟城官方历法</h3>
-    <p>纪元名称：戍城年。元年事件：恓鸟建国为元年，对应祀元200年。</p>
-    <p>换算：戍城年份 = 祀元年份 − 200 = 衡历年份 − 40。</p>
-    <h3 data-i18n="h3_c3">（三）眴姚城官方历法</h3>
-    <p>纪元名称：祀元。商行、海关、货单全部写祀元，和茹章通商完全无阻碍。</p>
-    <h3 data-i18n="h3_c4">（四）伏熏城官方历法</h3>
-    <p>纪元名称：衡历。元年事件：伏熏城邦统一、立衡法、定商事、规整匠艺的建国之年，对应祀元160年。</p>
-    <p>换算：衡历年份 = 祀元年份 − 160 = 戍城年 + 40。</p>
+    <div class="arch-entry">
+      <div class="arch-entry-head"><span class="aeh-no">卷之一</span><h3 data-i18n="h3_c1">（一）茹章城官方历法</h3><span class="aeh-seal" data-i18n="cal_seal_official">官修正史</span></div>
+      <div class="arch-fields">
+        <div class="af-row"><span class="af-k">纪元名称</span><span class="af-v">祀元纪（以"献祭"为纪元开端），简称祀元。</span></div>
+        <div class="af-row"><span class="af-k">纪元来源</span><span class="af-v" data-i18n="cal1_origin">源自初代茹章王"血祭封神"——官方史书讳言其真，仅以"幽荧降世"四字录之，民间抄本则直书其名。</span></div>
+        <div class="af-row"><span class="af-k">元年事件</span><span class="af-v">"幽荧降世"（官方史书美化后的说法）或"血祭封神"（民间隐秘传言）。</span></div>
+        <div class="af-row"><span class="af-k">政治意义</span><span class="af-v" data-i18n="cal1_pol">纪元以"献祭"为开端，使城邦起源与神骸绑定——王朝合法性不系于祖先功业，而系于一场不可言说的血契。全境商单、货契、海关文书皆用祀元，历法即统治权的延伸。</span></div>
+      </div>
+      <div class="arch-gloss" data-i18n="cal1_gloss">院按：民间私下以"一轮"指代一代人，即45年——恰与"茹章无人活过45岁"之诅咒暗合。此说不见于官修历书，然民间口传极广，研究院存疑待考。</div>
+      <div class="arch-seal-red" data-i18n="cal_seal_ruzhang">茹章太史令 · 印</div>
+    </div>
+    <div class="arch-entry">
+      <div class="arch-entry-head"><span class="aeh-no">卷之二</span><h3 data-i18n="h3_c2">（二）恓鸟城官方历法</h3><span class="aeh-seal aeh-seal-grey" data-i18n="cal_seal_military">军邦实录</span></div>
+      <div class="arch-fields">
+        <div class="af-row"><span class="af-k">纪元名称</span><span class="af-v">戍城年。</span></div>
+        <div class="af-row"><span class="af-k">纪元来源</span><span class="af-v" data-i18n="cal2_origin">以恓鸟建国为纪元元年——不以神明、不以君主，而以"城"本身为纪年之锚。城在，则年在。</span></div>
+        <div class="af-row"><span class="af-k">元年事件</span><span class="af-v">恓鸟建国，对应祀元200年。</span></div>
+        <div class="af-row"><span class="af-k">政治意义</span><span class="af-v" data-i18n="cal2_pol">拒不采用茹章祀元，等于向全大陆宣告：恓鸟不承认茹章正统。两邦历法并行，本身就是对峙的一部分——边境文书上写哪个年份，是比刀剑更早的表态。</span></div>
+      </div>
+      <div class="arch-gloss" data-i18n="cal2_gloss">院按：戍城年与祀元、衡历换算关系精确（戍城 = 祀元 − 200 = 衡历 − 40），三历互校无出入，可视为可靠纪年锚点。</div>
+      <div class="arch-seal-red" data-i18n="cal_seal_xuniao">恓鸟守城司 · 印</div>
+    </div>
+    <div class="arch-entry">
+      <div class="arch-entry-head"><span class="aeh-no">卷之三</span><h3 data-i18n="h3_c3">（三）眴姚城官方历法</h3><span class="aeh-seal aeh-seal-blue" data-i18n="cal_seal_trade">商会文书</span></div>
+      <div class="arch-fields">
+        <div class="af-row"><span class="af-k">纪元名称</span><span class="af-v">祀元（沿用茹章纪年，不设独立纪元）。</span></div>
+        <div class="af-row"><span class="af-k">纪元来源</span><span class="af-v" data-i18n="cal3_origin">商行、海关、货单全部写祀元，与茹章通商毫无阻碍——历法即通行证。</span></div>
+        <div class="af-row"><span class="af-k">政治意义</span><span class="af-v" data-i18n="cal3_pol">眴姚无历，因其不必有历：一座以贸易为生的港城，最贵重的不是自己的纪元，而是与所有买主都对得上的时间。以他邦之历纪自己之年，是最深的自保，也是最彻底的务实。</span></div>
+      </div>
+      <div class="arch-gloss" data-i18n="cal3_gloss">院按：有学人讥眴姚"无历可考"；亦有学者持异议——不立历，恰是眴姚的立国之策。两说并存，录此备考。</div>
+      <div class="arch-seal-red" data-i18n="cal_seal_xunyao">眴姚海商会 · 印</div>
+    </div>
+    <div class="arch-entry">
+      <div class="arch-entry-head"><span class="aeh-no">卷之四</span><h3 data-i18n="h3_c4">（四）伏熏城官方历法</h3><span class="aeh-seal aeh-seal-green" data-i18n="cal_seal_fuxun">岛邦宪书</span></div>
+      <div class="arch-fields">
+        <div class="af-row"><span class="af-k">纪元名称</span><span class="af-v">衡历。</span></div>
+        <div class="af-row"><span class="af-k">纪元来源</span><span class="af-v" data-i18n="cal4_origin">以伏熏城邦统一、立衡法、定商事、规整匠艺的建国之年为元年——历法与"法"同源，纪元即宪章。</span></div>
+        <div class="af-row"><span class="af-k">元年事件</span><span class="af-v">伏熏城邦统一，对应祀元160年。</span></div>
+        <div class="af-row"><span class="af-k">政治意义</span><span class="af-v" data-i18n="cal4_pol">"衡"者，平衡、衡平、衡器——以法立历，以历明法。伏熏不奉神、不尊君，纪年归于一部衡法之下，与其政团民主制互为表里：时间属于城邦全体公民，而非某一位君主。</span></div>
+      </div>
+      <div class="arch-gloss" data-i18n="cal4_gloss">院按：衡历换算（衡历 = 祀元 − 160 = 戍城年 + 40）与戍城年同属三历可互校之列，纪年可靠。伏熏孤悬海外而历法精密，可见其文明自成一脉。</div>
+      <div class="arch-seal-red" data-i18n="cal_seal_fuxun2">伏熏衡法院 · 印</div>
+    </div>
     <h2 data-i18n="h2_cal2">历法换算器</h2>
     <div class="calc">
       <h3 data-i18n="h3_c5">祀元 ⇄ 戍城 ⇄ 衡历</h3>
@@ -3808,6 +3901,25 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       h3_c1:'（一）茹章城官方历法', h3_c2:'（二）恓鸟城官方历法',
       h3_c3:'（三）眴姚城官方历法', h3_c4:'（四）伏熏城官方历法',
       h3_c5:'祀元 ⇄ 戍城 ⇄ 衡历',
+      cal_src:'沧陆历史研究院 · 历法考据卷宗（祀元纪抄本）', cal_status:'三历互校 · 存疑条目已标注',
+      cal_pre:'按：历法者，非止计时之具，实为权力之纹章。茹章以祀元纪立正统，恓鸟以戍城年自证独立，伏熏以衡历示其自治，眴姚则借祀元通商八方——每一纪元，都是一座城邦对"我者何属"的回答。下文所录，源自各邦官修正史与民间抄本，其中相抵牾处，皆依研究院旧例并录存疑，不敢妄断。',
+      cal_seal_official:'官修正史', cal_seal_military:'军邦实录', cal_seal_trade:'商会文书', cal_seal_fuxun:'岛邦宪书',
+      cal1_origin:'源自初代茹章王"血祭封神"——官方史书讳言其真，仅以"幽荧降世"四字录之，民间抄本则直书其名。',
+      cal1_pol:'纪元以"献祭"为开端，使城邦起源与神骸绑定——王朝合法性不系于祖先功业，而系于一场不可言说的血契。全境商单、货契、海关文书皆用祀元，历法即统治权的延伸。',
+      cal1_gloss:'院按：民间私下以"一轮"指代一代人，即45年——恰与"茹章无人活过45岁"之诅咒暗合。此说不见于官修历书，然民间口传极广，研究院存疑待考。',
+      cal_seal_ruzhang:'茹章太史令 · 印',
+      cal2_origin:'以恓鸟建国为纪元元年——不以神明、不以君主，而以"城"本身为纪年之锚。城在，则年在。',
+      cal2_pol:'拒不采用茹章祀元，等于向全大陆宣告：恓鸟不承认茹章正统。两邦历法并行，本身就是对峙的一部分——边境文书上写哪个年份，是比刀剑更早的表态。',
+      cal2_gloss:'院按：戍城年与祀元、衡历换算关系精确（戍城 = 祀元 − 200 = 衡历 − 40），三历互校无出入，可视为可靠纪年锚点。',
+      cal_seal_xuniao:'恓鸟守城司 · 印',
+      cal3_origin:'商行、海关、货单全部写祀元，与茹章通商毫无阻碍——历法即通行证。',
+      cal3_pol:'眴姚无历，因其不必有历：一座以贸易为生的港城，最贵重的不是自己的纪元，而是与所有买主都对得上的时间。以他邦之历纪自己之年，是最深的自保，也是最彻底的务实。',
+      cal3_gloss:'院按：有学人讥眴姚"无历可考"；亦有学者持异议——不立历，恰是眴姚的立国之策。两说并存，录此备考。',
+      cal_seal_xunyao:'眴姚海商会 · 印',
+      cal4_origin:'以伏熏城邦统一、立衡法、定商事、规整匠艺的建国之年为元年——历法与"法"同源，纪元即宪章。',
+      cal4_pol:'"衡"者，平衡、衡平、衡器——以法立历，以历明法。伏熏不奉神、不尊君，纪年归于一部衡法之下，与其政团民主制互为表里：时间属于城邦全体公民，而非某一位君主。',
+      cal4_gloss:'院按：衡历换算（衡历 = 祀元 − 160 = 戍城年 + 40）与戍城年同属三历可互校之列，纪年可靠。伏熏孤悬海外而历法精密，可见其文明自成一脉。',
+      cal_seal_fuxun2:'伏熏衡法院 · 印',
       spTheme:'外观主题', spFont:'界面字体', spLang:'界面语言',
       spAutoplay:'进站自动播放音乐', spFx:'鼠标光效（桌面端）',
       spOptAuto:'跟随系统', spOptLight:'浅色', spOptDark:'深色',
@@ -3867,8 +3979,27 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       h3_g4:'1. Main Landmasses', h3_g5:'2. Peninsulas', h3_g6:'3. Islands', h3_g7:'4. Archipelagos & Reefs',
       h3_g8:'1. Principal Ranges', h3_g9:'2. Peaks', h3_g10:'3. Strange Landforms',
       h3_c1:'(I) Official Calendar of Ruzhang', h3_c2:'(II) Official Calendar of Xuniao',
-      h3_c3:'(III) Official Calendar of Minyao', h3_c4:'(IV) Official Calendar of Fuxun',
+      h3_c3:'(III) Official Calendar of Xunyao', h3_c4:'(IV) Official Calendar of Fuxun',
       h3_c5:'Siyuan ⇄ Shucheng ⇄ Hengli',
+      cal_src:'Canglu Institute of History · Calendrical Records (Siyuan-era manuscript)', cal_status:'Tri-calendar collation · disputed entries marked',
+      cal_pre:'Note: a calendar is never merely a device for telling time — it is the insignia of power. Ruzhang claims orthodoxy through the Siyuan Era; Xuniao proves its independence with the Shucheng Year; Fuxun declares autonomy through the Hengli Calendar; and Xunyao trades with all under Siyuan. Every era is a city-state\'s answer to the question: "to whom do we belong?" The records below draw on official histories and folk manuscripts; where they conflict, we follow the Institute\'s old practice of recording both, without presumption.',
+      cal_seal_official:'Official Chronicle', cal_seal_military:'War-State Record', cal_seal_trade:'Guild Ledger', cal_seal_fuxun:'Isle Charter',
+      cal1_origin:'Born of the first Ruzhang king\'s "blood sacrifice to seal godhood" — the official chronicles veil it as the "Descent of the Dark Gleam," while folk manuscripts speak plainly.',
+      cal1_pol:'Opening the era with "the sacrifice" binds the city\'s origin to the divine relic: legitimacy rests not on ancestral deeds but on an unspeakable blood pact. Every bill, contract and customs slip across the realm uses Siyuan — the calendar is the reach of the throne.',
+      cal1_gloss:'Institute note: folk speech calls one generation "a round," i.e. 45 years — matching the curse that none in Ruzhang lives past 45. The phrase appears in no official almanac, yet oral tradition is wide; the Institute records it as unverified.',
+      cal_seal_ruzhang:'Seal of the Ruzhang Grand Historian',
+      cal2_origin:'Year One is the founding of Xuniao itself — anchored not to a god or a sovereign, but to the city. While the city stands, the year stands.',
+      cal2_pol:'Refusing Ruzhang\'s Siyuan is a declaration to the whole continent: Xuniao does not recognize Ruzhang\'s legitimacy. Two calendars running in parallel are themselves part of the standoff — which year appears on a border document is a statement made before any blade.',
+      cal2_gloss:'Institute note: the Shucheng conversion (Shucheng = Siyuan − 200 = Hengli − 40) matches across all three calendars with no discrepancy — a reliable anchor.',
+      cal_seal_xuniao:'Seal of the Xuniao City Guard',
+      cal3_origin:'Bills, customs and cargo manifests all use Siyuan, trading with Ruzhang without friction — the calendar is the passport.',
+      cal3_pol:'Xunyao has no calendar of its own, for it needs none: a harbor city lives by trade, and what matters most is not its own era but a time every buyer can agree on. Marking your years by another\'s calendar is the deepest self-preservation — and the most thorough pragmatism.',
+      cal3_gloss:'Institute note: some scholars mock Xunyao as "a state without a calendar"; others argue that having no calendar of its own is precisely Xunyao\'s statecraft. Both views are recorded for reference.',
+      cal_seal_xunyao:'Seal of the Xunyao Maritime Guild',
+      cal4_origin:'Year One is the founding of a unified Fuxun: the Balanced Law, trade regulations and craft standards. The calendar and the law share one origin — the era is the charter.',
+      cal4_pol:'"Heng" — balance, equity, the scale. Law establishes the calendar; the calendar makes the law visible. Fuxun worships no god and bows to no sovereign; time itself is bound beneath a single Balanced Law, mirroring its party democracy: time belongs to all citizens, not to any one ruler.',
+      cal4_gloss:'Institute note: the Hengli conversion (Hengli = Siyuan − 160 = Shucheng + 40) is collated with the Shucheng Year as reliable. That an isolated island realm keeps so precise a calendar speaks to a civilization grown whole on its own.',
+      cal_seal_fuxun2:'Seal of the Fuxun Balance Court',
       spTheme:'Appearance Theme', spFont:'Interface Font', spLang:'Interface Language',
       spAutoplay:'Auto-play Music on Entry', spFx:'Mouse Effects (Desktop)',
       spOptAuto:'Follow System', spOptLight:'Light', spOptDark:'Dark',
