@@ -594,7 +594,8 @@
     100%{opacity:.6;transform:scale(.97)}
   }
   .lg-wing-list{flex:1;min-width:0;margin:0 !important;padding-left:0 !important;list-style:none}
-  .lg-wing-list li{padding:5px 10px;border-radius:8px;border-left:2px solid var(--gold-dim);background:linear-gradient(90deg,rgba(200,162,74,.06),transparent 70%);margin:5px 0}
+  .lg-wing-list li{padding:5px 10px;border-radius:8px;border-left:2px solid var(--gold-dim);background:linear-gradient(90deg,rgba(200,162,74,.06),transparent 70%);margin:5px 0;transition:background .25s,border-color .25s}
+  .lg-wing-list li:hover{background:linear-gradient(90deg,rgba(200,162,74,.16),transparent 80%);border-left-color:var(--gold)}
 
   /* 移动端适配 */
   @media (max-width:560px){
@@ -2968,29 +2969,10 @@ function revealItem(el){
 (function(){
   var cities = document.getElementById('lgCities');
   if(!cities) return;
-  var map = {
-    xuniao: ['恓鸟', 'Xuniao', '剑左'],
-    ruzhang: ['茹章', 'Ruzhang', '剑上'],
-    xunyao: ['眴姚', 'Xunyao', '剑右'],
-    fuxun: ['伏熏', 'Fuxun', '剑下']
-  };
   cities.querySelectorAll('.lg-city').forEach(function(c){
     c.addEventListener('click', function(){
       cities.querySelectorAll('.lg-city').forEach(function(x){ x.classList.remove('on'); });
       c.classList.add('on');
-      var kw = map[c.dataset.city] || [];
-      var found = null;
-      document.querySelectorAll('.logo-intro-box li').forEach(function(li){
-        var txt = li.textContent;
-        if(kw.some(function(k){ return txt.indexOf(k) !== -1; })){
-          found = li;
-        }
-      });
-      if(found){
-        found.scrollIntoView({behavior:'smooth', block:'center'});
-        found.classList.add('lg-flash');
-        setTimeout(function(){ found.classList.remove('lg-flash'); }, 1400);
-      }
     });
   });
   var first = cities.querySelector('.lg-city');
