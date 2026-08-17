@@ -3491,7 +3491,7 @@ function revealItem(el){
     var mask = document.getElementById('logoIntroMask');
     if(mask) mask.classList.add('on');
   });
-  document.querySelectorAll('#homeGrid .hg-card').forEach(function(c){
+  document.querySelectorAll('#homeGrid [data-go]').forEach(function(c){
     c.addEventListener('click', function(){
       var go = c.getAttribute('data-go');
       if(go){ switchPage(go); location.hash = go; }
