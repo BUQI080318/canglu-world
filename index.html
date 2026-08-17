@@ -1899,6 +1899,59 @@ html[data-lang="en"] .contact-title{letter-spacing:2px}
 
 
 /* ============ 支持弹窗 ============ */
+
+/* ============ 更新公告（档案更新记录） ============ */
+.update-mask{position:fixed;inset:0;z-index:1250;display:flex;align-items:center;justify-content:center;background:rgba(6,10,20,.66);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s}
+.update-mask.on{opacity:1;visibility:visible}
+.update-box{position:relative;width:min(640px,94vw);max-height:84vh;overflow-y:auto;background:linear-gradient(160deg,rgba(16,22,38,.97),rgba(10,14,26,.99));border:1px solid rgba(200,162,74,.4);border-radius:4px;padding:34px 32px 26px;box-shadow:0 20px 60px rgba(0,0,0,.55),inset 0 1px 0 rgba(200,162,74,.18);transform:translateY(20px) scale(.96);transition:transform .4s cubic-bezier(.22,.61,.36,1)}
+.update-mask.on .update-box{transform:none}
+.update-close{position:absolute;top:12px;right:14px;width:30px;height:30px;border:none;border-radius:50%;background:rgba(200,162,74,.12);color:var(--ink);font-size:15px;cursor:pointer;transition:transform .25s,background .25s}
+.update-close:hover{transform:rotate(90deg);background:rgba(200,162,74,.22)}
+.update-head{text-align:center;padding-bottom:18px;border-bottom:1px solid rgba(200,162,74,.22);margin-bottom:18px;position:relative}
+.update-emblem{width:64px;height:64px;margin:0 auto 10px;position:relative;display:flex;align-items:center;justify-content:center}
+.up-ring{position:absolute;inset:0;border:1.5px solid rgba(200,162,74,.55);border-radius:50%;animation:lgRingSpin 9s linear infinite}
+.up-ring::after{content:"";position:absolute;inset:5px;border:1px dashed rgba(200,162,74,.3);border-radius:50%}
+.up-seal{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1.5px solid rgba(200,162,74,.7);border-radius:4px;color:var(--gold);font-size:19px;background:rgba(200,162,74,.08);box-shadow:0 0 14px rgba(200,162,74,.18),inset 0 0 10px rgba(200,162,74,.08)}
+@keyframes lgRingSpin{to{transform:rotate(360deg)}}
+.update-headline{font-size:20px;letter-spacing:5px;color:var(--gold);font-weight:700;margin:0 0 8px}
+.update-meta{display:flex;align-items:center;justify-content:center;gap:16px}
+.up-ver{font-size:14px;letter-spacing:2px;color:var(--gold);border:1px solid rgba(200,162,74,.5);padding:2px 12px;border-radius:2px;background:rgba(200,162,74,.07)}
+.up-date{font-size:12px;letter-spacing:2px;color:var(--ink-dim)}
+.update-body{display:flex;flex-direction:column;gap:14px}
+.up-ver-block{border:1px solid rgba(200,162,74,.28);border-radius:4px;padding:16px 18px;background:linear-gradient(135deg,rgba(200,162,74,.06),transparent 70%)}
+.up-ver-head{display:flex;align-items:baseline;gap:12px;margin-bottom:8px}
+.up-ver-tag{font-size:13px;letter-spacing:2px;color:var(--gold);font-weight:700}
+.up-ver-title{font-size:16px;letter-spacing:2px;color:var(--ink);font-weight:600}
+.up-ver-date{font-size:11px;letter-spacing:1px;color:var(--ink-dim);margin-left:auto}
+.up-module{display:flex;gap:10px;padding:7px 0;border-top:1px dashed rgba(200,162,74,.14)}
+.up-module:first-of-type{border-top:none}
+.up-module-badge{flex-shrink:0;width:14px;height:14px;margin-top:4px;border:1px solid rgba(200,162,74,.6);transform:rotate(45deg);position:relative}
+.up-module-badge::after{content:"";position:absolute;inset:3px;background:rgba(200,162,74,.5)}
+.up-module-text{font-size:13px;line-height:1.7;color:var(--ink-dim)}
+.up-module-text b{color:var(--gold);font-weight:600}
+.update-foot{display:flex;justify-content:center;gap:16px;margin-top:20px;padding-top:16px;border-top:1px solid rgba(200,162,74,.2)}
+.update-history,.update-read{padding:8px 22px;border-radius:3px;font-size:13px;letter-spacing:2px;cursor:pointer;transition:transform .2s,background .2s,border-color .2s;font-family:inherit}
+.update-history{border:1px solid rgba(200,162,74,.5);background:transparent;color:var(--gold)}
+.update-history:hover{transform:translateY(-2px);background:rgba(200,162,74,.12)}
+.update-read{border:1px solid rgba(200,162,74,.7);background:rgba(200,162,74,.16);color:var(--gold)}
+.update-read:hover{transform:translateY(-2px);background:rgba(200,162,74,.26)}
+/* 历次档案列表 */
+.up-history-list{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+.up-h-item{display:flex;gap:12px;align-items:baseline;padding:10px 12px;border:1px solid rgba(200,162,74,.22);border-radius:4px;background:rgba(200,162,74,.04)}
+.up-h-item.current{border-color:rgba(200,162,74,.6);background:rgba(200,162,74,.1)}
+.up-h-ver{font-size:13px;letter-spacing:1px;color:var(--gold);font-weight:700;min-width:48px}
+.up-h-title{font-size:14px;letter-spacing:1px;color:var(--ink)}
+.up-h-date{font-size:11px;color:var(--ink-dim);margin-left:auto;letter-spacing:1px}
+/* 浅色主题适配 */
+html[data-theme="light"] .update-box{background:linear-gradient(160deg,rgba(250,245,232,.99),rgba(244,236,214,.99));border-color:rgba(150,110,40,.45);box-shadow:0 20px 60px rgba(60,45,20,.28),inset 0 1px 0 rgba(255,255,255,.6)}
+html[data-theme="light"] .update-head{border-bottom-color:rgba(150,110,40,.3)}
+html[data-theme="light"] .up-ver-block{background:linear-gradient(135deg,rgba(150,110,40,.08),transparent 70%);border-color:rgba(150,110,40,.3)}
+html[data-theme="light"] .up-module{border-top-color:rgba(150,110,40,.16)}
+html[data-theme="light"] .update-foot{border-top-color:rgba(150,110,40,.25)}
+html[data-theme="light"] .up-h-item{background:rgba(150,110,40,.05);border-color:rgba(150,110,40,.25)}
+html[data-theme="light"] .up-h-item.current{background:rgba(150,110,40,.12);border-color:rgba(150,110,40,.55)}
+html[data-theme="light"] .up-ver-title{color:#3a2f1c}
+
 .support-mask{position:fixed;inset:0;z-index:1300;display:flex;align-items:center;justify-content:center;background:rgba(6,10,20,.62);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
 .support-mask.on{opacity:1;visibility:visible}
 .support-box{position:relative;width:min(680px,94vw);max-height:86vh;overflow-y:auto;background:var(--glass-bg);border:1px solid var(--glass-bd);border-radius:6px;padding:30px 28px 26px;box-shadow:0 18px 50px rgba(0,0,0,.45);transform:translateY(18px) scale(.97);transition:transform .3s cubic-bezier(.22,.61,.36,1)}
@@ -2471,6 +2524,7 @@ var _hmt = _hmt || [];
     <!-- 底部：联系/支持 -->
     <div class="home-footer">
       <span class="hf-item">© 2026 沧陆世界</span>
+      <a class="hf-item hf-update" href="javascript:void(0)" id="updateBtn" data-i18n="home_update">更新公告</a>
       <a class="hf-item" href="mailto:canglu@example.com" data-i18n="home_contact">联系我们</a>
       <a class="hf-item" href="https://github.com/BUQI080318/canglu-world" target="_blank" rel="noopener" data-i18n="home_support">支持一下 ★</a>
     </div>
@@ -2848,10 +2902,30 @@ var _hmt = _hmt || [];
     </div>
     <h2 class="wc-title" data-txt="欢迎来到沧陆" data-i18n="wc_t"></h2>
     <p class="wc-sub" data-i18n="wc_s">折翼一陆 · 剑衡四方</p>
-    <div class="wc-version" id="wcVersion" data-i18n="wc_v">当前版本 v1.1 · 沧陆世界</div>
+    <div class="wc-version" id="wcVersion" data-i18n="wc_v">当前版本 v1.2 · 沧陆世界</div>
     <div class="wc-line"></div>
     <button class="wc-enter" id="wcEnter" data-i18n="wc_b">踏入沧陆</button>
     <button class="wc-close" id="wcClose" title="跳过">✕</button>
+  </div>
+</div>
+
+
+<div class="update-mask" id="updateMask">
+  <div class="update-box">
+    <button class="update-close" id="updateClose">✕</button>
+    <div class="update-head">
+      <div class="update-emblem"><span class="up-ring"></span><span class="up-seal">档</span></div>
+      <div class="update-headline" data-i18n="up_title">沧陆档案更新记录</div>
+      <div class="update-meta">
+        <span class="up-ver" id="upVer">v1.2</span>
+        <span class="up-date" id="upDate">2026年8月</span>
+      </div>
+    </div>
+    <div class="update-body" id="updateBody"></div>
+    <div class="update-foot">
+      <button class="update-history" id="updateHistory" data-i18n="up_history">历次档案</button>
+      <button class="update-read" id="updateRead" data-i18n="up_read">阅毕归档</button>
+    </div>
   </div>
 </div>
 
@@ -4070,6 +4144,189 @@ function revealItem(el){
   document.addEventListener('keydown', function(e){ if(e.key === 'Escape') close(); });
 })();
 
+
+/* ============ 档案更新系统（更新公告） ============ */
+// 版本数据：集中管理，未来只在此数组追加新版本对象即可
+var CANG_LU_CURRENT = "v1.2";
+var CANG_LU_UPDATES = [
+  {
+    version:"v1.2",
+    date:"2026-08-18",
+    title:"神骸之契",
+    type:"world",
+    zh:"山河再勘 · 神骸之秘重写",
+    en:"The Relic's Pact · Lore Rewritten",
+    content:[
+      {title:"神骸档案重审", description:"神骸被重新定义为不具有善恶观的未知外来存在——它不赐福也不降罚，只按无人能解的规律与世界交换。此前的“诅咒来源”旧档已封存作废。", title_en:"The Relic Re-examined", desc_en:"The divine relic is redefined as an alien presence without good or evil — blessing nothing, punishing nothing, exchanging only by a law none can fathom. The old 'source of the curse' dossier is sealed and void.", type:"world"},
+      {title:"初代契约补全", description:"初代茹章王并非被神骸选中：在文明绝境之中，是他主动寻至神骸、代表整个茹章先民完成交换。", title_en:"The First Pact Completed", desc_en:"The first king was not chosen: in the civilization's darkest hour, he sought the relic himself and completed the exchange on behalf of all the Ruzhang ancestors.", type:"world"},
+      {title:"寿命记载修订", description:"茹章短寿并非交易代价的即时惩罚，而是神骸改变生命规律后的伴随结果——从新生代起逐渐显现，终成45年之限。", title_en:"The Lifespan Record Revised", desc_en:"Ruzhang's short lives are no instant punishment for the pact, but a side effect of the relic's reshaping of life itself — surfacing from the new generations onward, settling at 45 years.", type:"world"},
+      {title:"奇迤圣地档案开放", description:"奇迤岛作为茹章文明起源圣地之档案正式开放：驻军守护、神职管理、低度开发，望暮大桥连通圣地的完整记录。", title_en:"Qiyi Sanctuary Opened", desc_en:"The archive of Qiyi Island — sanctuary of Ruzhang's origin — is now open: garrisons guard it, clergy tend it, development stays low; the Wangmu Bridge links it to the realm.", type:"world"},
+      {title:"四方关系订正", description:"恓鸟之敌对、眴姚之臣服、伏熏之疏离——三方与茹章的真实关系重新厘定；茹章未能统一沧陆之缘由亦载入档案。", title_en:"The Four Realms Corrected", desc_en:"Xuniao's enmity, Xunyao's vassalage, Fuxun's aloofness — the true relations with Ruzhang are re-established; why Ruzhang never united Canglu is now on record.", type:"world"},
+      {title:"档案更新系统启用", description:"本系统建立：自此每次世界记录更新，皆在此留档，供四方访客查阅。", title_en:"The Archive System Activated", desc_en:"This system now stands: every future record of the world's changes will be archived here for all visitors to read.", type:"feature"}
+    ]
+  },
+  {
+    version:"v1.1",
+    date:"2026-08-16",
+    title:"山河渐明",
+    type:"site",
+    zh:"官网初成 · 诸邦见闻录",
+    en:"The Realm Takes Shape",
+    content:[
+      {title:"四方城邦档案开放", description:"四大城邦完整设定（恓鸟·茹章·眴姚·伏熏）正式公开。", type:"lore"},
+      {title:"联系档案开放", description:"档案馆联络通道开放：来访者可与馆主取得联系。", type:"feature"},
+      {title:"支持之墙立起", description:"来访者可在支持墙上留下评价与点赞，见证沧陆成长。", type:"feature"}
+    ]
+  },
+  {
+    version:"v1.0",
+    date:"2026-08-14",
+    title:"沧陆初临",
+    type:"site",
+    zh:"世界首次公开",
+    en:"First Unveiling",
+    content:[
+      {title:"沧陆世界首次公开", description:"首版档案落成：地理志、城邦志、历法、纪年、势力诸卷初开。", type:"lore"}
+    ]
+  }
+];
+
+(function(){
+  var mask = document.getElementById('updateMask');
+  var body = document.getElementById('updateBody');
+  var btn = document.getElementById('updateBtn');
+  var closeBtn = document.getElementById('updateClose');
+  var readBtn = document.getElementById('updateRead');
+  var histBtn = document.getElementById('updateHistory');
+  if(!mask) return;
+
+  var UPDATES = (typeof CANG_LU_UPDATES !== 'undefined') ? CANG_LU_UPDATES : [];
+  var CURRENT = (typeof CANG_LU_CURRENT !== 'undefined') ? CANG_LU_CURRENT : 'v1.2';
+  var LS_KEY = 'canglu-lastread';
+  var readVersion = '';
+  try{ readVersion = localStorage.getItem(LS_KEY) || ''; }catch(e){}
+
+  function isNewer(cur, read){
+    if(!read) return true;
+    var p = function(v){ var m = v.replace(/^v/i,'').split('.').map(function(n){return parseInt(n,10)||0;}); return m; };
+    var c = p(cur), r = p(read);
+    for(var i=0;i<Math.max(c.length,r.length);i++){
+      var a = c[i]||0, b = r[i]||0;
+      if(a>b) return true;
+      if(a<b) return false;
+    }
+    return false;
+  }
+
+  function lang(){ return (window.__lang && window.__lang === 'en') ? 'en' : 'zh'; }
+  function showVersion(vObj, isCurrent){
+    var L = lang();
+    var title = vObj.title || '';
+    var date = (vObj.date || '').replace(/(\d{4})-(\d{2})-(\d{2})/, '$1年$2月');
+    var items = (vObj.content||[]).map(function(c){
+      var ct = (L==='en' && c.title_en) ? c.title_en : c.title;
+      var cd = (L==='en' && c.desc_en) ? c.desc_en : c.description;
+      return '<div class="up-module"><span class="up-module-badge"></span><span class="up-module-text"><b>【' + ct + '】</b>' + cd + '</span></div>';
+    }).join('');
+    return '<div class="up-ver-block' + (isCurrent ? ' current' : '') + '">' +
+      '<div class="up-ver-head"><span class="up-ver-tag">' + vObj.version + (isCurrent ? ' · ' + (L==='en'?'NOW':'当前版本') : '') + '</span>' +
+      '<span class="up-ver-title">' + (L==='en' ? (vObj.en||title) : (vObj.zh||title)) + '</span>' +
+      '<span class="up-ver-date">' + date + '</span></div>' + items + '</div>';
+  }
+
+  function render(){
+    if(!body) return;
+    var L = lang();
+    var cur = null;
+    for(var i=0;i<UPDATES.length;i++){ if(UPDATES[i].version === CURRENT){ cur = UPDATES[i]; break; } }
+    // 默认只显示当前版本；历次档案按钮展开全部
+    body.innerHTML = cur ? showVersion(cur, true) : '';
+    body.setAttribute('data-mode','current');
+    var dv = document.getElementById('upVer'); if(dv) dv.textContent = CURRENT;
+    var dd = document.getElementById('upDate');
+    if(dd && cur){ dd.textContent = (cur.date||'').replace(/(\d{4})-(\d{2})-(\d{2})/, '$1年$2月'); }
+  }
+  function renderAll(){
+    if(!body) return;
+    var L = lang();
+    var htmls = UPDATES.map(function(u){ return showVersion(u, u.version === CURRENT); }).join('');
+    body.innerHTML = htmls;
+    body.setAttribute('data-mode','all');
+  }
+  function open(auto){
+    mask.classList.add('on');
+    if(body.getAttribute('data-mode') !== 'all') render();
+    if(!auto){
+      // 手动打开默认收起历史，只看当前
+      body.setAttribute('data-mode','current');
+      render();
+    }
+  }
+  function close(){
+    mask.classList.remove('on');
+    try{ localStorage.setItem(LS_KEY, CURRENT); }catch(e){}
+  }
+
+  if(closeBtn) closeBtn.onclick = close;
+  if(readBtn) readBtn.onclick = close;
+  if(histBtn){
+    histBtn.onclick = function(){
+      if(body.getAttribute('data-mode') === 'all'){ render(); }
+      else { renderAll(); }
+    };
+  }
+  mask.addEventListener('click', function(e){ if(e.target === mask) close(); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && mask.classList.contains('on')) close(); });
+  if(btn) btn.onclick = function(e){ e.preventDefault(); open(false); };
+
+  // 欢迎弹窗关闭后，若未读当前版本则自动弹出
+  function hookWelcome(){
+    var wc = document.getElementById('welcomeMask');
+    if(!wc) return;
+    // 监听进入/关闭按钮
+    var enter = document.getElementById('wcEnter');
+    var wclose = document.getElementById('wcClose');
+    function maybeShow(){
+      if(isNewer(CURRENT, readVersion)){
+        setTimeout(function(){ open(true); }, 600);
+      }
+    }
+    if(enter && enter._upHooked) return;
+    if(enter){
+      var orig = enter.onclick;
+      enter.onclick = function(e){
+        if(orig) orig.call(this, e);
+        maybeShow();
+      };
+    }
+    if(wclose){
+      var orig2 = wclose.onclick;
+      wclose.onclick = function(e){
+        if(orig2) orig2.call(this, e);
+        maybeShow();
+      };
+    }
+    // 兜底：如果欢迎弹窗无按钮点击（如sessionStorage已读），首次自动判断
+    try{
+      var seen = sessionStorage.getItem('canglu-welcome') === '1';
+      if(seen && isNewer(CURRENT, readVersion)){
+        setTimeout(function(){ open(true); }, 800);
+      }
+    }catch(e){}
+  }
+  hookWelcome();
+  // 语言切换时重绘公告内容
+  var _origApply = window.applyLang ? null : null;
+  var repaint = function(){ if(mask.classList.contains('on')){ if(body.getAttribute('data-mode') === 'all'){ renderAll(); } else { render(); } } };
+  document.addEventListener('cangluLangChange', repaint);
+  // 兼容：applyLang 执行后手动触发
+  if(window.__afterLangApply){ var _a = window.__afterLangApply; }
+  window.__afterLangApply = (window.__afterLangApply || function(){});
+  var _prev = window.__afterLangApply;
+  window.__afterLangApply = function(){ if(_prev) _prev(); repaint(); };
+})();
+
+
 /* ============ 音乐播放器 ============ */
 (function(){
   /* ===== 歌单：沧陆之声 ===== */
@@ -4538,7 +4795,7 @@ function revealItem(el){
       en:{role:'Central Theocracy', motto:'Divine mandate · Eternal prosperity',
         pol:'Absolutist theocracy: the sovereign unites divine and martial authority, ruling through four ministries — Society, Economy, Foreign Affairs, and Inspection — all turning on the sovereign\'s will.',
         hist:'The Pact that Founded the State: in the civilization\'s darkest hour the first king sought the relic and struck a deal — the land grew bountiful, the people rebuilt; the laws of life changed, generations quickened and aged early. The Descent of the Dark Gleam opened the Siyuan era.',
-        hidden:'The truth of the shortened lifespan: in a shrine deep within Egen Mountain sleeps a divine relic "not of this world" — without good or evil, without speech, it exchanges by an unknown law. The changed laws of life made Ruzhang's average span some 45 years. Every third Ember Month, the king crosses the Wangmu Bridge openly to Qiyi Island for the rite.'}},
+        hidden:'The truth of the shortened lifespan: in a shrine deep within Egen Mountain sleeps a divine relic "not of this world" — without good or evil, without speech, it exchanges by an unknown law. The changed laws of life made Ruzhang\'s average span some 45 years. Every third Ember Month, the king crosses the Wangmu Bridge openly to Qiyi Island for the rite.'}},
     xunyao: {role:'东海商港', motto:'左右逢源 · 以商立邦',
       pol:'海商公会共治：城内最大几支海商家族联合执掌政务，核心决策由公会议事会共同商议，维护贸易秩序与商人利益。',
       hist:'苍瀛海航线核心枢纽，贸易网络覆盖沧陆四方。名义上向茹章称臣朝贡，实际拥有极高自治权，茹章无权干涉内政。',
@@ -5147,7 +5404,7 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       try{ localStorage.setItem(SKEY, JSON.stringify(s)); }catch(err){}
       applySettings();
       // 语言切换时更新界面文字
-      if(binds[gid] === 'lang') applyLang();
+      if(binds[gid] === 'lang') applyLang(); document.dispatchEvent(new Event('cangluLangChange'));
     });
   });
 
@@ -5205,7 +5462,7 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       ga_title:'沧陆舆图 · 山河总览', ga_sub:'点击方位，展开地理篇章',
       ga_1:'海洋与水域', ga_2:'陆地单元', ga_3:'地形地貌', ga_4:'河流水系', ga_5:'人文聚落', ga_6:'大型工程地标',
       spAnchor:'历法锚点（祀元元年≈公元）',
-      wc_t:'欢迎来到沧陆', wc_s:'折翼一陆 · 剑衡四方', wc_v:'当前版本 v1.1 · 沧陆世界', wc_b:'踏入沧陆',
+      wc_t:'欢迎来到沧陆', wc_s:'折翼一陆 · 剑衡四方', wc_v:'当前版本 v1.2 · 沧陆世界', wc_b:'踏入沧陆', home_update:'更新公告', up_title:'沧陆档案更新记录', up_history:'历次档案', up_read:'阅毕归档',
       lg_hero_t:'沧陆全域徽记', lg_hero_s:'折翼一陆 · 剑衡四方', lg_hero_btn:'徽记释义',
       lg_verse:'折翼之世，以剑衡四方 —— 剑守四境，翼承苍生',
       lg_c1n:'恓鸟', lg_c1s:'西·军邦', lg_c2n:'茹章', lg_c2s:'中·神权', lg_c3n:'眴姚', lg_c3s:'东·商港', lg_c4n:'伏熏', lg_c4s:'南·海岛',
@@ -5320,7 +5577,7 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       ga_title:'The Atlas of Canglu', ga_sub:'Click a region to open its chapter',
       ga_1:'Seas & Waters', ga_2:'Landmasses', ga_3:'Terrain & Landforms', ga_4:'Rivers & Lakes', ga_5:'Settlements', ga_6:'Great Works',
       spAnchor:'Calendar anchor (Siyuan Year 1 ≈ AD)',
-      wc_t:'Welcome to Canglu', wc_s:'One broken wing, sword-balanced four realms', wc_v:'Version v1.1 · Canglu World', wc_b:'Enter Canglu',
+      wc_t:'Welcome to Canglu', wc_s:'One broken wing, sword-balanced four realms', wc_v:'Version v1.2 · Canglu World', wc_b:'Enter Canglu', home_update:'Update Archive', up_title:'Canglu Archive Update Log', up_history:'Past Records', up_read:'Mark as Read',
       lg_hero_t:'The Emblem of Canglu', lg_hero_s:'One broken wing for the land, the sword balances the four realms', lg_hero_btn:'About the Emblem',
       lg_verse:'A broken-winged world, balanced by the sword — the blade keeps four realms, the wing bears all lives',
       lg_c1n:'Xuniao', lg_c1s:'W · War-state', lg_c2n:'Ruzhang', lg_c2s:'C · Theocracy', lg_c3n:'Xunyao', lg_c3s:'E · Trade port', lg_c4n:'Fuxun', lg_c4s:'S · Island',
@@ -5540,7 +5797,7 @@ var ITEM_TITLES = {"元荒海：地图最西侧的广阔外海，为西部大陆
   window.cangluAutoplay = { get:function(){ return s.autoplay !== 'off'; } };
 
   applySettings();
-  applyLang();
+  applyLang(); document.dispatchEvent(new Event('cangluLangChange'));
 })();
 </script>
 
