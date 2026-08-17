@@ -1167,6 +1167,90 @@ html[data-theme="light"] .ph-card.ph-fuxun{--ph-c:#6a3fa0}
 
 /* ===== 机密档案 ===== */
 
+
+/* ============ 文明档案馆（v1.3） ============ */
+#archivePage .doc{padding-bottom:60px}
+.arch-overview{margin-bottom:42px}
+.ao-head{text-align:center;margin-bottom:24px}
+.ao-sub{font-size:13px;letter-spacing:2px;color:var(--ink-dim);margin:6px 0 0}
+.ao-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.ao-card{position:relative;padding:18px 16px 14px;border:1px solid rgba(200,162,74,.26);border-radius:4px;background:linear-gradient(160deg,rgba(200,162,74,.06),transparent 75%);cursor:pointer;transition:border-color .25s,transform .25s,box-shadow .25s;overflow:hidden}
+.ao-card:hover{border-color:rgba(200,162,74,.55);transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,.3)}
+.ao-card.ao-touched{border-color:rgba(200,162,74,.4)}
+.ao-id{font-size:10px;letter-spacing:2px;color:var(--ink-dim);opacity:.75}
+.ao-name{font-size:18px;letter-spacing:3px;color:var(--gold);font-family:"KaiTi","STKaiti","楷体",serif;margin:6px 0 2px}
+.ao-cat{font-size:11px;letter-spacing:2px;color:var(--ink-dim)}
+.ao-status{position:absolute;top:14px;right:14px;font-size:10px;letter-spacing:1px;padding:2px 8px;border-radius:2px}
+.ao-open{color:#8fbf6a;border:1px solid rgba(143,191,106,.45)}
+.ao-sealed{color:var(--gold);border:1px solid rgba(200,162,74,.5)}
+.ao-pct{margin:12px 0 8px;position:relative;height:16px}
+.ao-pct-bar{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,rgba(200,162,74,.25),rgba(200,162,74,.55));border-radius:2px;transition:width .8s ease}
+.ao-pct span{position:absolute;right:0;top:-1px;font-size:10px;color:var(--ink-dim);letter-spacing:1px}
+.ao-unknown{font-size:11px;letter-spacing:1px;color:#8a6a4a;border-top:1px dashed rgba(200,162,74,.2);padding-top:8px;word-break:break-all}
+/* 模块通用 */
+.arc-mod{margin:38px 0;padding-top:4px}
+.arc-mod-head{display:flex;align-items:center;gap:12px;margin-bottom:16px;border-bottom:1px solid rgba(200,162,74,.2);padding-bottom:12px}
+.am-badge{font-size:16px;letter-spacing:4px;color:var(--gold);font-weight:700}
+.am-badge-sealed{color:#b06a5a}
+.am-seal{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:1.5px solid rgba(200,162,74,.6);border-radius:3px;color:var(--gold);font-size:14px;background:rgba(200,162,74,.07)}
+.am-seal-red{border-color:rgba(176,106,90,.6);color:#b06a5a;background:rgba(139,38,53,.08)}
+.am-sub{font-size:12px;letter-spacing:2px;color:var(--ink-dim);margin:-8px 0 14px}
+/* 规则 */
+.arc-rules-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.arc-rule-card{display:flex;gap:14px;padding:18px 16px;border:1px solid rgba(200,162,74,.24);border-radius:4px;background:linear-gradient(135deg,rgba(200,162,74,.05),transparent 70%)}
+.ar-icon{flex-shrink:0;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border:1.5px solid rgba(200,162,74,.5);border-radius:4px;color:var(--gold);font-size:18px;font-family:"KaiTi","STKaiti","楷体",serif}
+.ar-body b{font-size:15px;letter-spacing:2px;color:var(--ink)}
+.ar-body p{font-size:12.5px;line-height:1.8;color:var(--ink-dim);margin:6px 0 0}
+/* 封存档案 */
+.arc-sealed-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.arc-sealed-card{padding:18px 16px;border:1px dashed rgba(176,106,90,.4);border-radius:4px;background:linear-gradient(160deg,rgba(139,38,53,.07),transparent 80%);cursor:pointer;transition:border-color .25s,background .25s}
+.arc-sealed-card:hover{border-color:rgba(176,106,90,.7);background:linear-gradient(160deg,rgba(139,38,53,.12),transparent 80%)}
+.as-id{font-size:10px;letter-spacing:2px;color:#b06a5a;opacity:.8}
+.as-title{font-size:16px;letter-spacing:3px;color:#c98a76;font-family:"KaiTi","STKaiti","楷体",serif;margin:8px 0 10px}
+.as-record{font-size:12px;letter-spacing:1px;color:#8a6a5a;line-height:1.9;letter-spacing:3px;word-break:break-all}
+.as-foot{display:flex;justify-content:space-between;margin-top:12px;padding-top:10px;border-top:1px dashed rgba(176,106,90,.25)}
+.as-status,.as-unlock{font-size:10.5px;letter-spacing:1px;color:var(--ink-dim)}
+/* 历史人物 */
+.arc-fig-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.arc-fig-card{padding:18px 16px;border:1px solid rgba(200,162,74,.24);border-radius:4px;background:linear-gradient(160deg,rgba(200,162,74,.05),transparent 75%);cursor:pointer;transition:border-color .25s,transform .25s}
+.arc-fig-card:hover{border-color:rgba(200,162,74,.5);transform:translateY(-2px)}
+.af-id{font-size:10px;letter-spacing:2px;color:var(--ink-dim);opacity:.8}
+.af-name{font-size:17px;letter-spacing:3px;color:var(--gold);font-family:"KaiTi","STKaiti","楷体",serif;margin:6px 0 2px}
+.af-era{font-size:11px;letter-spacing:1px;color:var(--ink-dim)}
+.af-eval{font-size:12.5px;line-height:1.8;color:var(--ink-dim);margin-top:10px;padding-top:10px;border-top:1px dashed rgba(200,162,74,.2)}
+/* 世界动态 */
+.arc-news-list{display:flex;flex-direction:column;gap:10px;max-width:720px}
+.arc-news-item{display:flex;gap:16px;padding:14px 16px;border:1px solid rgba(200,162,74,.2);border-radius:4px;background:rgba(200,162,74,.04)}
+.an-era{flex-shrink:0;font-size:12px;letter-spacing:1px;color:var(--gold);padding-top:3px;min-width:96px}
+.an-body b{font-size:14px;letter-spacing:1px;color:var(--ink)}
+.an-body p{font-size:12.5px;line-height:1.7;color:var(--ink-dim);margin:4px 0 0}
+/* 创世日志 */
+.arc-log-timeline{position:relative;max-width:640px;padding-left:26px}
+.arc-log-timeline::before{content:"";position:absolute;left:7px;top:6px;bottom:6px;width:1px;background:linear-gradient(180deg,rgba(200,162,74,.5),rgba(200,162,74,.08))}
+.arc-log-item{position:relative;padding:0 0 20px}
+.al-node{position:absolute;left:-24px;top:6px;width:11px;height:11px;border:1.5px solid var(--gold);border-radius:50%;background:var(--bg,#0a0e1a);box-shadow:0 0 8px rgba(200,162,74,.5)}
+.al-body .al-id{font-size:10.5px;letter-spacing:2px;color:var(--ink-dim)}
+.al-body b{display:block;font-size:14.5px;letter-spacing:2px;color:var(--gold);margin:4px 0}
+.al-body p{font-size:12.5px;line-height:1.7;color:var(--ink-dim);margin:0}
+/* 探索记录 */
+.arc-ex-body{padding:18px;border:1px solid rgba(200,162,74,.24);border-radius:4px;background:linear-gradient(160deg,rgba(200,162,74,.05),transparent 75%);max-width:720px}
+.ax-level{margin-bottom:14px}
+.ax-lv-k{font-size:12px;letter-spacing:2px;color:var(--ink-dim)}
+.ax-level b{font-size:17px;letter-spacing:3px;color:var(--gold);font-family:"KaiTi","STKaiti","楷体",serif;margin-left:8px}
+.ax-items{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.ax-item{font-size:11.5px;letter-spacing:1px;padding:4px 12px;border:1px solid rgba(200,162,74,.25);border-radius:2px;color:var(--ink-dim)}
+.ax-item.ax-done{color:#8fbf6a;border-color:rgba(143,191,106,.45);background:rgba(143,191,106,.06)}
+.ax-note{font-size:11.5px;letter-spacing:1px;color:var(--ink-dim);opacity:.8}
+/* 浅色主题 */
+html[data-theme="light"] .ao-card,html[data-theme="light"] .arc-rule-card,html[data-theme="light"] .arc-fig-card,html[data-theme="light"] .arc-news-item,html[data-theme="light"] .arc-ex-body{background:linear-gradient(160deg,rgba(150,110,40,.06),transparent 75%)}
+html[data-theme="light"] .arc-sealed-card{background:linear-gradient(160deg,rgba(139,38,53,.06),transparent 80%)}
+html[data-theme="light"] .al-node{background:#f2ead6}
+html[data-theme="light"] .ao-unknown{color:#8a6a4a}
+@media (max-width:700px){
+  .ao-grid,.arc-rules-grid,.arc-sealed-grid,.arc-fig-grid{grid-template-columns:1fr}
+  .arc-news-item{flex-direction:column;gap:6px}
+}
+
 /* ============ 世界状态（沧陆当前记录 v1.2） ============ */
 .world-status-sec{padding:0 4vw 26px}
 .ws-head{text-align:center;margin-bottom:22px}
@@ -2283,6 +2367,7 @@ var _hmt = _hmt || [];
     <button data-page="calPage">历法</button>
     <button data-page="timePage">纪年</button>
     <button data-page="powerPage">势力</button>
+    <button data-page="archivePage">档案</button>
   </nav>
   <button class="theme-btn" id="themeBtn" title="主题设置"></button>
   <div class="search-wrap">
@@ -3024,6 +3109,76 @@ var _hmt = _hmt || [];
     <div class="item"><b>狩脊山</b>：遍植白色草木的圣山，象征一尘不染的圣洁——而极致的纯白只存在于传说与理想中，现实里的圣洁永远伴随代价与虚伪。</div>
   </div>
 </section>
+
+<section class="page" id="archivePage">
+  <div class="doc fade">
+    <h1><span class="h-diamond"></span><span class="h-title" data-i18n="t_archive">文明档案馆</span><span class="h-diamond"></span></h1>
+
+    <!-- 档案总览 -->
+    <div class="arch-overview" id="archOverview">
+      <div class="ao-head">
+        <div class="faction-kicker" data-i18n="arc_kicker">THE GRAND ARCHIVE</div>
+        <p class="ao-sub" data-i18n="arc_sub">沧陆官方历史机构保存的资料库——收录编号、公开状态、完整程度，一应俱全。</p>
+      </div>
+      <div class="ao-grid" id="aoGrid"></div>
+    </div>
+
+    <!-- 世界规则 -->
+    <div class="arc-mod" id="arcRules">
+      <div class="arc-mod-head">
+        <span class="am-badge" data-i18n="arc_rules_b">世界规则</span>
+        <span class="am-seal">规</span>
+      </div>
+      <div class="arc-rules-grid" id="arcRulesGrid"></div>
+    </div>
+
+    <!-- 封存档案 -->
+    <div class="arc-mod" id="arcSealed">
+      <div class="arc-mod-head">
+        <span class="am-badge am-badge-sealed" data-i18n="arc_sealed_b">封存档案</span>
+        <span class="am-seal am-seal-red">封</span>
+      </div>
+      <p class="am-sub" data-i18n="arc_sealed_sub">以下卷宗依规程封存——部分公开，余者未来开放。</p>
+      <div class="arc-sealed-grid" id="arcSealedGrid"></div>
+    </div>
+
+    <!-- 历史人物 -->
+    <div class="arc-mod" id="arcFigures">
+      <div class="arc-mod-head">
+        <span class="am-badge" data-i18n="arc_fig_b">历史人物</span>
+        <span class="am-seal">人</span>
+      </div>
+      <div class="arc-fig-grid" id="arcFigGrid"></div>
+    </div>
+
+    <!-- 世界动态 -->
+    <div class="arc-mod" id="arcNews">
+      <div class="arc-mod-head">
+        <span class="am-badge" data-i18n="arc_news_b">世界动态</span>
+        <span class="am-seal">时</span>
+      </div>
+      <div class="arc-news-list" id="arcNewsList"></div>
+    </div>
+
+    <!-- 创世日志 -->
+    <div class="arc-mod" id="arcLog">
+      <div class="arc-mod-head">
+        <span class="am-badge" data-i18n="arc_log_b">创世日志</span>
+        <span class="am-seal">创</span>
+      </div>
+      <div class="arc-log-timeline" id="arcLogTimeline"></div>
+    </div>
+
+    <!-- 探索记录 -->
+    <div class="arc-mod" id="arcExplore">
+      <div class="arc-mod-head">
+        <span class="am-badge" data-i18n="arc_ex_b">探索记录</span>
+        <span class="am-seal">探</span>
+      </div>
+      <div class="arc-ex-body" id="arcExBody"></div>
+    </div>
+  </div>
+</section>
 </main>
 
 <div class="music-list" id="musicList"></div>
@@ -3085,7 +3240,7 @@ var _hmt = _hmt || [];
     </div>
     <h2 class="wc-title" data-txt="欢迎来到沧陆" data-i18n="wc_t"></h2>
     <p class="wc-sub" data-i18n="wc_s">折翼一陆 · 剑衡四方</p>
-    <div class="wc-version" id="wcVersion" data-i18n="wc_v">当前版本 v1.2 · 沧陆世界</div>
+    <div class="wc-version" id="wcVersion" data-i18n="wc_v">当前版本 v1.3 · 沧陆世界</div>
     <div class="wc-line"></div>
     <button class="wc-enter" id="wcEnter" data-i18n="wc_b">踏入沧陆</button>
     <button class="wc-close" id="wcClose" title="跳过">✕</button>
@@ -3100,7 +3255,7 @@ var _hmt = _hmt || [];
       <div class="update-emblem"><span class="up-ring"></span><span class="up-seal">档</span></div>
       <div class="update-headline" data-i18n="up_title">沧陆档案更新记录</div>
       <div class="update-meta">
-        <span class="up-ver" id="upVer">v1.2</span>
+        <span class="up-ver" id="upVer">v1.3</span>
         <span class="up-date" id="upDate">2026年8月</span>
       </div>
     </div>
@@ -4333,8 +4488,23 @@ function revealItem(el){
 
 /* ============ 档案更新系统（更新公告） ============ */
 // 版本数据：集中管理，未来只在此数组追加新版本对象即可
-var CANG_LU_CURRENT = "v1.2";
+var CANG_LU_CURRENT = "v1.3";
 var CANG_LU_UPDATES = [
+  {
+    version:"v1.3",
+    date:"2026-08-18",
+    title:"文明档案 · 未尽之史",
+    type:"site",
+    zh:"文明档案 · 未尽之史",
+    en:"The Civilizations' Archive · The Unfinished Chronicle",
+    content:[
+      {title:"沧陆百科升级", description:"新增文明档案体系：档案馆收录城邦、地理诸卷，标注档案编号、公开状态与完整程度。", title_en:"The Grand Archive Opens", desc_en:"A new archive system: dossiers of cities and lands, each marked with record number, status, and completeness.", type:"feature"},
+      {title:"封存档案开放", description:"新增封存档案区：神骸战争、失落文明、无名者、沉没之地、禁忌之史——部分公开，余者未来开放。", title_en:"Sealed Dossiers Unveiled (Partially)", desc_en:"New sealed records: the Relic War, the Lost Precursor, the Nameless One, the Sunken Land, the Forbidden Chronicle — partially open, the rest to come.", type:"feature"},
+      {title:"世界规则补全", description:"新增世界规则档案：神骸体系、力量体系、文明体系、历史体系——世界运行机制首次系统公开。", title_en:"The Laws of the World Completed", desc_en:"New rules dossiers: the Relic system, the Power system, the Civilization system, the History system — the world's mechanics, first systematically opened.", type:"world"},
+      {title:"历史人物档案", description:"新增历史人物展示：开国者、改革者、神秘人物——只录已定之史，不涉未来主角。", title_en:"Figures of History Filed", desc_en:"New historical figures: founders, reformers, mysteries — only settled history, no future protagonists.", type:"lore"},
+      {title:"创世日志", description:"新增作者世界构建记录：从概念建立到神骸体系确定，见证沧陆如何被创造。", title_en:"The Creation Log", desc_en:"New records of the world's construction: from the founding concept to the relic system — witness how Canglu was made.", type:"log"}
+    ]
+  },
   {
     version:"v1.2",
     date:"2026-08-18",
@@ -4391,7 +4561,7 @@ var CANG_LU_UPDATES = [
   if(!mask) return;
 
   var UPDATES = (typeof CANG_LU_UPDATES !== 'undefined') ? CANG_LU_UPDATES : [];
-  var CURRENT = (typeof CANG_LU_CURRENT !== 'undefined') ? CANG_LU_CURRENT : 'v1.2';
+  var CURRENT = (typeof CANG_LU_CURRENT !== 'undefined') ? CANG_LU_CURRENT : 'v1.3';
   var LS_KEY = 'canglu-lastread';
   var readVersion = '';
   try{ readVersion = localStorage.getItem(LS_KEY) || ''; }catch(e){}
@@ -4638,6 +4808,210 @@ var CANG_LU_UPDATES = [
   start();
 })();
 
+
+
+
+/* ============ 文明档案馆数据（v1.3） ============ */
+var CANG_LU_ARCHIVE = {
+  overview: [
+    {id:'CL-CITY-001', name:'恓鸟城', cat:'城邦文明', open:true, pct:67, unknown:'████ 宗族血脉之秘', zh:{cat:'城邦文明', unknown:'████ 宗族血脉之秘'}, en:{cat:'City-State', unknown:'████ The bloodline\'s secret'}},
+    {id:'CL-CITY-002', name:'茹章城', cat:'城邦文明', open:true, pct:58, unknown:'████ 神骸交易细节', zh:{cat:'城邦文明', unknown:'████ Pact details'}, en:{cat:'City-State', unknown:'████ Pact details'}},
+    {id:'CL-CITY-003', name:'眴姚城', cat:'城邦文明', open:true, pct:71, unknown:'████ 情报网络深处', zh:{cat:'城邦文明', unknown:'████ The intel web'}, en:{cat:'City-State', unknown:'████ The intel web'}},
+    {id:'CL-CITY-004', name:'伏熏城', cat:'城邦文明', open:true, pct:63, unknown:'████ 月教秘仪', zh:{cat:'城邦文明', unknown:'████ Moon cult rites'}, en:{cat:'City-State', unknown:'████ Moon cult rites'}},
+    {id:'CL-GEO-001', name:'奇迤岛', cat:'地理档案', open:true, pct:74, unknown:'████ 神骸遗迹深处', zh:{cat:'地理档案', unknown:'████ Depths of the relic'}, en:{cat:'Geography', unknown:'████ Depths of the relic'}},
+    {id:'CL-GEO-002', name:'无昼碛', cat:'地理档案', open:true, pct:52, unknown:'████ 沙漠之心', zh:{cat:'地理档案', unknown:'████ Heart of the desert'}, en:{cat:'Geography', unknown:'████ Heart of the desert'}}
+  ],
+  rules: [
+    {id:'RULE-01', icon:'骸', zh:{t:'神骸体系', d:'神骸是不属于这个世界的实体遗骸——无善恶、无语言，只按未知规律与世界交换。它改变所在区域的自然规律与生命规律，因此成为文明兴衰的根源，也被历代势力追寻与争夺。'}, en:{t:'The Relic System', d:'The divine relic is an entity not of this world — without good or evil, without speech, exchanging only by an unknown law. It reshapes the natural and vital laws of its region, making it the root of civilization\'s rise and fall, sought and fought over by every power.'}},
+    {id:'RULE-02', icon:'力', zh:{t:'力量体系', d:'沧陆之力源于自然规律与生命规律本身，而非个体修行。神骸影响之地，规则异变，力量亦随之扭曲——这使力量既是庇护，也是代价。'}, en:{t:'The Power System', d:'Canglu\'s power springs from the natural and vital laws themselves, not individual cultivation. Where the relic\'s influence reaches, rules warp and power twists with them — making power both a shield and a price.'}},
+    {id:'RULE-03', icon:'邦', zh:{t:'文明体系', d:'四方城邦由地理与历史共同塑造：山城军邦、神权霸主、商贸港城、海岛民主——四种制度，四段宿命，皆因文明根基之差异而各自成形。'}, en:{t:'The Civilization System', d:'Four city-states shaped by geography and history: the mountain war-state, the theocratic hegemon, the trading port, the island democracy — four systems, four fates, each born of a different civilizational root.'}},
+    {id:'RULE-04', icon:'史', zh:{t:'历史体系', d:'沧陆纪元以祀元为轴：幽荧降世开纪，戍城、衡历随之分列。时代变迁由神骸波动、文明博弈与地理变迁共同驱动——史书所载，只是已公开的部分。'}, en:{t:'The History System', d:'Canglu\'s eras turn on the Siyuan axis: the Descent opened the age, with Shucheng and Hengli branching after. Ages shift with relic fluctuations, civilizational rivalry, and geographic change — and the chronicles hold only what has been unsealed.'}}
+  ],
+  sealed: [
+    {id:'CL-SEAL-001', type:'神骸事件', status:'部分公开', zh:{t:'神骸战争', rec:'██████████ 初代契约的另一面 ██████████', unlock:'未来开放'}, en:{t:'The Relic War', rec:'██████████ The other face of the first pact ██████████', unlock:'To be opened'}},
+    {id:'CL-SEAL-002', type:'远古文明', status:'封存', zh:{t:'失落的先驱文明', rec:'██████████ 在四方之前 ██████████', unlock:'未来开放'}, en:{t:'The Lost Precursor', rec:'██████████ Before the four ██████████', unlock:'To be opened'}},
+    {id:'CL-SEAL-003', type:'未知人物', status:'封存', zh:{t:'无名者', rec:'██████████ 名字已被抹去 ██████████', unlock:'未来开放'}, en:{t:'The Nameless One', rec:'██████████ The name was erased ██████████', unlock:'To be opened'}},
+    {id:'CL-SEAL-004', type:'消失地区', status:'部分公开', zh:{t:'沉没之地', rec:'██████████ 海图上的空缺 ██████████', unlock:'未来开放'}, en:{t:'The Sunken Land', rec:'██████████ A void on the charts ██████████', unlock:'To be opened'}},
+    {id:'CL-SEAL-005', type:'禁忌历史', status:'封存', zh:{t:'禁忌之史', rec:'██████████ 不可言说 ██████████', unlock:'未来开放'}, en:{t:'The Forbidden Chronicle', rec:'██████████ Unspeakable ██████████', unlock:'To be opened'}}
+  ],
+  figures: [
+    {id:'CL-FIG-001', name:'初代茹章王', era:'祀元元年', role:'开国者', zh:{eval:'于文明绝境中与神骸达成交易，使茹章先民得以延续——以生命规律为代价，换千年繁荣。其名讳与更多细节，部分公开。'}, en:{eval:'Struck a pact with the relic in the civilization\'s darkest hour, letting the Ruzhang ancestors endure — trading the laws of life for a thousand years of prosperity. The name and further details, partially open.'}},
+    {id:'CL-FIG-002', name:'首任大长老', era:'戍城元年', role:'开国者', zh:{eval:'恓鸟城宗族制奠基者，确立“崇明者”选拔与卫国者庭制衡，使山城军邦在边境战火中屹立不倒。'}, en:{eval:'Founder of Xuniao\'s clan eldership, establishing the Luminaries\' selection and the Guardians\' balance — holding the mountain war-state firm through border war.'}},
+    {id:'CL-FIG-003', name:'衡历立法者', era:'衡历元年', role:'改革者', zh:{eval:'伏熏城统一之年的立法者：立衡法、定商事、规整匠艺，使海岛民主之邦自此自成一脉。'}, en:{eval:'The lawgiver of Fuxun\'s unification year: the Balanced Law, trade regulations, craft standards — an island democracy with a lineage of its own.'}},
+    {id:'CL-FIG-004', name:'无名航海者', era:'时代不详', role:'神秘人物', zh:{eval:'████████ 与沉没之地相关的记录已封存 ██████████'}, en:{eval:'████████ Records tied to the Sunken Land are sealed ██████████'}}
+  ],
+  news: [
+    {era:843, zh:{e:'北境发现异常神骸波动', d:'档案馆观测到白绫海以北出现未知能量扰动，已派员勘测。'}, en:{e:'Anomalous relic fluctuation in the north', d:'The Archive observes unknown energy disturbances north of the Bailing Sea; surveyors dispatched.'}},
+    {era:843, zh:{e:'四方城邦举行联合会议', d:'四邦使节于中部会盟，议题未公开。'}, en:{e:'The four city-states convene', d:'Envoys of the four powers met in the center; agenda undisclosed.'}},
+    {era:842, zh:{e:'某地区档案重新开放', d:'档案馆对一处在野地区完成补录，相关卷宗恢复公开。'}, en:{e:'A region\'s archive reopens', d:'The Archive completed supplementary records for an outlying region; dossiers reopened.'}}
+  ],
+  log: [
+    {id:'创世记录001', zh:{t:'沧陆世界概念建立', d:'世界初始概念确立：折翼之世，以剑衡四方。'}, en:{t:'The concept of Canglu takes root', d:'The founding concept: a broken-winged world, balanced by the sword.'}},
+    {id:'创世记录002', zh:{t:'四方城邦体系形成', d:'恓鸟、茹章、眴姚、伏熏四邦定案，四种制度与四段宿命成形。'}, en:{t:'The four city-states take shape', d:'Xuniao, Ruzhang, Xunyao, Fuxun settled — four systems, four fates.'}},
+    {id:'创世记录003', zh:{t:'神骸体系确定', d:'神骸被定义为无善恶观的未知外来存在——世界运行的核心机制落定。'}, en:{t:'The relic system fixed', d:'The divine relic defined as an alien presence without good or evil — the world\'s core mechanism set.'}},
+    {id:'创世记录004', zh:{t:'大陆历史完善', d:'历法、纪年、势力脉络全部贯通，千年历史在档案中铺开。'}, en:{t:'Continental history completed', d:'Calendars, chronicles, and power lines interwoven — a thousand years laid out in the archive.'}}
+  ]
+};
+
+/* ============ 文明档案馆渲染（v1.3） ============ */
+(function(){
+  var page = document.getElementById('archivePage');
+  if(!page) return;
+  var A = window.CANG_LU_ARCHIVE || {overview:[],rules:[],sealed:[],figures:[],news:[],log:[]};
+  var L = function(){ return window.__lang === 'en' ? 'en' : 'zh'; };
+
+  // 探索记录（localStorage）
+  var EX_KEY = 'canglu-explored';
+  var explored = {};
+  try{ explored = JSON.parse(localStorage.getItem(EX_KEY) || '{}'); }catch(e){}
+  function mark(k){ explored[k] = 1; try{ localStorage.setItem(EX_KEY, JSON.stringify(explored)); }catch(e){} }
+  function saveExplore(){ try{ localStorage.setItem(EX_KEY, JSON.stringify(explored)); }catch(e){} }
+
+  function renderOverview(){
+    var g = document.getElementById('aoGrid'); if(!g) return;
+    var en = L() === 'en';
+    g.innerHTML = (A.overview||[]).map(function(o){
+      var cat = en ? o.en.cat : (o.zh ? o.zh.cat : o.cat);
+      var unk = en ? o.en.unknown : (o.zh ? o.zh.unknown : o.unknown);
+      var nameEn = {'恓鸟城':'Xuniao','茹章城':'Ruzhang','眴姚城':'Xunyao','伏熏城':'Fuxun','奇迤岛':'Qiyi Island','无昼碛':'Wuzhou Desert'}[o.name] || o.name;
+      return '<div class="ao-card" data-arch="' + o.id + '">' +
+        '<div class="ao-id">' + o.id + '</div>' +
+        '<div class="ao-name">' + (en ? nameEn : o.name) + '</div>' +
+        '<div class="ao-cat">' + cat + '</div>' +
+        '<div class="ao-status ' + (o.open ? 'ao-open' : 'ao-sealed') + '">' + (en ? 'OPEN' : '公开') + '</div>' +
+        '<div class="ao-pct"><div class="ao-pct-bar" style="width:' + o.pct + '%"></div><span>' + (en ? 'Completeness ' : '完整度 ') + o.pct + '%</span></div>' +
+        '<div class="ao-unknown">' + unk + '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function renderRules(){
+    var g = document.getElementById('arcRulesGrid'); if(!g) return;
+    var en = L() === 'en';
+    g.innerHTML = (A.rules||[]).map(function(r){
+      var t = en ? r.en.t : r.zh.t;
+      var d = en ? r.en.d : r.zh.d;
+      return '<div class="arc-rule-card" data-rule="' + r.id + '">' +
+        '<span class="ar-icon">' + r.icon + '</span>' +
+        '<div class="ar-body"><b>' + t + '</b><p>' + d + '</p></div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function renderSealed(){
+    var g = document.getElementById('arcSealedGrid'); if(!g) return;
+    var en = L() === 'en';
+    var typeMap = {'神骸事件':'RELIC','远古文明':'PRECURSOR','未知人物':'UNKNOWN','消失地区':'SUNKEN','禁忌历史':'FORBIDDEN'};
+    g.innerHTML = (A.sealed||[]).map(function(s){
+      var t = en ? s.en.t : s.zh.t;
+      var rec = en ? s.en.rec : s.zh.rec;
+      var unlock = en ? s.en.unlock : s.zh.unlock;
+      return '<div class="arc-sealed-card" data-seal="' + s.id + '">' +
+        '<div class="as-id">' + s.id + ' · ' + (typeMap[s.type] || s.type) + '</div>' +
+        '<div class="as-title">' + t + '</div>' +
+        '<div class="as-record">' + rec + '</div>' +
+        '<div class="as-foot"><span class="as-status">' + (en ? 'Status: ' : '状态：') + s.status + '</span><span class="as-unlock">' + (en ? 'Unlock: ' : '解锁：') + unlock + '</span></div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function renderFigures(){
+    var g = document.getElementById('arcFigGrid'); if(!g) return;
+    var en = L() === 'en';
+    g.innerHTML = (A.figures||[]).map(function(f){
+      var evalT = en ? f.en.eval : f.zh.eval;
+      var roleMap = {'开国者':'FOUNDER','改革者':'REFORMER','战争人物':'WARLORD','圣贤':'SAGE','神秘人物':'MYSTERY'};
+      return '<div class="arc-fig-card" data-fig="' + f.id + '">' +
+        '<div class="af-id">' + f.id + ' · ' + (roleMap[f.role] || f.role) + '</div>' +
+        '<div class="af-name">' + f.name + '</div>' +
+        '<div class="af-era">' + (en ? 'Era: ' : '时代：') + f.era + '</div>' +
+        '<div class="af-eval">' + evalT + '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function renderNews(){
+    var g = document.getElementById('arcNewsList'); if(!g) return;
+    var en = L() === 'en';
+    g.innerHTML = (A.news||[]).map(function(n){
+      var e = en ? n.en.e : n.zh.e;
+      var d = en ? n.en.d : n.zh.d;
+      return '<div class="arc-news-item" data-news="' + n.era + '">' +
+        '<span class="an-era">衡历' + n.era + '年</span>' +
+        '<div class="an-body"><b>' + e + '</b><p>' + d + '</p></div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function renderLog(){
+    var g = document.getElementById('arcLogTimeline'); if(!g) return;
+    var en = L() === 'en';
+    g.innerHTML = (A.log||[]).map(function(l, i){
+      var t = en ? l.en.t : l.zh.t;
+      var d = en ? l.en.d : l.zh.d;
+      return '<div class="arc-log-item" data-log="' + i + '">' +
+        '<span class="al-node"></span>' +
+        '<div class="al-body"><span class="al-id">' + l.id + '</span><b>' + t + '</b><p>' + d + '</p></div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function renderExplore(){
+    var body = document.getElementById('arcExBody'); if(!body) return;
+    var en = L() === 'en';
+    var count = Object.keys(explored).length;
+    // 探索者等级
+    var level = '初识沧陆', levelEn = 'First Glimpse';
+    if(count >= 8){ level = '档案学者'; levelEn = 'Archivist'; }
+    else if(count >= 5){ level = '探秘者'; levelEn = 'Explorer'; }
+    else if(count >= 3){ level = '远行者'; levelEn = 'Wayfarer'; }
+    var items = (A.overview||[]).map(function(o){
+      var k = 'arch:' + o.id;
+      var done = explored[k];
+      var nameEn = {'恓鸟城':'Xuniao','茹章城':'Ruzhang','眴姚城':'Xunyao','伏熏城':'Fuxun','奇迤岛':'Qiyi Island','无昼碛':'Wuzhou Desert'}[o.name] || o.name;
+      return '<span class="ax-item ' + (done ? 'ax-done' : '') + '">' + (done ? '✓ ' : '○ ') + (en ? nameEn : o.name) + '</span>';
+    }).join('');
+    body.innerHTML =
+      '<div class="ax-level"><span class="ax-lv-k">' + (en ? 'Explorer Level: ' : '探索者等级：') + '</span><b>' + (en ? levelEn : level) + '</b></div>' +
+      '<div class="ax-items">' + items + '</div>' +
+      '<div class="ax-note">' + (en ? 'Explore the city cards, geography and chronicles to deepen your record.' : '探索城邦、地理与历史卷宗，可加深你的探索记录。') + '</div>';
+  }
+
+  function renderAll(){
+    renderOverview(); renderRules(); renderSealed(); renderFigures(); renderNews(); renderLog(); renderExplore();
+  }
+  renderAll();
+  document.addEventListener('cangluLangChange', renderAll);
+
+  // 查看档案卡时标记探索
+  var ov = document.getElementById('aoGrid');
+  if(ov){
+    ov.addEventListener('click', function(e){
+      var card = e.target.closest('.ao-card');
+      if(card && card.dataset.arch){
+        mark('arch:' + card.dataset.arch);
+        card.classList.add('ao-touched');
+        saveExplore();
+        renderExplore();
+      }
+    });
+  }
+  // 归档卡整体标记已读（简化：点击任一区域即视为查看过该类）
+  var sealGrid = document.getElementById('arcSealedGrid');
+  if(sealGrid){
+    sealGrid.addEventListener('click', function(e){
+      var c = e.target.closest('.arc-sealed-card');
+      if(c && c.dataset.seal){ mark('seal:' + c.dataset.seal); saveExplore(); renderExplore(); }
+    });
+  }
+  var figGrid = document.getElementById('arcFigGrid');
+  if(figGrid){
+    figGrid.addEventListener('click', function(e){
+      var c = e.target.closest('.arc-fig-card');
+      if(c && c.dataset.fig){ mark('fig:' + c.dataset.fig); saveExplore(); renderExplore(); }
+    });
+  }
+})();
 
 
 /* ============ 音乐播放器 ============ */
@@ -5750,7 +6124,7 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
   // 语言：界面关键元素切换
   var I18N = {
     zh: {
-      nav: ['首页','地理','城邦','秘境','历法','纪年','势力'],
+      nav: ['首页','地理','城邦','秘境','历法','纪年','势力','档案'],
       searchPh: '检索地名 / 城邦 / 条目',
       settings: '设置',
       themeTitle: '主题设置',
@@ -5801,10 +6175,12 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       ga_title:'沧陆舆图 · 山河总览', ga_sub:'点击方位，展开地理篇章',
       ga_1:'海洋与水域', ga_2:'陆地单元', ga_3:'地形地貌', ga_4:'河流水系', ga_5:'人文聚落', ga_6:'大型工程地标',
       spAnchor:'历法锚点（祀元元年≈公元）',
-      wc_t:'欢迎来到沧陆', wc_s:'折翼一陆 · 剑衡四方', wc_v:'当前版本 v1.2 · 沧陆世界', wc_b:'踏入沧陆', home_update:'更新公告', up_title:'沧陆档案更新记录', up_history:'历次档案', up_read:'阅毕归档',
+      wc_t:'欢迎来到沧陆', wc_s:'折翼一陆 · 剑衡四方', wc_v:'当前版本 v1.3 · 沧陆世界', wc_b:'踏入沧陆', home_update:'更新公告', up_title:'沧陆档案更新记录', up_history:'历次档案', up_read:'阅毕归档',
       pl_skip:'跳过 ▸', pl_enter:'进入沧陆', pl_c1:'恓鸟城', pl_c2:'茹章城', pl_c3:'眴姚城', pl_c4:'伏熏城',
       ws_kicker:'THE LIVING RECORD', ws_title:'沧陆当前记录', ws_sub:'世界仍在运转——这是档案馆此刻观测到的沧陆。',
       ws_era_k:'沧陆纪元', ws_sit_k:'当前局势', ws_sit_v:'四方势力保持平衡', ws_unk_k:'未知档案',
+      t_archive:'文明档案馆', arc_kicker:'THE GRAND ARCHIVE', arc_sub:'沧陆官方历史机构保存的资料库——收录编号、公开状态、完整程度，一应俱全。',
+      arc_rules_b:'世界规则', arc_sealed_b:'封存档案', arc_sealed_sub:'以下卷宗依规程封存——部分公开，余者未来开放。', arc_fig_b:'历史人物', arc_news_b:'世界动态', arc_log_b:'创世日志', arc_ex_b:'探索记录',
       lg_hero_t:'沧陆全域徽记', lg_hero_s:'折翼一陆 · 剑衡四方', lg_hero_btn:'徽记释义',
       lg_verse:'折翼之世，以剑衡四方 —— 剑守四境，翼承苍生',
       lg_c1n:'恓鸟', lg_c1s:'西·军邦', lg_c2n:'茹章', lg_c2s:'中·神权', lg_c3n:'眴姚', lg_c3s:'东·商港', lg_c4n:'伏熏', lg_c4s:'南·海岛',
@@ -5820,7 +6196,7 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       musicHint:'静候佳音', settingsTitle:'设置',
     },
     en: {
-      nav: ['Home','Geography','Cities','Mysteries','Calendar','Chronicle','Powers'],
+      nav: ['Home','Geography','Cities','Mysteries','Calendar','Chronicle','Powers','Archive'],
       searchPh: 'Search places / cities / entries',
       settings: 'Settings',
       themeTitle: 'Theme',
@@ -5830,6 +6206,8 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       pl_skip:'Skip ▸', pl_enter:'Enter Canglu', pl_c1:'Xuniao', pl_c2:'Ruzhang', pl_c3:'Xunyao', pl_c4:'Fuxun',
       ws_kicker:'THE LIVING RECORD', ws_title:'Current Record of Canglu', ws_sub:'The world is still turning — this is what the Archive observes now.',
       ws_era_k:'Era of Canglu', ws_sit_k:'Current Situation', ws_sit_v:'The four powers hold balance', ws_unk_k:'Unknown Dossiers',
+      t_archive:'The Grand Archive', arc_kicker:'THE GRAND ARCHIVE', arc_sub:'The repository of Canglu\'s official historical institute — record numbers, status, and completeness, all accounted.',
+      arc_rules_b:'Laws of the World', arc_sealed_b:'Sealed Dossiers', arc_sealed_sub:'The following rolls are sealed by protocol — partly open, the rest to come.', arc_fig_b:'Figures of History', arc_news_b:'World Chronicle', arc_log_b:'The Creation Log', arc_ex_b:'Exploration Record',
       home_geo_d:'Five seas encircle the land: Yuanhuang, Cangying, Bailing, Baihuang, Sixing. The Duanji and Mouxia ranges run north and south; Ziming Mountain rises 5,243 meters, the highest in Canglu. The Dujiao Rift tears the east, and Dongzhi Cliff reaches into the southern deep.', home_geo_f:'Explore the full terrain of Canglu',
       home_city_d:'Xuniao grieves, Ruzhang feigns glory, Xunyao chases profit, Fuxun holds balance. Four city-states, four systems, four fates — from clan elders to divine monarchy, from merchant guilds to party democracy, Canglu\'s political spectrum runs deeper than you imagine.', home_city_f:'Uncover the truth of the four states',
       home_land_d:'The Wuzhou Desert — sand that drinks light, no day ever dawns, the deeper the darker, space itself unravels. Egen Mountain — a dead peak at the oasis\'s heart, anchor of the sleeping divine relic. Here, the laws of nature bend; the line between reality and illusion dissolves.', home_land_f:'Step into forbidden lands',
@@ -5922,7 +6300,7 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       ga_title:'The Atlas of Canglu', ga_sub:'Click a region to open its chapter',
       ga_1:'Seas & Waters', ga_2:'Landmasses', ga_3:'Terrain & Landforms', ga_4:'Rivers & Lakes', ga_5:'Settlements', ga_6:'Great Works',
       spAnchor:'Calendar anchor (Siyuan Year 1 ≈ AD)',
-      wc_t:'Welcome to Canglu', wc_s:'One broken wing, sword-balanced four realms', wc_v:'Version v1.2 · Canglu World', wc_b:'Enter Canglu', home_update:'Update Archive', up_title:'Canglu Archive Update Log', up_history:'Past Records', up_read:'Mark as Read',
+      wc_t:'Welcome to Canglu', wc_s:'One broken wing, sword-balanced four realms', wc_v:'Version v1.3 · Canglu World', wc_b:'Enter Canglu', home_update:'Update Archive', up_title:'Canglu Archive Update Log', up_history:'Past Records', up_read:'Mark as Read',
       lg_hero_t:'The Emblem of Canglu', lg_hero_s:'One broken wing for the land, the sword balances the four realms', lg_hero_btn:'About the Emblem',
       lg_verse:'A broken-winged world, balanced by the sword — the blade keeps four realms, the wing bears all lives',
       lg_c1n:'Xuniao', lg_c1s:'W · War-state', lg_c2n:'Ruzhang', lg_c2s:'C · Theocracy', lg_c3n:'Xunyao', lg_c3s:'E · Trade port', lg_c4n:'Fuxun', lg_c4s:'S · Island',
@@ -5943,7 +6321,7 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
     var t = I18N[s.lang] || I18N.zh;
     // 导航
     var navBtns = document.querySelectorAll('nav button[data-page]');
-    var pages = ['homePage','geoPage','cityPage','landmarkPage','calPage','timePage','powerPage'];
+    var pages = ['homePage','geoPage','cityPage','landmarkPage','calPage','timePage','powerPage','archivePage'];
     navBtns.forEach(function(b, i){
       if(pages.indexOf(b.dataset.page) >= 0 && t.nav[pages.indexOf(b.dataset.page)]){
         b.textContent = t.nav[pages.indexOf(b.dataset.page)];
