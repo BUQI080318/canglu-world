@@ -248,7 +248,50 @@
   .doc td{padding:9px 10px;border:1px solid var(--line);line-height:1.8;vertical-align:top}
   .doc tr:nth-child(even) td{background:rgba(255,255,255,.02)}
   /* 城邦卡片 */
-  .city-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;margin:20px 0}
+  .city-banner{
+  position:relative;margin:18px 0 24px;border-radius:16px;overflow:hidden;
+  border:1px solid var(--line);min-height:150px;
+  background:linear-gradient(150deg,var(--panel),var(--panel2));
+  transition:border-color .6s,box-shadow .6s;
+}
+.city-banner::before{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(ellipse at 20% 0%,var(--cb-c,rgba(200,162,74,.14)),transparent 55%),
+             radial-gradient(ellipse at 90% 100%,var(--cb-c,rgba(200,162,74,.08)),transparent 50%);
+  transition:background .8s;
+}
+.city-banner::after{
+  content:"";position:absolute;left:0;right:0;top:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--cb-c,rgba(200,162,74,.8)),transparent);
+  opacity:.7;
+}
+.cb-glow{position:absolute;width:340px;height:340px;border-radius:50%;left:50%;top:-60%;transform:translateX(-50%);
+  background:radial-gradient(circle,var(--cb-c,rgba(200,162,74,.2)),transparent 65%);filter:blur(40px);pointer-events:none}
+.cb-emblem{position:absolute;right:26px;top:50%;transform:translateY(-50%);width:92px;height:92px;color:var(--cb-c,#c8a24a);
+  display:flex;align-items:center;justify-content:center;border-radius:50%;
+  border:1px solid color-mix(in srgb,var(--cb-c,#c8a24a) 55%,transparent);
+  box-shadow:0 0 30px color-mix(in srgb,var(--cb-c,#c8a24a) 30%,transparent),inset 0 0 20px color-mix(in srgb,var(--cb-c,#c8a24a) 12%,transparent);
+  animation:cbFloat 5s ease-in-out infinite;}
+.cb-emblem svg{width:48px;height:48px}
+@keyframes cbFloat{0%,100%{transform:translateY(-50%) translateY(0)}50%{transform:translateY(-50%) translateY(-6px)}}
+.cb-text{position:relative;padding:26px 130px 22px 28px;z-index:2}
+.cb-kicker{font-size:10.5px;letter-spacing:5px;color:var(--cb-c,#c8a24a);text-transform:uppercase;opacity:.85}
+.cb-name{font-size:24px;letter-spacing:8px;color:var(--ink);margin:8px 0 10px;text-indent:8px;
+  font-family:"Noto Serif SC","Source Han Serif SC","STSong","SimSun",serif}
+.cb-keys{display:flex;gap:8px;flex-wrap:wrap}
+.cb-keys span{font-size:10.5px;letter-spacing:2px;color:var(--ink);padding:4px 12px;border-radius:999px;
+  border:1px solid var(--line);background:rgba(0,0,0,.18)}
+.cb-totem{position:absolute;left:8px;bottom:-6px;font-size:120px;line-height:1;font-family:"Noto Serif SC","STSong",serif;
+  color:var(--cb-c,#c8a24a);opacity:.06;pointer-events:none;user-select:none}
+@media (max-width:700px){
+  .cb-emblem{width:64px;height:64px;right:14px}
+  .cb-emblem svg{width:34px;height:34px}
+  .cb-text{padding:20px 84px 18px 18px}
+  .cb-name{font-size:19px;letter-spacing:5px}
+  .cb-totem{font-size:80px}
+}
+
+.city-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px;margin:20px 0}
   .city-card{
     background:var(--glass-bg);
     -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
@@ -259,7 +302,33 @@
   .city-card h4{color:var(--gold);font-size:19px;letter-spacing:3px;margin-bottom:4px}
   .city-card .role{color:var(--ink-dim);font-size:12.5px;letter-spacing:2px;margin-bottom:10px}
   .city-card p{font-size:13.5px;color:var(--ink);line-height:1.75;text-indent:0;margin:0;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
-  .arch-city-card{position:relative;padding:22px 18px 20px;border-radius:4px;background:var(--arch-paper);border:1px solid var(--arch-line);box-shadow:0 3px 10px rgba(0,0,0,.25)}
+  /* 档案完整度 */
+.city-card{position:relative}
+.city-pct{
+  position:absolute;top:10px;right:10px;width:42px;height:42px;
+}
+.city-pct svg{width:42px;height:42px;transform:rotate(-90deg)}
+.city-pct .cp-track{fill:none;stroke:var(--line);stroke-width:3}
+.city-pct .cp-fill{fill:none;stroke:var(--gold);stroke-width:3;stroke-linecap:round;
+  filter:drop-shadow(0 0 4px var(--glow));transition:stroke-dasharray 1s ease}
+.city-pct span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-size:10px;color:var(--gold);font-weight:bold;letter-spacing:0}
+.city-pct-hint{position:absolute;top:14px;right:58px;font-size:9px;letter-spacing:1.5px;
+  color:var(--ink-dim);opacity:.75;text-align:right;line-height:1.5}
+.arch-completeness{margin:18px 0 6px;padding:14px 16px;border-radius:10px;
+  background:linear-gradient(150deg,rgba(200,162,74,.07),rgba(200,162,74,.02));
+  border:1px solid var(--gold-dim)}
+.ac-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.ac-k{font-size:10.5px;letter-spacing:3px;color:var(--bronze)}
+.ac-v{font-size:17px;color:var(--gold);font-weight:bold;letter-spacing:1px;
+  font-family:"Noto Serif SC","Source Han Serif SC","STSong","SimSun",serif}
+.ac-bar{height:5px;border-radius:99px;background:var(--line);overflow:hidden}
+.ac-fill{height:100%;border-radius:99px;
+  background:linear-gradient(90deg,var(--gold-dim),var(--gold));box-shadow:0 0 8px var(--glow);
+  transition:width 1s cubic-bezier(.2,.7,.3,1)}
+.ac-note{margin-top:8px;font-size:11px;letter-spacing:1.5px;color:var(--ink-dim)}
+
+.arch-city-card{position:relative;padding:22px 18px 20px;border-radius:4px;background:var(--arch-paper);border:1px solid var(--arch-line);box-shadow:0 3px 10px rgba(0,0,0,.25)}
   .arch-city-card:hover{border-color:rgba(201,168,76,.5);transform:translateY(-3px)}
   .arch-city-card .acc-no{position:absolute;top:12px;right:14px;font-size:10px;letter-spacing:3px;color:var(--gold-dim);font-style:italic}
   .arch-city-card .acc-foot{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:8px;border-top:1px dashed rgba(200,162,74,.15);font-size:11px;color:var(--ink-dim)}
@@ -270,7 +339,46 @@
   .fade{animation:fadeIn .25s ease}
   @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
   /* 年表 */
-  .timeline{position:relative;margin:18px 0 8px;padding-left:26px}
+  /* ===== 沧陆历史长卷 · 互动时间轴 ===== */
+.era-scroll{margin:20px 0 30px;padding:20px 22px 14px;border-radius:14px;
+  background:linear-gradient(160deg,rgba(200,162,74,.05),rgba(200,162,74,.01));
+  border:1px solid var(--gold-dim)}
+.es-track{position:relative;display:flex;justify-content:space-between;align-items:flex-start;padding:8px 6px 0}
+.es-node{position:relative;z-index:2;text-align:center;cursor:pointer;width:80px;flex-shrink:0;
+  transition:transform .3s;user-select:none}
+.es-node:hover{transform:translateY(-3px)}
+.es-dot{display:block;width:13px;height:13px;margin:0 auto 7px;border-radius:50%;
+  background:var(--panel2);border:2px solid var(--gold-dim);transition:all .35s;
+  box-shadow:0 0 0 4px transparent}
+.es-node b{display:block;font-size:12px;letter-spacing:2px;color:var(--ink);font-weight:normal;
+  font-family:"Noto Serif SC","Source Han Serif SC","STSong","SimSun",serif;transition:color .3s}
+.es-node small{display:block;font-size:10px;letter-spacing:1px;color:var(--ink-dim);margin-top:2px}
+.es-line{position:absolute;top:14px;left:8%;right:8%;height:2px;background:var(--line);z-index:1;border-radius:2px}
+.es-fill{height:100%;width:0;background:linear-gradient(90deg,var(--gold-dim),var(--gold));
+  box-shadow:0 0 10px var(--glow);border-radius:2px;transition:width .6s cubic-bezier(.2,.7,.3,1)}
+.es-node.active .es-dot{background:var(--gold);border-color:var(--gold);
+  box-shadow:0 0 0 4px rgba(200,162,74,.18),0 0 14px var(--glow);transform:scale(1.15)}
+.es-node.active b{color:var(--gold)}
+.es-node.active small{color:var(--gold-dim)}
+.es-foot{display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding-top:10px;border-top:1px dashed var(--line)}
+.es-era-label{font-size:11.5px;letter-spacing:3px;color:var(--bronze)}
+.es-play{font-size:11px;letter-spacing:2px;color:var(--ink);background:rgba(200,162,74,.08);
+  border:1px solid var(--gold-dim);border-radius:999px;padding:6px 16px;cursor:pointer;
+  transition:all .3s;font-family:inherit}
+.es-play:hover{color:var(--gold);border-color:var(--gold);box-shadow:0 0 14px var(--archive-glow)}
+.es-play.playing{color:var(--gold);border-color:var(--gold);animation:esPulse 1.4s ease-in-out infinite}
+@keyframes esPulse{0%,100%{box-shadow:0 0 6px var(--archive-glow)}50%{box-shadow:0 0 16px var(--glow)}}
+/* 事件卡片浮现 */
+.tl-item{transition:opacity .5s,transform .5s,box-shadow .5s,border-color .5s}
+.tl-item.hl{box-shadow:0 0 0 1px var(--gold-dim),0 10px 30px rgba(0,0,0,.35);
+  border-color:var(--gold);transform:translateX(6px)}
+@media (max-width:700px){
+  .es-track{overflow-x:auto;justify-content:flex-start;gap:18px;padding-bottom:8px}
+  .es-line{left:20%;right:6%}
+  .es-foot{flex-direction:column;gap:10px}
+}
+
+.timeline{position:relative;margin:18px 0 8px;padding-left:26px}
   .timeline::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:var(--gold-dim);opacity:.5}
   .tl-item{position:relative;margin:0 0 20px;padding:12px 16px;background:var(--glass-bg);-webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);border:1px solid var(--glass-brd);border-radius:6px;box-shadow:var(--glass-hl),var(--glass-shadow)}
   .tl-item::before{
@@ -769,7 +877,39 @@
   }
   .he-conflict::before{left:-8px}
   .he-conflict::after{right:-8px;transform:scaleX(-1)}
-  .he-secret{
+  /* 三入口按钮组 */
+.he-btns{display:flex;gap:14px;justify-content:center;align-items:center;flex-wrap:wrap;margin-top:8px}
+.hh-btn{
+  position:relative;display:inline-flex;align-items:center;justify-content:center;
+  padding:13px 30px;border-radius:999px;font-size:14px;letter-spacing:4px;text-indent:4px;
+  cursor:pointer;text-decoration:none;transition:all .35s cubic-bezier(.2,.7,.3,1.2);
+  font-family:"Noto Serif SC","Source Han Serif SC","STSong","SimSun",serif;
+}
+.hh-btn-primary{
+  background:linear-gradient(160deg,var(--gold),#a8843a);color:#0d1017;border:1px solid rgba(255,255,255,.14);
+  box-shadow:0 6px 22px rgba(200,162,74,.32),inset 0 1px 0 rgba(255,255,255,.25);
+}
+.hh-btn-primary:hover{transform:translateY(-3px);box-shadow:0 12px 34px rgba(200,162,74,.45),inset 0 1px 0 rgba(255,255,255,.3);letter-spacing:6px}
+.hh-btn-ghost{
+  background:rgba(200,162,74,.05);color:var(--ink);border:1px solid var(--gold-dim);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+}
+.hh-btn-ghost:hover{transform:translateY(-3px);border-color:var(--gold);color:var(--gold);
+  box-shadow:0 8px 26px rgba(200,162,74,.18),inset 0 0 16px rgba(200,162,74,.06);letter-spacing:6px}
+.hh-btn-secret{
+  color:var(--ink-dim);border-color:var(--line);background:transparent;opacity:.82;
+}
+.hh-btn-secret:hover{opacity:1;color:#8b2635;border-color:#8b2635;letter-spacing:6px;
+  box-shadow:0 8px 26px rgba(139,38,53,.25)}
+.he-entrance-hint{margin-top:20px;font-size:11px;letter-spacing:4px;color:var(--ink-dim);opacity:.55}
+html[data-theme="light"] .hh-btn-primary{background:linear-gradient(160deg,#a63a2e,#8a2c22);color:#f6f1e4}
+html[data-theme="light"] .hh-btn-secret:hover{color:#8b2635;border-color:#8b2635}
+@media (max-width:700px){
+  .hh-btn{padding:11px 20px;font-size:13px;letter-spacing:3px}
+  .he-btns{gap:10px}
+}
+
+.he-secret{
     display:inline-block;margin-top:26px;
     font-size:11.5px;letter-spacing:4px;color:var(--ink-dim);
     opacity:.62;cursor:pointer;text-decoration:none;
@@ -820,6 +960,55 @@
 .hmf-tr{top:10px;right:10px;border-top:1.5px solid var(--gold);border-right:1.5px solid var(--gold);border-top-right-radius:6px}
 .hmf-bl{bottom:10px;left:10px;border-bottom:1.5px solid var(--gold);border-left:1.5px solid var(--gold);border-bottom-left-radius:6px}
 .hmf-br{bottom:10px;right:10px;border-bottom:1.5px solid var(--gold);border-right:1.5px solid var(--gold);border-bottom-right-radius:6px}
+/* 地图探索浮层 + 镜头推进 */
+.he-map-frame{transition:transform .8s cubic-bezier(.25,.8,.3,1)}
+.he-map-frame.zoomed{transform:scale(1.22);z-index:8;position:relative}
+.hm-explore{
+  position:fixed;right:22px;top:50%;transform:translateY(-50%) translateX(30px);
+  width:340px;max-height:78vh;overflow:auto;z-index:160;
+  background:rgba(12,16,26,.96);border:1px solid var(--gold-dim);border-radius:16px;
+  padding:22px 20px;opacity:0;visibility:hidden;pointer-events:none;
+  transition:all .5s cubic-bezier(.2,.7,.3,1);backdrop-filter:blur(10px);
+  box-shadow:0 18px 50px rgba(0,0,0,.6),0 0 0 1px rgba(200,162,74,.12),inset 0 0 40px rgba(200,162,74,.04);
+}
+.hm-explore.on{opacity:1;visibility:visible;pointer-events:auto;transform:translateY(-50%) translateX(0)}
+.hmx-close{position:absolute;top:10px;right:12px;background:none;border:none;color:var(--ink-dim);
+  font-size:15px;cursor:pointer;transition:color .3s;font-family:inherit}
+.hmx-close:hover{color:var(--gold)}
+.hmx-emblem{
+  width:72px;height:72px;margin:4px auto 12px;border-radius:50%;
+  border:1px solid var(--gold-dim);display:flex;align-items:center;justify-content:center;
+  color:var(--gold);box-shadow:0 0 24px var(--archive-glow);
+  animation:hmxFloat 4s ease-in-out infinite;
+}
+.hmx-emblem svg{width:38px;height:38px}
+@keyframes hmxFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.hmx-kicker{text-align:center;font-size:10px;letter-spacing:4px;color:var(--bronze);text-transform:uppercase}
+.hmx-name{text-align:center;font-size:21px;letter-spacing:6px;color:var(--ink);margin:6px 0 4px;text-indent:6px;
+  font-family:"Noto Serif SC","Source Han Serif SC","STSong","SimSun",serif}
+.hmx-motto{text-align:center;font-size:12px;letter-spacing:1px;color:var(--gold);opacity:.85;margin-bottom:16px}
+.hmx-sec{margin:12px 0;padding:10px 12px;border-left:2px solid var(--gold-dim);background:rgba(200,162,74,.04);border-radius:0 8px 8px 0}
+.hmx-sec-k{display:block;font-size:10.5px;letter-spacing:3px;color:var(--bronze);margin-bottom:5px}
+.hmx-sec p{font-size:12.5px;line-height:1.85;color:var(--ink);letter-spacing:.5px}
+.hmx-sec-hidden{border-left-color:#8b2635;background:rgba(139,38,53,.06)}
+.hmx-sec-hidden .hmx-sec-k{color:#c05a48}
+.hmx-actions{text-align:center;margin-top:16px}
+.hmx-btn{
+  font-size:12px;letter-spacing:3px;color:var(--gold);background:rgba(200,162,74,.08);
+  border:1px solid var(--gold-dim);border-radius:999px;padding:9px 22px;cursor:pointer;
+  transition:all .3s;font-family:inherit;
+}
+.hmx-btn:hover{background:rgba(200,162,74,.18);box-shadow:0 0 18px var(--archive-glow)}
+/* 浅色主题浮层 */
+html[data-theme="light"] .hm-explore{background:rgba(250,245,232,.97);border-color:rgba(150,110,40,.35)}
+html[data-theme="light"] .hmx-sec{background:rgba(150,110,40,.05)}
+html[data-theme="light"] .hmx-sec-hidden{background:rgba(139,38,53,.05)}
+/* 移动端：浮层全宽吸底 */
+@media (max-width:700px){
+  .hm-explore{right:10px;left:10px;top:auto;bottom:76px;transform:translateY(20px);width:auto;max-height:56vh}
+  .hm-explore.on{transform:translateY(0)}
+}
+
 /* 地图城邦标记 */
 .he-map-frame{position:relative}
 .he-map-pins{position:absolute;inset:0;z-index:4;pointer-events:none}
@@ -897,6 +1086,46 @@ html[data-theme="light"] .hm-tip{background:rgba(250,245,232,.97);border-color:r
 }
 @media (max-width:767px){.he-seal{display:none}}
 /* 卷宗编号（右上角） */
+/* ===== 权柄档案 ===== */
+.powerholders-sec{max-width:1080px;margin:0 auto;padding:2.4rem 24px .5rem;text-align:center}
+.ph-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:18px}
+.ph-card{
+  position:relative;text-align:left;padding:24px 18px 18px;border-radius:14px;overflow:hidden;
+  background:var(--card-bg);border:1px solid var(--line);transition:transform .38s,box-shadow .38s,border-color .38s;
+}
+.ph-card:hover{transform:translateY(-5px);box-shadow:0 14px 36px var(--shadow)}
+.ph-card::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--ph-c,#c8a24a),transparent);opacity:.65}
+.ph-rank{position:absolute;top:12px;right:14px;font-size:11px;letter-spacing:2px;color:var(--ink-dim);opacity:.6;
+  font-family:"Noto Serif SC","STSong",serif}
+.ph-emblem{
+  width:52px;height:52px;border-radius:50%;margin-bottom:12px;display:flex;align-items:center;justify-content:center;
+  font-size:22px;color:var(--ph-c,#c8a24a);border:1px solid color-mix(in srgb,var(--ph-c,#c8a24a) 45%,transparent);
+  background:radial-gradient(circle at 35% 30%,color-mix(in srgb,var(--ph-c,#c8a24a) 16%,transparent),transparent 70%);
+  font-family:"Noto Serif SC","STSong",serif;
+  box-shadow:0 0 18px color-mix(in srgb,var(--ph-c,#c8a24a) 22%,transparent);
+}
+.ph-name{font-size:17px;letter-spacing:4px;color:var(--ink);margin-bottom:4px;text-indent:4px;
+  font-family:"Noto Serif SC","Source Han Serif SC","STSong","SimSun",serif}
+.ph-role{font-size:11px;letter-spacing:2px;color:var(--ph-c,#c8a24a);margin-bottom:10px;opacity:.9}
+.ph-desc{font-size:12px;line-height:1.8;color:var(--ink-dim);letter-spacing:.5px}
+.ph-pos{margin-top:12px;padding-top:10px;border-top:1px dashed var(--line);
+  font-size:10.5px;letter-spacing:2px;color:var(--ink);opacity:.75}
+.ph-card.ph-xuniao{--ph-c:#d0604a}
+.ph-card.ph-ruzhang{--ph-c:#c8a24a}
+.ph-card.ph-xunyao{--ph-c:#5a9ad8}
+.ph-card.ph-fuxun{--ph-c:#9a7ad0}
+.ph-note{margin-top:16px;font-size:11px;letter-spacing:2px;color:var(--ink-dim);opacity:.65}
+html[data-theme="light"] .ph-card.ph-xuniao{--ph-c:#b34a36}
+html[data-theme="light"] .ph-card.ph-ruzhang{--ph-c:#a67a14}
+html[data-theme="light"] .ph-card.ph-xunyao{--ph-c:#2860a8}
+html[data-theme="light"] .ph-card.ph-fuxun{--ph-c:#6a3fa0}
+@media (max-width:700px){
+  .ph-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .ph-card{padding:18px 14px 14px}
+  .ph-name{font-size:15px;letter-spacing:3px}
+}
+
 /* ===== 机密档案 ===== */
 .secret-sec{max-width:1080px;margin:0 auto;padding:2.4rem 24px .5rem;text-align:center}
 .secret-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:18px}
@@ -1792,10 +2021,11 @@ var _hmt = _hmt || [];
         <p class="he-sub" data-i18n="home_sub">宏大政治玄幻史诗 · 四方博弈 · 神骸低语</p>
         <p class="he-conflict" data-i18n="home_conflict">在神骸遗迹之上建立的文明，终将面对它们付出的代价。</p>
         <div class="he-btns">
-          <a class="hh-btn hh-btn-primary" id="hhExplore" data-i18n="home_btn1">进入沧陆档案</a>
-          <a class="hh-btn hh-btn-ghost" id="hhEmblem" data-i18n="home_btn2">徽记释义</a>
+          <a class="hh-btn hh-btn-primary" id="hhExplore" data-i18n="home_btn1">进入沧陆</a>
+          <a class="hh-btn hh-btn-ghost" id="hhCities" data-i18n="home_btn3">探索城邦</a>
+          <a class="hh-btn hh-btn-ghost hh-btn-secret" id="heSecret" data-i18n="home_secret">揭开真相</a>
         </div>
-        <a class="he-secret" id="heSecret" data-i18n="home_secret">揭开真相 ⟶</a>
+        <div class="he-entrance-hint" data-i18n="home_hint">选择一个入口，开始你的探索</div>
       </div>
       <div class="he-glyphs" aria-hidden="true">
         <span>剑</span><span>衡</span><span>四</span><span>方</span><span>翼</span><span>承</span><span>苍</span><span>生</span>
@@ -1816,25 +2046,42 @@ var _hmt = _hmt || [];
         <img class="he-map-img" src="assets/canglu_map.jpg" alt="沧陆舆图·手绘原稿" draggable="false">
         <div class="he-map-shine"></div>
         <div class="he-map-pins">
-          <div class="hm-pin hm-pin-xuniao" data-city="xuniao" style="left:31%;top:44%">
+          <div class="hm-pin hm-pin-xuniao" data-city="xuniao" style="left:10.5%;top:84%">
             <span class="hm-dot"></span><span class="hm-name" data-i18n="mp_x">恓鸟城</span>
             <div class="hm-tip" data-i18n="mp_x_t">西境军邦 · 悲息之城 · 断脊山脉脚下</div>
           </div>
-          <div class="hm-pin hm-pin-ruzhang" data-city="ruzhang" style="left:52%;top:38%">
+          <div class="hm-pin hm-pin-ruzhang" data-city="ruzhang" style="left:48.4%;top:30.8%">
             <span class="hm-dot"></span><span class="hm-name" data-i18n="mp_r">茹章城</span>
             <div class="hm-tip" data-i18n="mp_r_t">中枢神权 · 伪盛之都 · 扼根山灵祠</div>
           </div>
-          <div class="hm-pin hm-pin-xunyao" data-city="xunyao" style="left:70%;top:46%">
+          <div class="hm-pin hm-pin-xunyao" data-city="xunyao" style="left:91.3%;top:40%">
             <span class="hm-dot"></span><span class="hm-name" data-i18n="mp_y">眴姚港</span>
             <div class="hm-tip" data-i18n="mp_y_t">东海商港 · 苍瀛海航线枢纽</div>
           </div>
-          <div class="hm-pin hm-pin-fuxun" data-city="fuxun" style="left:47%;top:76%">
+          <div class="hm-pin hm-pin-fuxun" data-city="fuxun" style="left:52%;top:83%">
             <span class="hm-dot"></span><span class="hm-name" data-i18n="mp_f">伏熏岛</span>
             <div class="hm-tip" data-i18n="mp_f_t">南岛孤邦 · 之丝运河 · 理性之境</div>
           </div>
         </div>
       </div>
-      <div class="he-map-cap" data-i18n="home_map_cap">点击地理志，逐章展开山海脉络</div>
+      <div class="he-map-cap" data-i18n="home_map_cap">点击城市光点，推进镜头，探查城邦档案</div>
+      <div class="hm-explore" id="hmExplore" role="dialog" aria-hidden="true">
+        <button class="hmx-close" id="hmxClose" aria-label="关闭">✕</button>
+        <div class="hmx-emblem" id="hmxEmblem"></div>
+        <div class="hmx-body">
+          <div class="hmx-kicker" id="hmxKicker"></div>
+          <h3 class="hmx-name" id="hmxName"></h3>
+          <p class="hmx-motto" id="hmxMotto"></p>
+          <div class="hmx-sections">
+            <div class="hmx-sec"><span class="hmx-sec-k" data-i18n="mpk_pol">政治结构</span><p id="hmxPol"></p></div>
+            <div class="hmx-sec"><span class="hmx-sec-k" data-i18n="mpk_hist">历史事件</span><p id="hmxHist"></p></div>
+            <div class="hmx-sec hmx-sec-hidden"><span class="hmx-sec-k" data-i18n="mpk_hidden">隐藏档案</span><p id="hmxHidden"></p></div>
+          </div>
+          <div class="hmx-actions">
+            <button class="hmx-btn" id="hmxFull" data-i18n="mpk_full">查看完整城邦档案 →</button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- ═══ SECTION 1.5：四大城邦阵营 ═══ -->
@@ -1940,6 +2187,50 @@ var _hmt = _hmt || [];
           <div class="sc-hidden" data-i18n="sec_h3">届时茹章城的"奇迹"将彻底崩塌，沧陆的格局随之改写。档案馆对"苏醒之日"的推演卷宗共有九卷——其中八卷被封存，唯一公开的一卷只有四个字：血祭可延。</div>
         </div>
       </div>
+    </div>
+
+    <!-- ═══ SECTION 1.8：权柄档案（人物系统） ═══ -->
+    <div class="powerholders-sec" id="powerholderSec">
+      <div class="secret-head">
+        <div class="faction-kicker" data-i18n="ph_kicker">THE HOLDERS OF POWER</div>
+        <h2 class="faction-title" data-i18n="ph_title">权柄档案</h2>
+        <p class="faction-sub" data-i18n="ph_sub">四方文明由谁执掌？制度的齿轮咬合处，站着什么样的人。名录为未来纪事预留。</p>
+      </div>
+      <div class="ph-grid">
+        <div class="ph-card ph-xuniao">
+          <span class="ph-rank">壹</span>
+          <div class="ph-emblem" aria-hidden="true">恓</div>
+          <h3 class="ph-name" data-i18n="ph_x_name">大长老</h3>
+          <p class="ph-role" data-i18n="ph_x_role">恓鸟城 · 最高首领</p>
+          <p class="ph-desc" data-i18n="ph_x_desc">自宗族"崇明者"中选拔，须获民众认可方可上位；非终身制，年迈必退，失德可被民众联合推翻。</p>
+          <div class="ph-pos" data-i18n="ph_x_pos">立场 · 宗族制衡 · 民众认可</div>
+        </div>
+        <div class="ph-card ph-ruzhang">
+          <span class="ph-rank">贰</span>
+          <div class="ph-emblem" aria-hidden="true">茹</div>
+          <h3 class="ph-name" data-i18n="ph_r_name">茹章君主</h3>
+          <p class="ph-role" data-i18n="ph_r_role">茹章城 · 神权集权</p>
+          <p class="ph-desc" data-i18n="ph_r_desc">集宗教神权与军政大权于一身，自称君权神授；四部（社会/经济/外事/监察）以君主意志为轴运转，监察部可越过律法径行处置。</p>
+          <div class="ph-pos" data-i18n="ph_r_pos">立场 · 君权神授 · 删改围罪</div>
+        </div>
+        <div class="ph-card ph-xunyao">
+          <span class="ph-rank">叁</span>
+          <div class="ph-emblem" aria-hidden="true">眴</div>
+          <h3 class="ph-name" data-i18n="ph_y_name">海商公会</h3>
+          <p class="ph-role" data-i18n="ph_y_role">眴姚港 · 共治议会</p>
+          <p class="ph-desc" data-i18n="ph_y_desc">最大几支海商家族联合执掌政务，核心决策由议事会共同商议；名义朝贡茹章，实持极高自治。</p>
+          <div class="ph-pos" data-i18n="ph_y_pos">立场 · 左右逢源 · 以商立邦</div>
+        </div>
+        <div class="ph-card ph-fuxun">
+          <span class="ph-rank">肆</span>
+          <div class="ph-emblem" aria-hidden="true">伏</div>
+          <h3 class="ph-name" data-i18n="ph_f_name">执政团 · 参议团</h3>
+          <p class="ph-role" data-i18n="ph_f_role">伏熏岛 · 政团民主</p>
+          <p class="ph-desc" data-i18n="ph_f_desc">每十年换届：执政团掌行政，参议团掌监督提案；参议团全员反对可废执政决议，提案多数同意即生效。</p>
+          <div class="ph-pos" data-i18n="ph_f_pos">立场 · 制度制衡 · 务实理性</div>
+        </div>
+      </div>
+      <div class="ph-note" data-i18n="ph_note">※ 角色名录为未来纪事预留——当这个世界的故事正式展开，执权者将拥有名姓。</div>
     </div>
 
     <!-- ═══ SECTION 2：六大志入口卡片 ═══ -->
@@ -2136,6 +2427,16 @@ var _hmt = _hmt || [];
         <button class="logo-intro-btn" id="logoIntroBtn" data-i18n="lg_hero_btn">徽记释义</button>
       </div>
     </div>
+    <div class="city-banner" id="cityBanner" aria-hidden="true">
+      <div class="cb-glow"></div>
+      <div class="cb-emblem" id="cbEmblem"></div>
+      <div class="cb-text">
+        <div class="cb-kicker" id="cbKicker"></div>
+        <h3 class="cb-name" id="cbName"></h3>
+        <div class="cb-keys" id="cbKeys"></div>
+      </div>
+      <div class="cb-totem" id="cbTotem" aria-hidden="true"></div>
+    </div>
     <div class="city-grid" id="cityGrid"></div>
     <div id="cityDetail"></div>
   </div>
@@ -2270,6 +2571,21 @@ var _hmt = _hmt || [];
   <div class="doc fade">
     <h1><span class="h-diamond"></span><span class="h-title" data-i18n="t_time">纪年志</span><span class="h-diamond"></span></h1>
     <div class="lead" data-i18n="l_time">沧陆大事编年 · 从血祭封神到预言终局</div>
+    <div class="era-scroll" id="eraScroll">
+      <div class="es-track" id="esTrack">
+        <div class="es-node" data-ts="0"><span class="es-dot"></span><b data-i18n="tl_e1">神骸降世</b><small>祀元元年</small></div>
+        <div class="es-node" data-ts="16"><span class="es-dot"></span><b data-i18n="tl_e2">衡历立邦</b><small>祀元160年</small></div>
+        <div class="es-node" data-ts="20"><span class="es-dot"></span><b data-i18n="tl_e3">戍城肇建</b><small>祀元200年</small></div>
+        <div class="es-node" data-ts="50"><span class="es-dot"></span><b data-i18n="tl_e4">三年一祀</b><small>烬月 · 秘仪</small></div>
+        <div class="es-node" data-ts="70"><span class="es-dot"></span><b data-i18n="tl_e5">世代轮回</b><small>一轮一代</small></div>
+        <div class="es-node" data-ts="100"><span class="es-dot"></span><b data-i18n="tl_e6">预言终局</b><small>神醒之日</small></div>
+        <div class="es-line"><div class="es-fill" id="esFill"></div></div>
+      </div>
+      <div class="es-foot">
+        <span class="es-era-label" id="esEraLabel" data-i18n="tl_hint">拖动时间轴，翻阅沧陆纪元</span>
+        <button class="es-play" id="esPlay" data-i18n="tl_play">▶ 播放纪元</button>
+      </div>
+    </div>
     <div class="timeline">
       <div class="tl-item">
         <div class="era">祀元元年<small>幽荧降世 · 血祭封神</small></div>
@@ -2600,7 +2916,7 @@ const CITY_SECS = {
   '伏熏城': ['城邦风貌与地理禀赋','城邦风貌与地理禀赋','对外管控规则','政治制度：政团民主制','政治制度：政团民主制','政治制度：政团民主制','政治制度：政团民主制','信仰与文化']
 };
 const CITIES = [
-  {name:'恓鸟城', role:'西部山城军邦', motto:'薪火相传，守护故土', summary:'别称"悲息之城"，冶铁业冠绝沧陆。宗族长老制 + 卫国者庭军事制衡，崇拜断脊山脉。',
+  {name:'恓鸟城', pct:60, role:'西部山城军邦', motto:'薪火相传，守护故土', summary:'别称"悲息之城"，冶铁业冠绝沧陆。宗族长老制 + 卫国者庭军事制衡，崇拜断脊山脉。',
    arch:{
       no:'卷·壹', head:'恓鸟城 · 西部山城军邦', sealTag:'军邦实录',
       level:'文明等级：二级 · 军邦（官修正史定级）；民间自视"西境唯一可恃之墙"。',
@@ -2624,7 +2940,7 @@ const CITIES = [
     '社会结构：城邦居民以本地人居多，宗族成员占比接近半数，是统治与中坚阶层；外来人口可定居生产、享有基本公民权利，也需履行纳税、戍边等义务，但没有参政与进入权力体系的资格。',
     '精神信仰：没有正式宗教体系，核心精神是"敬自然、重血缘、守故土"，崇拜断脊山脉，将其视作城邦的守护神；重视宗族血脉传承，将先祖的荣光与教训视为最高行为准则。'
    ]},
-  {name:'茹章城', role:'中部神权霸主', motto:'君权神授 · 永恒繁荣', summary:'沧陆公认最强大的城邦，表面繁华鼎盛——实则被百年寿命诅咒笼罩，全城活不过45岁。',
+  {name:'茹章城', pct:30, role:'中部神权霸主', motto:'君权神授 · 永恒繁荣', summary:'沧陆公认最强大的城邦，表面繁华鼎盛——实则被百年寿命诅咒笼罩，全城活不过45岁。',
    arch:{
       no:'卷·贰', head:'茹章城 · 中部神权霸主', sealTag:'官修正史',
       level:'文明等级：一级 · 霸主（四邦公认，疆域诸邦之最）；官方自诩"君权神授"。',
@@ -2646,7 +2962,7 @@ const CITIES = [
     '百年寿命诅咒：这是茹章城最核心的秘密。扼根山深处的灵祠里，沉睡着一具"不属于这个世界的神之遗骸"（已死亡的远古神明）。初代茹章王为了换取城邦的强盛，将自己献祭，融入了神的心脏，以全城邦世代居民的寿命为代价，换来了永恒繁荣。诅咒之下，全城无论贵贱，都活不过45岁；神的遗骸一直在缓慢吞噬民众的生命余脉，以此维持城邦的气运。预言中，终有一日神会彻底苏醒，以它的规则重写整个世界的秩序，届时茹章城的"奇迹"也将彻底崩塌。',
     '思想管控与对外扩张：对内实行严格的思想管控，禁止任何质疑城邦历史、探讨寿命异常的言论，用"删改围罪"清除所有真相的知晓者；对外持续推行扩张政策，一方面通过朝贡体系吸纳周边小邦，另一方面用军事手段征服不臣服的势力，通过不断扩张转移民众对内部寿命问题的注意力。'
    ]},
-  {name:'眴姚城', role:'东部商贸港城', motto:'左右逢源 · 以商立邦', summary:'沧陆东部最大港口，苍瀛海航线核心枢纽，海商公会共治，全大陆的信息集散地。',
+  {name:'眴姚城', pct:50, role:'东部商贸港城', motto:'左右逢源 · 以商立邦', summary:'沧陆东部最大港口，苍瀛海航线核心枢纽，海商公会共治，全大陆的信息集散地。',
    arch:{
       no:'卷·叁', head:'眴姚城 · 东部商贸港城', sealTag:'商会文书',
       level:'文明等级：二级 · 商港（官方未定级；海商公会自认"四海枢纽"）。',
@@ -2666,7 +2982,7 @@ const CITIES = [
     '对外立场：名义上向茹章城称臣、按时朝贡，借此换取茹章城的贸易保护与通航便利；实际上拥有极高的自治权，城邦内部事务茹章城无权干涉。',
     '在各方势力之间奉行左右逢源的中立策略，不主动站队，与所有城邦都保持贸易往来，是大陆势力之间的缓冲带与信息中转站。'
    ]},
-  {name:'伏熏城', role:'海岛民主之邦', motto:'政团民主 · 务实理性', summary:'火山岛上的独立文明，政团民主制，十年换届选举，多数民众为无神论者。',
+  {name:'伏熏城', pct:40, role:'海岛民主之邦', motto:'政团民主 · 务实理性', summary:'火山岛上的独立文明，政团民主制，十年换届选举，多数民众为无神论者。',
    arch:{
       no:'卷·肆', head:'伏熏城 · 海岛民主之邦', sealTag:'岛邦宪书',
       level:'文明等级：三级 · 岛邦（官方未参与大陆定级；自衡历起自成一脉）。',
@@ -2761,9 +3077,12 @@ function renderCities(){
     const card = document.createElement('div');
     card.className = 'city-card arch-city-card';
     card.setAttribute('data-arch', '卷·' + '壹贰叁肆'[idx]);
+    var pct = c.pct || 40;
     card.innerHTML = '<div class="acc-no">档案 ' + String(idx+1).padStart(2,'0') + '</div>'
+      + '<div class="city-pct" title="' + (window.__lang==='en' ? 'Archive completeness' : '资料完整度') + '"><svg viewBox="0 0 42 42"><circle class="cp-track" cx="21" cy="21" r="17"/><circle class="cp-fill" cx="21" cy="21" r="17" style="stroke-dasharray:' + (pct*1.068) + ' 106.8"/></svg><span>' + pct + '%</span></div>'
       + '<h4>'+cName(c)+'</h4><div class="role">'+cRole(c)+'</div><p>'+cText(c.summary)+'</p>'
-      + '<div class="acc-foot"><span>'+cText((c.arch&&c.arch.sealTag)||'')+'</span><span class="acc-seal">'+cText((c.arch&&c.arch.archSeal)||'档案')+'</span></div>';
+      + '<div class="acc-foot"><span>'+cText((c.arch&&c.arch.sealTag)||'')+'</span><span class="acc-seal">'+cText((c.arch&&c.arch.archSeal)||'档案')+'</span></div>'
+      + '<div class="city-pct-hint">' + (window.__lang==='en' ? 'ARCHIVE ' + pct + '% UNLOCKED' : '资料完整度 ' + pct + '%') + '</div>';
     card.onclick = ()=> showCity(c);
     grid.appendChild(card);
   });
@@ -2784,6 +3103,13 @@ function showCity(c){
     + '<div class="arch-gloss">'+cText(arch.gloss||'')+'</div>'
     + '<div class="arch-seal-red">'+cText(arch.archSeal||'')+'</div>'
     + '</div>';
+  // ===== 档案完整度条 =====
+  var pct = c.pct || 40;
+  html += '<div class="arch-completeness" data-city="'+c.name+'">'
+    + '<div class="ac-head"><span class="ac-k">' + (window.__lang==='en' ? 'ARCHIVE COMPLETENESS' : '档案完整度') + '</span><span class="ac-v">' + pct + '%</span></div>'
+    + '<div class="ac-bar"><div class="ac-fill" style="width:' + pct + '%"></div></div>'
+    + '<div class="ac-note">' + (window.__lang==='en' ? 'Sealed entries remain. Continue exploring to unlock the truth.' : '仍有封存条目。继续探索，解锁真相。') + '</div>'
+    + '</div>';
   // 分类小节渲染：分类标题变化时插入小节标题
   const secs = CITY_SECS[c.name] || [];
   let lastSec = '';
@@ -2797,6 +3123,8 @@ function showCity(c){
   });
   detailBox.innerHTML = html;
   detailBox.scrollIntoView({behavior:'smooth'});
+  // 文明横幅随动
+  if(window.__renderCityBanner) window.__renderCityBanner(c);
 }
 // 城邦key→对象：供首页阵营卡定位
 const CITY_KEYS = {xuniao:'恓鸟城', ruzhang:'茹章城', xunyao:'眴姚城', fuxun:'伏熏城'};
@@ -2805,6 +3133,37 @@ window.showCityByKey = function(key){
   if(!nm || typeof CITIES === 'undefined') return;
   const c = CITIES.find(function(x){ return x.name === nm; });
   if(c) showCity(c);
+};
+// ===== 城邦文明横幅 =====
+var CITY_BANNERS = {
+  xuniao:{c:'#d0604a', totem:'恓', keys:['荣耀','守护','血脉','山脉']},
+  ruzhang:{c:'#c8a24a', totem:'茹', keys:['繁荣','神权','代价','秘密']},
+  xunyao:{c:'#5a9ad8', totem:'眴', keys:['贸易','航海','情报','平衡']},
+  fuxun:{c:'#9a7ad0', totem:'伏', keys:['自由','制度','孤立','理性']}
+};
+var CITY_BANNER_EN = {
+  xuniao:{kicker:'Western War-State', name:'Xuniao', keys:['Honor','Guard','Blood','Mountains']},
+  ruzhang:{kicker:'Central Theocracy', name:'Ruzhang', keys:['Prosperity','Divinity','Price','Secret']},
+  xunyao:{kicker:'Eastern Port', name:'Xunyao', keys:['Trade','Sail','Intel','Balance']},
+  fuxun:{kicker:'Southern Isle', name:'Fuxun', keys:['Freedom','Law','Isolation','Reason']}
+};
+window.__renderCityBanner = function(c){
+  var b = document.getElementById('cityBanner');
+  if(!b || !c) return;
+  var en = window.__lang === 'en';
+  var key = Object.keys(CITY_KEYS).find(function(k){ return CITY_KEYS[k] === c.name; });
+  var d = en ? (CITY_BANNER_EN[key] || {}) : CITY_BANNERS[key];
+  var zh = CITY_BANNERS[key];
+  if(!d && zh) d = zh;
+  var cvar = (zh && zh.c) || '#c8a24a';
+  b.style.setProperty('--cb-c', cvar);
+  var emb = document.getElementById('cbEmblem');
+  if(emb) emb.innerHTML = (window.MAP_EMBLEMS_INNER || {})[key] || '';
+  document.getElementById('cbKicker').textContent = d.kicker || '';
+  document.getElementById('cbName').textContent = d.name || '';
+  var keys = (d.keys || []).map(function(k){ return '<span>'+k+'</span>'; }).join('');
+  document.getElementById('cbKeys').innerHTML = keys;
+  document.getElementById('cbTotem').textContent = (zh && zh.totem) || '';
 };
 renderCities();
 
@@ -3165,6 +3524,11 @@ applyHash();
     render();
     showDetail(activeKey);
   };
+  // 地图浮层语言联动
+  var _mapLang = window.__mapLang;
+  window.__mapLang = function(){
+    if(hmExpCity && typeof openExplore === 'function') openExplore(hmExpCity);
+  };
   // 打开页面时默认选中茹章城（霸主视角）
   showDetail('ruzhang');
 })();
@@ -3260,6 +3624,53 @@ applyHash();
     });
   }
   setTimeout(rollAtlas, 500);
+/* ============ 沧陆历史长卷 · 互动时间轴 ============ */
+(function(){
+  var track = document.getElementById('esTrack');
+  var fill = document.getElementById('esFill');
+  var label = document.getElementById('esEraLabel');
+  var playBtn = document.getElementById('esPlay');
+  var items = document.querySelectorAll('#timePage .timeline .tl-item');
+  var nodes = track ? track.querySelectorAll('.es-node') : [];
+  if(!nodes.length) return;
+  var EN_LABELS = ['THE ERA OF THE RELIC','THE HENGLI FOUNDING','THE SHUCHENG FOUNDING','THE TRIENNIAL RITE','THE GENERATIONAL CYCLE','THE FINAL PROPHECY'];
+  var zh_labels = ['神骸降世 · 幽荧初临','衡历立邦 · 伏熏统一','戍城肇建 · 恓鸟立国','三年一祀 · 烬月秘仪','世代轮回 · 一轮一代','预言终局 · 神醒之日'];
+  var playing = null;
+  function setEra(idx){
+    nodes.forEach(function(n, i){
+      n.classList.toggle('active', i === idx);
+    });
+    items.forEach(function(it, i){
+      it.classList.toggle('hl', i === idx);
+      if(i === idx) it.scrollIntoView({behavior:'smooth', block:'nearest'});
+    });
+    if(fill) fill.style.width = (idx / (nodes.length - 1) * 100) + '%';
+    if(label){
+      label.textContent = (window.__lang === 'en') ? EN_LABELS[idx] : zh_labels[idx];
+    }
+  }
+  nodes.forEach(function(n, i){
+    n.addEventListener('click', function(){ setEra(i); stopPlay(); });
+  });
+  function startPlay(){
+    if(playing) return;
+    var i = 0;
+    nodes.forEach(function(n, j){ if(n.classList.contains('active')) i = j; });
+    playing = setInterval(function(){
+      i = (i + 1) % nodes.length;
+      setEra(i);
+    }, 2600);
+    if(playBtn){ playBtn.classList.add('playing'); playBtn.textContent = window.__lang==='en' ? '⏸ Playing the eras' : '⏸ 播放中'; }
+  }
+  function stopPlay(){
+    if(playing){ clearInterval(playing); playing = null; }
+    if(playBtn){ playBtn.classList.remove('playing'); playBtn.textContent = window.__lang==='en' ? '▶ Play the eras' : '▶ 播放纪元'; }
+  }
+  if(playBtn) playBtn.addEventListener('click', function(){ playing ? stopPlay() : startPlay(); });
+  // 页面切走时停止
+  window.__eraStop = stopPlay;
+  setEra(0);
+})();
 })();
 ['geoPage','powerPage'].forEach(pid=>{
   const sec = document.getElementById(pid);
@@ -3940,23 +4351,111 @@ function revealItem(el){
     var mask = document.getElementById('logoIntroMask');
     if(mask) mask.classList.add('on');
   });
+  var cities = document.getElementById('hhCities');
+  if(cities) cities.addEventListener('click', function(e){
+    e.preventDefault();
+    switchPage('cityPage'); location.hash = 'cityPage';
+  });
   document.querySelectorAll('#homeGrid [data-go]').forEach(function(c){
     c.addEventListener('click', function(){
       var go = c.getAttribute('data-go');
       if(go){ switchPage(go); location.hash = go; }
     });
   });
-  // 地图城邦标记 → 城邦志
+  // ===== 地图探索：镜头推进 + 城邦详情浮层 =====
+  var MAP_INFO = {
+    xuniao: {role:'西境军邦', motto:'薪火相传，守护故土',
+      pol:'宗族长老制 + 卫国者庭军事制衡。大长老从"崇明者"中选拔，民众认可方可上位，非终身制；右判决官世袭单传，对卫国者庭拥有最终否决权。',
+      hist:'戍城年元年（祀元200年）建国，以恓鸟建国为纪元之始。曾一度人烟萧条、濒临覆灭，最终全民死守守住疆土。',
+      hidden:'断脊山脉流放营之实际规模与生还记录，档案馆以最高等级封存。民间抄本谓之"放逐"，官修正史称之"戍边荣耀"。',
+      en:{role:'Western War-State', motto:'Pass the torch, guard the homeland',
+        pol:'Clan eldership balanced by the Court of Realm Guardians. The Grand Elder is chosen from the Luminaries with the people\'s approval, never for life; a hereditary Right Adjudicator holds final veto over the Guardians.',
+        hist:'Founded in Shucheng Year 1 (Siyuan 200), its founding marks the era. Once nearly ruined and depopulated, it held its land by the stubborn resistance of all.',
+        hidden:'The true scale of the Duanji exile camps and their survival records are sealed at the highest level. Folk manuscripts call it banishment; official annals call it glory of the frontier.'}},
+    ruzhang: {role:'中枢神权', motto:'君权神授 · 永恒繁荣',
+      pol:'君主集权神权制：君主集宗教神权、军政大权于一身，下设社会、经济、外事、监察四大部门，完全以君主意志运转。',
+      hist:'血祭封神：初代茹章王献祭自身融入神的心脏，以全城世代寿命为代价换永恒繁荣。幽荧降世，祀元由此开纪。',
+      hidden:'百年寿命诅咒的真相：扼根山灵祠深处沉睡"不属于这个世界的神之遗骸"，全城无论贵贱无人活过45岁。每三年烬月，君主秘密远赴奇迤岛举行献祭。',
+      en:{role:'Central Theocracy', motto:'Divine mandate · Eternal prosperity',
+        pol:'Absolutist theocracy: the sovereign unites divine and martial authority, ruling through four ministries — Society, Economy, Foreign Affairs, and Inspection — all turning on the sovereign\'s will.',
+        hist:'The Blood Sacrifice: the first king offered himself into the god\'s heart, paying with the lifespans of all generations for eternal prosperity. The Descent of the Dark Gleam opened the Siyuan era.',
+        hidden:'The truth of the century-long lifespan curse: in a shrine deep within Egen Mountain sleeps a divine relic "not of this world" — none in Ruzhang lives past 45. Every third Ember Month, the sovereign secretly journeys to Qiyi Island to feed the relic.'}},
+    xunyao: {role:'东海商港', motto:'左右逢源 · 以商立邦',
+      pol:'海商公会共治：城内最大几支海商家族联合执掌政务，核心决策由公会议事会共同商议，维护贸易秩序与商人利益。',
+      hist:'苍瀛海航线核心枢纽，贸易网络覆盖沧陆四方。名义上向茹章称臣朝贡，实际拥有极高自治权，茹章无权干涉内政。',
+      hidden:'眴姚的账册如海，偏无一页写自己——海商公会与各方势力之间究竟传递过什么，档案馆存有"密档·商路"三卷，均未解密。',
+      en:{role:'Eastern Port', motto:'Play both sides · Rise by trade',
+        pol:'Rule of the Sea Merchants\' Guild: the greatest seafaring houses jointly govern, key decisions made by the Guild council in defense of trade order and merchant profit.',
+        hist:'Core hub of the Cangying Sea routes, its trade web spans all four corners. Nominally a vassal paying tribute to Ruzhang, in truth holding great autonomy beyond Ruzhang\'s reach.',
+        hidden:'Xunyao\'s ledgers are vast as the sea, yet not one page speaks of itself — what the Guild truly relayed between the powers rests in three sealed volumes of the "Trade Routes" dossier.'}},
+    fuxun: {role:'南岛孤邦', motto:'政团民主 · 务实理性',
+      pol:'政团民主制：成年公民可自发组建政治团体参与治理，每十年换届，分执政团与参议团选举，参议团拥有完整制衡权。',
+      hist:'衡历元年（祀元160年）：伏熏城邦统一、立衡法、定商事、规整匠艺，为建国之年。对外管控森严，外人禁入狩脊山以西腹地。',
+      hidden:'伏熏宪书最明，外人却永不得见其全貌。之丝运河之下埋藏着什么，以及"月教"信徒昼伏夜出的真正缘由，均为未解封条目。',
+      en:{role:'Southern Isle', motto:'Party democracy · Pragmatic reason',
+        pol:'Party democracy: every adult citizen may form a political party; elections every ten years in two kinds — Governing Party and Senate Party — the Senate holding complete power of check.',
+        hist:'Hengli Year 1 (Siyuan 160): Fuxun unifies, establishes the Balanced Law, trade regulations and craft standards. External control is severe; outsiders may never cross west of Mount Shouji.',
+        hidden:'Fuxun\'s charter is the clearest of all — and no outsider has ever seen it whole. What lies beneath the Zhisi Canal, and the true reason the Moon Cult\'s faithful sleep by day, remain unsealed.'}}
+  };
+  var MAP_EMBLEMS_INNER = {
+    xuniao:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M32 6 C18 16 14 30 16 44 L32 54 L48 44 C50 30 46 16 32 6 Z"/><path d="M32 6 V54 M16 44 H48" opacity=".5"/><circle cx="32" cy="30" r="7" opacity=".8"/></svg>',
+    ruzhang:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M32 6 L58 32 L32 58 L6 32 Z"/><circle cx="32" cy="32" r="9" opacity=".85"/><path d="M32 12 V20 M32 44 V52 M12 32 H20 M44 32 H52" opacity=".6"/></svg>',
+    xunyao:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 36 C22 18 42 18 56 36" opacity=".85"/><path d="M12 44 C26 26 38 26 52 44" opacity=".45"/><circle cx="56" cy="36" r="4"/><path d="M52 30 L60 26 L58 34 Z" opacity=".6"/></svg>',
+    fuxun:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M32 8 L56 18 V38 C56 50 44 56 32 58 C20 56 8 50 8 38 V18 Z"/><path d="M32 24 V44 M24 32 H40" opacity=".55"/><path d="M20 20 L28 24 M44 20 L36 24" opacity=".5"/></svg>'
+  };
+  window.MAP_EMBLEMS_INNER = MAP_EMBLEMS_INNER;
+  var MAP_EMBLEMS = {
+    xuniao:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M32 6 C18 16 14 30 16 44 L32 54 L48 44 C50 30 46 16 32 6 Z"/><path d="M32 6 V54 M16 44 H48" opacity=".5"/><circle cx="32" cy="30" r="7" opacity=".8"/></svg>',
+    ruzhang:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M32 6 L58 32 L32 58 L6 32 Z"/><circle cx="32" cy="32" r="9" opacity=".85"/><path d="M32 12 V20 M32 44 V52 M12 32 H20 M44 32 H52" opacity=".6"/></svg>',
+    xunyao:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 36 C22 18 42 18 56 36" opacity=".85"/><path d="M12 44 C26 26 38 26 52 44" opacity=".45"/><circle cx="56" cy="36" r="4"/><path d="M52 30 L60 26 L58 34 Z" opacity=".6"/></svg>',
+    fuxun:'<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M32 8 L56 18 V38 C56 50 44 56 32 58 C20 56 8 50 8 38 V18 Z"/><path d="M32 24 V44 M24 32 H40" opacity=".55"/><path d="M20 20 L28 24 M44 20 L36 24" opacity=".5"/></svg>'
+  };
+  var hmFrame = document.getElementById('heMapFrame');
+  var hmExp = document.getElementById('hmExplore');
+  var hmExpCity = null;
+  function openExplore(city){
+    var info = MAP_INFO[city]; if(!info || !hmExp) return;
+    hmExpCity = city;
+    var en = window.__lang === 'en';
+    var d = en ? info.en : info;
+    document.getElementById('hmxEmblem').innerHTML = MAP_EMBLEMS[city] || '';
+    document.getElementById('hmxKicker').textContent = en ? city.toUpperCase() : info.role;
+    document.getElementById('hmxKicker').textContent = en ? MAP_INFO[city].en.role : info.role;
+    document.getElementById('hmxName').textContent = {'xuniao':en?'Xuniao':'恓鸟城','ruzhang':en?'Ruzhang':'茹章城','xunyao':en?'Xunyao':'眴姚港','fuxun':en?'Fuxun':'伏熏岛'}[city];
+    document.getElementById('hmxMotto').textContent = '"' + d.motto + '"';
+    document.getElementById('hmxPol').textContent = d.pol;
+    document.getElementById('hmxHist').textContent = d.hist;
+    document.getElementById('hmxHidden').textContent = d.hidden;
+    hmExp.classList.add('on');
+    hmExp.setAttribute('aria-hidden', 'false');
+    if(hmFrame) hmFrame.classList.add('zoomed');
+  }
+  function closeExplore(){
+    if(!hmExp) return;
+    hmExp.classList.remove('on');
+    hmExp.setAttribute('aria-hidden', 'true');
+    if(hmFrame) hmFrame.classList.remove('zoomed');
+    hmExpCity = null;
+  }
+  var hmxClose = document.getElementById('hmxClose');
+  if(hmxClose) hmxClose.addEventListener('click', closeExplore);
   document.querySelectorAll('.hm-pin[data-city]').forEach(function(p){
     p.addEventListener('click', function(e){
       e.stopPropagation();
       var city = p.getAttribute('data-city');
-      switchPage('cityPage'); location.hash = 'cityPage';
-      setTimeout(function(){
-        if(window.showCityByKey && city) showCityByKey(city);
-      }, 60);
+      openExplore(city);
     });
   });
+  var hmxFull = document.getElementById('hmxFull');
+  if(hmxFull) hmxFull.addEventListener('click', function(){
+    var city = hmExpCity;
+    closeExplore();
+    switchPage('cityPage'); location.hash = 'cityPage';
+    setTimeout(function(){
+      if(window.showCityByKey && city) showCityByKey(city);
+    }, 80);
+  });
+  window.__mapClose = closeExplore;
   // 揭开真相 → 滚动到机密档案
   var secretBtn = document.getElementById('heSecret');
   if(secretBtn){
@@ -4566,13 +5065,15 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       settings: 'Settings',
       themeTitle: 'Theme',
       home_badge:'Canglu World · Worldbuilding Collection', home_title:'Canglu', home_sub:'An epic of politics & mysticism · Four powers in play · Whispers of a dead god',
-      home_archno:'Canglu Archive · Record No. CL-0001', home_conflict:'Civilizations raised upon the remains of a god must one day answer for the price they paid.', home_secret:'Uncover the truth ⟶',
-      home_btn1:'Enter the Canglu Archive', home_btn2:'About the Emblem', home_scroll:'Explore Canglu',
+      home_archno:'Canglu Archive · Record No. CL-0001', home_conflict:'Civilizations raised upon the remains of a god must one day answer for the price they paid.', home_secret:'Uncover the Truth', home_hint:'Choose an entrance and begin your exploration',
+      home_btn1:'Enter Canglu', home_btn2:'About the Emblem', home_btn3:'Explore the City-States', home_scroll:'Explore Canglu',
       home_geo_d:'Five seas encircle the land: Yuanhuang, Cangying, Bailing, Baihuang, Sixing. The Duanji and Mouxia ranges run north and south; Ziming Mountain rises 5,243 meters, the highest in Canglu. The Dujiao Rift tears the east, and Dongzhi Cliff reaches into the southern deep.', home_geo_f:'Explore the full terrain of Canglu',
       home_city_d:'Xuniao grieves, Ruzhang feigns glory, Xunyao chases profit, Fuxun holds balance. Four city-states, four systems, four fates — from clan elders to divine monarchy, from merchant guilds to party democracy, Canglu\'s political spectrum runs deeper than you imagine.', home_city_f:'Uncover the truth of the four states',
       home_land_d:'The Wuzhou Desert — sand that drinks light, no day ever dawns, the deeper the darker, space itself unravels. Egen Mountain — a dead peak at the oasis\'s heart, anchor of the sleeping divine relic. Here, the laws of nature bend; the line between reality and illusion dissolves.', home_land_f:'Step into forbidden lands',
       home_cal_d:'Siyuan, Shucheng, Hengli — three eras beneath one sky. Twelve months, twelve fates: the frontier month, the war month, the sailing month, the sacrifice month. Time here is not a measure, but a measure of power.', home_cal_f:'Turn the pages of Canglu\'s timeline',
       home_time_d:'The Descent of the Dark Gleam; the Blood Sacrifice. The first king of Ruzhang offered himself for eternal prosperity — paid in the lifespans of all his people. The prophecy: one day the god will awaken and rewrite the order of the world.', home_time_f:'Blood sacrifice · Prophecy\'s end',
+      tl_e1:'The Relic Descends', tl_e2:'The Hengli Founding', tl_e3:'The Shucheng Founding', tl_e4:'The Triennial Rite', tl_e5:'The Generational Cycle', tl_e6:'The Final Prophecy',
+      tl_hint:'Drag the eras, unfold the chronicle of Canglu', tl_play:'▶ Play the eras',
       home_power_d:'The western war-state stands against the central hegemon, the eastern port plays both sides, the southern island watches coldly. Four powers in a silent game — and upon the board, a sleeping relic slowly stirs.',
       fac_kicker:'FOUR CITY-STATES · FOUR ANSWERS', fac_title:'The Four City-States', fac_sub:'Four systems, four fates. Choose a civilization and glimpse the board of Canglu\'s great game.',
       fac_enter:'Enter city archive →',
@@ -4587,14 +5088,25 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       sec_tag2:'TOP SECRET · LEVEL II', sec_t2:'Xuniao · The Other Face of Duanji', sec_o2:'Official records call it "glory of the frontier" — yet historians frown on the clan\'s ruthless training…',
       sec_h2:'Those exiled to the Duanji Mountains — folk manuscripts call it banishment. The true scale of the exile camps and their survival records are sealed at the highest level. The seal bears one line: Do not ask.',
       sec_tag3:'TOP SECRET · LEVEL I', sec_t3:'The Divine Relic · Prophecy of Awakening', sec_o3:'The prophecy: one day the god will fully awaken and rewrite the order of the world…',
-      sec_h3:'When that day comes, Ruzhang\'s "miracle" will collapse utterly, and the balance of Canglu will be remade. The Archive holds nine volumes of speculation on the Day of Awakening — eight are sealed. The only open volume says four words: Blood Sacrifice Delays.', home_power_f:'See the shape of the realm',
+      sec_h3:'When that day comes, Ruzhang\'s "miracle" will collapse utterly, and the balance of Canglu will be remade. The Archive holds nine volumes of speculation on the Day of Awakening — eight are sealed. The only open volume says four words: Blood Sacrifice Delays.',
+      ph_kicker:'THE HOLDERS OF POWER', ph_title:'The Holders of Power', ph_sub:'Who holds the levers of the four civilizations? Where the gears of system bite, there stand the few. A name list is reserved for the chronicles to come.',
+      ph_x_name:'The Grand Elder', ph_x_role:'Xuniao · Supreme Leader', ph_x_desc:'Chosen from the clan\'s "Luminaries," confirmed only with the people\'s assent; the seat is not for life — the aged must step down, and the corrupt may be jointly overthrown.',
+      ph_x_pos:'Stance · Clan balance · By the people\'s assent',
+      ph_r_name:'The Sovereign of Ruzhang', ph_r_role:'Ruzhang · Divine Monarchy', ph_r_desc:'Holding divine and martial power alike, ruling by claimed mandate of god; four ministries (Society, Economy, Foreign Affairs, Oversight) turn on the royal will, and the Ministry of Inspection may act beyond all law.',
+      ph_r_pos:'Stance · Divine mandate · The crime of erasure',
+      ph_y_name:'The Sea Merchants\' Guild', ph_y_role:'Xunyao · Council of Co-rule', ph_y_desc:'The greatest seafaring houses jointly govern; key decisions come from the Guild council. Nominally a vassal paying tribute to Ruzhang, in truth holding great autonomy.',
+      ph_y_pos:'Stance · Please all sides · Rise by trade',
+      ph_f_name:'Governing & Senate Parties', ph_f_role:'Fuxun · Party Democracy', ph_f_desc:'Elections every ten years: the Governing Party runs administration, the Senate Party oversees scrutiny and motions; unanimous Senate opposition voids any governing resolution.',
+      ph_f_pos:'Stance · Institutional balance · Pragmatic reason',
+      ph_note:'※ The name list is reserved for the chronicles to come — when this world\'s story truly begins, the holders of power will have names.', home_power_f:'See the shape of the realm',
       home_geo_sub:'Of mountains, seas, and the borders of civilization', home_city_sub:'The chessboard of four powers', home_land_sub:'Anomalous domains left by the divine relic', home_cal_sub:'The time systems that mark the passing of ages', home_time_sub:'The pivotal moments history remembers', home_power_sub:'The forces that will shape Canglu\'s future',
       home_cta:'Step into this land and uncover the truth of the world',
-      home_map_t:'Atlas of Canglu · A Survey of Mountains & Seas', home_map_cap:'Open the Gazetteer of Geography to unfold the land chapter by chapter',
+      home_map_t:'Atlas of Canglu · A Survey of Mountains & Seas', home_map_cap:'Click a city light to push the lens and inspect the city archive',
       mp_x:'Xuniao', mp_x_t:'Western War-State · City of Sorrowful Breath · Foot of the Duanji Range',
       mp_r:'Ruzhang', mp_r_t:'Central Theocracy · Capital of Hollow Glory · Shrine of Egen Mountain',
       mp_y:'Xunyao', mp_y_t:'Eastern Port · Hub of the Cangying Sea Routes',
       mp_f:'Fuxun', mp_f_t:'Southern Isle · The Zhisi Canal · Realm of Reason',
+      mpk_pol:'POLITICS', mpk_hist:'HISTORY', mpk_hidden:'CLASSIFIED', mpk_full:'Open full city archive →',
       hg_geo:'Seas, land & the great atlas', hg_city:'Four war-states, one continent', hg_land:'Wilds, spirits & hidden realms',
       hg_cal:'Three calendars, seasons & rites', hg_time:'From blood rites to the final prophecy', hg_power:'Four powers in a sword-balanced world',
       home_contact:'Contact Us',
@@ -4722,6 +5234,7 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
     if(window.__pmRender) setTimeout(window.__pmRender, 30);
     if(window.__contactLang) setTimeout(window.__contactLang, 30);
     if(window.__supportLang) setTimeout(window.__supportLang, 30);
+    if(window.__mapLang) setTimeout(window.__mapLang, 30);
     // 刷新今日沧陆历法牌
     if(window.__todayRender) setTimeout(window.__todayRender, 30);
     if(window.__atlasRefresh) setTimeout(window.__atlasRefresh, 60);
