@@ -225,6 +225,14 @@
   .city-card h4{color:var(--gold);font-size:19px;letter-spacing:3px;margin-bottom:4px}
   .city-card .role{color:var(--ink-dim);font-size:12.5px;letter-spacing:2px;margin-bottom:10px}
   .city-card p{font-size:13.5px;color:var(--ink);line-height:1.75;text-indent:0;margin:0;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+  .arch-city-card{position:relative;padding:22px 18px 20px;border-radius:4px;background:var(--arch-paper);border:1px solid var(--arch-line);box-shadow:0 3px 10px rgba(0,0,0,.25)}
+  .arch-city-card:hover{border-color:rgba(201,168,76,.5);transform:translateY(-3px)}
+  .arch-city-card .acc-no{position:absolute;top:12px;right:14px;font-size:10px;letter-spacing:3px;color:var(--gold-dim);font-style:italic}
+  .arch-city-card .acc-foot{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:8px;border-top:1px dashed rgba(200,162,74,.15);font-size:11px;color:var(--ink-dim)}
+  .arch-city-card .acc-seal{font-size:10px;letter-spacing:2px;color:var(--arch-seal);border:1px solid var(--arch-seal);padding:1px 6px;border-radius:2px;transform:rotate(-3deg);opacity:.8}
+  .arch-detail{margin:18px auto 26px}
+  .af-sealed .af-v{letter-spacing:1px;color:var(--arch-seal)}
+  .af-sealed .af-v::after{content:'（此条目由沧陆历史研究院封存）';font-size:11px;color:var(--ink-dim);margin-left:6px}
   .fade{animation:fadeIn .25s ease}
   @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
   /* 年表 */
@@ -1739,6 +1747,13 @@ var _hmt = _hmt || [];
   <div class="doc fade">
     <h1><span class="h-diamond"></span><span class="h-title" data-i18n="t_city">城邦志</span><span class="h-diamond"></span></h1>
     <div class="lead" data-i18n="l_city">沧陆四大核心城邦</div>
+    <div class="arch-doc-head">
+      <div class="adh-row"><span class="adh-label">文献编号</span><span class="adh-val">CL-CITY-02</span></div>
+      <div class="adh-row"><span class="adh-label">馆藏来源</span><span class="adh-val" data-i18n="city_src">沧陆历史研究院 · 城邦考据卷宗（四邦使节互访档案辑录）</span></div>
+      <div class="adh-row"><span class="adh-label">考据状态</span><span class="adh-val" data-i18n="city_status">官修与民间两说并录 · 封存条目不予公开</span></div>
+      <div class="adh-row"><span class="adh-label">整理时间</span><span class="adh-val">沧陆历 敛月 · 研究院丙寅批注</span></div>
+    </div>
+    <div class="arch-note" data-i18n="city_pre">按：四邦之档案，最难者不在考其制度，而在辨其虚实。茹章官修史书煌煌万言，民间抄本却字字见血；恓鸟以军功立传，其内政却系于宗族一脉；眴姚账册如海，偏无一页写自己；伏熏宪书最明，外人却永不得见其全貌。故凡涉及各邦讳言之秘，本卷一律依研究院规程以"封存"示之——非不知也，不录也。</div>
     <div class="logo-hero glass-shine">
       <img class="logo-hero-img" src="assets/logo_hero_gold.png" alt="沧陆全域LOGO">
       <div class="logo-hero-text">
@@ -2150,6 +2165,16 @@ const CITY_SECS = {
 };
 const CITIES = [
   {name:'恓鸟城', role:'西部山城军邦', motto:'薪火相传，守护故土', summary:'别称"悲息之城"，冶铁业冠绝沧陆。宗族长老制 + 卫国者庭军事制衡，崇拜断脊山脉。',
+   arch:{
+      no:'卷·壹', head:'恓鸟城 · 西部山城军邦', sealTag:'军邦实录',
+      level:'文明等级：二级 · 军邦（官修正史定级）；民间自视"西境唯一可恃之墙"。',
+      founded:'建立时间：戍城年元年（对应祀元200年）——以恓鸟建国为纪元之始，城在则年在。',
+      official:'官方记录：别称"悲息之城"。冶铁业冠绝沧陆，兵器甲胄精良耐用；宗族长老制与卫国者庭军事制衡并行，大长老由"崇明者"中选拔、民众认可方可上位，非终身制。',
+      disputed:'争议记录：宗族内部培养体系之严苛，史家多有微词——资质低劣、品行不端者被发配断脊山脉充军，官修正史称之"戍边荣耀"，民间抄本则谓之"放逐"。两说并存。',
+      sealed:'封存内容：██████ 断脊山脉流放营之实际规模与生还记录（院方封存）',
+      gloss:'院按：恓鸟以军功立传，然其立国之本实为"民众认可"四字——大长老可被民众联合推翻，此制在四邦中独树一帜，或为军邦内部最深的制衡。',
+      archSeal:'恓鸟守城司 · 印'
+   },
    detail:[
     '别称"悲息之城"，整座城市常年笼罩着苍凉沉重的氛围。多年的边境战火给城邦留下了深刻的创伤，也淬炼出了民众极强的凝聚力。城邦曾一度人烟萧条、濒临覆灭，最终凭借全民死守守住了疆土，如今已是西部不可小觑的核心势力。',
     '凛冽的山风与寒意是城市的印记，"薪火相传、守护故土"是刻在所有民众骨子里的精神内核，凛冽寒风中的万家灯火，是恓鸟城人心中永恒的归宿。',
@@ -2164,6 +2189,16 @@ const CITIES = [
     '精神信仰：没有正式宗教体系，核心精神是"敬自然、重血缘、守故土"，崇拜断脊山脉，将其视作城邦的守护神；重视宗族血脉传承，将先祖的荣光与教训视为最高行为准则。'
    ]},
   {name:'茹章城', role:'中部神权霸主', motto:'君权神授 · 永恒繁荣', summary:'沧陆公认最强大的城邦，表面繁华鼎盛——实则被百年寿命诅咒笼罩，全城活不过45岁。',
+   arch:{
+      no:'卷·贰', head:'茹章城 · 中部神权霸主', sealTag:'官修正史',
+      level:'文明等级：一级 · 霸主（四邦公认，疆域诸邦之最）；官方自诩"君权神授"。',
+      founded:'建立时间：祀元元年（纪元即"献祭"）——官修史书称"幽荧降世"，民间抄本则谓"血祭封神"。',
+      official:'官方记录：全盛的大陆中心，经济、文化、军事全面鼎盛；君主集宗教神权、军政大权于一身；朝贡体系吸纳周边小邦，四部（社会/经济/外事/监察）以君主意志为轴运转。',
+      disputed:'争议记录：官方记载恒言强盛"天经地义"；民间流传其"极速崛起"如虚伪的奇迹，且所有质疑崛起真相者皆被冠以"删改围罪"秘密处死——两说相抵牾，研究院存疑。',
+      sealed:'封存内容：████████ 扼根山灵祠内"神之遗骸"之相关记录；全城寿命诅咒之实证（院方封存，涉"祀元秘档"）',
+      gloss:'院按：茹章档案最似完备，实则最不可信——其官修史书之齐整，恰是思想管控之痕迹。凡涉及寿命、崛起、献祭者，卷宗皆现"删改"之迹。本卷谨录两说，不置可否。',
+      archSeal:'茹章太史令 · 印'
+   },
    detail:[
     '表象：全盛的大陆中心。是沧陆公认最繁荣、最强大的城邦，经济、文化、军事全面鼎盛，民众生活富庶安乐，疆域面积为诸邦之最，周边大量小城邦主动称臣朝贡。官方修撰的史籍中全是辉煌记载，强盛仿佛亘古不变、天经地义。',
     '内里：被诅咒的虚假繁荣。辉煌的表象之下藏着毁灭的宿命：茹章城最初只是一个落后的农耕小城邦，却在极短时间内毫无征兆地爆发式崛起，如同一场"虚伪的奇迹"，随后开始无休止的对外扩张，疆域不断膨胀。',
@@ -2176,6 +2211,16 @@ const CITIES = [
     '思想管控与对外扩张：对内实行严格的思想管控，禁止任何质疑城邦历史、探讨寿命异常的言论，用"删改围罪"清除所有真相的知晓者；对外持续推行扩张政策，一方面通过朝贡体系吸纳周边小邦，另一方面用军事手段征服不臣服的势力，通过不断扩张转移民众对内部寿命问题的注意力。'
    ]},
   {name:'眴姚城', role:'东部商贸港城', motto:'左右逢源 · 以商立邦', summary:'沧陆东部最大港口，苍瀛海航线核心枢纽，海商公会共治，全大陆的信息集散地。',
+   arch:{
+      no:'卷·叁', head:'眴姚城 · 东部商贸港城', sealTag:'商会文书',
+      level:'文明等级：二级 · 商港（官方未定级；海商公会自认"四海枢纽"）。',
+      founded:'建立时间：无独立纪元——商行、海关、货单一律沿用祀元，与茹章通商毫无阻碍。',
+      official:'官方记录：海商公会共治，核心决策由公会议事会共同商议；贸易网络覆盖沧陆东西南北，向西经肆星海抵中部、西部大陆，向东远航苍瀛海诸岛，向南连通伏熏岛、南引群岛。',
+      disputed:'争议记录：名义上向茹章称臣朝贡，实则自治权极高——史家讥其"无历可考、无君可述"；亦有学者以为，不立历、不称君，恰是其立国之道。两说并存。',
+      sealed:'封存内容：████ 各邦密档之中转记录（眴姚为信息集散地，院方封存涉及他邦之条目）',
+      gloss:'院按：眴姚账册如海，偏无一页写自己——其档案之"全"，恰以"无我"为代价。以他邦之历纪自己之年者，四邦唯此一例。',
+      archSeal:'眴姚海商会 · 印'
+   },
    detail:[
     '坐落于盎季地东侧沿海，是沧陆东部最大的港口城市，也是苍瀛海航线的核心枢纽。城市风气开放，人员往来混杂，是全沧陆的信息交汇地与商品集散地。',
     '城市依港而建，码头、商行、会馆林立，既有豪奢的商人宅邸，也有拥挤的水手街区，充满了市井与商贸的活力。',
@@ -2186,6 +2231,16 @@ const CITIES = [
     '在各方势力之间奉行左右逢源的中立策略，不主动站队，与所有城邦都保持贸易往来，是大陆势力之间的缓冲带与信息中转站。'
    ]},
   {name:'伏熏城', role:'海岛民主之邦', motto:'政团民主 · 务实理性', summary:'火山岛上的独立文明，政团民主制，十年换届选举，多数民众为无神论者。',
+   arch:{
+      no:'卷·肆', head:'伏熏城 · 海岛民主之邦', sealTag:'岛邦宪书',
+      level:'文明等级：三级 · 岛邦（官方未参与大陆定级；自衡历起自成一脉）。',
+      founded:'建立时间：衡历元年（对应祀元160年）——伏熏城邦统一、立衡法、定商事、规整匠艺之年。',
+      official:'官方记录：政团民主制，十年换届；执政团执掌日常行政，参议团负责议事监督（总席位不超过十）；参议团全员反对可废除执政团决议。对外边界管控森严，外人仅限平安港活动。',
+      disputed:'争议记录：管控之严与民主之名相悖——外来商人严禁踏入狩脊山以西，违者永久驱逐。学者或谓其"民主只对岛内公民"，或谓"孤岛自守，别有深意"。两说并存。',
+      sealed:'封存内容：████ 狩脊山以西腹地之全部地理与人口记录（伏熏官方拒绝向大陆使节公开）',
+      gloss:'院按：伏熏宪书最明，外人却永不得见其全貌——其档案之"透明"，恰止于平安港的船桅。四邦之中，封存最彻底者，反是最民主者。',
+      archSeal:'伏熏衡法院 · 印'
+   },
    detail:[
     '坐落于火山岛伏熏岛的中部腹地，远离大陆，发展出了独立的伏熏文明，与大陆城邦的文化、制度差异显著。',
     '岛内修有一条贯穿南北的之丝运河，以伏熏城为中心枢纽，串联起全岛的航运与灌溉，是海岛的经济命脉。',
@@ -2221,8 +2276,43 @@ var EN_MOTTOS = {
   '左右逢源 · 以商立邦':'Pleasing all sides · A state built on trade',
   '务实理性 · 自守孤岛':'Pragmatic and rational · Guarding the lone isle'
 };
+var CITY_ARCH_EN = {
+  '文明等级':'Civilization Rank','建立时间':'Founded','官方记录':'Official Records','争议记录':'Disputed Accounts','封存内容':'Sealed Contents',
+  '卷·壹':'Scroll I','卷·贰':'Scroll II','卷·叁':'Scroll III','卷·肆':'Scroll IV',
+  '军邦实录':'War-State Record','官修正史':'Official Chronicle','商会文书':'Guild Ledger','岛邦宪书':'Isle Charter',
+  '恓鸟城 · 西部山城军邦':'Xuniao · Western Mountain War-State','茹章城 · 中部神权霸主':'Ruzhang · Central Theocratic Hegemon','眴姚城 · 东部商贸港城':'Xunyao · Eastern Merchant Port','伏熏城 · 海岛民主之邦':'Fuxun · Island Democracy',
+  '文明等级：二级 · 军邦（官修正史定级）；民间自视"西境唯一可恃之墙"。':'Civilization rank: Second · War-state (per official annals); the folk see it as "the only wall the west can trust."',
+  '建立时间：戍城年元年（对应祀元200年）——以恓鸟建国为纪元之始，城在则年在。':'Founded: Year One of the Shucheng Era (Siyuan 200) — the era begins with the city\'s founding; while the city stands, the year stands.',
+  '官方记录：别称"悲息之城"。冶铁业冠绝沧陆，兵器甲胄精良耐用；宗族长老制与卫国者庭军事制衡并行，大长老由"崇明者"中选拔、民众认可方可上位，非终身制。':'Official: styled the "City of Sorrowful Breath." Its ironwork outshines the continent; clan-elder rule balances the Guards\' Court; the Grand Elder rises from the "Enlightened" with the people\'s assent, and the seat is not for life.',
+  '争议记录：宗族内部培养体系之严苛，史家多有微词——资质低劣、品行不端者被发配断脊山脉充军，官修正史称之"戍边荣耀"，民间抄本则谓之"放逐"。两说并存。':'Disputed: historians frown on the clan\'s brutal training — the unfit are sent to garrison the Duanji Mountains; official annals call it "glory of the frontier," folk manuscripts call it exile. Both accounts stand.',
+  '封存内容：██████ 断脊山脉流放营之实际规模与生还记录（院方封存）':'Sealed: ██████ the true scale and survival records of the Duanji exile camps (withheld by the Institute)',
+  '院按：恓鸟以军功立传，然其立国之本实为"民众认可"四字——大长老可被民众联合推翻，此制在四邦中独树一帜，或为军邦内部最深的制衡。':'Institute note: Xuniao chronicles itself by arms, yet its foundation is the people\'s assent — the Grand Elder may be overthrown by common accord, a mechanism unique among the four states, perhaps the deepest check within the war-state.',
+  '恓鸟守城司 · 印':'Seal of the Xuniao City Guard',
+  '文明等级：一级 · 霸主（四邦公认，疆域诸邦之最）；官方自诩"君权神授"。':'Civilization rank: First · Hegemon (acknowledged by all, the largest domain); the throne styles itself "divinely mandated."',
+  '建立时间：祀元元年（纪元即"献祭"）——官修史书称"幽荧降世"，民间抄本则谓"血祭封神"。':'Founded: Siyuan Year One (the era itself is "the sacrifice") — official annals call it the "Descent of the Dark Gleam"; folk manuscripts name it the "Blood Sacrifice."',
+  '官方记录：全盛的大陆中心，经济、文化、军事全面鼎盛；君主集宗教神权、军政大权于一身；朝贡体系吸纳周边小邦，四部（社会/经济/外事/监察）以君主意志为轴运转。':'Official: the resplendent heart of the continent; the sovereign holds divine and martial power alike; tribute binds the lesser states; four ministries (Society, Economy, Foreign Affairs, Oversight) turn on the royal will.',
+  '争议记录：官方记载恒言强盛"天经地义"；民间流传其"极速崛起"如虚伪的奇迹，且所有质疑崛起真相者皆被冠以"删改围罪"秘密处死——两说相抵牾，研究院存疑。':'Disputed: the annals call its greatness "heaven-ordained"; folk lore holds its meteoric rise a hollow miracle, and all who questioned it were put to death under the "crime of erasure." The Institute records the conflict without verdict.',
+  '封存内容：████████ 扼根山灵祠内"神之遗骸"之相关记录；全城寿命诅咒之实证（院方封存，涉"祀元秘档"）':'Sealed: ████████ records concerning the "divine remains" in Egen Mountain\'s shrine; evidence of the lifespan curse (withheld — the Siyuan Secret Dossier)',
+  '院按：茹章档案最似完备，实则最不可信——其官修史书之齐整，恰是思想管控之痕迹。凡涉及寿命、崛起、献祭者，卷宗皆现"删改"之迹。本卷谨录两说，不置可否。':'Institute note: Ruzhang\'s dossier seems the most complete, yet is the least trustworthy — the very neatness of its annals betrays the censor\'s hand. Every page touching lifespan, rise, or sacrifice shows the scar of erasure. Both accounts are recorded; no verdict is given.',
+  '茹章太史令 · 印':'Seal of the Ruzhang Grand Historian',
+  '文明等级：二级 · 商港（官方未定级；海商公会自认"四海枢纽"）。':'Civilization rank: Second · Port (no official grade; the Maritime Guild styles itself "hub of the four seas").',
+  '建立时间：无独立纪元——商行、海关、货单一律沿用祀元，与茹章通商毫无阻碍。':'Founded: no era of its own — bills, customs and manifests all use Siyuan, trading with Ruzhang without friction.',
+  '官方记录：海商公会共治，核心决策由公会议事会共同商议；贸易网络覆盖沧陆东西南北，向西经肆星海抵中部、西部大陆，向东远航苍瀛海诸岛，向南连通伏熏岛、南引群岛。':'Official: ruled by the Maritime Guild; trade spans all of Canglu — west through the Sixing Sea to the central and western continents, east to the Cangying isles, south to Fuxun Island and the Nanyin Archipelago.',
+  '争议记录：名义上向茹章称臣朝贡，实则自治权极高——史家讥其"无历可考、无君可述"；亦有学者以为，不立历、不称君，恰是其立国之道。两说并存。':'Disputed: nominally tributary to Ruzhang yet almost wholly self-ruled — scholars mock it as "a state without a calendar or a king," while others argue that having neither is precisely its statecraft. Both views stand.',
+  '封存内容：████ 各邦密档之中转记录（眴姚为信息集散地，院方封存涉及他邦之条目）':'Sealed: ████ transit copies of other states\' secret dossiers (Xunyao is the continent\'s clearing-house; entries concerning other states are withheld)',
+  '院按：眴姚账册如海，偏无一页写自己——其档案之"全"，恰以"无我"为代价。以他邦之历纪自己之年者，四邦唯此一例。':'Institute note: Xunyao\'s ledgers are vast as the sea, yet not one page speaks of itself — its "completeness" is bought with selflessness. The only state to mark its years by another\'s calendar.',
+  '眴姚海商会 · 印':'Seal of the Xunyao Maritime Guild',
+  '文明等级：三级 · 岛邦（官方未参与大陆定级；自衡历起自成一脉）。':'Civilization rank: Third · Isle (no part in continental grading; a lineage of its own since the Hengli era).',
+  '建立时间：衡历元年（对应祀元160年）——伏熏城邦统一、立衡法、定商事、规整匠艺之年。':'Founded: Hengli Year One (Siyuan 160) — the year of unification, the Balanced Law, trade regulations and craft standards.',
+  '官方记录：政团民主制，十年换届；执政团执掌日常行政，参议团负责议事监督（总席位不超过十）；参议团全员反对可废除执政团决议。对外边界管控森严，外人仅限平安港活动。':'Official: party democracy with decennial elections; the ruling bloc governs, the council oversees (no more than ten seats); unanimous council dissent can void a ruling-bloc decree. Borders are tightly controlled; outsiders may trade only in Peace Harbor.',
+  '争议记录：管控之严与民主之名相悖——外来商人严禁踏入狩脊山以西，违者永久驱逐。学者或谓其"民主只对岛内公民"，或谓"孤岛自守，别有深意"。两说并存。':'Disputed: the strictness of control sits ill with the name of democracy — outsiders are barred from the land west of Mount Shouji on pain of permanent exile. Some scholars call it "democracy for citizens only"; others read deeper intent in the island\'s self-containment. Both views stand.',
+  '封存内容：████ 狩脊山以西腹地之全部地理与人口记录（伏熏官方拒绝向大陆使节公开）':'Sealed: ████ all geographic and census records of the hinterland west of Mount Shouji (withheld by Fuxun from continental envoys)',
+  '院按：伏熏宪书最明，外人却永不得见其全貌——其档案之"透明"，恰止于平安港的船桅。四邦之中，封存最彻底者，反是最民主者。':'Institute note: Fuxun\'s charter is the clearest, yet no outsider has ever seen it whole — its "transparency" ends at Peace Harbor\'s masts. Of the four states, the one that seals the most is the most democratic.',
+  '伏熏衡法院 · 印':'Seal of the Fuxun Balance Court',
+};
 function cText(t){
   if(window.__lang==='en'){
+    if(CITY_ARCH_EN && CITY_ARCH_EN[t]) return CITY_ARCH_EN[t];
     if(EN_SUMMARIES[t]) return EN_SUMMARIES[t];
     if(EN_DETAILS[t]) return EN_DETAILS[t];
   }
@@ -2231,16 +2321,33 @@ function cText(t){
 function renderCities(){
   if(!grid) return;
   grid.innerHTML = '';
-  CITIES.forEach(c=>{
+  CITIES.forEach((c, idx)=>{
     const card = document.createElement('div');
-    card.className = 'city-card glass-shine';
-    card.innerHTML = '<h4>'+cName(c)+'</h4><div class="role">'+cRole(c)+'</div><p>'+cText(c.summary)+'</p>';
+    card.className = 'city-card arch-city-card';
+    card.setAttribute('data-arch', '卷·' + '壹贰叁肆'[idx]);
+    card.innerHTML = '<div class="acc-no">档案 ' + String(idx+1).padStart(2,'0') + '</div>'
+      + '<h4>'+cName(c)+'</h4><div class="role">'+cRole(c)+'</div><p>'+cText(c.summary)+'</p>'
+      + '<div class="acc-foot"><span>'+cText((c.arch&&c.arch.sealTag)||'')+'</span><span class="acc-seal">'+cText((c.arch&&c.arch.archSeal)||'档案')+'</span></div>';
     card.onclick = ()=> showCity(c);
     grid.appendChild(card);
   });
 }
 function showCity(c){
-  let html = '<h2>'+cName(c)+' · '+cRole(c)+'</h2><p class="note">"'+(window.__lang==='en'?(EN_MOTTOS[c.motto]||c.motto):c.motto)+'"</p>';
+  let html = '<h2>'+cName(c)+' · '+cRole(c)+'</h2><p class="note">"'+((window.__lang==='en')?(EN_MOTTOS[c.motto]||c.motto):c.motto)+'"</p>';
+  // 档案头部字段
+  const arch = c.arch || {};
+  html += '<div class="arch-entry arch-detail">'
+    + '<div class="arch-entry-head"><span class="aeh-no">'+cText(arch.no||'')+'</span><h3>'+cText(arch.head||'')+'</h3><span class="aeh-seal">'+cText(arch.sealTag||'')+'</span></div>'
+    + '<div class="arch-fields">'
+    + '<div class="af-row"><span class="af-k">'+cText('文明等级')+'</span><span class="af-v">'+cText(arch.level||'')+'</span></div>'
+    + '<div class="af-row"><span class="af-k">'+cText('建立时间')+'</span><span class="af-v">'+cText(arch.founded||'')+'</span></div>'
+    + '<div class="af-row"><span class="af-k">'+cText('官方记录')+'</span><span class="af-v">'+cText(arch.official||'')+'</span></div>'
+    + '<div class="af-row"><span class="af-k">'+cText('争议记录')+'</span><span class="af-v">'+cText(arch.disputed||'')+'</span></div>'
+    + '<div class="af-row af-sealed"><span class="af-k">'+cText('封存内容')+'</span><span class="af-v">'+cText(arch.sealed||'')+'</span></div>'
+    + '</div>'
+    + '<div class="arch-gloss">'+cText(arch.gloss||'')+'</div>'
+    + '<div class="arch-seal-red">'+cText(arch.archSeal||'')+'</div>'
+    + '</div>';
   // 分类小节渲染：分类标题变化时插入小节标题
   const secs = CITY_SECS[c.name] || [];
   let lastSec = '';
@@ -3889,7 +3996,9 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       settings: '设置',
       themeTitle: '主题设置',
       t_geo:'地理志', t_city:'城邦志', t_land:'秘境志', t_cal:'历法志', t_time:'纪年志', t_power:'势力志',
-      l_geo:'沧陆山河 · 海洋与陆地', l_city:'沧陆四大核心城邦', l_land:'山川人文意象与秘境',
+      l_geo:'沧陆山河 · 海洋与陆地', l_city:'沧陆四大核心城邦',
+      city_src:'沧陆历史研究院 · 城邦考据卷宗（四邦使节互访档案辑录）', city_status:'官修与民间两说并录 · 封存条目不予公开',
+      city_pre:'按：四邦之档案，最难者不在考其制度，而在辨其虚实。茹章官修史书煌煌万言，民间抄本却字字见血；恓鸟以军功立传，其内政却系于宗族一脉；眴姚账册如海，偏无一页写自己；伏熏宪书最明，外人却永不得见其全貌。故凡涉及各邦讳言之秘，本卷一律依研究院规程以"封存"示之——非不知也，不录也。', l_land:'山川人文意象与秘境',
       l_cal:'沧陆各邦历法 · 通用月份', l_time:'沧陆大事编年 · 从血祭封神到预言终局', l_power:'四方势力格局 · 世界核心主线',
       h2_geo1:'一、海洋与水域', h2_geo2:'二、陆地单元', h2_geo3:'三、地形地貌',
       h2_geo4:'四、河流水系', h2_geo5:'五、人文聚落', h2_geo6:'六、大型工程地标',
@@ -3969,7 +4078,9 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       ct_title:'Contact Canglu', ct_sub:'Come talk to me about this world', ct_wechat:'WeChat ID', ct_qq:'QQ Number', ct_copy:'Copy', home_support:'Support Us ★',
       sp_title:'Support Canglu', sp_sub:'If you love this world, drop a like or a word', sp_likehint:'Love this world? Tap to like', sp_name:'Nickname', sp_ph:'Say something…', sp_send:'Post', sp_empty:'No messages yet. Be the first!',
       t_geo:'Geography', t_city:'City-States', t_land:'Mystic Lands', t_cal:'Calendar', t_time:'Chronicle', t_power:'Powers',
-      l_geo:'Canglu Mountains & Seas', l_city:'The Four Great City-States', l_land:'Mountains, Icons & Mystic Lands',
+      l_geo:'Canglu Mountains & Seas', l_city:'The Four Great City-States',
+      city_src:'Canglu Institute of History · Dossier of the Four States (compiled from envoys\' mutual-visit records)', city_status:'Official and folk accounts both recorded · sealed entries withheld',
+      city_pre:'Note: the hardest part of these four dossiers is not verifying their institutions but discerning truth from semblance. Ruzhang\'s official annals run to ten thousand words, yet every line of the folk manuscripts draws blood; Xuniao builds its chronicle on military glory, but its governance hangs on a single clan line; Xunyao\'s ledgers are vast as the sea, yet not one page speaks of itself; Fuxun\'s charter is the clearest of all — and no outsider has ever seen it whole. Wherever a state keeps its own secret, this volume marks it "sealed," per Institute procedure — not for want of knowing, but of recording.', l_land:'Mountains, Icons & Mystic Lands',
       l_cal:'Calendars of the States · Common Months', l_time:'Chronicle of Canglu · From the Blood Sacrifice to the Final Prophecy', l_power:'The Four Powers · Core Threads of the World',
       h2_geo1:'I. Seas & Waters', h2_geo2:'II. Landmasses', h2_geo3:'III. Terrain & Landforms',
       h2_geo4:'IV. Rivers & Waterways', h2_geo5:'V. Settlements', h2_geo6:'VI. Great Engineering Works',
