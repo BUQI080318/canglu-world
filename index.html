@@ -163,11 +163,17 @@
   }
   .glass-shine:hover::after{opacity:1}
   .glass-shine > *{position:relative;z-index:2}
-  /* 页面切换：错层浮现动画 */
+  /* 页面切换：档案翻页感（错层浮现 + 左缘金线揭开） */
   section.page.on .doc > *{opacity:0;transform:translateY(16px);animation:riseIn .55s cubic-bezier(.22,.61,.36,1) forwards;animation-delay:var(--rd,0s)}
+  section.page.on .doc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(180deg,transparent,var(--gold),transparent);opacity:0;animation:pageOpen .7s cubic-bezier(.22,.61,.36,1) forwards}
   @keyframes riseIn{
     from{opacity:0;transform:translateY(18px);filter:blur(3px)}
     to{opacity:1;transform:none;filter:blur(0)}
+  }
+  @keyframes pageOpen{
+    0%{opacity:0;transform:scaleY(0);transform-origin:top}
+    45%{opacity:.85}
+    100%{opacity:0;transform:scaleY(1);transform-origin:top}
   }
   /* 卡片悬停缩放 */
   .city-card,.acc-card,.month-card,.tl-item,.calc{transition:transform .25s cubic-bezier(.22,.61,.36,1),box-shadow .25s,border-color .25s}
@@ -1234,13 +1240,37 @@ html[data-theme="light"] .ph-card.ph-fuxun{--ph-c:#6a3fa0}
 .al-body p{font-size:12.5px;line-height:1.7;color:var(--ink-dim);margin:0}
 /* 探索记录 */
 .arc-ex-body{padding:18px;border:1px solid rgba(200,162,74,.24);border-radius:4px;background:linear-gradient(160deg,rgba(200,162,74,.05),transparent 75%);max-width:720px}
-.ax-level{margin-bottom:14px}
-.ax-lv-k{font-size:12px;letter-spacing:2px;color:var(--ink-dim)}
-.ax-level b{font-size:17px;letter-spacing:3px;color:var(--gold);font-family:"KaiTi","STKaiti","楷体",serif;margin-left:8px}
-.ax-items{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
-.ax-item{font-size:11.5px;letter-spacing:1px;padding:4px 12px;border:1px solid rgba(200,162,74,.25);border-radius:2px;color:var(--ink-dim)}
-.ax-item.ax-done{color:#8fbf6a;border-color:rgba(143,191,106,.45);background:rgba(143,191,106,.06)}
+/* 档案进度（纯记录，未来版本接入等级系统） */
+.ax-progress{display:flex;align-items:center;gap:10px;margin-bottom:16px;font-size:11.5px;letter-spacing:2px}
+.ax-p-k{color:var(--ink-dim);flex-shrink:0}
+.ax-p-bar{flex:1;height:4px;background:rgba(200,162,74,.14);border-radius:2px;overflow:hidden}
+.ax-p-bar i{display:block;height:100%;background:linear-gradient(90deg,rgba(200,162,74,.55),var(--gold));border-radius:2px;transition:width .8s cubic-bezier(.22,.61,.36,1)}
+.ax-p-v{color:var(--gold);flex-shrink:0;font-variant-numeric:tabular-nums}
+/* 探索条目：档案卡感 */
+.ax-items{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:14px}
+.ax-item{font-size:11.5px;letter-spacing:1px;padding:5px 10px 5px 8px;border:1px solid rgba(200,162,74,.22);border-radius:3px;color:var(--ink-dim);display:inline-flex;align-items:center;gap:6px;position:relative;transition:border-color .3s,color .3s,background .3s,transform .3s,box-shadow .3s}
+.ax-mark{font-size:12px;line-height:1}
+.ax-tag{font-size:9.5px;letter-spacing:2px;opacity:.85;border-left:1px solid rgba(200,162,74,.2);padding-left:6px}
+/* 已探索：金勾+已记录盖章 */
+.ax-item.ax-done{color:var(--gold);border-color:rgba(200,162,74,.5);background:linear-gradient(135deg,rgba(200,162,74,.10),rgba(200,162,74,.03));box-shadow:inset 0 0 12px rgba(200,162,74,.06)}
+.ax-item.ax-done .ax-mark{color:var(--gold);text-shadow:0 0 8px rgba(200,162,74,.6)}
+.ax-item.ax-done .ax-tag{color:rgba(200,162,74,.75)}
+/* 未探索：神秘暗框+模糊 */
+.ax-item.ax-lock{color:var(--ink-dim);border-style:dashed;border-color:rgba(200,162,74,.16);filter:grayscale(.3)}
+.ax-item.ax-lock .ax-mark{opacity:.45}
+.ax-item.ax-lock .ax-tag{color:rgba(160,160,180,.5);border-left-color:rgba(200,162,74,.14)}
+/* 解锁动画：盖章+光晕 */
+.ax-item.ax-unlock{animation:axStamp .9s cubic-bezier(.2,1.4,.4,1)}
+@keyframes axStamp{
+  0%{transform:scale(.92);box-shadow:0 0 0 rgba(200,162,74,0)}
+  35%{transform:scale(1.06);box-shadow:0 0 18px rgba(200,162,74,.45);border-color:var(--gold)}
+  60%{transform:scale(.98)}
+  100%{transform:scale(1)}
+}
 .ax-note{font-size:11.5px;letter-spacing:1px;color:var(--ink-dim);opacity:.8}
+/* 浅色主题适配 */
+html[data-theme="light"] .ax-item.ax-lock{color:#8a7a60;filter:none}
+html[data-theme="light"] .ax-item.ax-lock .ax-tag{color:#a09070}
 /* 浅色主题 */
 html[data-theme="light"] .ao-card,html[data-theme="light"] .arc-rule-card,html[data-theme="light"] .arc-fig-card,html[data-theme="light"] .arc-news-item,html[data-theme="light"] .arc-ex-body{background:linear-gradient(160deg,rgba(150,110,40,.06),transparent 75%)}
 html[data-theme="light"] .arc-sealed-card{background:linear-gradient(160deg,rgba(139,38,53,.06),transparent 80%)}
@@ -1977,6 +2007,10 @@ html[data-theme="light"] .he-badge{background:rgba(255,255,255,.5)}
     display:flex;justify-content:center;gap:30px;flex-wrap:wrap}
   .hf-item{font-size:12px;letter-spacing:2px;color:var(--ink-dim);text-decoration:none;transition:color .2s}
   a.hf-item:hover{color:var(--gold)}
+  /* 更新公告入口：档案馆通知质感 */
+  .hf-update{position:relative;padding-left:14px}
+  .hf-update::before{content:'';position:absolute;left:0;top:50%;width:6px;height:6px;transform:translateY(-50%) rotate(45deg);border:1px solid var(--gold-dim);background:rgba(200,162,74,.14);transition:background .25s,box-shadow .25s}
+  .hf-update:hover::before{background:var(--gold);box-shadow:0 0 8px rgba(200,162,74,.6)}
   @media (max-width:700px){
     .home-footer{gap:18px}
   }
@@ -3240,7 +3274,7 @@ var _hmt = _hmt || [];
     </div>
     <h2 class="wc-title" data-txt="欢迎来到沧陆" data-i18n="wc_t"></h2>
     <p class="wc-sub" data-i18n="wc_s">折翼一陆 · 剑衡四方</p>
-    <div class="wc-version" id="wcVersion" data-i18n="wc_v">当前版本 v1.3 · 沧陆世界</div>
+    <div class="wc-version" id="wcVersion" data-i18n="wc_v">当前版本 v1.4 · 沧陆世界</div>
     <div class="wc-line"></div>
     <button class="wc-enter" id="wcEnter" data-i18n="wc_b">踏入沧陆</button>
     <button class="wc-close" id="wcClose" title="跳过">✕</button>
@@ -4491,8 +4525,21 @@ function revealItem(el){
 
 /* ============ 档案更新系统（更新公告） ============ */
 // 版本数据：集中管理，未来只在此数组追加新版本对象即可
-var CANG_LU_CURRENT = "v1.3";
+var CANG_LU_CURRENT = "v1.4";
 var CANG_LU_UPDATES = [
+  {
+    version:"v1.4",
+    date:"2026-08-18",
+    title:"世界入口优化",
+    type:"site",
+    zh:"世界入口优化",
+    en:"The World Gate Refined",
+    content:[
+      {title:"系统优化", description:"修复部分探索记录保存异常。优化页面状态同步。优化档案浏览体验。", title_en:"System Optimization", desc_en:"Fixed exploration-record saving anomalies. Improved page-state sync. Refined archive browsing.", type:"system"},
+      {title:"视觉优化", description:"优化部分页面动画。优化弹窗层级。优化卡片交互反馈。", title_en:"Visual Refinement", desc_en:"Polished page animations. Refined modal layering. Enhanced card interaction feedback.", type:"visual"},
+      {title:"体验优化", description:"优化移动端浏览。优化主题切换体验。优化部分文字显示。", title_en:"Experience Refinement", desc_en:"Better mobile browsing. Smoother theme switching. Cleaner typography.", type:"experience"}
+    ]
+  },
   {
     version:"v1.3",
     date:"2026-08-18",
@@ -4866,7 +4913,17 @@ var CANG_LU_ARCHIVE = {
   var EX_KEY = 'canglu-explored';
   var explored = {};
   try{ explored = JSON.parse(localStorage.getItem(EX_KEY) || '{}'); }catch(e){}
-  function mark(k){ explored[k] = 1; try{ localStorage.setItem(EX_KEY, JSON.stringify(explored)); }catch(e){} }
+  function mark(k){
+    var fresh = !explored[k];
+    explored[k] = 1;
+    try{ localStorage.setItem(EX_KEY, JSON.stringify(explored)); }catch(e){}
+    window.discoveredRecords = explored;
+    // 解锁动画：点亮对应条目 + 盖章光效
+    if(fresh){
+      var el = document.querySelector('.ax-item[data-k="' + k + '"]');
+      if(el){ el.classList.remove('ax-lock'); el.classList.add('ax-done','ax-unlock'); setTimeout(function(){ el.classList.remove('ax-unlock'); }, 900); }
+    }
+  }
   function saveExplore(){ try{ localStorage.setItem(EX_KEY, JSON.stringify(explored)); }catch(e){} }
 
   function renderOverview(){
@@ -4958,25 +5015,39 @@ var CANG_LU_ARCHIVE = {
     }).join('');
   }
 
+  // ===== 探索者系统·预留数据接口（v1.3 世界入口优化）=====
+  // 本版仅记录与展示，不启用等级/EXP/称号计算（未来版本开放）
+  window.explorationData = window.explorationData || { version: 1, regions: [] };
+  window.discoveredRecords = window.discoveredRecords || explored;
+  window.explorationProgress = {
+    get total(){ return (window.CANG_LU_ARCHIVE && window.CANG_LU_ARCHIVE.overview || []).length; },
+    get discovered(){ return Object.keys(explored).length; },
+    get ratio(){ var t = this.total; return t ? Math.round(this.discovered / t * 100) : 0; }
+  };
+
   function renderExplore(){
     var body = document.getElementById('arcExBody'); if(!body) return;
     var en = L() === 'en';
+    var total = (A.overview||[]).length;
     var count = Object.keys(explored).length;
-    // 探索者等级
-    var level = '初识沧陆', levelEn = 'First Glimpse';
-    if(count >= 8){ level = '档案学者'; levelEn = 'Archivist'; }
-    else if(count >= 5){ level = '探秘者'; levelEn = 'Explorer'; }
-    else if(count >= 3){ level = '远行者'; levelEn = 'Wayfarer'; }
+    var pct = total ? Math.round(count / total * 100) : 0;
     var items = (A.overview||[]).map(function(o){
       var k = 'arch:' + o.id;
       var done = explored[k];
       var nameEn = {'恓鸟城':'Xuniao','茹章城':'Ruzhang','眴姚城':'Xunyao','伏熏城':'Fuxun','奇迤岛':'Qiyi Island','无昼碛':'Wuzhou Desert'}[o.name] || o.name;
-      return '<span class="ax-item ' + (done ? 'ax-done' : '') + '">' + (done ? '✓ ' : '○ ') + (en ? nameEn : o.name) + '</span>';
+      return '<span class="ax-item ' + (done ? 'ax-done' : 'ax-lock') + '" data-k="' + k + '">' +
+        '<span class="ax-mark">' + (done ? '✓' : '○') + '</span>' +
+        '<span class="ax-name">' + (en ? nameEn : o.name) + '</span>' +
+        '<span class="ax-tag">' + (done ? (en ? 'RECORDED' : '已记录') : (en ? 'UNDISCOVERED' : '待探索')) + '</span>' +
+      '</span>';
     }).join('');
+    // 档案进度条（纯记录，不涉等级）
     body.innerHTML =
-      '<div class="ax-level"><span class="ax-lv-k">' + (en ? 'Explorer Level: ' : '探索者等级：') + '</span><b>' + (en ? levelEn : level) + '</b></div>' +
+      '<div class="ax-progress"><span class="ax-p-k">' + (en ? 'Archive Progress' : '档案进度') + '</span>' +
+      '<span class="ax-p-bar"><i style="width:' + pct + '%"></i></span>' +
+      '<span class="ax-p-v">' + count + '/' + total + '</span></div>' +
       '<div class="ax-items">' + items + '</div>' +
-      '<div class="ax-note">' + (en ? 'Explore the city cards, geography and chronicles to deepen your record.' : '探索城邦、地理与历史卷宗，可加深你的探索记录。') + '</div>';
+      '<div class="ax-note">' + (en ? 'Records open as you visit dossiers, maps and chronicles. The rest remain sealed.' : '查阅城邦档案、舆图与纪年卷宗，记录随之开启；余者仍封存待考。') + '</div>';
   }
 
   function renderAll(){
@@ -6196,7 +6267,7 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       ga_title:'沧陆舆图 · 山河总览', ga_sub:'点击方位，展开地理篇章',
       ga_1:'海洋与水域', ga_2:'陆地单元', ga_3:'地形地貌', ga_4:'河流水系', ga_5:'人文聚落', ga_6:'大型工程地标',
       spAnchor:'历法锚点（祀元元年≈公元）',
-      wc_t:'欢迎来到沧陆', wc_s:'折翼一陆 · 剑衡四方', wc_v:'当前版本 v1.3 · 沧陆世界', wc_b:'踏入沧陆', home_update:'更新公告', up_title:'沧陆档案更新记录', up_history:'历次档案', up_read:'阅毕归档',
+      wc_t:'欢迎来到沧陆', wc_s:'折翼一陆 · 剑衡四方', wc_v:'当前版本 v1.4 · 沧陆世界', wc_b:'踏入沧陆', home_update:'更新公告', up_title:'沧陆档案更新记录', up_history:'历次档案', up_read:'阅毕归档',
       pl_skip:'跳过 ▸', pl_enter:'进入沧陆', pl_c1:'恓鸟城', pl_c2:'茹章城', pl_c3:'眴姚城', pl_c4:'伏熏城',
       ws_kicker:'THE LIVING RECORD', ws_title:'沧陆当前记录', ws_sub:'世界仍在运转——这是档案馆此刻观测到的沧陆。',
       ws_era_k:'沧陆纪元', ws_sit_k:'当前局势', ws_sit_v:'四方势力保持平衡', ws_unk_k:'未知档案',
@@ -6334,7 +6405,7 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       ga_title:'The Atlas of Canglu', ga_sub:'Click a region to open its chapter',
       ga_1:'Seas & Waters', ga_2:'Landmasses', ga_3:'Terrain & Landforms', ga_4:'Rivers & Lakes', ga_5:'Settlements', ga_6:'Great Works',
       spAnchor:'Calendar anchor (Siyuan Year 1 ≈ AD)',
-      wc_t:'Welcome to Canglu', wc_s:'One broken wing, sword-balanced four realms', wc_v:'Version v1.3 · Canglu World', wc_b:'Enter Canglu', home_update:'Update Archive', up_title:'Canglu Archive Update Log', up_history:'Past Records', up_read:'Mark as Read',
+      wc_t:'Welcome to Canglu', wc_s:'One broken wing, sword-balanced four realms', wc_v:'Version v1.4 · Canglu World', wc_b:'Enter Canglu', home_update:'Update Archive', up_title:'Canglu Archive Update Log', up_history:'Past Records', up_read:'Mark as Read',
       lg_hero_t:'The Emblem of Canglu', lg_hero_s:'One broken wing for the land, the sword balances the four realms', lg_hero_btn:'About the Emblem',
       lg_verse:'A broken-winged world, balanced by the sword — the blade keeps four realms, the wing bears all lives',
       lg_c1n:'Xuniao', lg_c1s:'W · War-state', lg_c2n:'Ruzhang', lg_c2s:'C · Theocracy', lg_c3n:'Xunyao', lg_c3s:'E · Trade port', lg_c4n:'Fuxun', lg_c4s:'S · Island',
