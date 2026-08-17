@@ -331,8 +331,8 @@
   #cursorRing.hover.active{transform:translate(-50%,-50%) scale(.8)}
   .pt{position:fixed;border-radius:50%;pointer-events:none;z-index:9998;background:radial-gradient(circle,var(--gold) 0%,var(--gold-dim) 55%,transparent 75%);animation:ptFade 1.1s ease forwards}
   @keyframes ptFade{to{opacity:0;transform:translateY(-16px) scale(.15)}}
-  .ripple{position:fixed;border:1px solid var(--gold-dim);border-radius:50%;pointer-events:none;z-index:9997;animation:rip .55s ease-out forwards}
-  @keyframes rip{from{width:8px;height:8px;margin-left:-4px;margin-top:-4px;opacity:.9}to{width:72px;height:72px;margin-left:-36px;margin-top:-36px;opacity:0}}
+  .ripple{position:fixed;width:72px;height:72px;margin-left:-36px;margin-top:-36px;border:1px solid var(--gold-dim);border-radius:50%;pointer-events:none;z-index:9997;animation:rip .55s ease-out forwards}
+  @keyframes rip{from{transform:scale(.11);opacity:.9}to{transform:scale(1);opacity:0}}
   /* 音乐条 */
   .music-bar{position:fixed;right:18px;bottom:18px;z-index:150;display:flex;align-items:center;gap:10px;background:linear-gradient(160deg,rgba(30,39,54,.96),rgba(20,26,36,.96));border:1px solid var(--gold-dim);border-radius:24px;padding:8px 16px;backdrop-filter:blur(6px);box-shadow:0 8px 28px var(--shadow);cursor:default}
   /* 播放器悬停特效：流光扫过 + 上浮 + 金色光晕 */
@@ -759,10 +759,10 @@
 .hmf-bl{bottom:10px;left:10px;border-bottom:1.5px solid var(--gold);border-left:1.5px solid var(--gold);border-bottom-left-radius:6px}
 .hmf-br{bottom:10px;right:10px;border-bottom:1.5px solid var(--gold);border-right:1.5px solid var(--gold);border-bottom-right-radius:6px}
 /* 扫描流光 */
-.he-map-shine{position:absolute;top:0;bottom:0;width:36%;z-index:2;pointer-events:none;
+.he-map-shine{position:absolute;top:0;bottom:0;left:0;width:36%;z-index:2;pointer-events:none;
   background:linear-gradient(105deg,transparent,rgba(255,244,210,.14),transparent);
   animation:heMapShine 8s ease-in-out infinite}
-@keyframes heMapShine{0%,100%{left:-40%}55%{left:105%}}
+@keyframes heMapShine{0%,100%{transform:translateX(-130%)}55%{transform:translateX(310%)}}
 @media (prefers-reduced-motion:reduce){.he-map-shine{animation:none}}
 .he-map-cap{margin-top:16px;font-size:12px;letter-spacing:3px;color:var(--ink-dim)}
 
