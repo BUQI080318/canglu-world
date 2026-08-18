@@ -1269,6 +1269,23 @@ html[data-theme="light"] .ph-card.ph-fuxun{--ph-c:#6a3fa0}
   100%{transform:scale(1)}
 }
 .ax-note{font-size:11.5px;letter-spacing:1px;color:var(--ink-dim);opacity:.8}
+/* 档案速览浮层 */
+.explore-mask{position:fixed;inset:0;z-index:1400;display:flex;align-items:center;justify-content:center;background:rgba(6,10,20,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}
+.explore-mask.on{opacity:1;visibility:visible}
+.explore-box{position:relative;width:min(420px,90vw);background:linear-gradient(160deg,rgba(16,22,38,.97),rgba(10,14,26,.99));border:1px solid rgba(200,162,74,.4);border-radius:4px;padding:30px 26px 24px;box-shadow:0 20px 60px rgba(0,0,0,.55),inset 0 1px 0 rgba(200,162,74,.18);transform:translateY(18px) scale(.96);transition:transform .35s cubic-bezier(.22,.61,.36,1)}
+.explore-mask.on .explore-box{transform:none}
+.explore-close{position:absolute;top:12px;right:14px;width:30px;height:30px;border:none;border-radius:50%;background:rgba(200,162,74,.12);color:var(--ink);font-size:15px;cursor:pointer;transition:transform .25s,background .25s}
+.explore-close:hover{transform:rotate(90deg);background:rgba(200,162,74,.22)}
+.ex-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.ex-id{font-size:11px;letter-spacing:2px;color:var(--gold-dim);border:1px solid rgba(200,162,74,.3);padding:2px 8px;border-radius:2px}
+.ex-cat{font-size:11px;letter-spacing:2px;color:var(--ink-dim)}
+.ex-name{margin:0;font-size:22px;letter-spacing:4px;color:var(--gold);font-family:"KaiTi","STKaiti","楷体",serif}
+.ex-line{height:1px;background:linear-gradient(90deg,var(--gold),transparent);margin:14px 0}
+.ex-unknown{font-size:13px;letter-spacing:2px;color:var(--ink-dim);line-height:1.9;min-height:40px}
+.ex-hint{margin-top:16px;font-size:11px;letter-spacing:2px;color:var(--gold-dim);text-align:center;animation:exHintPulse 1.6s ease-in-out infinite}
+@keyframes exHintPulse{0%,100%{opacity:.5}50%{opacity:1}}
+html[data-theme="light"] .explore-box{background:linear-gradient(160deg,rgba(250,245,232,.99),rgba(244,236,214,.99));border-color:rgba(150,110,40,.45)}
+html[data-theme="light"] .explore-close{background:rgba(150,110,40,.14)}
 /* 浅色主题适配 */
 html[data-theme="light"] .ax-item.ax-lock{color:#8a7a60;filter:none}
 html[data-theme="light"] .ax-item.ax-lock .ax-tag{color:#a09070}
@@ -3214,6 +3231,21 @@ var _hmt = _hmt || [];
     </div>
   </div>
 </section>
+
+<!-- 档案速览浮层（探索解锁） -->
+<div class="explore-mask" id="exploreMask" aria-hidden="true">
+  <div class="explore-box">
+    <button class="explore-close" id="exClose" aria-label="Close">✕</button>
+    <div class="ex-head">
+      <span class="ex-id" id="exId">CL-000</span>
+      <span class="ex-cat" id="exCat">—</span>
+    </div>
+    <h3 class="ex-name" id="exName">—</h3>
+    <div class="ex-line"></div>
+    <div class="ex-unknown" id="exUnknown">████</div>
+    <div class="ex-hint" id="exHint">停留翻阅 3 秒，收入探索记录。</div>
+  </div>
+</div>
 </main>
 
 <div class="music-list" id="musicList"></div>
@@ -3829,6 +3861,7 @@ function renderLandmarks(){
   });
 }
 function showLandmark(l){
+  if(window.__exOnDetail) window.__exOnDetail(l.name);
   let html = '<h2>'+cName(l)+' · '+cRole(l)+'</h2>';
   l.detail.forEach(d=>{ html += '<p>'+cText(d)+'</p>'; });
   landmarkDetail.innerHTML = html;
@@ -5079,18 +5112,121 @@ var CANG_LU_ARCHIVE = {
   renderAll();
   document.addEventListener('cangluLangChange', renderAll);
 
-  // 查看档案卡时标记探索
+  // ===== 探索解锁机制（v1.4）：进入详情 + 停留满3秒 → 盖章解锁 =====
+  var EX_HOLD_MS = 3000;
+  var _exTimer = null, _exKey = null;
+  function exCancel(){ if(_exTimer){ clearTimeout(_exTimer); _exTimer = null; } _exKey = null; }
+  function exBegin(k){
+    if(explored[k]) return;
+    exCancel();
+    _exKey = k;
+    _exTimer = setTimeout(function(){ _exTimer = null; if(_exKey){ mark(_exKey); saveExplore(); renderExplore(); _exKey = null; } }, EX_HOLD_MS);
+  }
+  window.__exCancel = exCancel;
+
+  // 详情页停留计时入口（showCity/showLandmark 调用）
+  window.__exOnDetail = function(name){
+    var k = null;
+    for(var i=0;i<(A.overview||[]).length;i++){ if(A.overview[i].name === name){ k = 'arch:' + A.overview[i].id; break; } }
+    // 特殊映射：眸霞山脉与自鸣山 → 自鸣山条目
+    if(!k && name === '眸霞山脉与自鸣山'){ for(var j=0;j<(A.overview||[]).length;j++){ if(A.overview[j].name === '自鸣山'){ k = 'arch:' + A.overview[j].id; break; } } }
+    if(k) exBegin(k);
+  };
+
+  // 名称→档案条目解析（城邦/地标/工程）
+  function findOverview(name){
+    for(var i=0;i<(A.overview||[]).length;i++){ if(A.overview[i].name === name) return A.overview[i]; }
+    return null;
+  }
+
+  function openExploreView(o){
+    if(!o) return;
+    var en = L() === 'en';
+    var nm = (window.NAMES_EN && window.NAMES_EN[o.name]) || o.name;
+    var cat = en ? (o.en ? o.en.cat : o.cat) : (o.zh ? o.zh.cat : o.cat);
+    var unk = en ? (o.en ? o.en.unknown : o.unknown) : (o.zh ? o.zh.unknown : o.unknown);
+    var k = 'arch:' + o.id;
+    var lm = null, city = null;
+    try{
+      var lmList = (typeof LANDMARKS !== 'undefined') ? LANDMARKS : [];
+      for(var i=0;i<lmList.length;i++){
+        if(lmList[i].name === o.name || (o.name === '自鸣山' && lmList[i].name === '眸霞山脉与自鸣山')){ lm = lmList[i]; break; }
+      }
+      var cList = (typeof CITIES !== 'undefined') ? CITIES : [];
+      for(var j=0;j<cList.length;j++){ if(cList[j].name === o.name){ city = cList[j]; break; } }
+    }catch(e){}
+
+    // 城邦 → 城邦志详情
+    if(city){
+      exCancel();
+      switchPage('cityPage');
+      if(window.showCity) showCity(city);
+      return;
+    }
+    // 地标 → 秘境志详情
+    if(lm){
+      exCancel();
+      switchPage('landmarkPage');
+      if(window.showLandmark) showLandmark(lm);
+      return;
+    }
+    // 其余 → 速览浮层（停留计时解锁）
+    var mask = document.getElementById('exploreMask');
+    if(!mask) return;
+    var nmEl = document.getElementById('exName'); if(nmEl) nmEl.textContent = en ? nm : o.name;
+    var idEl = document.getElementById('exId'); if(idEl) idEl.textContent = o.id;
+    var catEl = document.getElementById('exCat'); if(catEl) catEl.textContent = cat;
+    var unkEl = document.getElementById('exUnknown'); if(unkEl) unkEl.textContent = unk || '';
+    var hint = document.getElementById('exHint');
+    if(hint) hint.textContent = en ? 'Hold 3 seconds to record this dossier.' : '停留翻阅 3 秒，收入探索记录。';
+    mask.classList.add('on');
+    exBegin(k);
+  }
+  window.__openExploreView = openExploreView;
+
+  // 档案总览卡点击
   var ov = document.getElementById('aoGrid');
   if(ov){
     ov.addEventListener('click', function(e){
       var card = e.target.closest('.ao-card');
       if(card && card.dataset.arch){
-        mark('arch:' + card.dataset.arch);
-        card.classList.add('ao-touched');
-        saveExplore();
-        renderExplore();
+        var o = null;
+        for(var i=0;i<(A.overview||[]).length;i++){ if(A.overview[i].id === card.dataset.arch){ o = A.overview[i]; break; } }
+        if(o) openExploreView(o);
       }
     });
+  }
+  // 探索记录条目点击：已解锁→再点仍可跳详情；未解锁→跳详情/浮层计时
+  var exBody = document.getElementById('arcExBody');
+  if(exBody){
+    exBody.addEventListener('click', function(e){
+      var it = e.target.closest('.ax-item');
+      if(!it || !it.dataset.k) return;
+      var key = it.dataset.k;
+      var o = null;
+      for(var i=0;i<(A.overview||[]).length;i++){ if(('arch:' + A.overview[i].id) === key){ o = A.overview[i]; break; } }
+      if(o) openExploreView(o);
+    });
+  }
+  // 速览浮层关闭 → 取消计时
+  var exMask = document.getElementById('exploreMask');
+  if(exMask){
+    exMask.addEventListener('click', function(e){
+      if(e.target === exMask || e.target.closest('#exClose')){
+        exMask.classList.remove('on');
+        exCancel();
+      }
+    });
+  }
+  // 页面切换 → 取消计时 + 关浮层
+  var _origSwitch = window.switchPage;
+  if(_origSwitch){
+    window.switchPage = function(id){
+      exCancel();
+      var m2 = document.getElementById('exploreMask');
+      if(m2) m2.classList.remove('on');
+      return _origSwitch.apply(this, arguments);
+    };
   }
   // 归档卡整体标记已读（简化：点击任一区域即视为查看过该类）
   var sealGrid = document.getElementById('arcSealedGrid');
