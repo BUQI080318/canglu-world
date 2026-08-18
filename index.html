@@ -1228,6 +1228,7 @@ html[data-theme="light"] .ph-card.ph-fuxun{--ph-c:#6a3fa0}
 .arc-news-list{display:flex;flex-direction:column;gap:10px;max-width:720px}
 .arc-news-item{display:flex;gap:16px;padding:14px 16px;border:1px solid rgba(200,162,74,.2);border-radius:4px;background:rgba(200,162,74,.04)}
 .an-era{flex-shrink:0;font-size:12px;letter-spacing:1px;color:var(--gold);padding-top:3px;min-width:96px}
+.an-era small{font-size:10px;letter-spacing:1px;color:var(--ink-dim);opacity:.75;margin-left:2px}
 .an-body b{font-size:14px;letter-spacing:1px;color:var(--ink)}
 .an-body p{font-size:12.5px;line-height:1.7;color:var(--ink-dim);margin:4px 0 0}
 /* 创世日志 */
@@ -4996,7 +4997,7 @@ var CANG_LU_ARCHIVE = {
       var e = en ? n.en.e : n.zh.e;
       var d = en ? n.en.d : n.zh.d;
       return '<div class="arc-news-item" data-news="' + n.era + '">' +
-        '<span class="an-era">' + (en ? 'Hengli ' : '衡历') + n.era + (en ? '' : '年') + '</span>' +
+        '<span class="an-era">' + (en ? ('Siyuan ' + (n.era + 160)) : ('祀元' + (n.era + 160) + '年')) + (en ? ' <small>Hengli ' : ' <small>衡历') + n.era + (en ? '</small>' : '年</small>') + '</span>' +
         '<div class="an-body"><b>' + e + '</b><p>' + d + '</p></div>' +
       '</div>';
     }).join('');
