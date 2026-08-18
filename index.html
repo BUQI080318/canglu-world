@@ -380,7 +380,9 @@ html[data-theme="light"] .city-pct-hint{color:#6a5a3a;opacity:.95}
 .es-era-label{font-size:11.5px;letter-spacing:3px;color:var(--bronze)}
 .es-play{font-size:11px;letter-spacing:2px;color:var(--ink);background:rgba(200,162,74,.08);
   border:1px solid var(--gold-dim);border-radius:999px;padding:6px 16px;cursor:pointer;
-  transition:all .3s;font-family:inherit}
+  transition:all .3s;font-family:inherit;display:inline-flex;align-items:center;gap:6px}
+  .es-play::before{content:"";width:0;height:0;border-left:7px solid currentColor;border-top:5px solid transparent;border-bottom:5px solid transparent}
+  .es-play.playing::before{width:9px;height:9px;border:none;border-left:3px solid currentColor;border-right:3px solid currentColor}
 .es-play:hover{color:var(--gold);border-color:var(--gold);box-shadow:0 0 14px var(--archive-glow)}
 .es-play.playing{color:var(--gold);border-color:var(--gold);animation:esPulse 1.4s ease-in-out infinite}
 @keyframes esPulse{0%,100%{box-shadow:0 0 6px var(--archive-glow)}50%{box-shadow:0 0 16px var(--glow)}}
@@ -510,7 +512,8 @@ html[data-theme="light"] .city-pct-hint{color:#6a5a3a;opacity:.95}
   .music-bar:hover .music-cover{transform:scale(1.12);box-shadow:0 0 18px var(--glow),0 2px 10px rgba(0,0,0,.5);animation-duration:6.5s}
   .music-bar:hover .eq span{animation-play-state:running;opacity:1}
   .music-bar:hover .music-btn{box-shadow:0 0 20px var(--glow)}
-  .music-btn{background:var(--gold);border:none;color:#141a24;width:34px;height:34px;border-radius:50%;font-size:14px;cursor:pointer;font-family:inherit;transition:all .2s;line-height:1}
+  .music-btn{background:var(--gold);border:none;color:#141a24;width:34px;height:34px;border-radius:50%;font-size:14px;cursor:pointer;font-family:inherit;transition:all .2s;line-height:1;display:inline-flex;align-items:center;justify-content:center}
+  .music-btn svg{width:15px;height:15px}
   .music-btn:hover{transform:scale(1.1);box-shadow:0 0 14px var(--glow)}
   /* 播放律动：均衡器条 */
   .eq{display:flex;align-items:flex-end;gap:3px;height:22px;padding:2px 0}
@@ -1307,7 +1310,8 @@ html[data-theme="light"] .ao-unknown{color:#8a6a4a}
 .ws-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:880px;margin:0 auto}
 .ws-card{position:relative;padding:22px 18px;border:1px solid rgba(200,162,74,.28);border-radius:4px;background:linear-gradient(160deg,rgba(200,162,74,.07),transparent 75%);display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;overflow:hidden}
 .ws-card::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(200,162,74,.6),transparent)}
-.ws-ico{font-size:22px;opacity:.85;filter:grayscale(.2)}
+.ws-ico{font-size:22px;opacity:.9;color:var(--gold-dim);display:flex;align-items:center;justify-content:center}
+  .ws-ico svg{width:22px;height:22px}
 .ws-k{font-size:11px;letter-spacing:3px;color:var(--ink-dim)}
 .ws-v{font-size:15px;letter-spacing:2px;color:var(--gold);font-family:"KaiTi","STKaiti","楷体",serif}
 .ws-card-sealed{border-style:dashed;background:linear-gradient(160deg,rgba(139,38,53,.08),transparent 75%)}
@@ -1701,7 +1705,8 @@ html[data-theme="light"] .he-badge{background:rgba(255,255,255,.5)}
   .music-vol{
     display:flex;align-items:center;gap:6px;flex-shrink:0;cursor:pointer;
   }
-  .vol-icon{font-size:13px;color:var(--gold-dim);font-style:normal}
+  .vol-icon{font-size:13px;color:var(--gold-dim);font-style:normal;display:inline-flex;align-items:center;justify-content:center}
+  .vol-icon svg{width:14px;height:14px}
   .vol-slider{
     position:relative;width:52px;height:4px;border-radius:2px;background:rgba(255,255,255,.14);cursor:pointer;
   }
@@ -2634,17 +2639,17 @@ var _hmt = _hmt || [];
       </div>
       <div class="ws-grid">
         <div class="ws-card">
-          <span class="ws-ico">⌛</span>
+          <span class="ws-ico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12M6 21h12M6 3v2.8a6 6 0 0 0 3 5.2 6 6 0 0 1 3 5.2V21M18 3v2.8a6 6 0 0 1-3 5.2 6 6 0 0 0-3 5.2V21"/></svg></span>
           <span class="ws-k" data-i18n="ws_era_k">沧陆纪元</span>
           <span class="ws-v" id="wsEra">祀元 · — — —</span>
         </div>
         <div class="ws-card">
-          <span class="ws-ico">⚖</span>
+          <span class="ws-ico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v16M8 20h8M12 4H4l-1.5 4.5a2.8 2.8 0 0 0 5.5 0L6 4zM12 4h8l-1.5 4.5a2.8 2.8 0 0 0 5.5 0L20 4z"/></svg></span>
           <span class="ws-k" data-i18n="ws_sit_k">当前局势</span>
           <span class="ws-v" data-i18n="ws_sit_v">四方势力保持平衡</span>
         </div>
         <div class="ws-card ws-card-sealed">
-          <span class="ws-ico">▣</span>
+          <span class="ws-ico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9.5 13.5l5 5M14.5 13.5l-5 5"/></svg></span>
           <span class="ws-k" data-i18n="ws_unk_k">未知档案</span>
           <span class="ws-v" id="wsUnknown" data-i18n="ws_unk_v">███ 已封存</span>
         </div>
@@ -2794,7 +2799,7 @@ var _hmt = _hmt || [];
       <span class="hf-item" data-i18n="footer_c">© 2026 沧陆世界</span>
       <a class="hf-item hf-update" href="javascript:void(0)" id="updateBtn" data-i18n="home_update">更新公告</a>
       <a class="hf-item" href="mailto:canglu@example.com" data-i18n="home_contact">联系我们</a>
-      <a class="hf-item" href="https://github.com/BUQI080318/canglu-world" target="_blank" rel="noopener" data-i18n="home_support">支持一下 ★</a>
+      <a class="hf-item" href="https://github.com/BUQI080318/canglu-world" target="_blank" rel="noopener" data-i18n="home_support">支持一下</a>
     </div>
   </div>
 </section>
@@ -3087,7 +3092,7 @@ var _hmt = _hmt || [];
       </div>
       <div class="es-foot">
         <span class="es-era-label" id="esEraLabel" data-i18n="tl_hint">拖动时间轴，翻阅沧陆纪元</span>
-        <button class="es-play" id="esPlay" data-i18n="tl_play">▶ 播放纪元</button>
+        <button class="es-play" id="esPlay" data-i18n="tl_play">播放纪元</button>
       </div>
     </div>
     <div class="timeline">
@@ -3333,9 +3338,9 @@ var _hmt = _hmt || [];
 
 <div class="music-bar" id="musicBar">
   <img class="music-cover" id="musicCover" src="music/covers/06_odyssey.jpg" alt="专辑封面">
-  <button class="music-ctrl" id="musicPrev" title="上一首">⏮</button>
-  <button class="music-btn" id="musicBtn">▶</button>
-  <button class="music-ctrl" id="musicNext" title="下一首">⏭</button>
+  <button class="music-ctrl" id="musicPrev" title="上一首"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 5v14M19 6.5v11L10 12z"/></svg></button>
+  <button class="music-btn" id="musicBtn"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></button>
+  <button class="music-ctrl" id="musicNext" title="下一首"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 5v14M5 6.5v11L14 12z"/></svg></button>
   <div class="music-mid">
     <div class="music-now" id="musicNow"><b>沧陆</b><span class="music-hint">· 静候佳音</span></div>
     <div class="music-progress" id="musicProgress">
@@ -3344,7 +3349,7 @@ var _hmt = _hmt || [];
     </div>
   </div>
   <div class="music-vol" id="musicVol" title="音量">
-    <span class="vol-icon">🔊</span>
+    <span class="vol-icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5v5h3.5L12 19V5L7.5 9.5H4z"/><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18 6.5a7.5 7.5 0 0 1 0 11"/></svg></span>
     <div class="vol-slider" id="volSlider"><div class="vs-fill" id="vsFill"></div><div class="vs-knob" id="vsKnob"></div></div>
   </div>
   <div class="eq" id="eqBars" aria-hidden="true">
@@ -4342,11 +4347,11 @@ applyHash();
       i = (i + 1) % nodes.length;
       setEra(i);
     }, 2600);
-    if(playBtn){ playBtn.classList.add('playing'); playBtn.textContent = window.__lang==='en' ? '⏸ Playing the eras' : '⏸ 播放中'; }
+    if(playBtn){ playBtn.classList.add('playing'); playBtn.textContent = window.__lang==='en' ? 'Playing the eras' : '播放中'; }
   }
   function stopPlay(){
     if(playing){ clearInterval(playing); playing = null; }
-    if(playBtn){ playBtn.classList.remove('playing'); playBtn.textContent = window.__lang==='en' ? '▶ Play the eras' : '▶ 播放纪元'; }
+    if(playBtn){ playBtn.classList.remove('playing'); playBtn.textContent = window.__lang==='en' ? 'Play the eras' : '播放纪元'; }
   }
   if(playBtn) playBtn.addEventListener('click', function(){ playing ? stopPlay() : startPlay(); });
   // 页面切走时停止
@@ -5413,7 +5418,7 @@ var CANG_LU_ARCHIVE = {
     if(e.target.closest('.vol-slider')) return;
     if(!audio) return;
     audio.muted = !audio.muted;
-    volBox.querySelector('.vol-icon').textContent = audio.muted ? '🔇' : '🔊';
+    volBox.querySelector('.vol-icon').innerHTML = audio.muted ? '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5v5h3.5L12 19V5L7.5 9.5H4z"/><path d="M16 9l5 5M21 9l-5 5"/></svg>' : '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5v5h3.5L12 19V5L7.5 9.5H4z"/><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>';
   });
   function playIdx(i){
     if(i < 0) i = SONGS.length - 1;
@@ -5469,7 +5474,7 @@ var CANG_LU_ARCHIVE = {
       started = true;
       now.innerHTML = songHTML(SONGS[cur].name, mh('奏响'));
       checkMarquee();
-      btn.textContent = '❚❚';
+      btn.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>';
       setPlaying(true);
       renderList();
       if(mpFill) mpFill.style.width = '0%';
@@ -5500,13 +5505,13 @@ var CANG_LU_ARCHIVE = {
     if(audio && started){
       if(audio.paused){
         audio.play();
-        btn.textContent = '❚❚';
+        btn.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>';
         now.innerHTML = songHTML(SONGS[cur].name, mh('奏响'));
       checkMarquee();
         setPlaying(true);
       } else {
         audio.pause();
-        btn.textContent = '▶';
+        btn.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
         now.innerHTML = songHTML(SONGS[cur].name, mh('暂歇'));
       checkMarquee();
         setPlaying(false);
@@ -5534,7 +5539,7 @@ var CANG_LU_ARCHIVE = {
       started = true;
       now.innerHTML = songHTML(SONGS[cur].name, mh('点击出声'));
       checkMarquee();
-      btn.textContent = '❚❚';
+      btn.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>';
       setPlaying(true);
     }).catch(()=>{
       // 极少数情况连静音也被拦：等首次交互
@@ -5552,7 +5557,7 @@ var CANG_LU_ARCHIVE = {
           started = true;
           now.innerHTML = songHTML(SONGS[cur].name, mh('奏响'));
       checkMarquee();
-          btn.textContent = '❚❚';
+          btn.innerHTML = '<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>';
           setPlaying(true);
         }).catch(()=>{});
       } else {
@@ -6488,7 +6493,7 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       home_cal_d:'Siyuan, Shucheng, Hengli — three eras beneath one sky. Twelve months, twelve fates: the frontier month, the war month, the sailing month, the rite month. Time here is not a measure, but a measure of power.', home_cal_f:'Turn the pages of Canglu\'s timeline',
       home_time_d:'The Descent of the Dark Gleam; the Pact that Founded the State. In the civilization\'s darkest hour the first king of Ruzhang sought the relic and struck a deal — the land grew bountiful, the people endured, yet the laws of life themselves changed. A thousand years on, the relic\'s power is fading; imbalance is surfacing.', home_time_f:'The Pact · The Onset of Imbalance',
       tl_e1:'The Relic Descends', tl_e2:'The Hengli Founding', tl_e3:'The Shucheng Founding', tl_e4:'The Triennial Rite', tl_e5:'The Generational Cycle', tl_e6:'The Final Prophecy',
-      tl_hint:'Drag the eras, unfold the chronicle of Canglu', tl_play:'▶ Play the eras',
+      tl_hint:'Drag the eras, unfold the chronicle of Canglu', tl_play:'Play the eras',
       home_power_d:'The western war-state stands against the central hegemon, the eastern port plays both sides, the southern island watches coldly. Four powers in a silent game — and upon the board, a sleeping relic slowly stirs.',
       fac_kicker:'FOUR CITY-STATES · FOUR ANSWERS', fac_title:'The Four City-States', fac_sub:'Four systems, four fates. Choose a civilization and glimpse the board of Canglu\'s great game.',
       fac_enter:'Enter city archive →',
@@ -6525,7 +6530,7 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       hg_geo:'Seas, land & the great atlas', hg_city:'Four war-states, one continent', hg_land:'Wilds, spirits & hidden realms',
       hg_cal:'Three calendars, seasons & rites', hg_time:'From blood rites to the final prophecy', hg_power:'Four powers in a sword-balanced world',
       home_contact:'Contact Us',
-      ct_title:'Contact Canglu', ct_sub:'Come talk to me about this world', ct_wechat:'WeChat ID', ct_qq:'QQ Number', ct_copy:'Copy', home_support:'Support Us ★',
+      ct_title:'Contact Canglu', ct_sub:'Come talk to me about this world', ct_wechat:'WeChat ID', ct_qq:'QQ Number', ct_copy:'Copy', home_support:'Support Us',
       sp_title:'Support Canglu', sp_sub:'If you love this world, drop a like or a word', sp_likehint:'Love this world? Tap to like', sp_name:'Nickname', sp_ph:'Say something…', sp_send:'Post', sp_empty:'No messages yet. Be the first!',
       t_geo:'Geography', t_city:'City-States', t_land:'Mystic Lands', t_cal:'Calendar', t_time:'Chronicle', t_power:'Powers',
       l_geo:'Canglu Mountains & Seas', l_city:'The Four Great City-States',
