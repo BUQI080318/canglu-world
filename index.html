@@ -5022,7 +5022,7 @@ var CANG_LU_ARCHIVE = {
   window.discoveredRecords = window.discoveredRecords || explored;
   window.explorationProgress = {
     get total(){ return (window.CANG_LU_ARCHIVE && window.CANG_LU_ARCHIVE.overview || []).length; },
-    get discovered(){ return Object.keys(explored).length; },
+    get discovered(){ return Object.keys(explored).filter(function(k){ return k.indexOf('arch:') === 0; }).length; },
     get ratio(){ var t = this.total; return t ? Math.round(this.discovered / t * 100) : 0; }
   };
 
@@ -5030,7 +5030,8 @@ var CANG_LU_ARCHIVE = {
     var body = document.getElementById('arcExBody'); if(!body) return;
     var en = L() === 'en';
     var total = (A.overview||[]).length;
-    var count = Object.keys(explored).length;
+    // 进度只统计展示列表对应条目（arch: 前缀），避免计入封存卡/人物卡等扩展标记
+    var count = Object.keys(explored).filter(function(k){ return k.indexOf('arch:') === 0; }).length;
     var pct = total ? Math.round(count / total * 100) : 0;
     var items = (A.overview||[]).map(function(o){
       var k = 'arch:' + o.id;
