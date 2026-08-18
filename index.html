@@ -2473,12 +2473,6 @@ var _hmt = _hmt || [];
         <button data-v="off" class="sp-opt">关闭</button>
       </div>
     </div>
-    <div class="sp-group">
-      <div class="sp-label" data-i18n="spAnchor">历法锚点（祀元元年≈公元）</div>
-      <div class="sp-row">
-        <input id="spAnchorInput" type="number" min="1" max="9999" value="1000" style="width:100%;padding:7px 10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font-family:inherit;font-size:13px;letter-spacing:1px">
-      </div>
-    </div>
   </div>
 </div>
 
@@ -4814,7 +4808,6 @@ var CANG_LU_UPDATES = [
   function calcEra(){
     try{
       var anchor = 1000;
-      try{ var a = parseInt(localStorage.getItem('canglu-anchor') || '', 10); if(a && a > 1000 && a < 10000) anchor = a; }catch(e){}
       var now = new Date().getFullYear();
       var siyuan = now - anchor + 1;
       return {siyuan: siyuan};
@@ -5596,9 +5589,8 @@ var CANG_LU_ARCHIVE = {
     {n:11, zh:'霜月', en:'Shuangyue', factZh:'初雪普降，眸霞山脉开始封山。', factEn:'First snow falls; the Mouxia range seals its passes.'},
     {n:12, zh:'烬月', en:'Jinyue', factZh:'年尾大祭，也是茹章城每三年一次前往扼根山祭祀的出发月。', factEn:'Year-end rite — the month Ruzhang secretly departs for Egen Mountain.'}
   ];
-  var defAnchor = 1000;  // 祀元元年 ≈ 公元1000年（可在设置/锚点按钮修改）
-  var anchor = defAnchor;
-  try{ var a = parseInt(localStorage.getItem('canglu-anchor') || '', 10); if(a && a > 0 && a < 10000) anchor = a; }catch(e){}
+  var defAnchor = 1000;  // 历法锚点固定：祀元元年 ≈ 公元1000年（不可修改）
+  var anchor = 1000;
 
   var monthsZh = ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
   var monthsEn = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -5657,7 +5649,6 @@ var CANG_LU_ARCHIVE = {
   function fill(){
     var en = window.__lang === 'en';
     var anchor = 1000;
-    try{ var a = parseInt(localStorage.getItem('canglu-anchor') || '', 10); if(a && a > 0 && a < 10000) anchor = a; }catch(e){}
     var now = new Date().getFullYear();
     var siyuan = now - anchor + 1;
     eraEl.textContent = (en ? 'Siyuan · ' : '祀元 · ') + siyuan;
@@ -6332,16 +6323,6 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
   try{ s = Object.assign({}, def, JSON.parse(localStorage.getItem(SKEY) || '{}')); }catch(e){}
   window.cangluSettings = { get:function(){ return s; } };
 
-  var anchorInput = document.getElementById('spAnchorInput');
-  if(anchorInput){
-    try{ anchorInput.value = localStorage.getItem('canglu-anchor') || '1000'; }catch(e){}
-    anchorInput.addEventListener('change', function(){
-      var n = parseInt(anchorInput.value, 10);
-      if(!n || n < 1 || n > 9999){ anchorInput.value = '1000'; n = 1000; }
-      try{ localStorage.setItem('canglu-anchor', String(n)); }catch(e){}
-      if(window.__todayRender) window.__todayRender();
-    });
-  }
   function applySettings(){
     var el = document.documentElement;
     el.setAttribute('data-font', s.font);
@@ -6448,7 +6429,7 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       td_anchor:'历法锚点：祀元元年 ≈ 公元 {N} 年',
       ga_title:'沧陆舆图 · 山河总览', ga_sub:'点击方位，展开地理篇章',
       ga_1:'海洋与水域', ga_2:'陆地单元', ga_3:'地形地貌', ga_4:'河流水系', ga_5:'人文聚落', ga_6:'大型工程地标',
-      spAnchor:'历法锚点（祀元元年≈公元）',
+
       wc_t:'欢迎来到沧陆', wc_s:'折翼一陆 · 剑衡四方', wc_v:'当前版本 v1.4 · 沧陆世界', wc_b:'踏入沧陆', home_update:'更新公告', up_title:'沧陆档案更新记录', up_history:'历次档案', up_read:'阅毕归档',
       pl_skip:'跳过 ▸', pl_enter:'进入沧陆', pl_c1:'恓鸟城', pl_c2:'茹章城', pl_c3:'眴姚城', pl_c4:'伏熏城',
       ws_kicker:'THE LIVING RECORD', ws_title:'沧陆当前记录', ws_sub:'世界仍在运转——这是档案馆此刻观测到的沧陆。',
@@ -6586,7 +6567,7 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       td_anchor:'Calendar anchor: Siyuan Year 1 ≈ AD {N}',
       ga_title:'The Atlas of Canglu', ga_sub:'Click a region to open its chapter',
       ga_1:'Seas & Waters', ga_2:'Landmasses', ga_3:'Terrain & Landforms', ga_4:'Rivers & Lakes', ga_5:'Settlements', ga_6:'Great Works',
-      spAnchor:'Calendar anchor (Siyuan Year 1 ≈ AD)',
+
       wc_t:'Welcome to Canglu', wc_s:'One broken wing, sword-balanced four realms', wc_v:'Version v1.4 · Canglu World', wc_b:'Enter Canglu', home_update:'Update Archive', up_title:'Canglu Archive Update Log', up_history:'Past Records', up_read:'Mark as Read',
       lg_hero_t:'The Emblem of Canglu', lg_hero_s:'One broken wing for the land, the sword balances the four realms', lg_hero_btn:'About the Emblem',
       lg_verse:'A broken-winged world, balanced by the sword — the blade keeps four realms, the wing bears all lives',
