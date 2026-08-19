@@ -4830,15 +4830,13 @@ var CANG_LU_UPDATES = [
   document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && mask.classList.contains('on')) close(); });
   if(btn) btn.onclick = function(e){ e.preventDefault(); open(false); };
 
-  // ===== 统一版本检测（v1.5）：只检测不写已读 =====
+  // ===== 版本检测（v1.5.1：强制弹出，不管是否已读）=====
   function checkVersionUpdate(){
     log('Version check: ' + CURRENT);
-    if(isNewer(CURRENT, readVersion)){
-      state = INTRO_STATE.updatePending;
-      log('Update pending');
-      return true;
-    }
-    return false;
+    // 每次访问都强制显示更新公告（不再按已读版本判断）
+    state = INTRO_STATE.updatePending;
+    log('Update pending (forced)');
+    return true;
   }
   window.__checkVersionUpdate = function(){
     // 确保首页已准备好（DOM 存在、切换完成、遮罩退出）
@@ -4915,32 +4913,9 @@ var CANG_LU_UPDATES = [
   var enterBtn = document.getElementById('plEnter');
   var skip2Btn = document.getElementById('plSkip2');
 
-  // 首次访问判定（localStorage 持久）
-  var introSeen = false;
-  try{ introSeen = localStorage.getItem('canglu-intro-seen') === '1'; }catch(e){}
-  // session 兜底（同一会话刷新不重播）
-  var sessPlayed = false;
-  try{ sessPlayed = sessionStorage.getItem('canglu-prologue') === '1'; }catch(e){}
-
-  var played = introSeen || sessPlayed;
-  if(played){
-    // 再次访问：快速Logo 入场（2-3 秒）
-    mask.parentNode && mask.parentNode.removeChild(mask);
-    if(quick){
-      quick.classList.add('on');
-      setTimeout(function(){
-        quick.classList.remove('on');
-        setTimeout(function(){
-          quick.parentNode && quick.parentNode.removeChild(quick);
-        }, 550);
-        // 快速Logo 结束 → 版本检测流程
-        window.__introComplete && window.__introComplete();
-      }, 2200);
-    } else {
-      window.__introComplete && window.__introComplete();
-    }
-    return;
-  }
+  // ===== 强制开屏（v1.5.1：每次访问都播完整序章，快速Logo 作为前置引子）=====
+  // 不再用 localStorage/sessionStorage 跳过序章——无论是否首次访问都完整播放
+  var quickPlayed = false;
 
   // ===== 五幕文案 =====
   function calcEra(){
@@ -4996,6 +4971,22 @@ var CANG_LU_UPDATES = [
   function start(){
     state = INTRO_STATE.playing;
     log('Intro started');
+    // 前置：快速Logo 引子（每次访问都播，2.2s）
+    if(quick && !quickPlayed){
+      quickPlayed = true;
+      quick.classList.add('on');
+      setTimeout(function(){
+        quick.classList.remove('on');
+        setTimeout(function(){
+          if(quick.parentNode) quick.parentNode.removeChild(quick);
+        }, 550);
+        startPrologue();
+      }, 2200);
+    } else {
+      startPrologue();
+    }
+  }
+  function startPrologue(){
     mask.classList.add('on');
     var t = T[L()];
     // 幕1：档案标记 + 纪元文字（淡入/位移/字距）
