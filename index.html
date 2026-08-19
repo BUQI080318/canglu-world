@@ -2151,33 +2151,17 @@ html[data-theme="light"] .up-ver-title{color:#3a2f1c}
 .pl-scene.active .pl-era-line{width:min(320px,50vw)}
 .pl-era-sub{font-size:15px;letter-spacing:6px;color:var(--ink-dim);opacity:0;transition:opacity 1s ease 1.2s}
 .pl-scene.active .pl-era-sub{opacity:1}
-/* 幕2 */
-.pl-map-wrap{position:relative;width:min(560px,72vw);aspect-ratio:1.15/1;opacity:0;transform:scale(.96);transition:opacity 1.4s ease,transform 1.8s ease}
-.pl-scene.active .pl-map-wrap{opacity:1;transform:scale(1)}
-.pl-map{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:3px;box-shadow:0 0 60px rgba(200,162,74,.12),0 24px 60px rgba(0,0,0,.6)}
-.pl-map-mist{position:absolute;border-radius:50%;filter:blur(30px);pointer-events:none}
-.pl-mist-1{width:120%;height:60%;left:-10%;top:8%;background:radial-gradient(ellipse,rgba(150,170,220,.06),transparent 70%);animation:plDrift 9s ease-in-out infinite alternate}
-.pl-mist-2{width:110%;height:50%;left:-5%;bottom:5%;background:radial-gradient(ellipse,rgba(200,162,74,.05),transparent 70%);animation:plDrift 11s ease-in-out infinite alternate-reverse}
-@keyframes plDrift{from{transform:translateX(-2%)}to{transform:translateX(3%)}}
-.pl-map-glow{position:absolute;inset:-8%;background:radial-gradient(ellipse at 50% 45%,rgba(200,162,74,.08),transparent 60%);animation:plGlow 4s ease-in-out infinite}
-@keyframes plGlow{0%,100%{opacity:.5}50%{opacity:1}}
-.pl-map-caption{font-size:13px;letter-spacing:4px;color:var(--ink-dim);margin-top:20px;opacity:0;transition:opacity 1s ease 1.2s}
-.pl-scene.active .pl-map-caption{opacity:1}
-/* 幕3 光点 */
-.pl-map-wrap-lit .pl-map{filter:saturate(1.05) brightness(.9)}
-.pl-city{position:absolute;display:flex;flex-direction:column;align-items:center;gap:6px;opacity:0;transform:translateY(8px);transition:opacity .8s ease,transform .8s ease}
-.pl-city i{width:9px;height:9px;border-radius:50%;background:var(--gold);box-shadow:0 0 12px 3px rgba(200,162,74,.65);animation:plPulse 2.2s ease-in-out infinite}
+/* 幕2：四方文明（无地图） */
+.pl-cities{display:flex;justify-content:center;gap:clamp(28px,8vw,72px);flex-wrap:wrap;padding:10px 20px}
+.pl-city{display:flex;flex-direction:column;align-items:center;gap:7px;opacity:0;transform:translateY(10px);transition:opacity .8s ease,transform .8s ease}
+.pl-city i{width:10px;height:10px;border-radius:50%;background:var(--gold);box-shadow:0 0 12px 3px rgba(200,162,74,.65);animation:plPulse 2.2s ease-in-out infinite}
 @keyframes plPulse{0%,100%{box-shadow:0 0 8px 2px rgba(200,162,74,.5)}50%{box-shadow:0 0 18px 6px rgba(200,162,74,.85)}}
-.pl-city b{font-size:12px;letter-spacing:2px;color:#e8d9b8;font-weight:500;text-shadow:0 0 8px rgba(0,0,0,.8)}
-.pl-c-xuniao{left:14%;top:22%}
-.pl-c-ruzhang{left:46%;top:32%}
-.pl-c-xunyao{left:84%;top:40%}
-.pl-c-fuxun{left:16%;top:80%}
+.pl-city b{font-size:13px;letter-spacing:2px;color:var(--ink);font-weight:500}
 .pl-scene.active .pl-city{opacity:1;transform:translateY(0)}
-.pl-scene.active .pl-city:nth-child(3){transition-delay:.3s}
-.pl-scene.active .pl-city:nth-child(4){transition-delay:.6s}
-.pl-scene.active .pl-city:nth-child(5){transition-delay:.9s}
-.pl-scene.active .pl-city:nth-child(6){transition-delay:1.2s}
+.pl-scene.active .pl-city:nth-child(1){transition-delay:.2s}
+.pl-scene.active .pl-city:nth-child(2){transition-delay:.5s}
+.pl-scene.active .pl-city:nth-child(3){transition-delay:.8s}
+.pl-scene.active .pl-city:nth-child(4){transition-delay:1.1s}
 .pl-verse{font-size:15px;letter-spacing:5px;color:var(--ink);opacity:0;transform:translateY(6px);transition:opacity .9s ease,transform .9s ease;margin-top:22px;text-align:center}
 .pl-scene.active .pl-verse{opacity:1;transform:none}
 .pl-verse-2{color:var(--gold);font-size:13px;letter-spacing:4px;margin-top:8px;transition-delay:1.4s}
@@ -3315,20 +3299,9 @@ var _hmt = _hmt || [];
       <div class="pl-era-line"></div>
       <p class="pl-era-sub" id="plEraSub"></p>
     </div>
-    <!-- 幕2：世界显现 -->
+    <!-- 幕2：四方文明（无地图版） -->
     <div class="pl-scene pl-scene-2" id="plScene2">
-      <div class="pl-map-wrap">
-        <img class="pl-map" src="assets/canglu_map.jpg" alt="沧陆大陆" draggable="false">
-        <div class="pl-map-mist pl-mist-1"></div>
-        <div class="pl-map-mist pl-mist-2"></div>
-        <div class="pl-map-glow"></div>
-      </div>
-      <div class="pl-map-caption" id="plMapCap"></div>
-    </div>
-    <!-- 幕3：四方文明 -->
-    <div class="pl-scene pl-scene-3" id="plScene3">
-      <div class="pl-map-wrap pl-map-wrap-lit">
-        <img class="pl-map" src="assets/canglu_map.jpg" alt="沧陆大陆" draggable="false">
+      <div class="pl-cities">
         <span class="pl-city pl-c-xuniao"><i></i><b data-i18n="pl_c1">恓鸟城</b><em data-i18n="pl_c1s">守护故土</em></span>
         <span class="pl-city pl-c-ruzhang"><i></i><b data-i18n="pl_c2">茹章城</b><em data-i18n="pl_c2s">繁荣与代价</em></span>
         <span class="pl-city pl-c-xunyao"><i></i><b data-i18n="pl_c3">眴姚城</b><em data-i18n="pl_c3s">财富与情报</em></span>
@@ -4937,8 +4910,7 @@ var CANG_LU_UPDATES = [
     }, 400);
   };
   var scenes = [document.getElementById('plScene1'), document.getElementById('plScene2'),
-                document.getElementById('plScene3'), document.getElementById('plScene4'),
-                document.getElementById('plScene5')];
+                document.getElementById('plScene4'), document.getElementById('plScene5')];
   var skipBtn = document.getElementById('prologueSkip');
   var enterBtn = document.getElementById('plEnter');
   var skip2Btn = document.getElementById('plSkip2');
@@ -4983,14 +4955,12 @@ var CANG_LU_UPDATES = [
     zh: {era: function(h){ return '祀元' + h + '年。'; },
          sub: '大陆之上，四方文明延续千年。',
          arch: '沧陆档案馆 · 卷首记录',
-         map: '这里，是沧陆。',
          v1: '四方文明，共存千年。',
          s1: '【档案缺失】', s2: '【记录中断】', s3: '【部分资料封存】',
          f1: '历史已经持续千年。', f2: '但故事尚未开始。'},
     en: {era: function(h){ return 'Siyuan Year ' + h + '.'; },
          sub: 'Upon the continent, four civilizations endure for a thousand years.',
          arch: 'The Canglu Archive · Opening Record',
-         map: 'This, is Canglu.',
          v1: 'Four civilizations, coexisting for a thousand years.',
          s1: '[RECORD MISSING]', s2: '[LOG INTERRUPTED]', s3: '[PARTIALLY SEALED]',
          f1: 'History has endured a thousand years.', f2: 'But the story has yet to begin.'}
@@ -5040,15 +5010,9 @@ var CANG_LU_UPDATES = [
     }
     if(subEl){ subEl.textContent = t.sub; subEl.classList.add('on'); }
     showScene(0);
-    // 幕2：世界显现（3s → 8s）
+    // 幕2：四方文明（3s 起，四城邦光点依次点亮）
     timers.push(setTimeout(function(){
-      var cap = document.getElementById('plMapCap');
-      if(cap){ cap.textContent = t.map; }
       showScene(1);
-    }, 3000));
-    // 幕3：四方文明（8s → 13s）
-    timers.push(setTimeout(function(){
-      showScene(2);
       // 四城邦依次点亮
       var cities = document.querySelectorAll('.pl-city');
       cities.forEach(function(c, i){
@@ -5058,10 +5022,10 @@ var CANG_LU_UPDATES = [
         var v1 = document.getElementById('plVerse1');
         if(v1){ v1.textContent = t.v1; v1.classList.add('on'); }
       }, 4200));
-    }, 8000));
-    // 幕4：未知档案（13s → 17s）
+    }, 3000));
+    // 幕3：未知档案（8s 起）
     timers.push(setTimeout(function(){
-      showScene(3);
+      showScene(2);
       var s1 = document.getElementById('plSeal1');
       var s2 = document.getElementById('plSeal2');
       var s3 = document.getElementById('plSeal3');
@@ -5070,14 +5034,14 @@ var CANG_LU_UPDATES = [
       if(s2){ s2.textContent = t.s2; }
       if(s3){ s3.textContent = t.s3; }
       timers.push(setTimeout(function(){ if(s1) s1.classList.add('on'); }, 400));
-      timers.push(setTimeout(function(){ if(s2) s2.classList.add('on'); }, 1600));
-      timers.push(setTimeout(function(){ if(s3) s3.classList.add('on'); }, 2800));
-      timers.push(setTimeout(function(){ if(sb){ sb.textContent = '████████'; sb.classList.add('on'); } }, 3600));
-      timers.push(setTimeout(function(){ if(sb) sb.classList.remove('on'); }, 4300));
-    }, 13000));
-    // 幕5：世界入口（16.5s 切入，显示 4.5s 后自动完成）
+      timers.push(setTimeout(function(){ if(s2) s2.classList.add('on'); }, 1200));
+      timers.push(setTimeout(function(){ if(s3) s3.classList.add('on'); }, 2000));
+      timers.push(setTimeout(function(){ if(sb){ sb.textContent = '████████'; sb.classList.add('on'); } }, 2600));
+      timers.push(setTimeout(function(){ if(sb) sb.classList.remove('on'); }, 3200));
+    }, 8000));
+    // 幕4：世界入口（11.5s 切入，显示 4.5s 后自动完成）
     timers.push(setTimeout(function(){
-      showScene(4);
+      showScene(3);
       var sbOld = document.getElementById('plSealBlock');
       if(sbOld) sbOld.classList.remove('on');
       var f1 = document.getElementById('plFinalV1');
@@ -5088,9 +5052,9 @@ var CANG_LU_UPDATES = [
       timers.push(setTimeout(function(){ if(f1) f1.classList.add('on'); }, 400));
       timers.push(setTimeout(function(){ if(f2) f2.classList.add('on'); }, 2000));
       timers.push(setTimeout(function(){ if(nm) nm.classList.add('on'); }, 3600));
-      // 幕5 展示完成后自动进入（保证入口场景可见 ≥4.5s）
+      // 幕4 展示完成后自动进入（保证入口场景可见 ≥4.5s）
       timers.push(setTimeout(function(){ completeIntro(false); }, 4500));
-    }, 16500));
+    }, 11500));
   }
 
   // ===== 跳过 / 进入：统一走 completeIntro =====
@@ -5115,39 +5079,44 @@ var CANG_LU_UPDATES = [
     if(eraEl && sceneIdx === 0) eraEl.textContent = t.era(calcEra().siyuan);
     var subEl = document.getElementById('plEraSub');
     if(subEl && sceneIdx === 0) subEl.textContent = t.sub;
-    var cap = document.getElementById('plMapCap');
-    if(cap && sceneIdx === 1) cap.textContent = t.map;
     var v1 = document.getElementById('plVerse1');
-    if(v1 && sceneIdx === 2) v1.textContent = t.v1;
+    if(v1 && sceneIdx === 1) v1.textContent = t.v1;
     var s1 = document.getElementById('plSeal1');
     var s2 = document.getElementById('plSeal2');
     var s3 = document.getElementById('plSeal3');
-    if(sceneIdx === 3){
+    if(sceneIdx === 2){
       if(s1) s1.textContent = t.s1;
       if(s2) s2.textContent = t.s2;
       if(s3) s3.textContent = t.s3;
     }
     var f1 = document.getElementById('plFinalV1');
     var f2 = document.getElementById('plFinalV2');
-    if(sceneIdx === 4){
+    if(sceneIdx === 3){
       if(f1) f1.textContent = t.f1;
       if(f2) f2.textContent = t.f2;
     }
     // 重排剩余计时（保持时间轴完整）
     // 简化：直接按当前场景重新规划剩余幕次
-    var remain = {0:3000, 1:8000, 2:13000, 3:17000, 4:21000}[sceneIdx];
+    var remain = {0:3000, 1:8000, 2:11500, 3:16000}[sceneIdx];
     if(remain){
       var now = remain;
       var seq = [];
       if(now <= 3000) seq.push([3000-now, 1]);
       if(now <= 8000) seq.push([8000-now, 2]);
-      if(now <= 13000) seq.push([13000-now, 3]);
-      if(now <= 16500) seq.push([16500-now, 4]);
-      seq.push([21000-now, 5]);
+      if(now <= 11500) seq.push([11500-now, 3]);
+      seq.push([16000-now, 4]);
       seq.forEach(function(s){
         timers.push(setTimeout(function(){
-          if(s[1] === 5){
-            showScene(4);
+          if(s[1] === 1){ showScene(1); var vv = document.getElementById('plVerse1'); if(vv){ vv.textContent = t.v1; vv.classList.add('on'); } document.querySelectorAll('.pl-city').forEach(function(cc,i){ timers.push(setTimeout(function(){ cc.classList.add('lit'); }, i*900)); }); }
+          else if(s[1] === 2){ showScene(2); var ss1=document.getElementById('plSeal1'),ss2=document.getElementById('plSeal2'),ss3=document.getElementById('plSeal3'),ssb=document.getElementById('plSealBlock');
+            if(ss1) ss1.textContent=t.s1; if(ss2) ss2.textContent=t.s2; if(ss3) ss3.textContent=t.s3;
+            timers.push(setTimeout(function(){ if(ss1) ss1.classList.add('on'); },400));
+            timers.push(setTimeout(function(){ if(ss2) ss2.classList.add('on'); },1200));
+            timers.push(setTimeout(function(){ if(ss3) ss3.classList.add('on'); },2000));
+            timers.push(setTimeout(function(){ if(ssb){ ssb.textContent='████████'; ssb.classList.add('on'); } },2600));
+          }
+          else if(s[1] === 3){
+            showScene(3);
             var sbOld2 = document.getElementById('plSealBlock');
             if(sbOld2) sbOld2.classList.remove('on');
             var ff1=document.getElementById('plFinalV1'),ff2=document.getElementById('plFinalV2'),nn=document.querySelector('.pl-final-name');
@@ -5156,24 +5125,6 @@ var CANG_LU_UPDATES = [
             timers.push(setTimeout(function(){ if(ff2) ff2.classList.add('on'); },2000));
             timers.push(setTimeout(function(){ if(nn) nn.classList.add('on'); },3600));
             timers.push(setTimeout(function(){ completeIntro(false); }, 4500));
-          }
-          else {
-            showScene(s[1]-1);
-            if(s[1] === 2){ var c2 = document.getElementById('plMapCap'); if(c2) c2.textContent = t.map; }
-            if(s[1] === 3){ var vv = document.getElementById('plVerse1'); if(vv){ vv.textContent = t.v1; vv.classList.add('on'); } document.querySelectorAll('.pl-city').forEach(function(cc,i){ timers.push(setTimeout(function(){ cc.classList.add('lit'); }, i*900)); }); }
-            if(s[1] === 4){ var ss1=document.getElementById('plSeal1'),ss2=document.getElementById('plSeal2'),ss3=document.getElementById('plSeal3'),ssb=document.getElementById('plSealBlock');
-              if(ss1) ss1.textContent=t.s1; if(ss2) ss2.textContent=t.s2; if(ss3) ss3.textContent=t.s3;
-              timers.push(setTimeout(function(){ if(ss1) ss1.classList.add('on'); },400));
-              timers.push(setTimeout(function(){ if(ss2) ss2.classList.add('on'); },1600));
-              timers.push(setTimeout(function(){ if(ss3) ss3.classList.add('on'); },2800));
-              timers.push(setTimeout(function(){ if(ssb){ ssb.textContent='████████'; ssb.classList.add('on'); } },3600));
-            }
-            if(s[1] === 5){ var ff1=document.getElementById('plFinalV1'),ff2=document.getElementById('plFinalV2'),nn=document.querySelector('.pl-final-name');
-              if(ff1) ff1.textContent=t.f1; if(ff2) ff2.textContent=t.f2;
-              timers.push(setTimeout(function(){ if(ff1) ff1.classList.add('on'); },400));
-              timers.push(setTimeout(function(){ if(ff2) ff2.classList.add('on'); },2000));
-              timers.push(setTimeout(function(){ if(nn) nn.classList.add('on'); },3600));
-            }
           }
         }, s[0]));
       });
