@@ -2087,6 +2087,12 @@ html[data-lang="en"] .contact-title{letter-spacing:2px}
 /* ============ 更新公告（档案更新记录） ============ */
 .update-mask{position:fixed;inset:0;z-index:1250;display:flex;align-items:center;justify-content:center;background:rgba(6,10,20,.66);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s}
 .update-mask.on{opacity:1;visibility:visible}
+.update-banner{font-family:"KaiTi","STKaiti","楷体",serif;font-size:21px;letter-spacing:4px;color:var(--gold);text-align:center;padding:12px 10px 14px;margin:0 0 16px;border:1px solid rgba(200,162,74,.45);border-radius:4px;background:linear-gradient(135deg,rgba(200,162,74,.10),rgba(200,162,74,.03));text-shadow:0 0 18px rgba(200,162,74,.45);position:relative;animation:upBannerGlow 2.4s ease-in-out infinite}
+  .update-banner::after{content:"";position:absolute;left:14%;right:14%;bottom:6px;height:1px;background:linear-gradient(90deg,transparent,rgba(200,162,74,.6),transparent)}
+  @keyframes upBannerGlow{0%,100%{text-shadow:0 0 14px rgba(200,162,74,.35)}50%{text-shadow:0 0 26px rgba(200,162,74,.7)}}
+  html[data-theme="light"] .update-banner{color:#8a5a2a;border-color:rgba(138,90,42,.5);background:linear-gradient(135deg,rgba(200,162,74,.16),rgba(200,162,74,.06));text-shadow:none}
+  html[data-theme="light"] .update-banner::after{background:linear-gradient(90deg,transparent,rgba(138,90,42,.55),transparent)}
+  @media (max-width:520px){.update-banner{font-size:17px;letter-spacing:2px}}
 .update-box{position:relative;width:min(640px,94vw);max-height:84vh;overflow-y:auto;background:linear-gradient(160deg,rgba(16,22,38,.97),rgba(10,14,26,.99));border:1px solid rgba(200,162,74,.4);border-radius:4px;padding:34px 32px 26px;box-shadow:0 20px 60px rgba(0,0,0,.55),inset 0 1px 0 rgba(200,162,74,.18);transform:translateY(20px) scale(.96);transition:transform .4s cubic-bezier(.22,.61,.36,1)}
 .update-mask.on .update-box{transform:none}
 .update-close{position:absolute;top:12px;right:14px;width:30px;height:30px;border:none;border-radius:50%;background:rgba(200,162,74,.12);color:var(--ink);font-size:15px;cursor:pointer;transition:transform .25s,background .25s}
@@ -3365,6 +3371,7 @@ var _hmt = _hmt || [];
 <div class="update-mask" id="updateMask">
   <div class="update-box">
     <button class="update-close" id="updateClose">✕</button>
+    <div class="update-banner" data-i18n="up_banner">小说正在加急创作中！</div>
     <div class="update-head">
       <div class="update-emblem"><span class="up-ring"></span><span class="up-seal">档</span></div>
       <div class="update-headline" data-i18n="up_title">沧陆档案更新记录</div>
@@ -6692,7 +6699,7 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       ga_title:'沧陆舆图 · 山河总览', ga_sub:'点击方位，展开地理篇章',
       ga_1:'海洋与水域', ga_2:'陆地单元', ga_3:'地形地貌', ga_4:'河流水系', ga_5:'人文聚落', ga_6:'大型工程地标',
 
-      wc_t:'欢迎来到沧陆', wc_s:'折翼一陆 · 剑衡四方', wc_v:'当前版本 v1.5 · 沧陆世界', wc_b:'踏入沧陆', home_update:'更新公告', up_title:'沧陆档案更新记录', up_history:'历次档案', up_read:'阅毕归档',
+      wc_t:'欢迎来到沧陆', wc_s:'折翼一陆 · 剑衡四方', wc_v:'当前版本 v1.5 · 沧陆世界', wc_b:'踏入沧陆', home_update:'更新公告', up_banner:'小说正在加急创作中！', up_title:'沧陆档案更新记录', up_history:'历次档案', up_read:'阅毕归档',
       pl_skip:'跳过 ▸', pl_enter:'进入沧陆', pl_c1:'恓鸟城', pl_c2:'茹章城', pl_c3:'眴姚城', pl_c4:'伏熏城',
       pl_c1s:'守护故土', pl_c2s:'繁荣与代价', pl_c3s:'财富与情报', pl_c4s:'自由与孤立', pl_skip2:'跳过序章',
       ws_kicker:'THE LIVING RECORD', ws_title:'沧陆当前记录', ws_sub:'世界仍在运转——这是档案馆此刻观测到的沧陆。',
@@ -6832,7 +6839,7 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       ga_title:'The Atlas of Canglu', ga_sub:'Click a region to open its chapter',
       ga_1:'Seas & Waters', ga_2:'Landmasses', ga_3:'Terrain & Landforms', ga_4:'Rivers & Lakes', ga_5:'Settlements', ga_6:'Great Works',
 
-      wc_t:'Welcome to Canglu', wc_s:'One broken wing, sword-balanced four realms', wc_v:'Current version v1.5 · Canglu World', wc_b:'Enter Canglu', home_update:'Update Archive', up_title:'Canglu Archive Update Log', up_history:'Past Records', up_read:'Mark as Read',
+      wc_t:'Welcome to Canglu', wc_s:'One broken wing, sword-balanced four realms', wc_v:'Current version v1.5 · Canglu World', wc_b:'Enter Canglu', home_update:'Update Archive', up_banner:'The novel is being written at full speed!', up_title:'Canglu Archive Update Log', up_history:'Past Records', up_read:'Mark as Read',
       lg_hero_t:'The Emblem of Canglu', lg_hero_s:'One broken wing for the land, the sword balances the four realms', lg_hero_btn:'About the Emblem',
       lg_verse:'A broken-winged world, balanced by the sword — the blade keeps four realms, the wing bears all lives',
       lg_c1n:'Xuniao', lg_c1s:'W · War-state', lg_c2n:'Ruzhang', lg_c2s:'C · Theocracy', lg_c3n:'Xunyao', lg_c3s:'E · Trade port', lg_c4n:'Fuxun', lg_c4s:'S · Island',
