@@ -3354,7 +3354,7 @@ var _hmt = _hmt || [];
     </div>
     <h2 class="wc-title" data-txt="欢迎来到沧陆" data-i18n="wc_t"></h2>
     <p class="wc-sub" data-i18n="wc_s">折翼一陆 · 剑衡四方</p>
-    <div class="wc-version" id="wcVersion" data-i18n="wc_v">当前版本 v1.4 · 沧陆世界</div>
+    <div class="wc-version" id="wcVersion" data-i18n="wc_v">当前版本 v1.5 · 沧陆世界</div>
     <div class="wc-line"></div>
     <button class="wc-enter" id="wcEnter" data-i18n="wc_b">踏入沧陆</button>
     <button class="wc-close" id="wcClose" title="跳过">✕</button>
@@ -4654,10 +4654,23 @@ function revealItem(el){
 
 /* ============ 档案更新系统（更新公告） ============ */
 // 版本数据：集中管理，未来只在此数组追加新版本对象即可
-var CANG_LU_CURRENT = "v1.4";
+var CANG_LU_CURRENT = "v1.5";
 var __cangluDebug = false;  // 统一调试开关：true 输出 [沧陆] 日志
 var INTRO_STATE = { idle:'idle', playing:'playing', skipped:'skipped', completed:'completed', updatePending:'updatePending', updateShown:'updateShown' };
 var CANG_LU_UPDATES = [
+  {
+    version:"v1.5",
+    date:"2026-08-19",
+    title:"世界序章重构",
+    type:"site",
+    zh:"世界序章重构",
+    en:"The World Prologue Rebuilt",
+    content:[
+      {title:"序章重制", description:"档案馆卷首记录重制——纪元、四方文明、未知档案与世界入口四幕相连，每次踏入沧陆皆完整呈现。", title_en:"Prologue Reforged", desc_en:"The Archive's opening record reforged — Era, Four Civilizations, Unknown Records, and the World Gate now unfold in four continuous acts, shown in full on every arrival.", type:"system"},
+      {title:"徽记引子", description:"进站先见沧陆徽记——金环旋转，卷首即启。", title_en:"Emblem Overture", desc_en:"The Canglu emblem greets every visitor — a turning golden ring before the record opens.", type:"visual"},
+      {title:"记录通报", description:"档案更新记录于每次进入时呈报，供访客随时查阅最新卷宗。", title_en:"Record Bulletin", desc_en:"The archive's update bulletin is presented on every entry, so visitors may always consult the latest records.", type:"system"}
+    ]
+  },
   {
     version:"v1.4",
     date:"2026-08-18",
@@ -6679,7 +6692,7 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       ga_title:'沧陆舆图 · 山河总览', ga_sub:'点击方位，展开地理篇章',
       ga_1:'海洋与水域', ga_2:'陆地单元', ga_3:'地形地貌', ga_4:'河流水系', ga_5:'人文聚落', ga_6:'大型工程地标',
 
-      wc_t:'欢迎来到沧陆', wc_s:'折翼一陆 · 剑衡四方', wc_v:'当前版本 v1.4 · 沧陆世界', wc_b:'踏入沧陆', home_update:'更新公告', up_title:'沧陆档案更新记录', up_history:'历次档案', up_read:'阅毕归档',
+      wc_t:'欢迎来到沧陆', wc_s:'折翼一陆 · 剑衡四方', wc_v:'当前版本 v1.5 · 沧陆世界', wc_b:'踏入沧陆', home_update:'更新公告', up_title:'沧陆档案更新记录', up_history:'历次档案', up_read:'阅毕归档',
       pl_skip:'跳过 ▸', pl_enter:'进入沧陆', pl_c1:'恓鸟城', pl_c2:'茹章城', pl_c3:'眴姚城', pl_c4:'伏熏城',
       pl_c1s:'守护故土', pl_c2s:'繁荣与代价', pl_c3s:'财富与情报', pl_c4s:'自由与孤立', pl_skip2:'跳过序章',
       ws_kicker:'THE LIVING RECORD', ws_title:'沧陆当前记录', ws_sub:'世界仍在运转——这是档案馆此刻观测到的沧陆。',
@@ -6819,7 +6832,7 @@ var EN_DETAILS = {"别称\"悲息之城\"，整座城市常年笼罩着苍凉沉
       ga_title:'The Atlas of Canglu', ga_sub:'Click a region to open its chapter',
       ga_1:'Seas & Waters', ga_2:'Landmasses', ga_3:'Terrain & Landforms', ga_4:'Rivers & Lakes', ga_5:'Settlements', ga_6:'Great Works',
 
-      wc_t:'Welcome to Canglu', wc_s:'One broken wing, sword-balanced four realms', wc_v:'Version v1.4 · Canglu World', wc_b:'Enter Canglu', home_update:'Update Archive', up_title:'Canglu Archive Update Log', up_history:'Past Records', up_read:'Mark as Read',
+      wc_t:'Welcome to Canglu', wc_s:'One broken wing, sword-balanced four realms', wc_v:'Current version v1.5 · Canglu World', wc_b:'Enter Canglu', home_update:'Update Archive', up_title:'Canglu Archive Update Log', up_history:'Past Records', up_read:'Mark as Read',
       lg_hero_t:'The Emblem of Canglu', lg_hero_s:'One broken wing for the land, the sword balances the four realms', lg_hero_btn:'About the Emblem',
       lg_verse:'A broken-winged world, balanced by the sword — the blade keeps four realms, the wing bears all lives',
       lg_c1n:'Xuniao', lg_c1s:'W · War-state', lg_c2n:'Ruzhang', lg_c2s:'C · Theocracy', lg_c3n:'Xunyao', lg_c3s:'E · Trade port', lg_c4n:'Fuxun', lg_c4s:'S · Island',
